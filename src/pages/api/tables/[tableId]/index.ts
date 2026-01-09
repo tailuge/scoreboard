@@ -2,6 +2,10 @@ import { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { Table } from "@/services/table"
 
+export const config = {
+  runtime: "edge",
+}
+
 const TABLES_KEY = "tables"
 
 export async function GET(
@@ -40,4 +44,21 @@ export async function DELETE(
   } catch (error) {
     return Response.json({ error: "Failed to delete table" }, { status: 500 })
   }
+}
+
+export default async function handler(
+  request: NextRequest,
+  ctx: { params?: { tableId?: string } } = {}
+) {
+  const method = request.method?.toUpperCase()
+
+  if (method === "GET") {
+    return GET(request, { params: { tableId: ctx.params?.tableId || "" } })
+  }
+
+  if (method === "DELETE") {
+    return DELETE(request, { params: { tableId: ctx.params?.tableId || "" } })
+  }
+
+  return Response.json({ error: "Method not allowed" }, { status: 405 })
 }
