@@ -1,6 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 :root {
   --background: #ffffff;
@@ -20,44 +41,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Reusable Utility Classes */
-.flex-center {
-  @apply flex items-center justify-center;
-}
-
-.button-base {
-  @apply flex-center cursor-pointer transition-all duration-300;
-}
-
-.icon-base {
-  @apply h-4 w-4;
-}
-
-.status-base {
-  @apply inline-flex items-center gap-1 text-xs px-2 py-2 rounded;
-}
-
-.table-base {
-  @apply relative rounded-xl shadow-lg shadow-black overflow-hidden border-2;
-  max-width: 250px;
-  font-size: 0.6rem;
-}
-
-.pocket-base {
-  @apply absolute w-7 h-7 bg-black rounded-full shadow-inner;
-}
-
-.modal-overlay-base {
-  @apply fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[1px] bg-black/50;
-}
-
-.modal-container-base {
-  @apply bg-white rounded-lg p-4 max-w-sm w-full m-4 text-center;
-}
+/* Base styles removed for inlining */
 
 /* Server Status Component Styles */
 .status-indicator {
-  @apply status-base;
+  @apply inline-flex items-center gap-1 text-xs px-2 py-2 rounded-sm;
 }
 
 .status-connecting {
@@ -73,7 +61,7 @@ body {
 }
 
 .status-icon {
-  @apply icon-base;
+  @apply h-4 w-4;
 }
 
 .status-icon-connecting {
@@ -98,15 +86,15 @@ body {
 }
 
 .game-button {
-  @apply button-base px-4 py-1 text-white;
+  @apply flex items-center justify-center cursor-pointer transition-all duration-300 px-4 py-1 text-white;
 }
 
 .game-button-main {
-  @apply game-button rounded-l-md;
+  @apply flex items-center justify-center cursor-pointer transition-all duration-300 rounded-l-md;
 }
 
 .game-button-dropdown {
-  @apply game-button px-2 rounded-r-md border-l border-indigo-400;
+  @apply flex items-center justify-center cursor-pointer transition-all duration-300 px-2 rounded-r-md border-l border-indigo-400;
 }
 
 .game-button-enabled {
@@ -118,7 +106,7 @@ body {
 }
 
 .game-dropdown {
-  @apply absolute mt-1 bg-indigo-500 rounded-md shadow-lg z-[100] min-w-full;
+  @apply absolute mt-1 bg-indigo-500 rounded-md shadow-lg z-100 min-w-full;
 }
 
 .game-dropdown-list {
@@ -135,7 +123,9 @@ body {
 
 /* Table Component Styles */
 .table-card {
-  @apply table-base;
+  @apply relative rounded-xl shadow-lg shadow-black overflow-hidden border-2;
+  max-width: 250px;
+  font-size: 0.6rem;
 }
 
 .table-card-creator {
@@ -174,7 +164,7 @@ body {
 }
 
 .table-button {
-  @apply flex-1 px-2 py-1 border border-white/50 rounded-lg bg-transparent hover:bg-gray-800/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-opacity-50;
+  @apply flex-1 px-2 py-1 border border-white/50 rounded-lg bg-transparent hover:bg-gray-800/20 hover:text-white focus:outline-hidden focus:ring-2 focus:ring-gray-800/50;
 }
 
 .table-spectator-count {
@@ -182,7 +172,7 @@ body {
 }
 
 .table-pocket {
-  @apply pocket-base;
+  @apply absolute w-7 h-7 bg-black rounded-full shadow-inner;
 }
 
 .table-pocket-top-left {
@@ -260,27 +250,25 @@ body {
 
 /* User Pill Styles */
 .user-pill {
-  @apply hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded 
-         bg-green-200 dark:bg-green-900/10 cursor-pointer transition-colors
-         text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2;
+  @apply hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded-sm bg-green-200 dark:bg-green-900/10 cursor-pointer transition-colors text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2;
 }
 
 .user-pill-icon {
-  @apply icon-base text-gray-500 dark:text-gray-400;
+  @apply h-4 w-4 text-gray-500 dark:text-gray-400;
 }
 
 .user-pill-input {
-  @apply bg-transparent text-gray-700 dark:text-gray-300 outline-none w-full;
+  @apply bg-transparent text-gray-700 dark:text-gray-300 outline-hidden w-full;
 }
 
 /* Play Modal Styles */
 .play-modal-overlay {
-  @apply modal-overlay-base;
+  @apply fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[1px] bg-black/50;
   top: -10vh;
 }
 
 .play-modal-container {
-  @apply modal-container-base;
+  @apply bg-white rounded-lg p-4 max-w-sm w-full m-4 text-center;
 }
 
 .play-modal-title {
@@ -305,7 +293,7 @@ body {
 
 /* Iframe Overlay Styles */
 .iframe-overlay {
-  @apply modal-overlay-base;
+  @apply fixed inset-0 z-50 flex items-center justify-center backdrop-blur-[1px] bg-black/50;
 }
 
 .iframe-container {
@@ -317,7 +305,7 @@ body {
 }
 
 .iframe-close-button {
-  @apply absolute top-2 right-2 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition-colors;
+  @apply absolute top-2 right-2 bg-gray-300 text-gray-800 px-4 py-2 rounded-sm hover:bg-gray-400 transition-colors;
 }
 
 /* Lobby Styles */
@@ -335,7 +323,7 @@ body {
 
 /* Star Button Styles */
 .star-button {
-  @apply button-base p-1 text-gray-600 rounded-md;
+  @apply flex items-center justify-center cursor-pointer transition-all duration-300 p-1 text-gray-600 rounded-md;
 }
 
 .star-button--clicked {
@@ -351,7 +339,7 @@ body {
 }
 
 .star-icon {
-  @apply icon-base text-yellow-500;
+  @apply h-4 w-4 text-yellow-500;
 }
 
 .star-icon--outline:hover {

@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -19,18 +15,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@components": [
-        "components/index"
-      ],
-      "@components/*": [
-        "components/*"
-      ]
+      "@/*": ["./src/*"],
+      "@lib/*": ["lib/*"],
+      "@components": ["components/index"],
+      "@components/*": ["components/*"]
     },
     "incremental": true,
     "plugins": [
@@ -40,13 +28,6 @@
     ],
     "strictNullChecks": false
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

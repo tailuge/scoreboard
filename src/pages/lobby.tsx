@@ -28,7 +28,11 @@ export default function Lobby() {
 
   useEffect(() => {
     markUsage("lobby")
-    const storedUserId = crypto.randomUUID().slice(0, 8)
+    const storedUserId =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID().slice(0, 8)
+        : Math.random().toString(36).substring(2, 10)
+
     const urlUserName = searchParams.get("username")
     const storedUserName =
       urlUserName || localStorage.getItem("userName") || "Anonymous"
