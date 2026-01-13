@@ -98,7 +98,7 @@ export default function TableLogs() {
             )}
           </div>
         )
-      } catch (e) {
+      } catch {
         return (
           <div
             key={index}
