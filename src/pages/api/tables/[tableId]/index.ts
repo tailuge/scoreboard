@@ -19,6 +19,7 @@ export async function GET(
     }
     return Response.json(table)
   } catch (error) {
+    console.error(error)
     return Response.json({ error: "Failed to fetch table" }, { status: 500 })
   }
 }
@@ -42,6 +43,7 @@ export async function DELETE(
     await kv.hdel(TABLES_KEY, params.tableId)
     return Response.json({ success: true })
   } catch (error) {
+    console.error(error)
     return Response.json({ error: "Failed to delete table" }, { status: 500 })
   }
 }
