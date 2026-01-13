@@ -238,21 +238,21 @@
 
       async function hiscore() {
         const input = document.getElementById("initials")
-        const params = new URLSearchParams(window.location.search)
-        const url = new URL("/api/hiscore", window.location.origin)
+        const params = new URLSearchParams(globalThis.location.search)
+        const url = new URL("/api/hiscore", globalThis.location.origin)
         const details = new URLSearchParams()
         details.append("ruletype", params.get("ruletype"))
         details.append("id", input.value)
         url.search = details.toString()
-        await postData(url, window.location.search)
-        window.location.href = "/leaderboard.html"
+        await postData(url, globalThis.location.search)
+        globalThis.location.href = "/leaderboard.html"
       }
 
       const button = document.getElementById("submit")
       button.onclick = hiscore
 
       const replayurl = new URL("https://tailuge.github.io/billiards/dist/")
-      const params = new URLSearchParams(window.location.search)
+      const params = new URLSearchParams(globalThis.location.search)
       replayurl.search = params.toString()
       const iframe = document.getElementById("embed")
       iframe.src = replayurl.toString()

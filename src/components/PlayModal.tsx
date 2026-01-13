@@ -5,11 +5,7 @@ import { Table } from "@/services/table"
 const WEBSOCKET_SERVER = "wss://billiards.onrender.com/ws"
 
 const isInsideIframe = () => {
-  try {
-    return window.self !== window.top
-  } catch (e) {
-    return true // Assume it's in an iframe if there's a cross-origin error
-  }
+  return globalThis.self !== globalThis.top
 }
 
 function useBodyOverflow(isOpen: boolean) {
@@ -86,7 +82,7 @@ export function PlayModal({
     if (isInsideIframe()) {
       createOverlay(target, onClose)
     } else {
-      window.open(target.toString(), "_blank")
+      globalThis.open(target.toString(), "_blank")
     }
     if (!isInsideIframe() && onClose) {
       onClose()
