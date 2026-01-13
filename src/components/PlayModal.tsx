@@ -2,8 +2,6 @@ import { useEffect } from "react"
 import { GameUrl } from "@/utils/GameUrl"
 import { Table } from "@/services/table"
 
-const WEBSOCKET_SERVER = "wss://billiards.onrender.com/ws"
-
 const isInsideIframe = () => {
   return globalThis.self !== globalThis.top
 }
