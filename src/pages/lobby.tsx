@@ -10,6 +10,7 @@ import { NchanSub } from "@/nchan/nchansub"
 import { Title } from "@/components/Title"
 import { markUsage } from "@/utils/usage"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
+import { getUID } from "@/utils/uid"
 
 export default function Lobby() {
   const [userId, setUserId] = useState("")
@@ -28,10 +29,7 @@ export default function Lobby() {
 
   useEffect(() => {
     markUsage("lobby")
-    const storedUserId =
-      typeof crypto !== "undefined" && crypto.randomUUID
-        ? crypto.randomUUID().slice(0, 8)
-        : Math.random().toString(36).substring(2, 10)
+    const storedUserId = getUID()
 
     const urlUserName = searchParams.get("username")
     const storedUserName =

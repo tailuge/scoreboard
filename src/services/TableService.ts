@@ -3,6 +3,7 @@ import { Table } from "@/services/table"
 
 import { NchanPub } from "@/nchan/nchanpub"
 import { Player } from "./player"
+import { getUID } from "@/utils/uid"
 
 const KEY = "tables"
 const TABLE_TIMEOUT = 60 * 1000 // 1 minute
@@ -38,7 +39,7 @@ export class TableService {
   }
 
   async createTable(userId: string, userName: string, ruleType: string) {
-    const tableId = crypto.randomUUID().slice(0, 8)
+    const tableId = getUID()
     const creator: Player = { id: userId, name: userName || "Anonymous" }
 
     const newTable: Table = {
