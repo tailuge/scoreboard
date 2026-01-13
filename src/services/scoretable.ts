@@ -13,7 +13,7 @@ export class ScoreTable {
   readonly replayUrl = "https://tailuge.github.io/billiards/dist/"
   readonly notFound = "https://scoreboard-tailuge.vercel.app/notfound.html"
 
-  constructor(private readonly store: VercelKV) {}
+  constructor(private readonly store: VercelKV) { }
 
   dbKey(ruletype) {
     return `${this.prefix}${ruletype}`
@@ -84,8 +84,8 @@ export class ScoreTable {
   }
 
   generateUID() {
-    const a = (Math.random() * 46656) | 0
-    const b = (Math.random() * 46656) | 0
+    const a = Math.trunc(Math.random() * 46656)
+    const b = Math.trunc(Math.random() * 46656)
     return (
       ("000" + a.toString(36)).slice(-3) + ("000" + b.toString(36)).slice(-3)
     )

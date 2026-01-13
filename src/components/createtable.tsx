@@ -55,11 +55,10 @@ export function CreateTable({
           key={isOnline ? "online" : "offline"} // Add key to force re-render
           onClick={handleCreate}
           disabled={isLoading || !isOnline}
-          className={`game-button-main ${
-            !isOnline || isLoading
-              ? "game-button-disabled"
-              : "game-button-enabled"
-          }`}
+          className={`game-button-main ${isOnline && !isLoading
+              ? "game-button-enabled"
+              : "game-button-disabled"
+            }`}
           title={!isOnline ? "Server offline" : ""}
         >
           Play {ruleType.charAt(0).toUpperCase() + ruleType.slice(1)}
@@ -67,9 +66,8 @@ export function CreateTable({
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
           disabled={!isOnline}
-          className={`game-button-dropdown ${
-            !isOnline ? "game-button-disabled" : "game-button-enabled"
-          }`}
+          className={`game-button-dropdown ${isOnline ? "game-button-enabled" : "game-button-disabled"
+            }`}
         >
           ▼
         </button>
@@ -80,9 +78,8 @@ export function CreateTable({
             {["nineball", "snooker", "threecushion"].map((type) => (
               <li
                 key={type}
-                className={`game-dropdown-item ${
-                  ruleType === type ? "game-dropdown-item-selected" : ""
-                }`}
+                className={`game-dropdown-item ${ruleType === type ? "game-dropdown-item-selected" : ""
+                  }`}
                 onClick={() => {
                   setRuleType(type)
                   setDropdownOpen(false)
