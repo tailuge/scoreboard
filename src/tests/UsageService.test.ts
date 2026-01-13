@@ -1,5 +1,5 @@
 import { mockKv } from "./mockkv"
-import { VercelKV } from "@vercel/kv"
+
 import { UsageService } from "@/services/usageservice"
 
 describe("UsageService", () => {

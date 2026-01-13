@@ -1,7 +1,7 @@
 import { Table } from "@/services/table"
 import { TableService } from "../services/TableService"
 import { mockKv } from "./mockkv"
-import { VercelKV } from "@vercel/kv"
+
 
 function makeTable(lastUsed: number, tableId: string): Table {
   const newTable: Table = {

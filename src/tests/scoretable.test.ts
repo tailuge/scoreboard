@@ -1,6 +1,6 @@
 import { mockKv } from "./mockkv"
 import { ScoreTable } from "../services/scoretable"
-import { VercelKV } from "@vercel/kv"
+
 
 describe("ScoreTable", () => {
   afterEach(async () => {
