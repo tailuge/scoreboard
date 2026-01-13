@@ -58,12 +58,12 @@ describe("Lobby Component Functional Tests", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useSearchParams as jest.Mock).mockReturnValue({
-      get: (key: string) => (key === "username" ? "TestUser" : null),
-    })
+      ; (useSearchParams as jest.Mock).mockReturnValue({
+        get: (key: string) => (key === "username" ? "TestUser" : null),
+      })
 
-    // Mock global fetch
-    global.fetch = jest.fn().mockImplementation((url) => {
+    // Mock globalThis fetch
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
       if (url === "/api/tables") {
         return Promise.resolve({
           json: () => Promise.resolve(mockTables),
@@ -87,7 +87,7 @@ describe("Lobby Component Functional Tests", () => {
 
     // Check if fetch was called with POST to /api/tables
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         "/api/tables",
         expect.objectContaining({
           method: "POST",
@@ -106,7 +106,7 @@ describe("Lobby Component Functional Tests", () => {
 
     // Check if fetch was called with PUT to join endpoint
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         expect.stringMatching(/\/api\/tables\/table-1\/join/),
         expect.objectContaining({
           method: "PUT",
