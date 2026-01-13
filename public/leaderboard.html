@@ -1,125 +1,131 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <title>High Break!</title>
+    <link rel="icon" type="image/png" href="golden-cup.png" />
+    <meta charset="utf-8" />
+    <meta name="description" content="billiards scoreboard" />
+    <link rel="stylesheet" type="text/css" href="leaderboard.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <title>High Break!</title>
-  <link rel="icon" type="image/png" href="golden-cup.png" />
-  <meta charset="utf-8" />
-  <meta name="description" content="billiards scoreboard" />
-  <link rel="stylesheet" type="text/css" href="leaderboard.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
-</head>
-
-<body>
-  <h1><a href="https://github.com/tailuge/billiards">Leaderboard</a></h1>
-  <div class="leaderboards">
-    <div class="leaderboard">
-      <h2>
-        <a href="https://tailuge.github.io/billiards/dist?ruletype=snooker">Snooker</a>
-      </h2>
-      <table id="snooker"></table>
+  <body>
+    <h1><a href="https://github.com/tailuge/billiards">Leaderboard</a></h1>
+    <div class="leaderboards">
+      <div class="leaderboard">
+        <h2>
+          <a href="https://tailuge.github.io/billiards/dist?ruletype=snooker"
+            >Snooker</a
+          >
+        </h2>
+        <table id="snooker"></table>
+      </div>
+      <div class="leaderboard">
+        <h2><a href="https://tailuge.github.io/billiards/dist">9-Ball</a></h2>
+        <table id="nineball"></table>
+      </div>
+      <div class="leaderboard">
+        <h2>
+          <a
+            href="https://tailuge.github.io/billiards/dist?ruletype=threecushion"
+            >Three Cushion Billiards</a
+          >
+        </h2>
+        <table id="threecushion"></table>
+      </div>
     </div>
-    <div class="leaderboard">
-      <h2><a href="https://tailuge.github.io/billiards/dist">9-Ball</a></h2>
-      <table id="nineball"></table>
-    </div>
-    <div class="leaderboard">
-      <h2>
-        <a href="https://tailuge.github.io/billiards/dist?ruletype=threecushion">Three Cushion Billiards</a>
-      </h2>
-      <table id="threecushion"></table>
-    </div>
-  </div>
 
-  <script type="module">
-    async function getData(url = "") {
-      const response = await fetch(url)
-      return response.json()
-    }
-
-    async function updateLikes(likeButton) {
-      try {
-        const ruletype = likeButton.dataset.ruletype
-        const id = likeButton.dataset.id
-        const url = `/api/rank/${id}?ruletype=${ruletype}`
-        await fetch(url, { method: "PUT" })
-        const currentLikes = Number.parseInt(likeButton.textContent || "0")
-        likeButton.textContent = currentLikes + 1
-      } catch (error) {
-        console.error("Error updating likes:", error)
+    <script type="module">
+      async function getData(url = "") {
+        const response = await fetch(url)
+        return response.json()
       }
-    }
 
-    function createLikeButton(ruletype, id, likes) {
-      const button = document.createElement("button")
-      button.classList.add("like-button")
-      button.textContent = likes
-      button.dataset.ruletype = ruletype // Store ruletype for updateLikes
-      button.dataset.id = id
-      button.addEventListener("click", () => updateLikes(button)) // Pass the button
-      return button
-    }
-
-    function getTrophyIcon(index) {
-      switch (index) {
-        case 0:
-          return `<span class="trophy trophy--gold">🏆</span>`
-        case 1:
-          return `<span class="trophy trophy--silver">🥈</span>`
-        case 2:
-          return `<span class="trophy trophy--bronze">🥉</span>`
-        default:
-          return ""
+      async function updateLikes(likeButton) {
+        try {
+          const ruletype = likeButton.dataset.ruletype
+          const id = likeButton.dataset.id
+          const url = `/api/rank/${id}?ruletype=${ruletype}`
+          await fetch(url, { method: "PUT" })
+          const currentLikes = Number.parseInt(likeButton.textContent || "0")
+          likeButton.textContent = currentLikes + 1
+        } catch (error) {
+          console.error("Error updating likes:", error)
+        }
       }
-    }
 
-    async function renderLeaderboard(ruletype) {
-      try {
-        const params = new URLSearchParams({ ruletype })
-        const url = `/api/rank?${params.toString()}`
-        const data = await getData(url)
-        const scoreboard = document.getElementById(ruletype)
-        scoreboard.innerHTML = ""
-
-        // Create table header row
-        const headerRow = scoreboard.insertRow()
-        headerRow.innerHTML = `<th></th><th>Score</th><th>Player</th><th></th><th></th>`
-
-        data.forEach((item, index) => {
-          const row = scoreboard.insertRow()
-
-          // Trophy cell
-          const trophyCell = row.insertCell()
-          trophyCell.innerHTML = getTrophyIcon(index)
-
-          // Score cell
-          const scoreCell = row.insertCell()
-          scoreCell.textContent = item.score
-
-          // Name cell
-          const nameCell = row.insertCell()
-          nameCell.innerHTML = `<b>${item.name}</b>`
-
-          // Replay link cell
-          const replayCell = row.insertCell()
-          replayCell.innerHTML = `<a href="/api/rank/${item.id}?${params.toString()}">replay</a>`
-
-          // Like button cell
-          const likeCell = row.insertCell()
-          likeCell.appendChild(
-            createLikeButton(ruletype, item.id, item.likes || 0)
-          )
-        })
-      } catch (error) {
-        console.error("Error fetching or rendering leaderboard:", error)
-        document.getElementById(ruletype).innerHTML =
-          "<p>Error loading leaderboard.</p>"
+      function createLikeButton(ruletype, id, likes) {
+        const button = document.createElement("button")
+        button.classList.add("like-button")
+        button.textContent = likes
+        button.dataset.ruletype = ruletype // Store ruletype for updateLikes
+        button.dataset.id = id
+        button.addEventListener("click", () => updateLikes(button)) // Pass the button
+        return button
       }
-    }
 
-    const ruleTypes = ["snooker", "nineball", "threecushion"]
-    ruleTypes.forEach(renderLeaderboard)
-  </script>
-</body>
+      function getTrophyIcon(index) {
+        switch (index) {
+          case 0:
+            return `<span class="trophy trophy--gold">🏆</span>`
+          case 1:
+            return `<span class="trophy trophy--silver">🥈</span>`
+          case 2:
+            return `<span class="trophy trophy--bronze">🥉</span>`
+          default:
+            return ""
+        }
+      }
 
+      async function renderLeaderboard(ruletype) {
+        try {
+          const params = new URLSearchParams({ ruletype })
+          const url = `/api/rank?${params.toString()}`
+          const data = await getData(url)
+          const scoreboard = document.getElementById(ruletype)
+          scoreboard.innerHTML = ""
+
+          // Create table header row
+          const headerRow = scoreboard.insertRow()
+          headerRow.innerHTML = `<th></th><th>Score</th><th>Player</th><th></th><th></th>`
+
+          data.forEach((item, index) => {
+            const row = scoreboard.insertRow()
+
+            // Trophy cell
+            const trophyCell = row.insertCell()
+            trophyCell.innerHTML = getTrophyIcon(index)
+
+            // Score cell
+            const scoreCell = row.insertCell()
+            scoreCell.textContent = item.score
+
+            // Name cell
+            const nameCell = row.insertCell()
+            nameCell.innerHTML = `<b>${item.name}</b>`
+
+            // Replay link cell
+            const replayCell = row.insertCell()
+            replayCell.innerHTML = `<a href="/api/rank/${item.id}?${params.toString()}">replay</a>`
+
+            // Like button cell
+            const likeCell = row.insertCell()
+            likeCell.appendChild(
+              createLikeButton(ruletype, item.id, item.likes || 0)
+            )
+          })
+        } catch (error) {
+          console.error("Error fetching or rendering leaderboard:", error)
+          document.getElementById(ruletype).innerHTML =
+            "<p>Error loading leaderboard.</p>"
+        }
+      }
+
+      const ruleTypes = ["snooker", "nineball", "threecushion"]
+      ruleTypes.forEach(renderLeaderboard)
+    </script>
+  </body>
 </html>

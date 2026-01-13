@@ -47,7 +47,8 @@
         transition:
           transform 0.3s ease,
           box-shadow 0.3s ease;
-        min-height: 360px; /* Ensure graphs are visible */
+        min-height: 360px;
+        /* Ensure graphs are visible */
         overflow: hidden;
       }
 
@@ -90,7 +91,8 @@
 
         .leaderboard {
           padding: 15px;
-          min-height: 350px; /* Adjust for mobile */
+          min-height: 350px;
+          /* Adjust for mobile */
         }
       }
     </style>
@@ -122,10 +124,12 @@
     ></script>
 
     <script type="module">
-      plotMetric("lobby")
-      plotMetric("createTable")
-      plotMetric("joinTable")
-      plotMetric("game")
+      Promise.all([
+        plotMetric("lobby"),
+        plotMetric("createTable"),
+        plotMetric("joinTable"),
+        plotMetric("game"),
+      ])
 
       async function getData(url) {
         const response = await fetch(url)
