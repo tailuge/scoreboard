@@ -18,16 +18,16 @@ export class MockKV {
   async zadd<TData>(
     ...args:
       | [
-          key: string,
-          scoreMember: { score: number; member: TData },
-          ...scoreMemberPairs: { score: number; member: TData }[],
-        ]
+        key: string,
+        scoreMember: { score: number; member: TData },
+        ...scoreMemberPairs: { score: number; member: TData }[],
+      ]
       | [
-          key: string,
-          opts: any,
-          scoreMember: { score: number; member: TData },
-          ...scoreMemberPairs: { score: number; member: TData }[],
-        ]
+        key: string,
+        opts: any,
+        scoreMember: { score: number; member: TData },
+        ...scoreMemberPairs: { score: number; member: TData }[],
+      ]
   ): Promise<number> {
     const [key, ...rest] = args
     let scoreMembers: { score: number; member: TData }[]
@@ -71,7 +71,8 @@ export class MockKV {
     return result.map((item) => {
       try {
         return JSON.parse(item)
-      } catch (e) {
+      } catch {
+        // Return original if not valid JSON
         return item
       }
     })
@@ -115,7 +116,7 @@ export class MockKV {
     const score = await this.mockRedis.zscore(key, stringMember)
 
     // Return null if no score found, otherwise return the parsed number
-    return score === null ? null : parseFloat(score)
+    return score === null ? null : Number.parseFloat(score)
   }
 
   /**
@@ -145,7 +146,8 @@ export class MockKV {
     // Parse the stringified JSON back into an object
     try {
       return JSON.parse(value)
-    } catch (e) {
+    } catch {
+      // Return original if not valid JSON
       return value
     }
   }
@@ -166,7 +168,8 @@ export class MockKV {
     for (const [field, value] of Object.entries(result)) {
       try {
         parsedResult[field] = JSON.parse(value)
-      } catch (e) {
+      } catch {
+        // Return original if not valid JSON
         parsedResult[field] = value
       }
     }
