@@ -3,11 +3,26 @@ import { TableService } from "../services/TableService"
 import { mockKv } from "./mockkv"
 import { VercelKV } from "@vercel/kv"
 
+function makeTable(lastUsed: number, tableId: string): Table {
+  const newTable: Table = {
+    id: tableId,
+    creator: { id: "creator01", name: "user01" },
+    players: [{ id: "creator01", name: "user01" }],
+    spectators: [],
+    createdAt: lastUsed,
+    lastUsedAt: lastUsed,
+    isActive: true,
+    ruleType: "nineball",
+    completed: false,
+  }
+  return newTable
+}
+
 describe("TableService", () => {
   let tableService: TableService
 
   beforeAll(() => {
-    tableService = new TableService(mockKv as VercelKV, (_) =>
+    tableService = new TableService(mockKv, (_) =>
       Promise.resolve()
     )
   })
@@ -16,20 +31,7 @@ describe("TableService", () => {
     await mockKv.flushall()
   })
 
-  function makeTable(lastUsed: number, tableId: string): Table {
-    const newTable: Table = {
-      id: tableId,
-      creator: { id: "creator01", name: "user01" },
-      players: [{ id: "creator01", name: "user01" }],
-      spectators: [],
-      createdAt: lastUsed,
-      lastUsedAt: lastUsed,
-      isActive: true,
-      ruleType: "nineball",
-      completed: false,
-    }
-    return newTable
-  }
+
 
   const userId = "user1"
   const userName = "luke"

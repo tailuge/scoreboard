@@ -8,7 +8,7 @@ describe("ScoreTable", () => {
   })
 
   it("should add a new high score and like it", async () => {
-    const scoreTable = new ScoreTable(mockKv as VercelKV)
+    const scoreTable = new ScoreTable(mockKv)
     await scoreTable.add("nineball", 100, "user", { some: "data" })
     const items = await scoreTable.topTen("nineball")
     console.log(items)

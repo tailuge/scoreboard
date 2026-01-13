@@ -10,9 +10,9 @@ const TABLE_TIMEOUT = 60 * 1000 // 1 minute
 
 export class TableService {
   constructor(
-    private readonly store: VercelKV = kv,
+    private readonly store: VercelKV | Partial<VercelKV> = kv,
     private readonly notify: (event: any) => Promise<void> = this.defaultNotify
-  ) {}
+  ) { }
 
   async getTables() {
     await this.expireTables()

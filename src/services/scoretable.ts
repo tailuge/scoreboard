@@ -13,7 +13,7 @@ export class ScoreTable {
   readonly replayUrl = "https://tailuge.github.io/billiards/dist/"
   readonly notFound = "https://scoreboard-tailuge.vercel.app/notfound.html"
 
-  constructor(private readonly store: VercelKV) { }
+  constructor(private readonly store: VercelKV | Partial<VercelKV>) { }
 
   dbKey(ruletype) {
     return `${this.prefix}${ruletype}`

@@ -3,8 +3,8 @@ import { kv, VercelKV } from "@vercel/kv"
 export class UsageService {
   constructor(
     private readonly key: string,
-    private readonly store: VercelKV = kv
-  ) {}
+    private readonly store: VercelKV | Partial<VercelKV> = kv
+  ) { }
 
   fullKey(): string {
     return this.key + "Usage"
