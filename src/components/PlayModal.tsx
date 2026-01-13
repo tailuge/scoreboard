@@ -42,7 +42,7 @@ export function createOverlay(target: URL, onClose: () => void) {
   closeButton.textContent = "Close"
   closeButton.className = "iframe-close-button"
   closeButton.onclick = () => {
-    document.body.removeChild(overlay)
+    overlay.remove()
     onClose()
   }
 

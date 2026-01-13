@@ -56,10 +56,10 @@ export function CreateTable({
           onClick={handleCreate}
           disabled={isLoading || !isOnline}
           className={`game-button-main ${isOnline && !isLoading
-              ? "game-button-enabled"
-              : "game-button-disabled"
+            ? "game-button-enabled"
+            : "game-button-disabled"
             }`}
-          title={!isOnline ? "Server offline" : ""}
+          title={isOnline ? "" : "Server offline"}
         >
           Play {ruleType.charAt(0).toUpperCase() + ruleType.slice(1)}
         </button>

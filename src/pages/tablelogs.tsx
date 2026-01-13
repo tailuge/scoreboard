@@ -23,7 +23,7 @@ export default function TableLogs() {
       const currentMsg = JSON.parse(message)
       const nextMsg =
         index + 1 < messages.length ? JSON.parse(messages[index + 1]) : null
-      return currentMsg.type !== "AIM" || !nextMsg || nextMsg.type !== "AIM"
+      return currentMsg.type !== "AIM" || nextMsg?.type !== "AIM"
     })
   }
 
