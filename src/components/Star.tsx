@@ -2,7 +2,7 @@ import { StarIcon as SolidStarIcon } from "@heroicons/react/24/solid"
 import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline"
 import { useState } from "react"
 
-export function Title() {
+export function Star() {
   const [clicked, setClicked] = useState(false)
 
   const handleClick = () => {

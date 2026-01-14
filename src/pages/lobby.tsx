@@ -7,7 +7,7 @@ import { User } from "@/components/User"
 import Head from "next/head"
 import { Table } from "@/services/table"
 import { NchanSub } from "@/nchan/nchansub"
-import { Title } from "@/components/Title"
+import { Star } from "@/components/Star"
 import { markUsage } from "@/utils/usage"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import { getUID } from "@/utils/uid"
@@ -98,7 +98,7 @@ export default function Lobby() {
             userId={userId}
             onUserNameChange={handleUserNameChange}
           />
-          <Title />
+          <Star />
           <ServerStatus statusPage={statusPage} />
         </div>
       </div>
