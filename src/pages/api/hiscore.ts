@@ -30,7 +30,7 @@ export default async function handler(request: NextRequest) {
 
   const ruletype = url.searchParams.get("ruletype")
   const base = new Date("2024").valueOf()
-  const score = json?.score + (new Date().valueOf() - base) / base
+  const score = json?.score + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
   console.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
   const data = await scoretable.topTen(url.searchParams.get("ruletype"))
