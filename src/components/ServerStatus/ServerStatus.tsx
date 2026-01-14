@@ -1,6 +1,5 @@
-import { FC, useState } from "react"
+import { FC } from "react"
 import { StatusIndicator } from "./StatusIndicator"
-import { LogsModal } from "./LogsModal"
 import { useServerStatus } from "../hooks/useServerStatus"
 
 interface ServerStatusProps {
@@ -8,13 +7,15 @@ interface ServerStatusProps {
 }
 
 export const ServerStatus: FC<ServerStatusProps> = ({ statusPage }) => {
-  const [showLogs, setShowLogs] = useState(false)
   const serverState = useServerStatus(statusPage)
+
+  const handleStatusClick = () => {
+    window.open("/server-logs", "_blank")
+  }
 
   return (
     <div className="relative">
-      <StatusIndicator {...serverState} onClick={() => setShowLogs(true)} />
-      <LogsModal showLogs={showLogs} onClose={() => setShowLogs(false)} />
+      <StatusIndicator {...serverState} onClick={handleStatusClick} />
     </div>
   )
 }
