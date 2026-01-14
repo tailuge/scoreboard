@@ -54,22 +54,14 @@ export const LogsModal: React.FC<LogsModalProps> = ({ showLogs, onClose }) => {
           </div>
           {tables.map((table) => (
             <div key={table.id} className="border rounded mb-1">
-              <div
-                className="p-1 cursor-pointer hover:bg-gray-100 flex items-center"
+              <button
+                className="p-1 cursor-pointer hover:bg-gray-100 flex items-center w-full text-left"
                 onClick={() => handleTableClick(table.id)}
-                onKeyDown={(e) => {
-                  // Check if the key pressed is "Enter" or "Space" (standard keys for activating elements)
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleTableClick(table.id)
-                  }
-                }}
-                role="button" // Indicates that the div is acting as a button
-                tabIndex={0} // Makes the div focusable
               >
                 <div>
                   Table ID: {table.id} Creator: {table.creator.name}
                 </div>
-              </div>
+              </button>
             </div>
           ))}
         </div>

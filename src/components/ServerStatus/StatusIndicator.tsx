@@ -50,11 +50,12 @@ export const StatusIndicator: FC<StatusIndicatorProps> = ({
   serverStatus,
   onClick,
 }) => {
-  const statusClass = isConnecting
-    ? "status-connecting"
-    : isOnline
-      ? "status-online"
-      : "status-offline"
+  let statusClass = "status-offline"
+  if (isConnecting) {
+    statusClass = "status-connecting"
+  } else if (isOnline) {
+    statusClass = "status-online"
+  }
 
   return (
     <button className={`status-indicator ${statusClass}`} onClick={onClick}>
