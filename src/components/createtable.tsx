@@ -80,12 +80,16 @@ export function CreateTable({
                 key={type}
                 className={`game-dropdown-item ${ruleType === type ? "game-dropdown-item-selected" : ""
                   }`}
-                onClick={() => {
-                  setRuleType(type)
-                  setDropdownOpen(false)
-                }}
               >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
+                <button
+                  className="w-full text-left bg-transparent border-none cursor-pointer"
+                  onClick={() => {
+                    setRuleType(type)
+                    setDropdownOpen(false)
+                  }}
+                >
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </button>
               </li>
             ))}
           </ul>

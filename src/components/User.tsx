@@ -24,7 +24,8 @@ export function User({ userName, userId, onUserNameChange }: UserPillProps) {
   }
 
   return (
-    <div
+    <button
+      type="button"
       className="user-pill"
       title={`${userName}\n${userId}`}
       onClick={() => setIsEditing(true)}
@@ -44,7 +45,7 @@ export function User({ userName, userId, onUserNameChange }: UserPillProps) {
       ) : (
         userName
       )}
-    </div>
+    </button>
   )
 }
 

@@ -13,7 +13,7 @@ export default function TableLogs() {
   const router = useRouter()
   const { tableId } = router.query
   const [messages, setMessages] = useState<string[]>([])
-  const [subscription, setSubscription] = useState<NchanSub | null>(null)
+  const [_, setSubscription] = useState<NchanSub | null>(null)
   const [expandedMessages, setExpandedMessages] = useState<Set<number>>(
     new Set()
   )
