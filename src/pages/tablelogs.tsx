@@ -9,20 +9,28 @@ interface LogMessage {
   [key: string]: any
 }
 
+interface MessageItem {
+  id: number
+  content: string
+}
+
 export default function TableLogs() {
   const router = useRouter()
   const { tableId } = router.query
-  const [messages, setMessages] = useState<string[]>([])
-  const [_, setSubscription] = useState<NchanSub | null>(null)
+  const [messages, setMessages] = useState<MessageItem[]>([])
   const [expandedMessages, setExpandedMessages] = useState<Set<number>>(
     new Set()
   )
 
-  const filterConsecutiveAimMessages = (messages: string[]): string[] => {
+  const filterConsecutiveAimMessages = (
+    messages: MessageItem[]
+  ): MessageItem[] => {
     return messages.filter((message, index) => {
-      const currentMsg = JSON.parse(message)
+      const currentMsg = JSON.parse(message.content)
       const nextMsg =
-        index + 1 < messages.length ? JSON.parse(messages[index + 1]) : null
+        index + 1 < messages.length
+          ? JSON.parse(messages[index + 1].content)
+          : null
       return currentMsg.type !== "AIM" || nextMsg?.type !== "AIM"
     })
   }
@@ -34,13 +42,18 @@ export default function TableLogs() {
       tableId as string,
       (message) => {
         const messageString = message.toString()
-        setMessages((prev) => [...prev, messageString])
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: prev.length > 0 ? prev[prev.length - 1].id + 1 : 0,
+            content: messageString,
+          },
+        ])
       },
       "table"
     )
 
     sub.start()
-    setSubscription(sub)
 
     return () => {
       if (sub) {
@@ -49,40 +62,33 @@ export default function TableLogs() {
     }
   }, [tableId])
 
-  const toggleMessage = (index: number) => {
+  const toggleMessage = (id: number) => {
     setExpandedMessages((prev) => {
       const next = new Set(prev)
-      if (next.has(index)) {
-        next.delete(index)
+      if (next.has(id)) {
+        next.delete(id)
       } else {
-        next.add(index)
+        next.add(id)
       }
       return next
     })
   }
 
-  const renderMessages = (messages: string[]) => {
+  const renderMessages = (messages: MessageItem[]) => {
     const filteredMessages = filterConsecutiveAimMessages(messages)
-    return filteredMessages.map((message, index) => {
+    return filteredMessages.map((message) => {
       try {
-        const parsedMessage: LogMessage = JSON.parse(message)
-        const isExpanded = expandedMessages.has(index)
+        const parsedMessage: LogMessage = JSON.parse(message.content)
+        const isExpanded = expandedMessages.has(message.id)
         return (
           <div
-            key={index}
+            key={message.id}
             className="py-0 min-h-[1rem] border-b border-gray-100 last:border-b-0"
           >
-            <div
-              className="text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center"
-              onClick={() => toggleMessage(index)}
-              onKeyDown={(e) => {
-                // Trigger the same action for "Enter" or "Space" key
-                if (e.key === "Enter" || e.key === " ") {
-                  toggleMessage(index)
-                }
-              }}
-              role="button" // Indicates that the div acts like a button
-              tabIndex={0} // Makes the div focusable
+            <button
+              type="button"
+              className="w-full text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center text-left appearance-none bg-transparent"
+              onClick={() => toggleMessage(message.id)}
             >
               {isExpanded ? (
                 <ChevronDownIcon className="h-3 w-3 text-gray-500 mr-1" />
@@ -90,7 +96,7 @@ export default function TableLogs() {
                 <ChevronRightIcon className="h-3 w-3 text-gray-500 mr-1" />
               )}
               {parsedMessage.clientId} {parsedMessage.type}
-            </div>
+            </button>
             {isExpanded && (
               <div className="text-black pl-4">
                 {JSON.stringify(parsedMessage, null, 2)}
@@ -101,10 +107,10 @@ export default function TableLogs() {
       } catch {
         return (
           <div
-            key={index}
+            key={message.id}
             className="py-1 min-h-[2rem] border-b border-gray-100 last:border-b-0 text-red-500"
           >
-            Invalid JSON: {message}
+            Invalid JSON: {message.content}
           </div>
         )
       }
