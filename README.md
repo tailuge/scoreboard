@@ -11,25 +11,40 @@ This project is a work in progress experiment to get AI LLMs to code a complex t
 
 I have to intervene and untangle things now and then but these tools allowed me to get away with minimal understanding of react and nextjs. I am blown away with it all - could never have imagined this a couple of years ago. It is a thrill to witness these advances (being put use to nonsense).
 
-## dev
+## scripts
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tailuge/scoreboard)
+### dev
 
 ```shell
 yarn dev
-yarn deps
+yarn start
 yarn build
+yarn deps
 yarn prettify
-yarn serve
-yarn docker:build
-yarn docker:push
 ```
 
-## test
+### lint
+
+```shell
+yarn lint
+yarn lint:smells
+```
+
+### test
 
 ```shell
 yarn test
 yarn coverage
+yarn e2e
+yarn e2e:headed
+yarn e2e:local
+```
+
+### docker
+
+```shell
+yarn docker:build
+yarn docker:push
 ```
 [multi lobby](https://scoreboard-tailuge.vercel.app/test.html)
 
