@@ -39,4 +39,3 @@ Review style: Code should be simple and readable. Avoid complex logic and unnece
 
 ## 7. Testing
 - New components should have associated Jest tests in `src/tests`.
-- Significant user flows should be covered by Playwright E2E tests.
