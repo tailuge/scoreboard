@@ -1,15 +1,9 @@
 import "@testing-library/jest-dom"
 
+import { mockKv } from "./mockkv"
+
 jest.mock("@vercel/kv", () => ({
-  kv: {
-    hgetall: jest.fn(),
-    hset: jest.fn(),
-    hdel: jest.fn(),
-    zadd: jest.fn(),
-    zrange: jest.fn(),
-    zrem: jest.fn(),
-    flushall: jest.fn(),
-  },
+  kv: mockKv,
 }))
 
 jest.mock("uncrypto", () => ({

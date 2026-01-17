@@ -6,7 +6,7 @@ describe("UsageService", () => {
   let usageService: UsageService
 
   beforeAll(() => {
-    usageService = new UsageService("testUsage", mockKv)
+    usageService = new UsageService("testUsage")
   })
 
   afterEach(async () => {

@@ -22,7 +22,7 @@ describe("TableService", () => {
   let tableService: TableService
 
   beforeAll(() => {
-    tableService = new TableService(mockKv, (_) =>
+    tableService = new TableService(undefined, (_) =>
       Promise.resolve()
     )
   })
