@@ -18,16 +18,16 @@ export class MockKV {
   async zadd<TData>(
     ...args:
       | [
-          key: string,
-          scoreMember: { score: number; member: TData },
-          ...scoreMemberPairs: { score: number; member: TData }[],
-        ]
+        key: string,
+        scoreMember: { score: number; member: TData },
+        ...scoreMemberPairs: { score: number; member: TData }[],
+      ]
       | [
-          key: string,
-          opts: any,
-          scoreMember: { score: number; member: TData },
-          ...scoreMemberPairs: { score: number; member: TData }[],
-        ]
+        key: string,
+        opts: any,
+        scoreMember: { score: number; member: TData },
+        ...scoreMemberPairs: { score: number; member: TData }[],
+      ]
   ): Promise<number> {
     const [key, ...rest] = args
     let scoreMembers: { score: number; member: TData }[]
@@ -228,6 +228,35 @@ export class MockKV {
 
   async flushall(): Promise<"OK"> {
     return this.mockRedis.flushall() as Promise<"OK">
+  }
+
+  /**
+   * Adapter function to match @vercel/kv's set signature using ioredis-mock's set.
+   */
+  async set(key: string, value: any, opts?: any): Promise<any> {
+    const stringValue = JSON.stringify(value)
+    // Basic support for opts if needed in future, currently just simple set
+    return this.mockRedis.set(key, stringValue)
+  }
+
+  /**
+   * Adapter function to match @vercel/kv's get signature using ioredis-mock's get.
+   */
+  async get<TData>(key: string): Promise<TData | null> {
+    const value = await this.mockRedis.get(key)
+    if (value === null) return null
+    try {
+      return JSON.parse(value)
+    } catch {
+      return value as any
+    }
+  }
+
+  /**
+   * Adapter function to match @vercel/kv's incr signature using ioredis-mock's incr.
+   */
+  async incr(key: string): Promise<number> {
+    return this.mockRedis.incr(key)
   }
 }
 
