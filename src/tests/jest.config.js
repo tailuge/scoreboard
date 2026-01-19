@@ -14,6 +14,9 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.json" }],
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!jsoncrush/)",
+  ],
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/tests/**", // Exclude test files and mocks in tests dir
