@@ -8,7 +8,7 @@ jest.mock("@vercel/kv");
 describe("GET /api/tables/[tableId]", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    global.Response.json = jest.fn().mockReturnValue(new Response());
+    globalThis.Response.json = jest.fn().mockReturnValue(new Response());
   });
 
   it("should return a table if it exists", async () => {
@@ -57,7 +57,7 @@ describe("DELETE /api/tables/[tableId]", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    global.Response.json = jest.fn().mockReturnValue(new Response());
+    globalThis.Response.json = jest.fn().mockReturnValue(new Response());
   });
 
   it("should delete a table if the user is the creator", async () => {

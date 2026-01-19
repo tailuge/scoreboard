@@ -11,20 +11,18 @@ jest.mock("uncrypto", () => ({
 }))
 
 // Mocking Edge runtime globals
-if (typeof global.Request === 'undefined') {
-  global.Request = class Request {
-    constructor(input, init) {
-      // Basic mock properties
-      this.url = input;
-      this.method = init?.method || 'GET';
-      this.headers = new Headers(init?.headers);
-      this.body = init?.body;
-    }
+if (globalThis.Request === undefined) {
+  globalThis.Request = function Request(input, init) {
+    // Basic mock properties
+    this.url = input;
+    this.method = init?.method || "GET";
+    this.headers = new Headers(init?.headers);
+    this.body = init?.body;
   };
 }
 
-if (typeof global.Response === 'undefined') {
-  global.Response = class Response {
+if (globalThis.Response === undefined) {
+  globalThis.Response = class Response {
     constructor(body, init) {
       // Basic mock properties
       this.body = body;
@@ -42,8 +40,8 @@ if (typeof global.Response === 'undefined') {
   };
 }
 
-if (typeof global.Headers === 'undefined') {
-    global.Headers = class Headers {
+if (globalThis.Headers === undefined) {
+    globalThis.Headers = class Headers {
         constructor(init) {
             this._headers = new Map(Object.entries(init || {}));
         }
