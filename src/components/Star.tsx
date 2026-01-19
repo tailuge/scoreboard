@@ -13,7 +13,8 @@ export function Star() {
   return (
     <button
       onClick={handleClick}
-      onKeyDown={handleClick}
+      aria-label="Star on GitHub"
+      title="Star on GitHub"
       className={`star-button ${clicked ? "star-button--clicked" : "star-button--unclicked"}`}
     >
       {clicked ? (
