@@ -10,15 +10,15 @@ describe("Game Page", () => {
     expect(screen.getByText("Highscore Challenge")).toBeInTheDocument()
     expect(screen.getByText("2-Player Online")).toBeInTheDocument()
 
-    // Check for the Highscore Challenge buttons (strict match to avoid matching "Online" buttons)
+    // Check for the Highscore Challenge links (strict match to avoid matching "Online" buttons)
     expect(
-      screen.getByRole("button", { name: /^Play Snooker$/i })
+      screen.getByRole("link", { name: /^Play Snooker$/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /^Play Nine Ball$/i })
+      screen.getByRole("link", { name: /^Play Nine Ball$/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /^Play Three Cushion$/i })
+      screen.getByRole("link", { name: /^Play Three Cushion$/i })
     ).toBeInTheDocument()
 
     // Check for the Online buttons
