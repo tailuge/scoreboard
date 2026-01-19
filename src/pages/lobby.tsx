@@ -114,7 +114,7 @@ export default function Lobby() {
         createTable(gameType)
       }
     }
-  }, [isLoading, tables, searchParams, userId, userName])
+  }, [isLoading, tables, searchParams, userId, userName, createTable, handleJoin])
 
   useEffect(() => {
     tables.forEach((table) => {

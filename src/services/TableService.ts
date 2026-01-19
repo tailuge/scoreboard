@@ -7,6 +7,7 @@ import { getUID } from "@/utils/uid"
 
 const KEY = "tables"
 const TABLE_TIMEOUT = 60 * 1000 // 1 minute
+const TABLE_NOT_FOUND_ERROR = "Table not found"
 
 export class TableService {
   constructor(
@@ -65,7 +66,7 @@ export class TableService {
     const table = await this.store.hget<Table>(KEY, tableId)
     if (!table) {
       await this.notify({ action: "expired table" })
-      throw new Error("Table not found")
+      throw new Error(TABLE_NOT_FOUND_ERROR)
     }
 
     if (table.players.length >= 2) {
@@ -85,7 +86,7 @@ export class TableService {
     const table = await this.store.hget<Table>(KEY, tableId)
 
     if (!table) {
-      throw new Error("Table not found")
+      throw new Error(TABLE_NOT_FOUND_ERROR)
     }
 
     const spectator: Player = { id: userId, name: userName || "Anonymous" }
@@ -101,7 +102,7 @@ export class TableService {
     const table = await this.store.hget<Table>(KEY, tableId)
 
     if (!table) {
-      throw new Error("Table not found")
+      throw new Error(TABLE_NOT_FOUND_ERROR)
     }
 
     table.lastUsedAt = Date.now()
