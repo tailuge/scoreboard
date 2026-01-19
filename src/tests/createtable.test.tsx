@@ -22,7 +22,11 @@ describe("CreateTable component", () => {
 
   it("renders the component and creates a table on click", async () => {
     render(
-      <CreateTable userId="user-1" userName="TestUser" onCreate={mockOnCreate} />
+      <CreateTable
+        userId="user-1"
+        userName="TestUser"
+        onCreate={mockOnCreate}
+      />
     )
 
     // Check initial render
@@ -50,7 +54,11 @@ describe("CreateTable component", () => {
 
   it("opens the dropdown and changes the game type", () => {
     render(
-      <CreateTable userId="user-1" userName="TestUser" onCreate={mockOnCreate} />
+      <CreateTable
+        userId="user-1"
+        userName="TestUser"
+        onCreate={mockOnCreate}
+      />
     )
 
     const dropdownButton = screen.getByText("▼")

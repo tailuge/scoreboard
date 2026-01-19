@@ -60,13 +60,15 @@ describe("TableService", () => {
     it("should fail if table is full (already has 2 players)", async () => {
       const table = await tableService.createTable("u1", "user1", "rule")
       await tableService.joinTable(table.id, "u2", "user2")
-      await expect(tableService.joinTable(table.id, "u3", "user3"))
-        .rejects.toThrow("Table is full")
+      await expect(
+        tableService.joinTable(table.id, "u3", "user3")
+      ).rejects.toThrow("Table is full")
     })
 
     it("should fail if table does not exist", async () => {
-      await expect(tableService.joinTable("missing", "u2", "user2"))
-        .rejects.toThrow("Table not found")
+      await expect(
+        tableService.joinTable("missing", "u2", "user2")
+      ).rejects.toThrow("Table not found")
     })
   })
 
@@ -79,8 +81,9 @@ describe("TableService", () => {
     })
 
     it("should fail if table does not exist", async () => {
-      await expect(tableService.spectateTable("missing", "u3", "spec1"))
-        .rejects.toThrow("Table not found")
+      await expect(
+        tableService.spectateTable("missing", "u3", "spec1")
+      ).rejects.toThrow("Table not found")
     })
   })
 
@@ -92,8 +95,9 @@ describe("TableService", () => {
     })
 
     it("should fail if table does not exist", async () => {
-      await expect(tableService.completeTable("missing"))
-        .rejects.toThrow("Table not found")
+      await expect(tableService.completeTable("missing")).rejects.toThrow(
+        "Table not found"
+      )
     })
   })
 })
