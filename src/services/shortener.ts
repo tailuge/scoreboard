@@ -12,8 +12,7 @@ export class Shortener {
   }
 
   async keyFountain() {
-    const id = await this.store.incr("idfountain")
-    return id
+    return await this.store.incr("idfountain")
   }
 
   dbKey(id) {

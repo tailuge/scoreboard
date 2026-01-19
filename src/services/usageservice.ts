@@ -21,9 +21,8 @@ export class UsageService {
   }
 
   async getAllCounts(): Promise<unknown[]> {
-    const result = await this.store.zrange(this.fullKey(), 0, -1, {
+    return await this.store.zrange(this.fullKey(), 0, -1, {
       withScores: true,
     })
-    return result
   }
 }
