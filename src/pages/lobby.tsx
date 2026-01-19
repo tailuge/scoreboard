@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
@@ -16,13 +16,16 @@ export default function Lobby() {
   const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("")
   const [tables, setTables] = useState<Table[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const searchParams = useSearchParams()
   const statusPage = "https://billiards-network.onrender.com/basic_status"
+  const hasHandledAutoJoin = useRef(false)
 
   const fetchTables = async () => {
     const res = await fetch("/api/tables")
     const data = await res.json()
     setTables(data)
+    setIsLoading(false)
   }
 
   const { fetchActiveUsers } = useServerStatus(statusPage)
@@ -74,6 +77,33 @@ export default function Lobby() {
     fetchTables()
   }
 
+  const createTable = async (ruleType: string) => {
+    await fetch("/api/tables", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, userName, ruleType }),
+    })
+    fetchTables()
+  }
+
+  useEffect(() => {
+    if (isLoading || hasHandledAutoJoin.current || !userId || !userName) return
+
+    const action = searchParams.get("action")
+    const gameType = searchParams.get("gameType")
+
+    if (action === "join" && gameType) {
+      hasHandledAutoJoin.current = true
+      const existingTable = tables.find((t) => t.ruleType === gameType)
+
+      if (existingTable) {
+        handleJoin(existingTable.id)
+      } else {
+        createTable(gameType)
+      }
+    }
+  }, [isLoading, tables, searchParams, userId, userName])
+
   const handleUserNameChange = (newUserName: string) => {
     setUserName(newUserName)
     localStorage.setItem("userName", newUserName)
@@ -112,3 +142,4 @@ export default function Lobby() {
     </main>
   )
 }
+

@@ -21,15 +21,15 @@ describe("Game Page", () => {
       screen.getByRole("link", { name: /^Play Three Cushion$/i })
     ).toBeInTheDocument()
 
-    // Check for the Online buttons
+    // Check for the Online buttons (now links)
     expect(
-      screen.getByRole("button", { name: /Play Snooker Online/i })
+      screen.getByRole("link", { name: /Play Snooker Online/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /Play Nine Ball Online/i })
+      screen.getByRole("link", { name: /Play Nine Ball Online/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /Play Three Cushion Online/i })
+      screen.getByRole("link", { name: /Play Three Cushion Online/i })
     ).toBeInTheDocument()
 
     // Check if images are present (using alt text) - now duplicated

@@ -64,6 +64,7 @@ yarn docker:push
 2. **Backend**: The project heavily relies on Vercel KV. Local development might use `ioredis-mock` for testing, but real functionality requires KV credentials.
 3. **Hybrid Pages**: Some functionality is in Next.js React pages, while other parts are in static HTML files in the `public` directory.
 4. **Nchan**: Real-time updates (like lobby status) are handled via Nchan. See `src/nchan` for implementation details.
+5. **Testing**: Always run `yarn test` after completing a task to ensure no regressions were introduced.
 
 ## Common Tasks
 - **Adding an API route**: Add a new file in `src/pages/api`.

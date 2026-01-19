@@ -8,18 +8,21 @@ const GAMES = [
     icon: "/snooker_icon.png",
     alt: "Snooker Icon",
     highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=snooker",
+    ruleType: "snooker",
   },
   {
     name: "Nine Ball",
     icon: "/nineball_icon.png",
     alt: "Nine Ball Icon",
     highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=nineball",
+    ruleType: "nineball",
   },
   {
     name: "Three Cushion",
     icon: "/threecushion_icon.png",
     alt: "Three Cushion Icon",
     highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=threecushion",
+    ruleType: "threecushion",
   },
 ]
 
@@ -62,8 +65,8 @@ function GameButton({
         href={href}
         className={commonClasses}
         aria-label={ariaLabel}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={href.startsWith("http") ? "_blank" : "_self"}
+        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
       >
         {content}
       </a>
@@ -100,7 +103,11 @@ function GameSection({
             icon={game.icon}
             alt={game.alt}
             hoverBorderColor={hoverBorderColor}
-            href={isHighscore ? game.highscoreUrl : undefined}
+            href={
+              isHighscore
+                ? game.highscoreUrl
+                : `/lobby?action=join&gameType=${game.ruleType}`
+            }
             ariaLabel={
               isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
             }
