@@ -20,59 +20,54 @@ export default function Game() {
         <meta name="description" content="Choose your game mode" />
       </Head>
 
-      <h1 className="text-4xl font-bold text-white mb-12">Choose Your Game</h1>
+      <div className="flex flex-col gap-6 w-full max-w-lg items-center h-full justify-center">
 
-      <div className="flex flex-col gap-12 w-full max-w-6xl items-center">
-        <div className="flex flex-col items-center gap-6 w-full">
-          <div className="flex flex-wrap justify-center gap-6">
+        {/* Highscore Challenge Group */}
+        <div className="flex flex-col items-center gap-4 w-full border border-gray-700/50 rounded-3xl p-6 bg-gray-800/20 shadow-inner">
+          <div className="grid grid-cols-3 gap-4 w-full">
             {games.map((game) => (
               <button
                 key={game.name}
-                className="group relative flex flex-col items-center justify-center bg-gray-800 p-6 sm:p-8 rounded-2xl border-2 border-transparent hover:border-blue-500 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 w-full sm:w-64 h-64 sm:h-64 max-w-xs"
+                className="group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 hover:border-blue-500 hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square"
                 aria-label={`Play ${game.name}`}
               >
-                <div className="relative w-28 h-28 sm:w-32 sm:h-32 mb-4 sm:mb-6 transition-transform duration-300 group-hover:rotate-6">
+                <div className="relative w-full h-full p-4 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src={game.icon}
                     alt={game.alt}
                     fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                 </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-300 group-hover:text-white transition-colors duration-300">
-                  {game.name}
-                </span>
               </button>
             ))}
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-wide text-center">Highscore Challenge</h2>
+          <h2 className="text-xl font-medium text-gray-400 tracking-wide text-center uppercase text-sm">Highscore Challenge</h2>
         </div>
 
-        <div className="flex flex-col items-center gap-6 w-full">
-          <div className="flex flex-wrap justify-center gap-6">
+        {/* 2-Player Online Group */}
+        <div className="flex flex-col items-center gap-4 w-full border border-gray-700/50 rounded-3xl p-6 bg-gray-800/20 shadow-inner">
+          <div className="grid grid-cols-3 gap-4 w-full">
             {games.map((game) => (
               <button
                 key={`${game.name}-online`}
-                className="group relative flex flex-col items-center justify-center bg-gray-800 p-6 sm:p-8 rounded-2xl border-2 border-transparent hover:border-green-500 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-green-500/20 w-full sm:w-64 h-64 sm:h-64 max-w-xs"
+                className="group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 hover:border-green-500 hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square"
                 aria-label={`Play ${game.name} Online`}
               >
-                <div className="relative w-28 h-28 sm:w-32 sm:h-32 mb-4 sm:mb-6 transition-transform duration-300 group-hover:rotate-6">
+                <div className="relative w-full h-full p-4 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src={game.icon}
                     alt={game.alt}
                     fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                 </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-300 group-hover:text-white transition-colors duration-300">
-                  {game.name}
-                </span>
               </button>
             ))}
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-wide text-center">2-Player Online</h2>
+          <h2 className="text-xl font-medium text-gray-400 tracking-wide text-center uppercase text-sm">2-Player Online</h2>
         </div>
       </div>
     </div>

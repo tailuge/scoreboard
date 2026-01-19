@@ -5,8 +5,8 @@ describe("Game Page", () => {
   it("renders the game selection page with 3 buttons", () => {
     render(<Game />)
 
-    // Check main heading
-    expect(screen.getByText("Choose Your Game")).toBeInTheDocument()
+    // Check main heading (Removed)
+    // expect(screen.getByText("Choose Your Game")).toBeInTheDocument()
     expect(screen.getByText("Highscore Challenge")).toBeInTheDocument()
     expect(screen.getByText("2-Player Online")).toBeInTheDocument()
 
