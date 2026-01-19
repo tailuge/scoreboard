@@ -13,8 +13,8 @@ export function Star() {
   return (
     <button
       onClick={handleClick}
-      aria-label="Star on GitHub"
-      title="Star on GitHub"
+      aria-label="Star the repository on GitHub (opens in a new tab)"
+      title="Star the repository on GitHub (opens in a new tab)"
       className={`star-button ${clicked ? "star-button--clicked" : "star-button--unclicked"}`}
     >
       {clicked ? (
