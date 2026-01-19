@@ -9,7 +9,7 @@ describe("useServerStatus", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    global.fetch = jest.fn()
+    globalThis.fetch = jest.fn() as jest.Mock
   })
 
   it("should have the correct initial state", async () => {
@@ -21,7 +21,7 @@ describe("useServerStatus", () => {
   })
 
   it("should handle a successful server connection", async () => {
-    ;(global.fetch as jest.Mock)
+    ;(globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({
         ok: true,
         type: "basic",
@@ -53,7 +53,7 @@ describe("useServerStatus", () => {
   })
 
   it("should handle a failed server connection", async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+    ;(globalThis.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 500,
       statusText: "Internal Server Error",
@@ -77,7 +77,7 @@ describe("useServerStatus", () => {
 
   it("should handle a network error", async () => {
     const errorMessage = "Network error"
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(new Error(errorMessage))
+    ;(globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error(errorMessage))
 
     const { result, rerender } = renderHook(() =>
       useServerStatus(mockStatusPage)
@@ -94,7 +94,7 @@ describe("useServerStatus", () => {
   })
 
   it("should fetch active users manually", async () => {
-    ;(global.fetch as jest.Mock)
+    ;(globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({
         ok: true,
         type: "basic",
