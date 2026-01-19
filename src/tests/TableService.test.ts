@@ -31,6 +31,8 @@ describe("TableService", () => {
   const userId = "user1"
   const userName = "luke"
   const ruleType = "nineball"
+  const TABLE_NOT_FOUND_ERROR = "Table not found"
+  const SHOULD_FAIL_IF_TABLE_MISSING = "should fail if table does not exist"
 
   it("should create a new table", async () => {
     const newTable = await tableService.createTable(userId, userName, ruleType)
@@ -65,10 +67,10 @@ describe("TableService", () => {
       ).rejects.toThrow("Table is full")
     })
 
-    it("should fail if table does not exist", async () => {
+    it(SHOULD_FAIL_IF_TABLE_MISSING, async () => {
       await expect(
         tableService.joinTable("missing", "u2", "user2")
-      ).rejects.toThrow("Table not found")
+      ).rejects.toThrow(TABLE_NOT_FOUND_ERROR)
     })
   })
 
@@ -80,10 +82,10 @@ describe("TableService", () => {
       expect(updated.spectators[0].id).toBe("u3")
     })
 
-    it("should fail if table does not exist", async () => {
+    it(SHOULD_FAIL_IF_TABLE_MISSING, async () => {
       await expect(
         tableService.spectateTable("missing", "u3", "spec1")
-      ).rejects.toThrow("Table not found")
+      ).rejects.toThrow(TABLE_NOT_FOUND_ERROR)
     })
   })
 
@@ -94,9 +96,9 @@ describe("TableService", () => {
       expect(updated.completed).toBe(true)
     })
 
-    it("should fail if table does not exist", async () => {
+    it(SHOULD_FAIL_IF_TABLE_MISSING, async () => {
       await expect(tableService.completeTable("missing")).rejects.toThrow(
-        "Table not found"
+        TABLE_NOT_FOUND_ERROR
       )
     })
   })

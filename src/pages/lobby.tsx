@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
@@ -70,7 +70,7 @@ export default function Lobby() {
     return response.status === 200
   }
 
-  const handleJoin = async (tableId: string) => {
+  const handleJoin = useCallback(async (tableId: string) => {
     const success = await tableAction(tableId, "join")
     if (success) {
       const table = tables.find((t) => t.id === tableId)
@@ -79,7 +79,7 @@ export default function Lobby() {
       }
     }
     return success
-  }
+  }, [tables])
 
   const handleSpectate = async (tableId: string) => {
     return tableAction(tableId, "spectate")
@@ -89,14 +89,14 @@ export default function Lobby() {
     fetchTables()
   }
 
-  const createTable = async (ruleType: string) => {
+  const createTable = useCallback(async (ruleType: string) => {
     await fetch("/api/tables", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, userName, ruleType }),
     })
     fetchTables()
-  }
+  }, [userId, userName])
 
   useEffect(() => {
     if (isLoading || hasHandledAutoJoin.current || !userId || !userName) return
