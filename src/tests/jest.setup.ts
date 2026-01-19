@@ -9,3 +9,57 @@ jest.mock("@vercel/kv", () => ({
 jest.mock("uncrypto", () => ({
   randomUUID: () => "test-uuid-1234",
 }))
+
+// Mocking Edge runtime globals
+if (typeof global.Request === 'undefined') {
+  global.Request = class Request {
+    constructor(input, init) {
+      // Basic mock properties
+      this.url = input;
+      this.method = init?.method || 'GET';
+      this.headers = new Headers(init?.headers);
+      this.body = init?.body;
+    }
+  };
+}
+
+if (typeof global.Response === 'undefined') {
+  global.Response = class Response {
+    constructor(body, init) {
+      // Basic mock properties
+      this.body = body;
+      this.status = init?.status || 200;
+      this.statusText = init?.statusText || 'OK';
+      this.headers = new Headers(init?.headers);
+    }
+
+    static json(data, init) {
+      const body = JSON.stringify(data);
+      const headers = new Headers(init?.headers);
+      headers.set('content-type', 'application/json');
+      return new Response(body, { ...init, headers });
+    }
+  };
+}
+
+if (typeof global.Headers === 'undefined') {
+    global.Headers = class Headers {
+        constructor(init) {
+            this._headers = new Map(Object.entries(init || {}));
+        }
+        get(name) {
+            return this._headers.get(name.toLowerCase());
+        }
+        set(name, value) {
+            this._headers.set(name.toLowerCase(), value);
+        }
+        has(name) {
+            return this._headers.has(name.toLowerCase());
+        }
+        forEach(callback, thisArg) {
+          for (const [key, value] of this._headers.entries()) {
+            callback.call(thisArg, value, key, this);
+          }
+        }
+    };
+}
