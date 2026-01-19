@@ -1,0 +1,29 @@
+yarn run v1.22.22
+$ next dev --turbo
+▲ Next.js 16.1.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+✓ Ready in 839ms
+○ Compiling /lobby ...
+ GET /lobby 200 in 4.6s (compile: 4.5s, render: 65ms)
+⨯ Error: @vercel/kv: Missing required environment variables KV_REST_API_URL and KV_REST_API_TOKEN
+    at TableService.expireTables (src/services/TableService.ts:24:37)
+    at TableService.getTables (src/services/TableService.ts:18:16)
+    at handler (src/pages/api/tables/index.ts:12:39)
+  22 |
+  23 |   async expireTables() {
+> 24 |     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
+     |                                     ^
+  25 |     const expiredEntries = Object.entries(tables || {}).filter(
+  26 |       ([, table]) =>
+  27 |         Date.now() - table.lastUsedAt > {
+  page: '/api/tables/index'
+}
+ GET /api/tables 500 in 307ms (compile: 57ms, render: 250ms)
