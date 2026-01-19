@@ -87,8 +87,7 @@ export function PlayModal({
     }
   }
 
-  const handleCancel = async () => {
-    await markComplete(tableId)
+  const handleCancel = () => {
     onClose()
   }
 
