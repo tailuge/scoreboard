@@ -58,9 +58,9 @@ describe("Lobby Component Functional Tests", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-      ; (useSearchParams as jest.Mock).mockReturnValue({
-        get: (key: string) => (key === "username" ? "TestUser" : null),
-      })
+    ;(useSearchParams as jest.Mock).mockReturnValue({
+      get: (key: string) => (key === "username" ? "TestUser" : null),
+    })
 
     // Mock globalThis fetch
     globalThis.fetch = jest.fn().mockImplementation((url) => {

@@ -18,16 +18,16 @@ export class MockKV {
   async zadd<TData>(
     ...args:
       | [
-        key: string,
-        scoreMember: { score: number; member: TData },
-        ...scoreMemberPairs: { score: number; member: TData }[],
-      ]
+          key: string,
+          scoreMember: { score: number; member: TData },
+          ...scoreMemberPairs: { score: number; member: TData }[],
+        ]
       | [
-        key: string,
-        opts: any,
-        scoreMember: { score: number; member: TData },
-        ...scoreMemberPairs: { score: number; member: TData }[],
-      ]
+          key: string,
+          opts: any,
+          scoreMember: { score: number; member: TData },
+          ...scoreMemberPairs: { score: number; member: TData }[],
+        ]
   ): Promise<number> {
     const [key, ...rest] = args
     let scoreMembers: { score: number; member: TData }[]

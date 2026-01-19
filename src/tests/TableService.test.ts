@@ -2,7 +2,6 @@ import { Table } from "@/services/table"
 import { TableService } from "../services/TableService"
 import { mockKv } from "./mockkv"
 
-
 function makeTable(lastUsed: number, tableId: string): Table {
   const newTable: Table = {
     id: tableId,
@@ -22,16 +21,12 @@ describe("TableService", () => {
   let tableService: TableService
 
   beforeAll(() => {
-    tableService = new TableService(undefined, (_) =>
-      Promise.resolve()
-    )
+    tableService = new TableService(undefined, (_) => Promise.resolve())
   })
 
   afterEach(async () => {
     await mockKv.flushall()
   })
-
-
 
   const userId = "user1"
   const userName = "luke"

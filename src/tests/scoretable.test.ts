@@ -1,7 +1,6 @@
 import { mockKv } from "./mockkv"
 import { ScoreTable } from "../services/scoretable"
 
-
 describe("ScoreTable", () => {
   afterEach(async () => {
     await mockKv.flushall()
