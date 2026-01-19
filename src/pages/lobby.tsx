@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
+import { PlayModal } from "@/components/PlayModal"
 import { ServerStatus } from "@/components/ServerStatus/ServerStatus"
 import { User } from "@/components/User"
 import Head from "next/head"
@@ -20,6 +21,10 @@ export default function Lobby() {
   const searchParams = useSearchParams()
   const statusPage = "https://billiards-network.onrender.com/basic_status"
   const hasHandledAutoJoin = useRef(false)
+  const [modalTable, setModalTable] = useState<{
+    id: string
+    ruleType: string
+  } | null>(null)
 
   const fetchTables = async () => {
     const res = await fetch("/api/tables")
@@ -66,7 +71,14 @@ export default function Lobby() {
   }
 
   const handleJoin = async (tableId: string) => {
-    return tableAction(tableId, "join")
+    const success = await tableAction(tableId, "join")
+    if (success) {
+      const table = tables.find((t) => t.id === tableId)
+      if (table && !table.completed) {
+        setModalTable({ id: table.id, ruleType: table.ruleType })
+      }
+    }
+    return success
   }
 
   const handleSpectate = async (tableId: string) => {
@@ -104,6 +116,18 @@ export default function Lobby() {
     }
   }, [isLoading, tables, searchParams, userId, userName])
 
+  useEffect(() => {
+    tables.forEach((table) => {
+      if (
+        table.creator.id === userId &&
+        table.players.length === 2 &&
+        !table.completed
+      ) {
+        setModalTable({ id: table.id, ruleType: table.ruleType })
+      }
+    })
+  }, [tables, userId])
+
   const handleUserNameChange = (newUserName: string) => {
     setUserName(newUserName)
     localStorage.setItem("userName", newUserName)
@@ -138,6 +162,14 @@ export default function Lobby() {
         onJoin={handleJoin}
         onSpectate={handleSpectate}
         tables={tables}
+      />
+      <PlayModal
+        isOpen={!!modalTable}
+        onClose={() => setModalTable(null)}
+        tableId={modalTable?.id || ""}
+        userName={userName}
+        userId={userId}
+        ruleType={modalTable?.ruleType || "nineball"}
       />
     </main>
   )

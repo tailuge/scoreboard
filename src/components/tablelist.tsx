@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Table } from "@/services/table"
 import { TableItem } from "./table"
-import { PlayModal } from "./PlayModal"
 import { AnimatePresence, motion } from "framer-motion"
 
 export function TableList({
@@ -17,32 +16,10 @@ export function TableList({
   readonly onSpectate: (tableId: string) => void
   readonly tables: Table[]
 }) {
-  const [modalTable, setModalTable] = useState<{
-    id: string
-    ruleType: string
-  } | null>(null)
 
   const handleJoin = async (tableId: string) => {
-    const success = await onJoin(tableId)
-    if (success) {
-      const table = tables.find((t) => t.id === tableId)
-      if (table && !table.completed) {
-        setModalTable({ id: table.id, ruleType: table.ruleType })
-      }
-    }
+    await onJoin(tableId)
   }
-
-  useEffect(() => {
-    tables.forEach((table) => {
-      if (
-        table.creator.id === userId &&
-        table.players.length === 2 &&
-        !table.completed
-      ) {
-        setModalTable({ id: table.id, ruleType: table.ruleType })
-      }
-    })
-  }, [tables, userId])
 
   const sortedTables = [...tables].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -73,14 +50,6 @@ export function TableList({
           ))}
         </AnimatePresence>
       </div>
-      <PlayModal
-        isOpen={!!modalTable}
-        onClose={() => setModalTable(null)}
-        tableId={modalTable?.id || ""}
-        userName={userName}
-        userId={userId}
-        ruleType={modalTable?.ruleType || "nineball"}
-      />
     </div>
   )
 }
