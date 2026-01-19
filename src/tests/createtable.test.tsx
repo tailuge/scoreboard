@@ -12,7 +12,7 @@ describe("CreateTable component", () => {
 
   beforeEach(() => {
     // Mock fetch
-    global.fetch = jest.fn(() =>
+    globalThis.fetch = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({}),
       })
@@ -40,7 +40,7 @@ describe("CreateTable component", () => {
     })
 
     // Verify fetch and callback
-    expect(global.fetch).toHaveBeenCalledWith("/api/tables", {
+    expect(globalThis.fetch).toHaveBeenCalledWith("/api/tables", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
