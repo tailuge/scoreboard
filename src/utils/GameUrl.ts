@@ -28,7 +28,7 @@ export class GameUrl {
     if (isCreator) {
       target.searchParams.append("first", "true")
     }
-    console.log(target)
+
     return target
   }
 }

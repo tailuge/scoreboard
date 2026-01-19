@@ -12,6 +12,10 @@ describe("PlayModal", () => {
         json: () => Promise.resolve({ creator: { id: "user-123" } }),
       })
     ) as jest.Mock
+
+    // Mock window.open
+    global.open = jest.fn()
+
     mockOnClose.mockClear()
   })
 
