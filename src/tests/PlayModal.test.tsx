@@ -7,14 +7,14 @@ describe("PlayModal", () => {
 
   beforeEach(() => {
     // Mock fetch
-    global.fetch = jest.fn(() =>
+    globalThis.fetch = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ creator: { id: "user-123" } }),
       })
     ) as jest.Mock
 
     // Mock window.open
-    global.open = jest.fn()
+    globalThis.open = jest.fn()
 
     mockOnClose.mockClear()
   })
@@ -62,7 +62,7 @@ describe("PlayModal", () => {
     )
     fireEvent.click(screen.getByText("Start Game"))
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(globalThis.fetch).toHaveBeenCalledWith(
         "/api/tables/table-1/complete",
         { method: "PUT" }
       )
@@ -82,7 +82,7 @@ describe("PlayModal", () => {
       />
     )
     fireEvent.click(screen.getByText("Cancel"))
-    expect(global.fetch).not.toHaveBeenCalled()
+    expect(globalThis.fetch).not.toHaveBeenCalled()
     expect(mockOnClose).toHaveBeenCalledTimes(1)
   })
 })

@@ -6,7 +6,7 @@ describe("Star component", () => {
   it("opens the GitHub repository in a new tab when clicked", () => {
     // Mock window.open
     const mockOpen = jest.fn()
-    global.open = mockOpen
+    globalThis.open = mockOpen
 
     render(<Star />)
 
