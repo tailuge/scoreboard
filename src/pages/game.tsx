@@ -95,7 +95,7 @@ function GameSection({
 }) {
   return (
     <div className="relative w-full border border-gray-700/50 rounded-3xl p-6 bg-gray-800/20 shadow-inner">
-      <h2 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 px-4 text-xl font-medium text-gray-400 tracking-wide uppercase text-sm">
+      <h2 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 px-4 text-xs font-light text-gray-400 tracking-wide uppercase">
         {title}
       </h2>
       <div className="grid grid-cols-3 gap-4 w-full">
