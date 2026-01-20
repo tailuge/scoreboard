@@ -75,45 +75,70 @@ export default function TableLogs() {
   }
 
   const renderMessages = (messages: MessageItem[]) => {
-    const filteredMessages = filterConsecutiveAimMessages(messages)
-    return filteredMessages.map((message) => {
+    const parsedMessages = messages.map((message) => {
       try {
-        const parsedMessage: LogMessage = JSON.parse(message.content)
-        const isExpanded = expandedMessages.has(message.id)
-        return (
-          <div
-            key={message.id}
-            className="py-0 min-h-[1rem] border-b border-gray-100 last:border-b-0"
-          >
-            <button
-              type="button"
-              className="w-full text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center text-left appearance-none bg-transparent"
-              onClick={() => toggleMessage(message.id)}
-            >
-              {isExpanded ? (
-                <ChevronDownIcon className="h-3 w-3 text-gray-500 mr-1" />
-              ) : (
-                <ChevronRightIcon className="h-3 w-3 text-gray-500 mr-1" />
-              )}
-              {parsedMessage.clientId} {parsedMessage.type}
-            </button>
-            {isExpanded && (
-              <div className="text-black pl-4">
-                {JSON.stringify(parsedMessage, null, 2)}
-              </div>
-            )}
-          </div>
-        )
+        return {
+          id: message.id,
+          parsed: JSON.parse(message.content) as LogMessage,
+          originalContent: message.content,
+        }
       } catch {
+        return {
+          id: message.id,
+          error: true,
+          originalContent: message.content,
+        }
+      }
+    })
+
+    const filteredMessages = parsedMessages.filter((message, index) => {
+      if (message.error) return true
+      const nextMessage = parsedMessages[index + 1]
+      return (
+        message.parsed.type !== "AIM" ||
+        !nextMessage ||
+        nextMessage.error ||
+        nextMessage.parsed.type !== "AIM"
+      )
+    })
+
+    return filteredMessages.map((message) => {
+      if (message.error) {
         return (
           <div
             key={message.id}
             className="py-1 min-h-[2rem] border-b border-gray-100 last:border-b-0 text-red-500"
           >
-            Invalid JSON: {message.content}
+            Invalid JSON: {message.originalContent}
           </div>
         )
       }
+
+      const isExpanded = expandedMessages.has(message.id)
+      return (
+        <div
+          key={message.id}
+          className="py-0 min-h-[1rem] border-b border-gray-100 last:border-b-0"
+        >
+          <button
+            type="button"
+            className="w-full text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center text-left appearance-none bg-transparent"
+            onClick={() => toggleMessage(message.id)}
+          >
+            {isExpanded ? (
+              <ChevronDownIcon className="h-3 w-3 text-gray-500 mr-1" />
+            ) : (
+              <ChevronRightIcon className="h-3 w-3 text-gray-500 mr-1" />
+            )}
+            {message.parsed.clientId} {message.parsed.type}
+          </button>
+          {isExpanded && (
+            <div className="text-black pl-4">
+              {JSON.stringify(message.parsed, null, 2)}
+            </div>
+          )}
+        </div>
+      )
     })
   }
 
