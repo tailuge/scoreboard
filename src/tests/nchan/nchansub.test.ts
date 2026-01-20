@@ -12,7 +12,7 @@ class MockWebSocket {
     constructor(public url: string) { }
 }
 
-global.WebSocket = MockWebSocket as any;
+globalThis.WebSocket = MockWebSocket as any;
 
 describe('NchanSub', () => {
     let sub: NchanSub;

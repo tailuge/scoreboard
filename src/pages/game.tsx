@@ -27,13 +27,13 @@ const GAMES = [
 ]
 
 type GameButtonProps = {
-  name: string
-  icon: string
-  alt: string
-  href?: string
-  onClick?: () => void
-  hoverBorderColor: string
-  ariaLabel: string
+  readonly name: string
+  readonly icon: string
+  readonly alt: string
+  readonly href?: string
+  readonly onClick?: () => void
+  readonly hoverBorderColor: string
+  readonly ariaLabel: string
 }
 
 function GameButton({
@@ -89,9 +89,9 @@ function GameSection({
   hoverBorderColor,
   isHighscore = false,
 }: {
-  title: string
-  hoverBorderColor: string
-  isHighscore?: boolean
+  readonly title: string
+  readonly hoverBorderColor: string
+  readonly isHighscore?: boolean
 }) {
   return (
     <div className="flex flex-col items-center gap-4 w-full border border-gray-700/50 rounded-3xl p-6 bg-gray-800/20 shadow-inner">

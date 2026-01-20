@@ -14,7 +14,7 @@ describe("/api/shorten handler", () => {
     jest.clearAllMocks()
 
     // Mock the global Response object for the edge runtime
-    global.Response = jest.fn().mockImplementation((body, init) => {
+    globalThis.Response = jest.fn().mockImplementation((body, init) => {
       return {
         status: init?.status || 200,
         headers: new Map(init?.headers),
