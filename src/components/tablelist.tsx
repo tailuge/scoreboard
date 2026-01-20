@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Table } from "@/services/table"
 import { TableItem } from "./table"
 import { AnimatePresence, motion } from "framer-motion"

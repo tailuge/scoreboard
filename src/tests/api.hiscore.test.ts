@@ -33,7 +33,7 @@ describe("/api/hiscore handler", () => {
       headers: new Map([["Location", url]]),
     }))
 
-    global.Response = mockResponseConstructor
+    globalThis.Response = mockResponseConstructor
   })
 
   it("should return a 400 error if the client version is outdated", async () => {
