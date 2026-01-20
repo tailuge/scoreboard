@@ -12,24 +12,32 @@ jest.mock("uncrypto", () => ({
 
 // Mocking Edge runtime globals
 // Using a function instead of a class to avoid "class with only a constructor" error
-globalThis.Request ??= function Request(input, init) {
+globalThis.Request ??= function Request(
+  this: any,
+  input: any,
+  init?: { method?: string; headers?: any; body?: any },
+) {
   // Basic mock properties
-  ;(this as any).url = input
-  ;(this as any).method = init?.method || "GET"
-  ;(this as any).headers = new (globalThis.Headers as any)(init?.headers)
-  ;(this as any).body = init?.body
+  this.url = input
+  this.method = init?.method || "GET"
+  this.headers = new (globalThis.Headers as any)(init?.headers)
+  this.body = init?.body
 } as any
 
 globalThis.Response ??= class Response {
-  constructor(body, init) {
-    // Basic mock properties
-    ;(this as any).body = body
-    ;(this as any).status = init?.status || 200
-    ;(this as any).statusText = init?.statusText || "OK"
-    ;(this as any).headers = new (globalThis.Headers as any)(init?.headers)
+  body: any
+  status: number
+  statusText: string
+  headers: Headers
+
+  constructor(body: any, init?: { status?: number; statusText?: string; headers?: any }) {
+    this.body = body
+    this.status = init?.status || 200
+    this.statusText = init?.statusText || "OK"
+    this.headers = new (globalThis.Headers as any)(init?.headers)
   }
 
-  static json(data, init) {
+  static json(data: any, init?: any) {
     const body = JSON.stringify(data)
     const headers = new (globalThis.Headers as any)(init?.headers)
     headers.set("content-type", "application/json")
@@ -38,20 +46,22 @@ globalThis.Response ??= class Response {
 } as any
 
 globalThis.Headers ??= class Headers {
-  constructor(init) {
-    ;(this as any)._headers = new Map(Object.entries(init || {}))
+  _headers: Map<string, any>
+
+  constructor(init?: any) {
+    this._headers = new Map(Object.entries(init || {}))
   }
-  get(name) {
-    return (this as any)._headers.get(name.toLowerCase())
+  get(name: string) {
+    return this._headers.get(name.toLowerCase())
   }
-  set(name, value) {
-    ;(this as any)._headers.set(name.toLowerCase(), value)
+  set(name: string, value: any) {
+    this._headers.set(name.toLowerCase(), value)
   }
-  has(name) {
-    return (this as any)._headers.has(name.toLowerCase())
+  has(name: string) {
+    return this._headers.has(name.toLowerCase())
   }
-  forEach(callback, thisArg) {
-    for (const [key, value] of (this as any)._headers.entries()) {
+  forEach(callback: (value: any, key: string, parent: this) => void, thisArg?: any) {
+    for (const [key, value] of this._headers.entries()) {
       callback.call(thisArg, value, key, this)
     }
   }
