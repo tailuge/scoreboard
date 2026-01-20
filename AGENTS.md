@@ -65,6 +65,7 @@ yarn docker:push
 3. **Hybrid Pages**: Some functionality is in Next.js React pages, while other parts are in static HTML files in the `public` directory.
 4. **Nchan**: Real-time updates (like lobby status) are handled via Nchan. See `src/nchan` for implementation details.
 5. **Testing**: Always run `yarn test` after completing a task to ensure no regressions were introduced.
+6. **`globalThis`**: Always use `globalThis` instead of environment-specific globals like `window`, `global`, or `self`. Before submitting, search the codebase for any instances of these to ensure code portability.
 
 ## Common Tasks
 - **Adding an API route**: Add a new file in `src/pages/api`.
