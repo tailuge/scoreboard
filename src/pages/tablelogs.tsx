@@ -22,19 +22,6 @@ export default function TableLogs() {
     new Set()
   )
 
-  const filterConsecutiveAimMessages = (
-    messages: MessageItem[]
-  ): MessageItem[] => {
-    return messages.filter((message, index) => {
-      const currentMsg = JSON.parse(message.content)
-      const nextMsg =
-        index + 1 < messages.length
-          ? JSON.parse(messages[index + 1].content)
-          : null
-      return currentMsg.type !== "AIM" || nextMsg?.type !== "AIM"
-    })
-  }
-
   useEffect(() => {
     if (!tableId) return
 
