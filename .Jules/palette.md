@@ -1,7 +1,5 @@
-# Palette's Journal - CRITICAL LEARNINGS ONLY
+## 2024-07-26 - Keyboard Focus and Clean Commits
 
-This journal is for recording critical UX and accessibility learnings that are specific to this application or represent a significant pattern.
+**Learning:** Adding a `focus-visible` style with a distinct ring is a high-impact, low-effort way to significantly improve keyboard navigation accessibility. Additionally, it's critical to avoid committing temporary development files (like `dev.log`) or auto-generated configuration files (`next-env.d.ts`), as they can cause repository bloat and conflicts.
 
-## 2024-07-25 - Redundant onKeyDown Handler on Buttons
-**Learning:** I discovered a button component using both `onClick` and a redundant `onKeyDown={handleClick}` prop. Native `<button>` elements automatically trigger their `onClick` handler when activated via the keyboard ("Enter" or "Space"). Adding an `onKeyDown` handler for the same action is not only unnecessary but can be harmful, as it may fire on *any* key press, violating standard keyboard accessibility patterns.
-**Action:** When modifying components, always check for and remove redundant `onKeyDown` handlers on button elements. Rely on the browser's native `onClick` behavior for keyboard accessibility.
+**Action:** Always check for focus states on interactive elements as a primary accessibility enhancement. Before committing, review the changed files list to ensure no unintended files are included.
