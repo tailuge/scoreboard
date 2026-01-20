@@ -1,7 +1,6 @@
 import React from "react"
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import TableLogs from "@/pages/tablelogs"
-import { NchanSub } from "@/nchan/nchansub"
 import { useRouter } from "next/router"
 
 // Mock next/router
