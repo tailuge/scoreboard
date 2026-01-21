@@ -6,35 +6,116 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="description" content="Billiards Usage Dashboard" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="usage.css" />
+    <link rel="stylesheet" type="text/css" href="leaderboard.css" />
+    <style>
+      /* General Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background-color: #f4f4f9;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+
+      .leaderboards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .leaderboard {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1px;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        min-height: 360px;
+        /* Ensure graphs are visible */
+        overflow: hidden;
+      }
+
+      .leaderboard:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .leaderboard .plotly-graph-div {
+        width: 95%;
+        height: 95%;
+      }
+
+      .server-stats-links {
+        text-align: center;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
+
+      .server-stats-links a {
+        color: #3498db;
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin: 0 10px;
+      }
+
+      .server-stats-links a:hover {
+        text-decoration: underline;
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.3rem;
+        }
+
+        .leaderboards {
+          grid-template-columns: 1fr;
+        }
+
+        .leaderboard {
+          padding: 15px;
+          min-height: 350px;
+          /* Adjust for mobile */
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <header class="header">
-      <h1 class="title">Billiards Usage Dashboard</h1>
-      <div class="server-stats-links">
-        <a href="https://vercel.com/tailuges-projects/~/usage" target="_blank"
-          >Vercel Stats</a
-        >
-        <a
-          href="https://dashboard.render.com/web/srv-ctk5bmtds78s73eteil0/metrics"
-          target="_blank"
-          >Render Stats</a
-        >
-      </div>
-    </header>
-    <main class="chart-grid">
-      <div id="lobby" class="chart-container"></div>
-      <div id="createTable" class="chart-container"></div>
-      <div id="joinTable" class="chart-container"></div>
-      <div id="game" class="chart-container"></div>
-    </main>
+    <h1>Billiards Usage Dashboard</h1>
+    <div class="server-stats-links">
+      <a href="https://vercel.com/tailuges-projects/~/usage" target="_blank"
+        >Vercel Server Stats</a
+      >
+      <a
+        href="https://dashboard.render.com/web/srv-ctk5bmtds78s73eteil0/metrics"
+        target="_blank"
+        >Render Server Stats</a
+      >
+    </div>
+    <div class="leaderboards">
+      <div id="lobby" class="leaderboard"></div>
+      <div id="createTable" class="leaderboard"></div>
+      <div id="joinTable" class="leaderboard"></div>
+      <div id="game" class="leaderboard"></div>
+    </div>
 
     <script
       src="https://cdn.plot.ly/plotly-cartesian-3.0.0-rc.0.min.js"
@@ -78,80 +159,42 @@
             y: clicks,
             type: "scatter",
             mode: "lines+markers",
-            marker: {
-              color: "var(--primary-glow)",
-              size: 8,
-              symbol: "circle-open",
-              line: {
-                color: "var(--primary-glow)",
-                width: 2,
-              },
-            },
-            line: {
-              color: "var(--primary-glow)",
-              width: 3,
-              shape: "spline",
-              smoothing: 0.7,
-            },
+            marker: { color: "#3498db" },
+            line: { color: "#3498db", width: 2 },
             hoverinfo: "x+y",
-            hovertemplate: "<b>%{x}</b><br>Interactions: %{y}<extra></extra>",
+            hovertemplate: "<b>%{x}</b><br>Clicks: %{y}<extra></extra>",
           },
         ]
 
         const layout = {
           title: {
-            text: metric.replace(/([A-Z])/g, " $1").toUpperCase(),
+            text: metric.toUpperCase(),
             font: {
-              family: "var(--font-display)",
-              size: 18,
-              color: "var(--primary-glow)",
+              family: "Arial, sans-serif",
+              size: 11,
+              color: "#2c3e50",
             },
-            x: 0.5,
-            y: 0.95,
           },
           xaxis: {
+            title: "Date",
             type: "category",
             tickangle: -45,
-            gridcolor: "var(--grid-line-color)",
-            linecolor: "var(--grid-line-color)",
-            tickfont: {
-              family: "var(--font-body)",
-              size: 12,
-              color: "var(--text-color)",
-            },
-            dtick: Math.ceil(dates.length / 10), // Show around 10 ticks
+            gridcolor: "#f0f0f0",
+            dtick: 7,
           },
           yaxis: {
-            title: {
-              text: "INTERACTIONS",
-              font: {
-                family: "var(--font-body)",
-                size: 12,
-                color: "var(--text-color)",
-              },
-            },
-            gridcolor: "var(--grid-line-color)",
-            linecolor: "var(--grid-line-color)",
-            tickfont: {
-              family: "var(--font-body)",
-              size: 12,
-              color: "var(--text-color)",
-            },
-            zerolinecolor: "var(--secondary-glow)",
+            title: "Clicks",
+            gridcolor: "#f0f0f0",
+            range: [0, null],
           },
-          plot_bgcolor: "transparent",
-          paper_bgcolor: "transparent",
-          hovermode: "x unified",
-          margin: { t: 60, r: 40, b: 80, l: 60 },
-        }
-
-        const config = {
-          responsive: true,
-          displayModeBar: false,
+          plot_bgcolor: "#fff",
+          paper_bgcolor: "#fff",
+          hovermode: "closest",
+          margin: { t: 40, r: 20, b: 60, l: 60 },
         }
 
         // Render the chart
-        Plotly.newPlot(metric, plotData, layout, config)
+        Plotly.newPlot(metric, plotData, layout)
       }
     </script>
   </body>
