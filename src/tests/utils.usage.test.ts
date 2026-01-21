@@ -4,6 +4,7 @@ import { UsageService } from "@/services/usageservice"
 jest.mock("@/services/usageservice")
 
 describe("Usage Utils", () => {
+  const testMetric = "test-metric"
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -11,8 +12,8 @@ describe("Usage Utils", () => {
   describe("markUsage", () => {
     it("should call the usage API with the correct metric", () => {
       global.fetch = jest.fn()
-      markUsage("test-metric")
-      expect(global.fetch).toHaveBeenCalledWith("/api/usage/test-metric", {
+      markUsage(testMetric)
+      expect(global.fetch).toHaveBeenCalledWith(`/api/usage/${testMetric}`, {
         method: "PUT",
       })
     })
@@ -27,8 +28,8 @@ describe("Usage Utils", () => {
         }
       })
 
-      await markUsageFromServer("test-metric")
-      expect(UsageService).toHaveBeenCalledWith("test-metric")
+      await markUsageFromServer(testMetric)
+      expect(UsageService).toHaveBeenCalledWith(testMetric)
       expect(mockIncrementCount).toHaveBeenCalled()
     })
   })

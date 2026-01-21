@@ -81,7 +81,7 @@ export default function Lobby() {
       }
       return success
     },
-    [tables]
+    [tables, tableAction]
   )
 
   const handleSpectate = async (tableId: string) => {

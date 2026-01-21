@@ -5,6 +5,7 @@ import { Table } from "@/services/table"
 
 jest.mock("@vercel/kv")
 
+const tableIdNotFound = "table-not-found"
 describe("GET /api/tables/[tableId]", () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -34,9 +35,9 @@ describe("GET /api/tables/[tableId]", () => {
     jest.spyOn(kv, "hget").mockResolvedValue(null)
 
     const req = { method: "GET" } as NextRequest
-    await handler(req, { params: { tableId: "table-not-found" } })
+    await handler(req, { params: { tableId: tableIdNotFound } })
 
-    expect(kv.hget).toHaveBeenCalledWith("tables", "table-not-found")
+    expect(kv.hget).toHaveBeenCalledWith("tables", tableIdNotFound)
     expect(Response.json).toHaveBeenCalledWith(
       { error: "Table not found" },
       { status: 404 }
@@ -102,9 +103,9 @@ describe("DELETE /api/tables/[tableId]", () => {
       json: async () => ({ userId: "user-1" }),
     } as unknown as NextRequest
 
-    await handler(req, { params: { tableId: "table-not-found" } })
+    await handler(req, { params: { tableId: tableIdNotFound } })
 
-    expect(kv.hget).toHaveBeenCalledWith("tables", "table-not-found")
+    expect(kv.hget).toHaveBeenCalledWith("tables", tableIdNotFound)
     expect(kv.hdel).not.toHaveBeenCalled()
     expect(Response.json).toHaveBeenCalledWith(
       { error: "Table not found" },
