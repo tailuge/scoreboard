@@ -33,7 +33,7 @@ describe("/api/replay/[id] handler", () => {
       nextUrl: new URL(url),
     } as unknown as NextRequest
 
-    const response = await handler(req)
+    await handler(req)
 
     expect(replaySpy).toHaveBeenCalledWith(id)
     expect(Response.redirect).toHaveBeenCalledWith(replayUrl)
