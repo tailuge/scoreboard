@@ -1,121 +1,37 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Billiards Usage Dashboard</title>
+    <title>Support Terminal: Usage</title>
     <link rel="icon" type="image/png" href="golden-cup.png" />
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="description" content="Billiards Usage Dashboard" />
-    <link rel="stylesheet" type="text/css" href="leaderboard.css" />
-    <style>
-      /* General Reset */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", sans-serif;
-      }
-
-      body {
-        background-color: #f4f4f9;
-        color: #333;
-        line-height: 1.6;
-        padding: 20px;
-      }
-
-      h1 {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        font-weight: 500;
-      }
-
-      .leaderboards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .leaderboard {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 1px;
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
-        min-height: 360px;
-        /* Ensure graphs are visible */
-        overflow: hidden;
-      }
-
-      .leaderboard:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      .leaderboard .plotly-graph-div {
-        width: 95%;
-        height: 95%;
-      }
-
-      .server-stats-links {
-        text-align: center;
-        margin-top: 2px;
-        margin-bottom: 2px;
-      }
-
-      .server-stats-links a {
-        color: #3498db;
-        text-decoration: none;
-        font-size: 0.9rem;
-        margin: 0 10px;
-      }
-
-      .server-stats-links a:hover {
-        text-decoration: underline;
-      }
-
-      /* Mobile Responsiveness */
-      @media (max-width: 768px) {
-        h1 {
-          font-size: 1.3rem;
-        }
-
-        .leaderboards {
-          grid-template-columns: 1fr;
-        }
-
-        .leaderboard {
-          padding: 15px;
-          min-height: 350px;
-          /* Adjust for mobile */
-        }
-      }
-    </style>
+    <meta
+      name="description"
+      content="A TUI-inspired dashboard for monitoring usage metrics."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="usage.css" />
   </head>
-
   <body>
-    <h1>Billiards Usage Dashboard</h1>
-    <div class="server-stats-links">
-      <a href="https://vercel.com/tailuges-projects/~/usage" target="_blank"
-        >Vercel Server Stats</a
-      >
-      <a
-        href="https://dashboard.render.com/web/srv-ctk5bmtds78s73eteil0/metrics"
-        target="_blank"
-        >Render Server Stats</a
-      >
-    </div>
-    <div class="leaderboards">
-      <div id="lobby" class="leaderboard"></div>
-      <div id="createTable" class="leaderboard"></div>
-      <div id="joinTable" class="leaderboard"></div>
-      <div id="game" class="leaderboard"></div>
-    </div>
+    <header class="header">
+      <h1 class="title">SUPPORT TERMINAL: USAGE</h1>
+      <div class="server-stats-links">
+        <a href="https://vercel.com/tailuges-projects/~/usage" target="_blank"
+          >VERCEL</a
+        >
+        <a
+          href="https://dashboard.render.com/web/srv-ctk5bmtds78s73eteil0/metrics"
+          target="_blank"
+          >RENDER</a
+        >
+      </div>
+    </header>
+    <main class="chart-grid">
+      <div id="lobby" class="chart-container"></div>
+      <div id="createTable" class="chart-container"></div>
+      <div id="joinTable" class="chart-container"></div>
+      <div id="game" class="chart-container"></div>
+    </main>
 
     <script
       src="https://cdn.plot.ly/plotly-cartesian-3.0.0-rc.0.min.js"
@@ -158,11 +74,10 @@
             x: dates,
             y: clicks,
             type: "scatter",
-            mode: "lines+markers",
-            marker: { color: "#3498db" },
-            line: { color: "#3498db", width: 2 },
+            mode: "lines",
+            line: { color: "#0055ff", width: 2 },
             hoverinfo: "x+y",
-            hovertemplate: "<b>%{x}</b><br>Clicks: %{y}<extra></extra>",
+            hovertemplate: "<b>%{x}</b><br>CLICKS: %{y}<extra></extra>",
           },
         ]
 
@@ -170,31 +85,48 @@
           title: {
             text: metric.toUpperCase(),
             font: {
-              family: "Arial, sans-serif",
-              size: 11,
-              color: "#2c3e50",
+              family: "'IBM Plex Mono', monospace",
+              size: 12,
+              color: "#1a1a1a",
             },
+            x: 0.05,
+            xanchor: "left",
           },
           xaxis: {
-            title: "Date",
             type: "category",
-            tickangle: -45,
-            gridcolor: "#f0f0f0",
-            dtick: 7,
+            tickangle: 0,
+            gridcolor: "#eaeaea",
+            linecolor: "#eaeaea",
+            tickfont: {
+              family: "'DM Sans', sans-serif",
+              size: 10,
+              color: "#1a1a1a",
+            },
+            zeroline: false,
           },
           yaxis: {
-            title: "Clicks",
-            gridcolor: "#f0f0f0",
-            range: [0, null],
+            gridcolor: "#eaeaea",
+            linecolor: "#eaeaea",
+            tickfont: {
+              family: "'DM Sans', sans-serif",
+              size: 10,
+              color: "#1a1a1a",
+            },
+            zeroline: false,
           },
-          plot_bgcolor: "#fff",
-          paper_bgcolor: "#fff",
-          hovermode: "closest",
-          margin: { t: 40, r: 20, b: 60, l: 60 },
+          plot_bgcolor: "rgba(0,0,0,0)",
+          paper_bgcolor: "rgba(0,0,0,0)",
+          hovermode: "x unified",
+          margin: { t: 40, r: 20, b: 50, l: 30 },
+          autosize: true,
         }
 
-        // Render the chart
-        Plotly.newPlot(metric, plotData, layout)
+        const config = {
+          responsive: true,
+          displayModeBar: false,
+        }
+
+        Plotly.newPlot(metric, plotData, layout, config)
       }
     </script>
   </body>
