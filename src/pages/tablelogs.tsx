@@ -14,6 +14,11 @@ interface MessageItem {
   content: string
 }
 
+function isValidTableId(id: string): boolean {
+  // Allow only alphanumeric characters, underscore, and hyphen to avoid path manipulation
+  return /^[A-Za-z0-9_-]+$/.test(id)
+}
+
 export default function TableLogs() {
   const router = useRouter()
   const { tableId } = router.query
@@ -23,10 +28,10 @@ export default function TableLogs() {
   )
 
   useEffect(() => {
-    if (!tableId) return
+    if (typeof tableId !== "string" || !isValidTableId(tableId)) return
 
     const sub = new NchanSub(
-      tableId as string,
+      tableId,
       (message) => {
         const messageString = message.toString()
         setMessages((prev) => [
