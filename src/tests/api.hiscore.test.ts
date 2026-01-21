@@ -80,4 +80,65 @@ describe("/api/hiscore handler", () => {
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })
+
+  it("should not add a duplicate hiscore", async () => {
+    const validData = { v: 1, score: 150 }
+    const crushedString = "some-crushed-string"
+    const body = `state=${crushedString}`
+    const ruletype = "eightball"
+    const playerId = "player-1"
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+
+    const existingScore = { data: `state=${crushedString}` }
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockResolvedValue([existingScore as any])
+    const addSpy = jest
+      .spyOn(mockScoreTable.prototype, "add")
+      .mockResolvedValue(1)
+
+    const url = `https://localhost/api/hiscore?ruletype=${ruletype}&id=${playerId}`
+    req = {
+      text: jest.fn().mockResolvedValue(body),
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    await handler(req)
+
+    expect(Response.redirect).toHaveBeenCalledWith(
+      "https://localhost/leaderboard.html"
+    )
+    expect(topTenSpy).toHaveBeenCalledWith(ruletype)
+    expect(addSpy).not.toHaveBeenCalled()
+  })
+
+  it("should handle errors in urlState gracefully", async () => {
+    const validData = { v: 1, score: 200 }
+    const crushedString = "another-crushed-string"
+    const body = `state=${crushedString}`
+    const ruletype = "nineball"
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+
+    const malformedScore = { data: "this-is-not-url-encoded" }
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockResolvedValue([malformedScore as any])
+    const addSpy = jest
+      .spyOn(mockScoreTable.prototype, "add")
+      .mockResolvedValue(1)
+
+    const url = `https://localhost/api/hiscore?ruletype=${ruletype}`
+    req = {
+      text: jest.fn().mockResolvedValue(body),
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    await handler(req)
+
+    expect(Response.redirect).toHaveBeenCalledWith(
+      "https://localhost/leaderboard.html"
+    )
+    expect(topTenSpy).toHaveBeenCalledWith(ruletype)
+    expect(addSpy).toHaveBeenCalled()
+  })
 })
