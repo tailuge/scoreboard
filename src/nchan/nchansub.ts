@@ -39,7 +39,7 @@ export class NchanSub {
     }
 
     this.socket.onclose = (event: CloseEvent) => {
-      console.log(`Disconnected from ${this.subscribeUrl}:`, event.reason)
+      console.log("Disconnected from %s:", this.subscribeUrl, event.reason)
       if (this.shouldReconnect) {
         this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
       }
