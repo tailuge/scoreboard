@@ -17,6 +17,7 @@ const mockScoreTable = ScoreTable as jest.MockedClass<typeof ScoreTable>
 const mockJsonCrush = JSONCrush as jest.Mocked<typeof JSONCrush>
 
 describe("/api/hiscore handler", () => {
+  const leaderboardUrl = "https://localhost/leaderboard.html"
   let req: NextRequest
 
   beforeEach(() => {
@@ -74,9 +75,7 @@ describe("/api/hiscore handler", () => {
 
     await handler(req)
 
-    expect(Response.redirect).toHaveBeenCalledWith(
-      "https://localhost/leaderboard.html"
-    )
+    expect(Response.redirect).toHaveBeenCalledWith(leaderboardUrl)
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })
@@ -105,9 +104,7 @@ describe("/api/hiscore handler", () => {
 
     await handler(req)
 
-    expect(Response.redirect).toHaveBeenCalledWith(
-      "https://localhost/leaderboard.html"
-    )
+    expect(Response.redirect).toHaveBeenCalledWith(leaderboardUrl)
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).not.toHaveBeenCalled()
   })
@@ -135,9 +132,7 @@ describe("/api/hiscore handler", () => {
 
     await handler(req)
 
-    expect(Response.redirect).toHaveBeenCalledWith(
-      "https://localhost/leaderboard.html"
-    )
+    expect(Response.redirect).toHaveBeenCalledWith(leaderboardUrl)
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })
