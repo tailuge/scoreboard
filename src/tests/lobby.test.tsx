@@ -40,6 +40,8 @@ jest.mock("@/components/hooks/useServerStatus", () => ({
   }),
 }))
 
+const TABLES_API_ENDPOINT = "/api/tables"
+
 const mockTables = [
   {
     id: "table-1",
@@ -63,7 +65,7 @@ describe("Lobby Component Functional Tests", () => {
 
     // Mock globalThis fetch
     globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url === "/api/tables") {
+      if (url === TABLES_API_ENDPOINT) {
         return Promise.resolve({
           json: () => Promise.resolve(mockTables),
           ok: true,
@@ -87,7 +89,7 @@ describe("Lobby Component Functional Tests", () => {
     // Check if fetch was called with POST to /api/tables
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        "/api/tables",
+        TABLES_API_ENDPOINT,
         expect.objectContaining({
           method: "POST",
           body: expect.stringContaining('"ruleType":"nineball"'),
@@ -136,7 +138,7 @@ describe("Lobby Redirection Tests", () => {
 
     // Mock globalThis fetch
     globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url === "/api/tables") {
+      if (url === TABLES_API_ENDPOINT) {
         return Promise.resolve({
           json: () => Promise.resolve(mockTables),
           ok: true,
