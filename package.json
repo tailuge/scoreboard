@@ -53,6 +53,7 @@
     "eslint": "9.39.2",
     "eslint-config-next": "16.1.4",
     "eslint-plugin-sonarjs": "^3.0.1",
+    "identity-obj-proxy": "^3.0.0",
     "ioredis": "^5.9.2",
     "ioredis-mock": "8.13.1",
     "jest": "30.2.0",
