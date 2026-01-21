@@ -42,9 +42,9 @@ export function CreateTable({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside, { passive: true })
+    document.addEventListener("mousedown", handleClickOutside, { passive: true } as any)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, { passive: true })
+      document.removeEventListener("mousedown", handleClickOutside, { passive: true } as any)
     }
   }, [])
 
