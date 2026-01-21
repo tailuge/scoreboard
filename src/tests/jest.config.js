@@ -9,6 +9,7 @@ module.exports = {
   testMatch: ["<rootDir>/src/tests/**/*.test.(ts|tsx)"],
   setupFilesAfterEnv: ["<rootDir>/src/tests/jest.setup.ts"],
   moduleNameMapper: {
+    "\\.css$": "identity-obj-proxy",
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
