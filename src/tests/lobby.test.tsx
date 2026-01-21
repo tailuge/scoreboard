@@ -1,6 +1,5 @@
 import React from "react"
-import { render } from "@testing-library/react"
-import { screen, fireEvent, waitFor } from "@testing-library/dom"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import Lobby from "../pages/lobby"
 import { useSearchParams } from "next/navigation"
 
@@ -41,21 +40,21 @@ jest.mock("@/components/hooks/useServerStatus", () => ({
   }),
 }))
 
-describe("Lobby Component Functional Tests", () => {
-  const mockTables = [
-    {
-      id: "table-1",
-      creator: { id: "creator-1", name: "Creator 1" },
-      players: [{ id: "creator-1", name: "Creator 1" }],
-      spectators: [],
-      createdAt: Date.now(),
-      lastUsedAt: Date.now(),
-      isActive: true,
-      ruleType: "nineball",
-      completed: false,
-    },
-  ]
+const mockTables = [
+  {
+    id: "table-1",
+    creator: { id: "creator-1", name: "Creator 1" },
+    players: [{ id: "creator-1", name: "Creator 1" }],
+    spectators: [],
+    createdAt: Date.now(),
+    lastUsedAt: Date.now(),
+    isActive: true,
+    ruleType: "nineball",
+    completed: false,
+  },
+]
 
+describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ;(useSearchParams as jest.Mock).mockReturnValue({
@@ -115,6 +114,62 @@ describe("Lobby Component Functional Tests", () => {
     })
 
     // Verify that the PlayModal appears
+    await waitFor(() => {
+      expect(screen.getByText("Opponent Ready")).toBeInTheDocument()
+    })
+  })
+})
+
+describe("Lobby Redirection Tests", () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+
+    // Default search params mock (can be overridden in tests)
+    ;(useSearchParams as jest.Mock).mockReturnValue({
+      get: (key: string) => {
+        if (key === "username") return "TestUser"
+        if (key === "action") return "join"
+        if (key === "gameType") return "nineball"
+        return null
+      },
+    })
+
+    // Mock globalThis fetch
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
+      if (url === "/api/tables") {
+        return Promise.resolve({
+          json: () => Promise.resolve(mockTables),
+          ok: true,
+        })
+      }
+      if (url.includes("/join")) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({}),
+        })
+      }
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({}),
+      })
+    })
+  })
+
+  it("should attempt to join table and show PlayModal when redirecting with action=join", async () => {
+    render(<Lobby />)
+
+    // Check if fetch was called with PUT to join endpoint automatically
+    await waitFor(() => {
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        expect.stringMatching(/\/api\/tables\/table-1\/join/),
+        expect.objectContaining({
+          method: "PUT",
+        })
+      )
+    })
+
     await waitFor(() => {
       expect(screen.getByText("Opponent Ready")).toBeInTheDocument()
     })
