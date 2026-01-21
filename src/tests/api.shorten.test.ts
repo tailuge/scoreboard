@@ -8,8 +8,6 @@ jest.mock("@/services/shortener")
 const mockShortener = Shortener as jest.MockedClass<typeof Shortener>
 
 describe("/api/shorten handler", () => {
-  let req: NextRequest
-
   beforeEach(() => {
     jest.clearAllMocks()
 
