@@ -59,8 +59,12 @@ describe("/api/hiscore handler", () => {
     const playerId = "player-1"
     mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
 
-    const topTenSpy = jest.spyOn(mockScoreTable.prototype, "topTen").mockResolvedValue([])
-    const addSpy = jest.spyOn(mockScoreTable.prototype, "add").mockResolvedValue(1)
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockResolvedValue([])
+    const addSpy = jest
+      .spyOn(mockScoreTable.prototype, "add")
+      .mockResolvedValue(1)
 
     const url = `https://localhost/api/hiscore?ruletype=${ruletype}&id=${playerId}`
     req = {
@@ -70,7 +74,9 @@ describe("/api/hiscore handler", () => {
 
     await handler(req)
 
-    expect(Response.redirect).toHaveBeenCalledWith("https://localhost/leaderboard.html")
+    expect(Response.redirect).toHaveBeenCalledWith(
+      "https://localhost/leaderboard.html"
+    )
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })

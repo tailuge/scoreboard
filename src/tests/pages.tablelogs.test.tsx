@@ -31,7 +31,9 @@ describe("TableLogs Component", () => {
 
   it("renders the component with the tableId", () => {
     render(<TableLogs />)
-    expect(screen.getByText("Logs for Table test-table-123")).toBeInTheDocument()
+    expect(
+      screen.getByText("Logs for Table test-table-123")
+    ).toBeInTheDocument()
   })
 
   it("displays a received message", async () => {
@@ -95,7 +97,9 @@ describe("TableLogs Component", () => {
       mockNchanCallback(invalidJson)
     })
     await waitFor(() => {
-      expect(screen.getByText(`Invalid JSON: ${invalidJson}`)).toBeInTheDocument()
+      expect(
+        screen.getByText(`Invalid JSON: ${invalidJson}`)
+      ).toBeInTheDocument()
     })
   })
 

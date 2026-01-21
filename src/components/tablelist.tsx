@@ -15,7 +15,6 @@ export function TableList({
   readonly onSpectate: (tableId: string) => void
   readonly tables: Table[]
 }) {
-
   const handleJoin = async (tableId: string) => {
     await onJoin(tableId)
   }

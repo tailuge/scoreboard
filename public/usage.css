@@ -73,7 +73,9 @@ body {
   box-shadow: 0 4px 6px var(--shadow-color);
   padding: 1.5rem;
   min-height: 380px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .chart-container:hover {

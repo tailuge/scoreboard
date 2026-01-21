@@ -21,7 +21,8 @@ const GAMES = [
     name: "Three Cushion",
     icon: "/threecushion_icon.png",
     alt: "Three Cushion Icon",
-    highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=threecushion",
+    highscoreUrl:
+      "https://tailuge.github.io/billiards/dist/?ruletype=threecushion",
     ruleType: "threecushion",
   },
 ]
@@ -74,11 +75,7 @@ function GameButton({
   }
 
   return (
-    <button
-      onClick={onClick}
-      className={commonClasses}
-      aria-label={ariaLabel}
-    >
+    <button onClick={onClick} className={commonClasses} aria-label={ariaLabel}>
       {content}
     </button>
   )

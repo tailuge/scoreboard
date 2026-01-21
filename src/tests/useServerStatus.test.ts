@@ -77,7 +77,9 @@ describe("useServerStatus", () => {
 
   it("should handle a network error", async () => {
     const errorMessage = "Network error"
-    ;(globalThis.fetch as jest.Mock).mockRejectedValueOnce(new Error(errorMessage))
+    ;(globalThis.fetch as jest.Mock).mockRejectedValueOnce(
+      new Error(errorMessage)
+    )
 
     const { result, rerender } = renderHook(() =>
       useServerStatus(mockStatusPage)

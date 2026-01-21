@@ -15,7 +15,7 @@ jest.mock("uncrypto", () => ({
 globalThis.Request ??= function Request(
   this: any,
   input: any,
-  init?: { method?: string; headers?: any; body?: any },
+  init?: { method?: string; headers?: any; body?: any }
 ) {
   // Basic mock properties
   this.url = input
@@ -30,7 +30,10 @@ globalThis.Response ??= class Response {
   statusText: string
   headers: Headers
 
-  constructor(body: any, init?: { status?: number; statusText?: string; headers?: any }) {
+  constructor(
+    body: any,
+    init?: { status?: number; statusText?: string; headers?: any }
+  ) {
     this.body = body
     this.status = init?.status || 200
     this.statusText = init?.statusText || "OK"
@@ -60,7 +63,10 @@ globalThis.Headers ??= class Headers {
   has(name: string) {
     return this._headers.has(name.toLowerCase())
   }
-  forEach(callback: (value: any, key: string, parent: this) => void, thisArg?: any) {
+  forEach(
+    callback: (value: any, key: string, parent: this) => void,
+    thisArg?: any
+  ) {
     for (const [key, value] of this._headers.entries()) {
       callback.call(thisArg, value, key, this)
     }
