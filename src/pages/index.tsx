@@ -6,7 +6,7 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    router.push("/lobby")
+    router.push("/game")
   }, [router])
 
   return null
