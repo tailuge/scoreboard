@@ -19,7 +19,7 @@ describe("/api/shorten handler", () => {
         json: () => Promise.resolve(JSON.parse(body)),
         text: () => Promise.resolve(body),
       } as any
-    })
+    }) as unknown as typeof Response
   })
 
   it("should return a shortened URL with a 200 status code", async () => {
