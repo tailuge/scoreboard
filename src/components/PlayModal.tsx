@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { GameUrl } from "@/utils/GameUrl"
 import { Table } from "@/services/table"
+import { IFrameOverlay } from "./IFrameOverlay"
 
 const isInsideIframe = () => {
   try {
@@ -20,20 +21,6 @@ async function markComplete(tableId: string): Promise<string> {
   }
   const table: Table = await response.json()
   return table.creator.id
-}
-
-function IFrameModal({ target, onClose }: { target: URL; onClose: () => void }) {
-  return createPortal(
-    <div className="iframe-overlay">
-      <div className="iframe-container">
-        <iframe src={target.toString()} className="iframe-element" />
-        <button onClick={onClose} className="iframe-close-button">
-          Close
-        </button>
-      </div>
-    </div>,
-    document.body
-  )
 }
 
 interface PlayModalProps {
@@ -96,7 +83,7 @@ export function PlayModal({
   }
 
   if (showIframe && gameUrl) {
-    return <IFrameModal target={gameUrl} onClose={handleIframeClose} />
+    return <IFrameOverlay target={gameUrl} onClose={handleIframeClose} />
   }
 
   return createPortal(

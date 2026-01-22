@@ -1,7 +1,8 @@
 import { Table } from "@/services/table"
 import { UserPlusIcon, EyeIcon } from "@heroicons/react/24/solid"
 import { GameUrl } from "@/utils/GameUrl"
-import { createOverlay } from "@/components/PlayModal"
+import { IFrameOverlay } from "./IFrameOverlay"
+import { useState } from "react"
 
 const TablePockets = () => (
   <>
@@ -97,6 +98,7 @@ export function TableItem({
   readonly userId: string
   readonly userName: string
 }) {
+  const [isSpectating, setIsSpectating] = useState(false)
   const isCreator = table.creator.id === userId
 
   const tableClass = getStatusClass(
@@ -113,16 +115,25 @@ export function TableItem({
   )
 
   const handleSpectate = () => {
-    const target = GameUrl.create({
-      tableId: table.id,
-      userName,
-      userId,
-      ruleType: table.ruleType,
-      isSpectator: true,
-      isCreator: false,
-    })
-    createOverlay(target, () => {})
+    setIsSpectating(true)
     onSpectate(table.id)
+  }
+
+  const handleCloseSpectate = () => {
+    setIsSpectating(false)
+  }
+
+  const spectatorUrl = GameUrl.create({
+    tableId: table.id,
+    userName,
+    userId,
+    ruleType: table.ruleType,
+    isSpectator: true,
+    isCreator: false,
+  })
+
+  if (isSpectating) {
+    return <IFrameOverlay target={spectatorUrl} onClose={handleCloseSpectate} />
   }
 
   return (
