@@ -133,7 +133,13 @@ export function TableItem({
   })
 
   if (isSpectating) {
-    return <IFrameOverlay target={spectatorUrl} onClose={handleCloseSpectate} />
+    return (
+      <IFrameOverlay
+        target={spectatorUrl}
+        onClose={handleCloseSpectate}
+        title="Spectator Window"
+      />
+    )
   }
 
   return (
