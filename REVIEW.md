@@ -11,12 +11,6 @@ The codebase utilizes Next.js (Pages Router), React 19, and Tailwind CSS. While 
 **Impact:** This causes a full page reload, defeating the purpose of a Single Page Application (SPA) and resetting client state (like Redux or Context if used later).
 **Recommendation:** Use `Link` from `next/link`.
 
-### 2. Hardcoded Configuration
-**Files:** `src/pages/lobby.tsx`, `src/components/hooks/useServerStatus.ts`
-**Issue:** The `statusPage` URL (`https://billiards-network.onrender.com/basic_status`) is hardcoded.
-**Impact:** Changing environments (dev, staging, prod) requires code changes.
-**Recommendation:** Move this to `process.env.NEXT_PUBLIC_STATUS_PAGE`.
-
 ### 3. State Management & Race Conditions
 **File:** `src/pages/lobby.tsx`
 **Issue:** `fetchTables` is called multiple times and sets state. If network responses arrive out of order, the UI might show stale data.
@@ -43,11 +37,6 @@ Please work through the following tasks in order. Create a separate branch for t
 - [ ] Import `Link` from `next/link`.
 - [ ] Update `GameButton` to use `Link` for internal URLs (those starting with `/`).
 - [ ] Ensure external links still use `<a>` with `target="_blank"`.
-
-## Task 2: Externalize Configuration
-- [ ] Create or update `.env.local` (and `.env.example`).
-- [ ] Add `NEXT_PUBLIC_STATUS_PAGE=https://billiards-network.onrender.com/basic_status`.
-- [ ] Replace the hardcoded string in `src/pages/lobby.tsx` and `src/components/hooks/useServerStatus.ts` with the environment variable.
 
 ## Task 3: Optimize Table List Rendering
 - [ ] Open `src/components/tablelist.tsx`.
@@ -78,7 +67,7 @@ Please work through the following tasks in order. Create a separate branch for t
 **File:** `tsconfig.json`
 **Issue:** Strict mode is disabled (`"strict": false`, `"strictNullChecks": false`).
 **Impact:** Significantly increases the risk of runtime errors (null pointers) and reduces the effectiveness of TypeScript.
-**Recommendation:** Enable `"strict": true` and remove `"strictNullChecks": false`.
+**Recommendation:** Enable `"strict": true` and remove `"strictNullChecks": false`. fix all subsequent compiler warnings.
 
 **Issue:** Path aliases are incorrect.
 **Impact:** Imports using `@lib` or `@components` will fail to resolve because they point to non-existent root directories instead of `src/`.
