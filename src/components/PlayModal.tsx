@@ -1,52 +1,48 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import { GameUrl } from "@/utils/GameUrl"
 import { Table } from "@/services/table"
 
 const isInsideIframe = () => {
-  return globalThis.self !== globalThis.top
+  try {
+    return globalThis.self !== globalThis.top
+  } catch (e) {
+    return true
+  }
 }
 
-function useBodyOverflow(isOpen: boolean) {
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "unset"
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isOpen])
-}
-
-async function markComplete(tableId: string) {
+async function markComplete(tableId: string): Promise<string> {
   const response = await fetch(`/api/tables/${tableId}/complete`, {
     method: "PUT",
   })
+  if (!response.ok) {
+    throw new Error("Failed to mark table as complete")
+  }
   const table: Table = await response.json()
   return table.creator.id
 }
 
-export function createOverlay(target: URL, onClose: () => void) {
-  const overlay = document.createElement("div")
-  overlay.className = "iframe-overlay"
+function IFrameModal({ target, onClose }: { target: URL; onClose: () => void }) {
+  return createPortal(
+    <div className="iframe-overlay">
+      <div className="iframe-container">
+        <iframe src={target.toString()} className="iframe-element" />
+        <button onClick={onClose} className="iframe-close-button">
+          Close
+        </button>
+      </div>
+    </div>,
+    document.body
+  )
+}
 
-  const iframeContainer = document.createElement("div")
-  iframeContainer.className = "iframe-container"
-
-  const iframe = document.createElement("iframe")
-  iframe.src = target.toString()
-  iframe.className = "iframe-element"
-
-  iframeContainer.appendChild(iframe)
-  overlay.appendChild(iframeContainer)
-  document.body.appendChild(overlay)
-
-  const closeButton = document.createElement("button")
-  closeButton.textContent = "Close"
-  closeButton.className = "iframe-close-button"
-  closeButton.onclick = () => {
-    overlay.remove()
-    onClose()
-  }
-
-  iframeContainer.appendChild(closeButton)
+interface PlayModalProps {
+  readonly isOpen: boolean
+  readonly onClose: () => void
+  readonly tableId: string
+  readonly userName: string
+  readonly userId: string
+  readonly ruleType: string
 }
 
 export function PlayModal({
@@ -56,42 +52,54 @@ export function PlayModal({
   userName,
   userId,
   ruleType,
-}: {
-  readonly isOpen: boolean
-  readonly onClose: () => void
-  readonly tableId: string
-  readonly userName: string
-  readonly userId: string
-  readonly ruleType: string
-}) {
-  useBodyOverflow(isOpen)
+}: PlayModalProps) {
+  const [showIframe, setShowIframe] = useState(false)
+  const [gameUrl, setGameUrl] = useState<URL | null>(null)
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "unset"
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
   const handleStartGame = async () => {
-    const creator = await markComplete(tableId)
-    const target = GameUrl.create({
-      tableId,
-      userName,
-      userId,
-      ruleType,
-      isCreator: userId === creator,
-    })
-    if (isInsideIframe()) {
-      createOverlay(target, onClose)
-    } else {
-      globalThis.open(target.toString(), "_blank")
-    }
-    if (!isInsideIframe() && onClose) {
-      onClose()
+    try {
+      const creatorId = await markComplete(tableId)
+      const target = GameUrl.create({
+        tableId,
+        userName,
+        userId,
+        ruleType,
+        isCreator: userId === creatorId,
+      })
+
+      if (isInsideIframe()) {
+        setGameUrl(target)
+        setShowIframe(true)
+      } else {
+        globalThis.open(target.toString(), "_blank")
+        onClose()
+      }
+    } catch (error) {
+      console.error("Error starting game:", error)
+      // Optionally, show an error message to the user
     }
   }
 
-  const handleCancel = () => {
+  const handleIframeClose = () => {
+    setShowIframe(false)
+    setGameUrl(null)
     onClose()
   }
 
-  return (
+  if (showIframe && gameUrl) {
+    return <IFrameModal target={gameUrl} onClose={handleIframeClose} />
+  }
+
+  return createPortal(
     <div className="play-modal-overlay">
       <div className="play-modal-container">
         <h2 className="play-modal-title">Opponent Ready</h2>
@@ -100,11 +108,12 @@ export function PlayModal({
           <button onClick={handleStartGame} className="play-modal-start-button">
             Start Game
           </button>
-          <button onClick={handleCancel} className="play-modal-cancel-button">
+          <button onClick={onClose} className="play-modal-cancel-button">
             Cancel
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
