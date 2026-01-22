@@ -1,4 +1,5 @@
 import { Table } from "@/types/table"
+import { useMemo } from "react"
 import { TableItem } from "./table"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -19,8 +20,13 @@ export function TableList({
     await onJoin(tableId)
   }
 
-  const sortedTables = [...tables].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  const sortedTables = useMemo(
+    () =>
+      [...tables].sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ),
+    [tables]
   )
 
   return (
