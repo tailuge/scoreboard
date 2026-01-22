@@ -46,7 +46,11 @@ export function CreateTable({
     document.addEventListener("mousedown", handleClickOutside, options)
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, options)
+      // The `as any` is a workaround for a discrepancy in TypeScript's DOM typings.
+      // `addEventListener` accepts `AddEventListenerOptions` (which includes `passive`),
+      // but `removeEventListener` only accepts `EventListenerOptions` (which doesn't).
+      // However, to correctly remove the listener, the same options object must be passed.
+      document.removeEventListener("mousedown", handleClickOutside, options as any)
     }
   }, [])
 
