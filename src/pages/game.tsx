@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Image from "next/image"
+import Link from "next/link"
 import React from "react"
 
 const GAMES = [
@@ -61,13 +62,22 @@ function GameButton({
   const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-full h-full`
 
   if (href) {
+    if (href.startsWith("/")) {
+      return (
+        <Link href={href} passHref legacyBehavior>
+          <a className={commonClasses} aria-label={ariaLabel}>
+            {content}
+          </a>
+        </Link>
+      )
+    }
     return (
       <a
         href={href}
         className={commonClasses}
         aria-label={ariaLabel}
-        target={href.startsWith("http") ? "_blank" : "_self"}
-        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+        target="_blank"
+        rel="noopener noreferrer"
       >
         {content}
       </a>
