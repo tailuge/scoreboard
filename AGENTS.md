@@ -69,5 +69,5 @@ yarn docker:push
 
 ## Common Tasks
 - **Adding an API route**: Add a new file in `src/pages/api`.
-- **Modifying styles**: Uses Tailwind CSS. Check `tailwind.config.ts`.
+- **Modifying styles**: Uses Tailwind CSS. Check `postcss.config.mjs`.
 - **Updating Score Logic**: Primarily handled in `src/services/scoretable.ts` and `src/services/TableService.ts`.
