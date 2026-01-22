@@ -1,4 +1,4 @@
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 import { TableItem } from "./table"
 import { AnimatePresence, motion } from "framer-motion"
 

@@ -1,7 +1,7 @@
 import handler from "@/pages/api/tables/[tableId]"
 import { kv } from "@vercel/kv"
 import { NextRequest } from "next/server"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 
 jest.mock("@vercel/kv")
 

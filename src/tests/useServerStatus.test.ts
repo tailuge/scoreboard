@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react"
+import { renderHook, act, waitFor } from "@testing-library/react"
 import { useServerStatus } from "../components/hooks/useServerStatus"
 import { NchanPub } from "../nchan/nchanpub"
 
@@ -13,11 +13,18 @@ describe("useServerStatus", () => {
   })
 
   it("should have the correct initial state", async () => {
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: "Internal Server Error",
+    })
     const { result } = renderHook(() => useServerStatus(mockStatusPage))
     expect(result.current.isConnecting).toBe(true)
     expect(result.current.isOnline).toBe(false)
     expect(result.current.serverStatus).toBe(null)
     expect(result.current.activeUsers).toBe(null)
+
+    await waitFor(() => expect(result.current.isConnecting).toBe(false))
   })
 
   it("should handle a successful server connection", async () => {
@@ -38,18 +45,15 @@ describe("useServerStatus", () => {
       }
     })
 
-    const { result, rerender } = renderHook(() =>
-      useServerStatus(mockStatusPage)
-    )
+    const { result } = renderHook(() => useServerStatus(mockStatusPage))
 
-    await act(async () => {
-      rerender()
+    await waitFor(() => {
+      expect(result.current.isConnecting).toBe(false)
+      expect(result.current.activeUsers).toBe(5)
     })
 
-    expect(result.current.isConnecting).toBe(false)
     expect(result.current.isOnline).toBe(true)
     expect(result.current.serverStatus).toBe("Server OK")
-    expect(result.current.activeUsers).toBe(5)
   })
 
   it("should handle a failed server connection", async () => {
@@ -59,19 +63,16 @@ describe("useServerStatus", () => {
       statusText: "Internal Server Error",
     })
 
-    const { result, rerender } = renderHook(() =>
-      useServerStatus(mockStatusPage)
-    )
+    const { result } = renderHook(() => useServerStatus(mockStatusPage))
 
-    await act(async () => {
-      rerender()
+    await waitFor(() => {
+      expect(result.current.isConnecting).toBe(false)
+      expect(result.current.serverStatus).toBe(
+        "Server Issue: 500 Internal Server Error"
+      )
     })
 
-    expect(result.current.isConnecting).toBe(false)
     expect(result.current.isOnline).toBe(false)
-    expect(result.current.serverStatus).toBe(
-      "Server Issue: 500 Internal Server Error"
-    )
     expect(result.current.activeUsers).toBe(null)
   })
 
@@ -81,17 +82,14 @@ describe("useServerStatus", () => {
       new Error(errorMessage)
     )
 
-    const { result, rerender } = renderHook(() =>
-      useServerStatus(mockStatusPage)
-    )
+    const { result } = renderHook(() => useServerStatus(mockStatusPage))
 
-    await act(async () => {
-      rerender()
+    await waitFor(() => {
+      expect(result.current.isConnecting).toBe(false)
+      expect(result.current.serverStatus).toBe(`Server Down: ${errorMessage}`)
     })
 
-    expect(result.current.isConnecting).toBe(false)
     expect(result.current.isOnline).toBe(false)
-    expect(result.current.serverStatus).toBe(`Server Down: ${errorMessage}`)
     expect(result.current.activeUsers).toBe(null)
   })
 
@@ -112,16 +110,12 @@ describe("useServerStatus", () => {
       }
     })
 
-    const { result, rerender } = renderHook(() =>
-      useServerStatus(mockStatusPage)
-    )
+    const { result } = renderHook(() => useServerStatus(mockStatusPage))
 
-    await act(async () => {
-      rerender()
+    await waitFor(() => {
+      expect(result.current.isConnecting).toBe(false)
+      expect(result.current.activeUsers).toBe(10)
     })
-
-    // initial fetch
-    expect(result.current.activeUsers).toBe(10)
 
     // manual fetch
     mockGet.mockResolvedValue(15)

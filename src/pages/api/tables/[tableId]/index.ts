@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 
 export const config = {
   runtime: "edge",

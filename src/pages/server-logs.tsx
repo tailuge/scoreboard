@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 import Link from "next/link"
 
 export default function ServerLogs() {

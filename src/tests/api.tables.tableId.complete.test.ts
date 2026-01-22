@@ -2,7 +2,7 @@ import handler from "@/pages/api/tables/[tableId]/complete"
 import { TableService } from "@/services/TableService"
 import { NextApiRequest, NextApiResponse } from "next"
 import { mock } from "jest-mock-extended"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 
 jest.mock("@/services/TableService")
 

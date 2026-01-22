@@ -1,12 +1,5 @@
 import { VercelKV } from "@vercel/kv"
-
-export interface ScoreData {
-  name: string
-  score: number
-  data: string
-  likes: number
-  id: string
-}
+import { ScoreData } from "@/types/score"
 
 export class ScoreTable {
   readonly prefix = "hiscore"

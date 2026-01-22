@@ -1,8 +1,8 @@
 import { kv, VercelKV } from "@vercel/kv"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 
 import { NchanPub } from "@/nchan/nchanpub"
-import { Player } from "./player"
+import { Player } from "@/types/player"
 import { getUID } from "@/utils/uid"
 
 const KEY = "tables"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { GameUrl } from "@/utils/GameUrl"
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 import { IFrameOverlay } from "./IFrameOverlay"
 
 const isInsideIframe = () => {

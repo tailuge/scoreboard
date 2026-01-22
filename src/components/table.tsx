@@ -1,4 +1,4 @@
-import { Table } from "@/services/table"
+import { Table } from "@/types/table"
 import { UserPlusIcon, EyeIcon } from "@heroicons/react/24/solid"
 import { GameUrl } from "@/utils/GameUrl"
 import { IFrameOverlay } from "./IFrameOverlay"

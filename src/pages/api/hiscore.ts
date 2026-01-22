@@ -1,7 +1,8 @@
 import type { NextRequest } from "next/server"
 import JSONCrush from "jsoncrush"
 import { kv } from "@vercel/kv"
-import { ScoreData, ScoreTable } from "@/services/scoretable"
+import { ScoreTable } from "@/services/scoretable"
+import { ScoreData } from "@/types/score"
 
 export const config = {
   runtime: "edge",
