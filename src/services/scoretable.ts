@@ -8,7 +8,7 @@ export class ScoreTable {
 
   constructor(private readonly store: VercelKV | Partial<VercelKV>) {}
 
-  dbKey(ruletype) {
+  dbKey(ruletype: string) {
     return `${this.prefix}${ruletype}`
   }
 
@@ -20,6 +20,9 @@ export class ScoreTable {
       likes: 0,
       id: this.generateUID(),
     }
+    if (typeof this.store.zadd !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.zadd(this.dbKey(ruletype), {
       score: score,
       member: scoreData,
@@ -28,6 +31,9 @@ export class ScoreTable {
   }
 
   async trim(ruletype: string) {
+    if (typeof this.store.zremrangebyrank !== "function") {
+      return
+    }
     return await this.store.zremrangebyrank(this.dbKey(ruletype), 0, -11)
   }
 
@@ -36,8 +42,14 @@ export class ScoreTable {
   }
 
   async topTen(ruletype: string) {
-    const data = (await this.store.zrange(this.dbKey(ruletype), 0, 9)).reverse()
-    return data.map((row: ScoreData) => ({
+    if (typeof this.store.zrange !== "function") {
+      return []
+    }
+    const data = (await this.store.zrange(this.dbKey(ruletype), 0, 9)) as ScoreData[]
+    if (!data) {
+      return []
+    }
+    return data.reverse().map((row) => ({
       name: row.name,
       likes: row.likes ?? 0,
       id: row.id,
@@ -45,8 +57,18 @@ export class ScoreTable {
     }))
   }
 
-  async getById(ruletype: string, id: string): Promise<ScoreData> {
-    const data = await this.store.zrange(this.dbKey(ruletype), 0, 9)
+  async getById(ruletype: string, id: string): Promise<ScoreData | undefined> {
+    if (typeof this.store.zrange !== "function") {
+      return
+    }
+    const data = (await this.store.zrange(
+      this.dbKey(ruletype),
+      0,
+      9
+    )) as ScoreData[]
+    if (!data) {
+      return
+    }
     return data
       .map((item: any) => ({
         name: item.name,
@@ -61,9 +83,18 @@ export class ScoreTable {
   async like(ruletype: string, id: string) {
     console.log("like", ruletype, id)
     const item = await this.getById(ruletype, id)
+    if (!item) {
+      throw new Error("Item not found")
+    }
     console.log("item", item)
+    if (typeof this.store.zrem !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.zrem(this.dbKey(ruletype), item)
     item.likes = (item.likes ?? 0) + 1
+    if (typeof this.store.zadd !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.zadd(this.dbKey(ruletype), {
       score: item.score,
       member: item,
@@ -73,6 +104,9 @@ export class ScoreTable {
 
   async get(ruletype: string, id: string) {
     const item = await this.getById(ruletype, id)
+    if (!item) {
+      return this.notFound
+    }
     return this.formatReplayUrl(item.data)
   }
 

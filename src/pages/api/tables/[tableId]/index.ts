@@ -30,7 +30,7 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await request.json()
-    const table: Table = await kv.hget<Table>(TABLES_KEY, params.tableId)
+    const table = await kv.hget<Table>(TABLES_KEY, params.tableId)
 
     if (!table) {
       return Response.json({ error: "Table not found" }, { status: 404 })

@@ -9,6 +9,10 @@ export default async function handler(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const metric = searchParams.get("metric")
 
+  if (!metric) {
+    return new Response("Missing metric parameter", { status: 400 })
+  }
+
   const usageService = new UsageService(metric)
 
   if (request.method === "GET") {

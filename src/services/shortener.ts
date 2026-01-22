@@ -15,7 +15,7 @@ export class Shortener {
     return await this.store.incr("idfountain")
   }
 
-  dbKey(id) {
+  dbKey(id: string) {
     return `${this.prefix}${id}`
   }
 
@@ -34,7 +34,7 @@ export class Shortener {
   async replay(key: string) {
     const full = this.dbKey(key)
     console.log(full)
-    const item: { input } = await this.store.get(full)
+    const item = await this.store.get<{ input: string }>(full)
     console.log(item)
     if (item?.input) {
       return this.replayUrl + item.input

@@ -84,12 +84,13 @@ export default function TableLogs() {
     })
 
     const filteredMessages = parsedMessages.filter((message, index) => {
-      if (message.error) return true
+      if (message.error || !message.parsed) return true
       const nextMessage = parsedMessages[index + 1]
       return (
         message.parsed.type !== "AIM" ||
         !nextMessage ||
         nextMessage.error ||
+        !nextMessage.parsed ||
         nextMessage.parsed.type !== "AIM"
       )
     })
@@ -122,7 +123,7 @@ export default function TableLogs() {
             ) : (
               <ChevronRightIcon className="h-3 w-3 text-gray-500 mr-1" />
             )}
-            {message.parsed.clientId} {message.parsed.type}
+            {message.parsed?.clientId} {message.parsed?.type}
           </button>
           {isExpanded && (
             <div className="text-black pl-4">

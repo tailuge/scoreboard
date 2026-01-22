@@ -17,11 +17,17 @@ export class TableService {
 
   async getTables() {
     await this.expireTables()
+    if (typeof this.store.hgetall !== "function") {
+      return []
+    }
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
     return Object.values(tables || {}).sort((a, b) => b.createdAt - a.createdAt)
   }
 
   async expireTables() {
+    if (typeof this.store.hgetall !== "function") {
+      return 0
+    }
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
     const expiredEntries = Object.entries(tables || {}).filter(
       ([, table]) =>
@@ -32,7 +38,9 @@ export class TableService {
     if (expiredEntries.length > 0) {
       // Use hdel to remove multiple fields from the hash
       const keysToDelete = expiredEntries.map(([key, _]) => key)
-      await this.store.hdel(KEY, ...keysToDelete)
+      if (typeof this.store.hdel === "function") {
+        await this.store.hdel(KEY, ...keysToDelete)
+      }
 
       console.log(`Expired ${expiredEntries.length} tables.`)
     }
@@ -54,7 +62,9 @@ export class TableService {
       ruleType,
       completed: false,
     }
-
+    if (typeof this.store.hset !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.hset(KEY, { [tableId]: newTable })
     await this.notify({ action: "create" })
     return newTable
@@ -62,7 +72,9 @@ export class TableService {
 
   async joinTable(tableId: string, userId: string, userName: string) {
     await this.expireTables()
-
+    if (typeof this.store.hget !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     const table = await this.store.hget<Table>(KEY, tableId)
     if (!table) {
       await this.notify({ action: "expired table" })
@@ -76,13 +88,18 @@ export class TableService {
     const player: Player = { id: userId, name: userName || "Anonymous" }
     table.players.push(player)
     table.lastUsedAt = Date.now()
-
+    if (typeof this.store.hset !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.hset(KEY, { [tableId]: table })
     await this.notify({ action: "join" })
     return table
   }
 
   async spectateTable(tableId: string, userId: string, userName: string) {
+    if (typeof this.store.hget !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     const table = await this.store.hget<Table>(KEY, tableId)
 
     if (!table) {
@@ -92,13 +109,18 @@ export class TableService {
     const spectator: Player = { id: userId, name: userName || "Anonymous" }
     table.spectators.push(spectator)
     table.lastUsedAt = Date.now()
-
+    if (typeof this.store.hset !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.hset(KEY, { [tableId]: table })
     await this.notify({ action: "spectate" })
     return table
   }
 
   async completeTable(tableId: string) {
+    if (typeof this.store.hget !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     const table = await this.store.hget<Table>(KEY, tableId)
 
     if (!table) {
@@ -107,6 +129,9 @@ export class TableService {
 
     table.lastUsedAt = Date.now()
     table.completed = true
+    if (typeof this.store.hset !== "function") {
+      throw new Error("Store is not configured correctly")
+    }
     await this.store.hset(KEY, { [tableId]: table })
     await this.notify({ action: "complete" })
     return table

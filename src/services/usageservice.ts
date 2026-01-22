@@ -10,9 +10,14 @@ export class UsageService {
     return this.key + "Usage"
   }
   // Increment the count for day
-  async incrementCount(date): Promise<void> {
+  async incrementCount(date: number): Promise<void> {
     const day = { date: new Date(date).toISOString().split("T")[0] }
-
+    if (
+      typeof this.store.zscore !== "function" ||
+      typeof this.store.zadd !== "function"
+    ) {
+      return
+    }
     const currentScore = (await this.store.zscore(this.fullKey(), day)) || 0
     await this.store.zadd(this.fullKey(), {
       score: currentScore + 1,
@@ -21,6 +26,9 @@ export class UsageService {
   }
 
   async getAllCounts(): Promise<unknown[]> {
+    if (typeof this.store.zrange !== "function") {
+      return []
+    }
     return await this.store.zrange(this.fullKey(), 0, -1, {
       withScores: true,
     })

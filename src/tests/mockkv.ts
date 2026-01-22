@@ -139,10 +139,10 @@ export class MockKV {
    * @param field - The field to retrieve.
    * @returns A promise that resolves to the value of the field.
    */
-  async hget(key: string, field: string): Promise<any> {
+  async hget(key: string, field:string): Promise<any> {
     // Call ioredis-mock's hget to retrieve the value
     const value = await this.mockRedis.hget(key, field)
-
+    if (value === null) return null
     // Parse the stringified JSON back into an object
     try {
       return JSON.parse(value)
@@ -159,10 +159,12 @@ export class MockKV {
    */
   async hgetall<
     TData extends Record<string, unknown> = Record<string, unknown>,
-  >(key: string): Promise<TData> {
+  >(key: string): Promise<TData | null> {
     // Call ioredis-mock's hgetall to retrieve all fields and values
     const result = await this.mockRedis.hgetall(key)
-
+    if (Object.keys(result).length === 0) {
+      return null
+    }
     // Parse the stringified JSON values back into objects
     const parsedResult: Record<string, unknown> = {}
     for (const [field, value] of Object.entries(result)) {
@@ -260,4 +262,4 @@ export class MockKV {
   }
 }
 
-export const mockKv: Partial<VercelKV> = new MockKV()
+export const mockKv: Partial<VercelKV> = new MockKV() as any

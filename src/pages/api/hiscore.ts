@@ -17,6 +17,9 @@ export default async function handler(request: NextRequest) {
   console.log(`url.searchParams = ${url.searchParams}`)
   const raw = new URLSearchParams(body).get("state")
   console.log(raw)
+  if (!raw) {
+    return new Response("Missing state parameter", { status: 400 })
+  }
   const json = JSON.parse(JSONCrush.uncrush(raw))
   console.log(json)
 
@@ -30,11 +33,14 @@ export default async function handler(request: NextRequest) {
   }
 
   const ruletype = url.searchParams.get("ruletype")
+  if (!ruletype) {
+    return new Response("Missing ruletype parameter", { status: 400 })
+  }
   const base = new Date("2024").valueOf()
   const score = json?.score + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
   console.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
-  const data = await scoretable.topTen(url.searchParams.get("ruletype"))
+  const data = await scoretable.topTen(ruletype)
 
   if (
     !data.some((row) => {

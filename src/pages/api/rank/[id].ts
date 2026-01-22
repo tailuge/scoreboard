@@ -13,6 +13,10 @@ export default async function handler(request: NextRequest) {
   const ruletype = searchParams.get("ruletype")
   const id = searchParams.get("id")
 
+  if (!ruletype || !id) {
+    return new Response("Missing ruletype or id", { status: 400 })
+  }
+
   if (request.method === "GET") {
     const url = await scoretable.get(ruletype, id)
     console.log(`redirecting ${ruletype} id ${id} to ${url}`)

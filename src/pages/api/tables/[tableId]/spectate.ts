@@ -19,7 +19,11 @@ export default async function handler(
       )
       res.status(200).json(table)
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message })
+      } else {
+        res.status(400).json({ error: "An unknown error occurred" })
+      }
     }
   } else {
     res.status(405).json({ error: "Method not allowed" })
