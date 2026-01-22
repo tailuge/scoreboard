@@ -9,6 +9,7 @@ describe("PlayModal", () => {
     // Mock fetch
     globalThis.fetch = jest.fn(() =>
       Promise.resolve({
+        ok: true,
         json: () => Promise.resolve({ creator: { id: "user-123" } }),
       })
     ) as jest.Mock

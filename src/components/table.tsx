@@ -14,46 +14,75 @@ const TablePockets = () => (
   </>
 )
 
-const TableContent = ({ table, isCreator, onJoin, handleSpectate }) => (
-  <div className="table-content">
-    <div className="text-center">
-      <p className="table-title">{table.ruleType}</p>
-      <p className="table-players">
-        {table.creator.name}{" "}
-        {table.players.length > 1
-          ? `vs ${table.players[1].name}`
-          : "- waiting for opponent"}
-      </p>
+interface TableContentProps {
+  readonly table: Table
+  readonly isCreator: boolean
+  readonly onJoin: (tableId: string) => void
+  readonly onSpectate: () => void
+}
+
+function TableContent({
+  table,
+  isCreator,
+  onJoin,
+  onSpectate,
+}: TableContentProps) {
+  const opponentName =
+    table.players.length > 1
+      ? `vs ${table.players[1].name}`
+      : "- waiting for opponent"
+  const canJoin = !isCreator && table.players.length < 2
+  const canSpectate = !isCreator && table.players.length >= 2
+
+  return (
+    <div className="table-content">
+      <div className="text-center">
+        <p className="table-title">{table.ruleType}</p>
+        <p className="table-players">
+          {table.creator.name} {opponentName}
+        </p>
+      </div>
+      <div className="table-actions">
+        {canJoin && (
+          <button
+            onClick={() => onJoin(table.id)}
+            className="table-button"
+            aria-label="Join Table"
+          >
+            <UserPlusIcon className="h-5 w-5 text-white" />
+          </button>
+        )}
+        {canSpectate && (
+          <button
+            onClick={onSpectate}
+            className="table-button"
+            aria-label="Spectate Table"
+          >
+            <EyeIcon className="h-5 w-5 text-white" />
+            <span className="table-spectator-count">
+              {table.spectators.length}
+            </span>
+          </button>
+        )}
+      </div>
     </div>
-    <div className="table-actions">
-      {!isCreator && (
-        <>
-          {table.players.length < 2 && (
-            <button
-              onClick={() => onJoin(table.id)}
-              className="table-button"
-              aria-label="Join Table"
-            >
-              <UserPlusIcon className="h-5 w-5 text-white" />
-            </button>
-          )}
-          {table.players.length >= 2 && (
-            <button
-              onClick={handleSpectate}
-              className="table-button"
-              aria-label="Spectate Table"
-            >
-              <EyeIcon className="h-5 w-5 text-white" />
-              <span className="table-spectator-count">
-                {table.spectators.length}
-              </span>
-            </button>
-          )}
-        </>
-      )}
-    </div>
-  </div>
-)
+  )
+}
+
+function getStatusClass(
+  base: "table" | "felt",
+  ruleType: string,
+  playerCount: number,
+  completed: boolean
+): string {
+  if (playerCount < 2) {
+    return `${base}-${ruleType}`
+  }
+  if (completed) {
+    return `${base}-completed`
+  }
+  return base === "table" ? "table-occupied" : "felt-default"
+}
 
 export function TableItem({
   table,
@@ -70,24 +99,18 @@ export function TableItem({
 }) {
   const isCreator = table.creator.id === userId
 
-  const getTableClass = (
-    ruleType: string,
-    playerCount: number,
-    completed: boolean
-  ) => {
-    if (playerCount >= 2)
-      return completed ? "table-completed" : "table-occupied"
-    return `table-${ruleType}`
-  }
-
-  const getFeltClass = (
-    ruleType: string,
-    playerCount: number,
-    completed: boolean
-  ) => {
-    if (playerCount >= 2) return completed ? "felt-completed" : "felt-default"
-    return `felt-${ruleType}`
-  }
+  const tableClass = getStatusClass(
+    "table",
+    table.ruleType,
+    table.players.length,
+    table.completed
+  )
+  const feltClass = getStatusClass(
+    "felt",
+    table.ruleType,
+    table.players.length,
+    table.completed
+  )
 
   const handleSpectate = () => {
     const target = GameUrl.create({
@@ -104,18 +127,16 @@ export function TableItem({
 
   return (
     <div
-      className={`table-card ${getTableClass(table.ruleType, table.players.length, table.completed)} ${isCreator ? "table-card-creator" : ""}`}
+      className={`table-card ${tableClass} ${isCreator ? "table-card-creator" : ""}`}
     >
       <div className="table-container">
         <div className="table-inner">
-          <div
-            className={`table-felt ${getFeltClass(table.ruleType, table.players.length, table.completed)}`}
-          ></div>
+          <div className={`table-felt ${feltClass}`}></div>
           <TableContent
             table={table}
             isCreator={isCreator}
             onJoin={onJoin}
-            handleSpectate={handleSpectate}
+            onSpectate={handleSpectate}
           />
           {table.ruleType !== "threecushion" && <TablePockets />}
         </div>
