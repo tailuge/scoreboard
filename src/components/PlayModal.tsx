@@ -42,6 +42,7 @@ export function PlayModal({
 }: PlayModalProps) {
   const [showIframe, setShowIframe] = useState(false)
   const [gameUrl, setGameUrl] = useState<URL | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset"
@@ -50,9 +51,16 @@ export function PlayModal({
     }
   }, [isOpen])
 
+  useEffect(() => {
+    if (!isOpen) {
+      setError(null)
+    }
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const handleStartGame = async () => {
+    setError(null)
     try {
       const creatorId = await markComplete(tableId)
       const target = GameUrl.create({
@@ -71,8 +79,8 @@ export function PlayModal({
         onClose()
       }
     } catch (error) {
+      setError("Failed to start the game. Please try again.")
       console.error("Error starting game:", error)
-      // Optionally, show an error message to the user
     }
   }
 
@@ -83,7 +91,13 @@ export function PlayModal({
   }
 
   if (showIframe && gameUrl) {
-    return <IFrameOverlay target={gameUrl} onClose={handleIframeClose} />
+    return (
+      <IFrameOverlay
+        target={gameUrl}
+        onClose={handleIframeClose}
+        title="Game Window"
+      />
+    )
   }
 
   return createPortal(
@@ -91,6 +105,7 @@ export function PlayModal({
       <div className="play-modal-container">
         <h2 className="play-modal-title">Opponent Ready</h2>
         <p className="play-modal-text">Your table is ready to play</p>
+        {error && <p className="play-modal-error">{error}</p>}
         <div className="play-modal-buttons">
           <button onClick={handleStartGame} className="play-modal-start-button">
             Start Game
