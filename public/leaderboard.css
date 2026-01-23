@@ -1,0 +1,120 @@
+body {
+  font-family: "Roboto", sans-serif; /* Set Roboto as the default font */
+  font-weight: 300; /* Light font weight */
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f8f8; /* Soft background */
+  color: #333; /* Neutral text color */
+}
+
+h1,
+h2 {
+  font-weight: 320; /* Slightly bolder for headings */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.leaderboards {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap onto the next line */
+  gap: 20px;
+  justify-content: flex-start; /* Align items to the start of the container */
+}
+
+.leaderboard {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.08);
+  flex: 1 0 300px; /* Allow items to grow, not shrink initially, and have a base width */
+}
+
+.leaderboard h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+  color: #444; /* Subtle gray for a soft look */
+}
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse; /* Clean table design */
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 4px; /* More padding for breathing space */
+  text-align: left;
+  border-bottom: 1px solid #eee; /* Minimal borders */
+}
+
+.leaderboard th {
+  color: #555; /* Subtle gray */
+  font-size: 0.875rem;
+}
+
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fdfdfd;
+  color: #0969da;
+  border: 0.5px solid #c6e1ff;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.like-button:hover {
+  background-color: #deebf7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle hover effect */
+}
+
+.like-button::before {
+  content: "👍";
+  margin-right: 5px;
+}
+
+.trophy {
+  font-size: 1.2em;
+}
+
+.trophy--gold {
+  color: gold;
+}
+
+.trophy--silver {
+  color: silver;
+}
+
+.trophy--bronze {
+  color: #cd7f32;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile-responsive adjustments */
+@media (max-width: 768px) {
+  .leaderboards {
+    flex-direction: column; /* Stack vertically */
+  }
+
+  .leaderboard {
+    flex: 1 0 100%; /* Take full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    margin-bottom: 15px; /* Add spacing between stacked leaderboards */
+  }
+
+  /* Optional: Adjust padding for smaller screens */
+  body {
+    padding: 15px;
+  }
+}
