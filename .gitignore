@@ -48,3 +48,5 @@ next-env.d.ts
 #playwright
 /test-results
 /playwright-report
+.gemini/
+gha-creds-*.json
