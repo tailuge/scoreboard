@@ -23,7 +23,6 @@ const LeaderboardPage: React.FC = () => {
             <GroupBox title="Snooker">
                 <LeaderboardTable
                 ruleType="snooker"
-                gameUrl="https://tailuge.github.io/billiards/dist?ruletype=snooker"
                 />
             </GroupBox>
         </div>
@@ -31,7 +30,6 @@ const LeaderboardPage: React.FC = () => {
             <GroupBox title="9-Ball">
                 <LeaderboardTable
                 ruleType="nineball"
-                gameUrl="https://tailuge.github.io/billiards/dist"
                 />
             </GroupBox>
         </div>
@@ -39,7 +37,6 @@ const LeaderboardPage: React.FC = () => {
             <GroupBox title="Three Cushion">
                 <LeaderboardTable
                 ruleType="threecushion"
-                gameUrl="https://tailuge.github.io/billiards/dist?ruletype=threecushion"
                 />
             </GroupBox>
         </div>
