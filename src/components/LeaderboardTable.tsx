@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { LeaderboardItem } from "@/types/leaderboard";
 
 interface LeaderboardTableProps {
-  title?: string; // Kept for API calls/logic if needed, but not rendered as header
   ruleType: string;
-  gameUrl?: string; // Made optional if not used for header link
   limit?: number;
   compact?: boolean;
+  gameUrl: string;
 }
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   ruleType,
   limit,
   compact = false,
+  gameUrl,
 }) => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
 
@@ -48,7 +48,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   };
 
   const handleRowClick = (id: string) => {
-    window.location.href = `/api/rank/${id}?ruletype=${ruleType}`;
+    globalThis.location.href = `${gameUrl}&replayId=${id}`;
   };
 
   const renderTrophy = (index: number) => {
@@ -66,7 +66,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const displayData = limit ? data.slice(0, limit) : data;
   const rows = limit 
-    ? [...displayData, ...Array(Math.max(0, limit - displayData.length)).fill(null)]
+    ? [...displayData, ...new Array(Math.max(0, limit - displayData.length)).fill(null)]
     : displayData;
 
   return (
@@ -87,6 +87,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           {rows.map((item, index) => {
             if (!item) {
                return (
+                // Using index as a key is acceptable here for non-interactive placeholder rows.
                 <tr key={`empty-${index}`} className={compact ? "h-[22px]" : "h-[28px]"}>
                    <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
                    <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
@@ -116,9 +117,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                 <>
                   <td className="px-2 py-1 text-left border-b border-gray-800">
                     <a 
-                      href={`/api/rank/${item.id}?ruletype=${ruleType}`}
-                      className="text-blue-400/60 hover:text-blue-300 hover:underline text-[10px]"
-                      onClick={(e) => e.stopPropagation()} 
+                      href={`${gameUrl}&replayId=${item.id}`} 
                     >
                       replay
                     </a>
