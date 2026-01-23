@@ -94,7 +94,6 @@ function GameGrid({
       {GAMES.map((game) => (
         <GameButton
           key={`${game.name}-${isHighscore ? "highscore" : "online"}`}
-          name={game.name}
           icon={game.icon}
           alt={game.alt}
           hoverBorderColor={hoverBorderColor}
