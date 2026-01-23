@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LeaderboardItem } from "@/types/leaderboard";
 
 interface LeaderboardTableProps {
-  title?: string; // Kept for API calls/logic if needed, but not rendered as header
   ruleType: string;
-  gameUrl?: string; // Made optional if not used for header link
   limit?: number;
   compact?: boolean;
 }
@@ -48,7 +46,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   };
 
   const handleRowClick = (id: string) => {
-    window.location.href = `/api/rank/${id}?ruletype=${ruleType}`;
+    globalThis.location.href = `/api/rank/${id}?ruletype=${ruleType}`;
   };
 
   const renderTrophy = (index: number) => {
@@ -66,7 +64,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const displayData = limit ? data.slice(0, limit) : data;
   const rows = limit 
-    ? [...displayData, ...Array(Math.max(0, limit - displayData.length)).fill(null)]
+    ? [...displayData, ...new Array(Math.max(0, limit - displayData.length)).fill(null)]
     : displayData;
 
   return (
@@ -87,7 +85,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           {rows.map((item, index) => {
             if (!item) {
                return (
-                <tr key={`empty-${index}`} className="h-[29px]">
+                // eslint-disable-next-line react/no-array-index-key
+                <tr key={`skeleton-${index}`} className="h-[29px]">
                    <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
                    <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
                    <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
