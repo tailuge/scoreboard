@@ -60,7 +60,7 @@ function GameButton({
     </div>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-full h-full`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
     return (
@@ -93,7 +93,7 @@ function GameGrid({
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => (
-        <div key={`${game.name}-${isHighscore ? "highscore" : "online"}`} className="flex flex-col gap-2">
+        <div key={`${game.name}-${isHighscore ? "highscore" : "online"}`} className="flex flex-col gap-2 items-center">
           <GameButton
             icon={game.icon}
             alt={game.alt}
@@ -108,7 +108,7 @@ function GameGrid({
             }
           />
           {isHighscore && (
-            <div className="mt-2">
+            <div className="mt-2 w-full h-[87px] text-gray-500 text-sm overflow-hidden">
               <LeaderboardTable
                 ruleType={game.ruleType}
                 limit={3}

@@ -65,6 +65,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   };
 
   const displayData = limit ? data.slice(0, limit) : data;
+  const rows = limit 
+    ? [...displayData, ...Array(Math.max(0, limit - displayData.length)).fill(null)]
+    : displayData;
 
   return (
     <div className="w-full overflow-x-auto">
@@ -81,19 +84,30 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           </thead>
         )}
         <tbody>
-          {displayData.map((item, index) => (
+          {rows.map((item, index) => {
+            if (!item) {
+               return (
+                <tr key={`empty-${index}`} className="h-[29px]">
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
+                   {!compact && <><td /><td /></>}
+                </tr>
+               );
+            }
+            return (
             <tr 
               key={item.id} 
               className="group hover:bg-gray-800/30 transition-colors cursor-pointer"
               onClick={() => handleRowClick(item.id)}
             >
-              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1' : 'p-2'}`}>
+              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-600' : 'p-2'}`}>
                 {renderTrophy(index)}
               </td>
-              <td className={`text-left border-b border-gray-800 text-gray-300 ${compact ? 'p-1' : 'p-2'}`}>
+              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-500' : 'p-2 text-gray-300'}`}>
                 {item.score}
               </td>
-              <td className={`text-left border-b border-gray-800 text-gray-200 ${compact ? 'p-1' : 'p-2'}`}>
+              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-500' : 'p-2 text-gray-200'}`}>
                 <span className="font-semibold">{item.name}</span>
               </td>
               {!compact && (
@@ -118,7 +132,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                 </>
               )}
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>
