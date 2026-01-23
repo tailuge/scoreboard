@@ -3,6 +3,7 @@ import Image from "next/image"
 import React from "react"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
+import { useServerStatus } from "@/components/hooks/useServerStatus"
 
 const GAMES = [
   {
@@ -114,6 +115,9 @@ function GameGrid({
 }
 
 export default function Game() {
+  const statusPage = "https://billiards-network.onrender.com/basic_status"
+  const { activeUsers } = useServerStatus(statusPage)
+
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
       <Head>
@@ -130,7 +134,9 @@ export default function Game() {
         </GroupBox>
         <GroupBox
           title="2-Player Online"
-          rightBadge={<OnlineCount count={3} />}
+          rightBadge={
+            activeUsers !== null ? <OnlineCount count={activeUsers} /> : null
+          }
         >
           <GameGrid hoverBorderColor="hover:border-green-500" />
         </GroupBox>
