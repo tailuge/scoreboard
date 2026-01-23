@@ -71,15 +71,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   return (
     <div className="w-full overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
+      <table className={`w-full border-collapse ${compact ? 'text-[11px]' : 'text-sm'}`}>
         {!compact && (
           <thead>
             <tr>
-              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
-              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
-              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
-              <th className="p-2 text-left border-b border-gray-700"></th>
-              <th className="p-2 text-left border-b border-gray-700"></th>
+              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
+              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
+              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
+              <th className="px-2 py-1 text-left border-b border-gray-700"></th>
+              <th className="px-2 py-1 text-left border-b border-gray-700"></th>
             </tr>
           </thead>
         )}
@@ -87,10 +87,10 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           {rows.map((item, index) => {
             if (!item) {
                return (
-                <tr key={`empty-${index}`} className="h-[29px]">
-                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
-                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
-                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'p-1' : 'p-2'}`}>&nbsp;</td>
+                <tr key={`empty-${index}`} className={compact ? "h-[22px]" : "h-[28px]"}>
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
+                   <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
                    {!compact && <><td /><td /></>}
                 </tr>
                );
@@ -101,30 +101,32 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
               className="group hover:bg-gray-800/30 transition-colors cursor-pointer"
               onClick={() => handleRowClick(item.id)}
             >
-              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-600' : 'p-2'}`}>
-                {renderTrophy(index)}
+              <td className={`text-left border-b border-gray-800 ${compact ? 'px-1 py-0 text-gray-600' : 'px-2 py-1'}`}>
+                <div className={compact ? 'scale-75 origin-left' : ''}>
+                  {renderTrophy(index)}
+                </div>
               </td>
-              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-500' : 'p-2 text-gray-300'}`}>
+              <td className={`text-left border-b border-gray-800 ${compact ? 'px-1 py-0 text-gray-500/70' : 'px-2 py-1 text-gray-400'}`}>
                 {item.score}
               </td>
-              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1 text-gray-500' : 'p-2 text-gray-200'}`}>
-                <span className="font-semibold">{item.name}</span>
+              <td className={`text-left border-b border-gray-800 truncate ${compact ? 'px-1 py-0 text-gray-500/70 max-w-[60px]' : 'px-2 py-1 text-gray-300 max-w-[120px]'}`}>
+                <span className={compact ? "font-medium" : "font-semibold"}>{item.name}</span>
               </td>
               {!compact && (
                 <>
-                  <td className="p-2 text-left border-b border-gray-800">
+                  <td className="px-2 py-1 text-left border-b border-gray-800">
                     <a 
                       href={`/api/rank/${item.id}?ruletype=${ruleType}`}
-                      className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
+                      className="text-blue-400/60 hover:text-blue-300 hover:underline text-[10px]"
                       onClick={(e) => e.stopPropagation()} 
                     >
                       replay
                     </a>
                   </td>
-                  <td className="p-2 text-left border-b border-gray-800">
+                  <td className="px-2 py-1 text-left border-b border-gray-800">
                     <button
                       onClick={(e) => handleLike(e, item.id)}
-                      className="inline-flex items-center bg-gray-700 text-gray-300 border border-gray-600 rounded-full px-2 py-0.5 text-xs cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-2"
+                      className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-1.5 py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
                     >
                       👍 {item.likes || 0}
                     </button>
