@@ -1,4 +1,4 @@
-import { kv, VercelKV } from "@vercel/kv"
+import { VercelKV } from "@vercel/kv"
 import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
 
