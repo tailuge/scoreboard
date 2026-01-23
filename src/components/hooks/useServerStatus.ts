@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { NchanPub } from "../../nchan/nchanpub"
 import { NchanSub } from "../../nchan/nchansub"
+import { logger } from "../../utils/logger"
 
 export interface ServerStatusState {
   serverStatus: string | null
@@ -19,9 +20,9 @@ export function useServerStatus(statusPage: string) {
 
   const fetchActiveUsers = useCallback(async () => {
     try {
-      const users = await new NchanPub("lobby").get()
-      console.log("active users:", users)
-      setState((prev) => ({ ...prev, activeUsers: users }))
+      const activeUsers = await new NchanPub("lobby").get()
+      logger.log("active users:", activeUsers)
+      setState((prev) => ({ ...prev, activeUsers }))
     } catch {
       setState((prev) => ({ ...prev, activeUsers: null }))
     }

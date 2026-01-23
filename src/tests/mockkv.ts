@@ -1,5 +1,6 @@
 import RedisMock from "ioredis-mock"
 import { VercelKV } from "@vercel/kv"
+import { logger } from "../utils/logger"
 
 // Create an adapter class for Vercel KV
 export class MockKV {
@@ -219,7 +220,7 @@ export class MockKV {
             value = "Unknown type"
         }
 
-        console.log(`Key: ${key}, Type: ${type}, Value:`, value)
+        logger.log(`Key: ${key}, Type: ${type}, Value:`, value)
       }
     } catch (error) {
       console.error("Error retrieving data from mockRedis:", error)

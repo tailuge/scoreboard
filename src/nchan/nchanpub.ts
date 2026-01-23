@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger"
+
 export class NchanPub {
   private readonly publishUrl: string
   private readonly base = "billiards-network.onrender.com"
@@ -28,7 +30,7 @@ export class NchanPub {
     })
 
     const textData = await response.text()
-    console.log(textData)
+    logger.log(textData)
 
     // Parse the active connections from the response
     const activeConnectionsRegex = /Active connections:\s+(\d+)/
@@ -37,7 +39,7 @@ export class NchanPub {
       ? Number.parseInt(activeConnectionsMatch[1], 10) - 1
       : 0
 
-    console.log("Active Connections:", activeConnections)
+    logger.log("Active Connections:", activeConnections)
     return activeConnections
   }
 }

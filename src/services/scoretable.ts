@@ -1,5 +1,6 @@
-import { VercelKV } from "@vercel/kv"
+import { kv, VercelKV } from "@vercel/kv"
 import { ScoreData } from "@/types/score"
+import { logger } from "@/utils/logger"
 
 export class ScoreTable {
   readonly prefix = "hiscore"
@@ -59,9 +60,12 @@ export class ScoreTable {
   }
 
   async like(ruletype: string, id: string) {
-    console.log("like", ruletype, id)
+    logger.log("like", ruletype, id)
     const item = await this.getById(ruletype, id)
-    console.log("item", item)
+    logger.log("item", item)
+    if (!item) {
+      return 0
+    }
     await this.store.zrem(this.dbKey(ruletype), item)
     item.likes = (item.likes ?? 0) + 1
     await this.store.zadd(this.dbKey(ruletype), {

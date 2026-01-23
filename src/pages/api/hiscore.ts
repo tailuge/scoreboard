@@ -3,6 +3,7 @@ import JSONCrush from "jsoncrush"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { ScoreData } from "@/types/score"
+import { logger } from "@/utils/logger"
 
 export const config = {
   runtime: "edge",
@@ -13,16 +14,16 @@ const scoretable = new ScoreTable(kv)
 export default async function handler(request: NextRequest) {
   const url = request.nextUrl
   const body = await request.text()
-  console.log(`body = ${body}`)
-  console.log(`url.searchParams = ${url.searchParams}`)
+  logger.log(`body = ${body}`)
+  logger.log(`url.searchParams = ${url.searchParams}`)
   const raw = new URLSearchParams(body).get("state")
-  console.log(raw)
+  logger.log(raw)
   const json = JSON.parse(JSONCrush.uncrush(raw))
-  console.log(json)
+  logger.log(json)
 
   // require up to date client version
   if (json?.v !== 1) {
-    console.log("Client version is outdated")
+    logger.log("Client version is outdated")
     return new Response(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
       { status: 400 }
@@ -33,7 +34,7 @@ export default async function handler(request: NextRequest) {
   const base = new Date("2024").valueOf()
   const score = json?.score + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
-  console.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
+  logger.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
   const data = await scoretable.topTen(url.searchParams.get("ruletype"))
 
   if (
@@ -42,7 +43,7 @@ export default async function handler(request: NextRequest) {
       return urlState(rowData) === raw
     })
   ) {
-    console.log("Add hiscore")
+    logger.log("Add hiscore")
     await scoretable.add(ruletype, score, player, body)
   }
 

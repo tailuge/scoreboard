@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { logger } from "../utils/logger"
 
 test("initial page load", async ({ page }) => {
   await page.goto("/test.html")
@@ -8,7 +9,7 @@ test("initial page load", async ({ page }) => {
 
   // Debug: Log the body content
   const bodyContent = await page.locator("body").innerHTML()
-  console.log("Body Content:", bodyContent)
+  logger.log("Body Content:", bodyContent)
 
   // Wait for the container to load
   await page.waitForSelector(".container")

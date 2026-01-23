@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
+import { logger } from "@/utils/logger"
 
 export const config = {
   runtime: "edge",
@@ -15,7 +16,7 @@ export default async function handler(request: NextRequest) {
 
   if (request.method === "GET") {
     const url = await scoretable.get(ruletype, id)
-    console.log(`redirecting ${ruletype} id ${id} to ${url}`)
+    logger.log(`redirecting ${ruletype} id ${id} to ${url}`)
     return new Response(null, {
       status: 302,
       headers: {
@@ -26,7 +27,7 @@ export default async function handler(request: NextRequest) {
 
   if (request.method === "PUT") {
     await scoretable.like(ruletype, id)
-    console.log(`liked ${ruletype} id ${id}`)
+    logger.log(`liked ${ruletype} id ${id}`)
   }
 
   return new Response(null, { status: 200 })

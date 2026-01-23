@@ -1,5 +1,6 @@
-import { mockKv } from "./mockkv"
 import { ScoreTable } from "../services/scoretable"
+import { mockKv } from "./mockkv"
+import { logger } from "../utils/logger"
 
 describe("ScoreTable", () => {
   afterEach(async () => {
@@ -10,7 +11,7 @@ describe("ScoreTable", () => {
     const scoreTable = new ScoreTable(mockKv)
     await scoreTable.add("nineball", 100, "user", { some: "data" })
     const items = await scoreTable.topTen("nineball")
-    console.log(items)
+    logger.log(items)
     expect(items).toHaveLength(1)
     const item = items[0]
     expect(item.name).toEqual("user")

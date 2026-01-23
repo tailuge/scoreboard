@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger"
+
 export class NchanSub {
   private socket: WebSocket | null = null
   private readonly subscribeUrl: string
@@ -26,11 +28,11 @@ export class NchanSub {
     this.socket = new WebSocket(this.subscribeUrl)
 
     this.socket.onopen = () => {
-      console.log(`Connected to ${this.subscribeUrl}`)
+      logger.log(`Connected to ${this.subscribeUrl}`)
     }
 
     this.socket.onmessage = (event: MessageEvent) => {
-      console.log(`Received message: ${event.data}`)
+      logger.log(`Received message: ${event.data}`)
       this.notify(event.data)
     }
 
@@ -39,7 +41,7 @@ export class NchanSub {
     }
 
     this.socket.onclose = (event: CloseEvent) => {
-      console.log("Disconnected from %s:", this.subscribeUrl, event.reason)
+      logger.log("Disconnected from %s:", this.subscribeUrl, event.reason)
       if (this.shouldReconnect) {
         this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
       }
@@ -55,7 +57,7 @@ export class NchanSub {
     if (this.socket) {
       this.socket.close()
       this.socket = null
-      console.log(`Closed connection to ${this.subscribeUrl}`)
+      logger.log(`Closed connection to ${this.subscribeUrl}`)
     }
   }
 }

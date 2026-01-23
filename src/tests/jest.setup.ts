@@ -1,6 +1,9 @@
 import "@testing-library/jest-dom"
 
 import { mockKv } from "./mockkv"
+import { logger } from "../utils/logger"
+
+logger.enabled = false
 
 jest.mock("@vercel/kv", () => ({
   kv: mockKv,

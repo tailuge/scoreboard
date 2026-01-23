@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server"
 import { NchanPub } from "@/nchan/nchanpub"
+import { logger } from "@/utils/logger"
 
 export const config = {
   runtime: "edge",
@@ -7,7 +8,7 @@ export const config = {
 
 export default async function handler(req: NextRequest) {
   if (req.method === "GET") {
-    console.log(`connected`)
+    logger.log(`connected`)
     await new NchanPub("lobby").post({ action: "connected" })
     return Response.json({ success: true })
   }

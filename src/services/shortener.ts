@@ -1,4 +1,5 @@
-import { VercelKV } from "@vercel/kv"
+import { kv, VercelKV } from "@vercel/kv"
+import { logger } from "@/utils/logger"
 
 export class Shortener {
   readonly store: VercelKV
@@ -21,9 +22,9 @@ export class Shortener {
 
   async shorten(data: any) {
     const key = (await this.keyFountain()).toString()
-    console.log("next free key: ", key)
+    logger.log("next free key: ", key)
     const result = await this.store.set(this.dbKey(key), data)
-    console.log(result)
+    logger.log(result)
     return {
       input: data.input,
       key: key,
@@ -32,13 +33,11 @@ export class Shortener {
   }
 
   async replay(key: string) {
-    const full = this.dbKey(key)
-    console.log(full)
-    const item: { input } = await this.store.get(full)
-    console.log(item)
-    if (item?.input) {
-      return this.replayUrl + item.input
+    const data = await this.store.get<any>(this.dbKey(key))
+    logger.log(data)
+    if (!data) {
+      return this.notFound
     }
-    return this.notFound
+    return this.replayUrl + data.input
   }
 }

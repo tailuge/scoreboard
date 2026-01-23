@@ -4,6 +4,7 @@ import { Table } from "@/types/table"
 import { NchanPub } from "@/nchan/nchanpub"
 import { Player } from "@/types/player"
 import { getUID } from "@/utils/uid"
+import { logger } from "@/utils/logger"
 
 const KEY = "tables"
 const TABLE_TIMEOUT = 60 * 1000 // 1 minute
@@ -34,7 +35,7 @@ export class TableService {
       const keysToDelete = expiredEntries.map(([key]) => key)
       await this.store.hdel(KEY, ...keysToDelete)
 
-      console.log(`Expired ${expiredEntries.length} tables.`)
+      logger.log(`Expired ${expiredEntries.length} tables.`)
     }
     return expiredEntries.length
   }
