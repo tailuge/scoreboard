@@ -44,30 +44,30 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     }
   };
 
-  const getTrophyIcon = (index: number) => {
+  const renderTrophy = (index: number) => {
     switch (index) {
       case 0:
-        return `<span class="trophy trophy--gold">🏆</span>`;
+        return <span className="text-xl">🏆</span>;
       case 1:
-        return `<span class="trophy trophy--silver">🥈</span>`;
+        return <span className="text-xl">🥈</span>;
       case 2:
-        return `<span class="trophy trophy--bronze">🥉</span>`;
+        return <span className="text-xl">🥉</span>;
       default:
-        return "";
+        return null;
     }
   };
 
   return (
     <div className="bg-white p-2.5 rounded shadow-md flex-1 min-w-[300px]">
-      <h2 className="text-xl font-semibold mb-2 text-center">
-        <a href={gameUrl}>{title}</a>
+      <h2 className="text-xl font-semibold mb-2 text-center text-gray-700">
+        <a href={gameUrl} className="hover:underline decoration-1">{title}</a>
       </h2>
       <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th className="p-1 text-left border-b border-gray-200"></th>
-            <th className="p-1 text-left border-b border-gray-200">Score</th>
-            <th className="p-1 text-left border-b border-gray-200">Player</th>
+            <th className="p-1 text-left border-b border-gray-200 w-8"></th>
+            <th className="p-1 text-left border-b border-gray-200 text-gray-600 text-sm font-normal">Score</th>
+            <th className="p-1 text-left border-b border-gray-200 text-gray-600 text-sm font-normal">Player</th>
             <th className="p-1 text-left border-b border-gray-200"></th>
             <th className="p-1 text-left border-b border-gray-200"></th>
           </tr>
@@ -75,23 +75,27 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         <tbody>
           {data.map((item, index) => (
             <tr key={item.id}>
-              <td
-                className="p-1 text-left border-b border-gray-200"
-                dangerouslySetInnerHTML={{ __html: getTrophyIcon(index) }}
-              />
-              <td className="p-1 text-left border-b border-gray-200">
+              <td className="p-1 text-left border-b border-gray-100">
+                {renderTrophy(index)}
+              </td>
+              <td className="p-1 text-left border-b border-gray-100">
                 {item.score}
               </td>
-              <td className="p-1 text-left border-b border-gray-200">
+              <td className="p-1 text-left border-b border-gray-100">
                 <b>{item.name}</b>
               </td>
-              <td className="p-1 text-left border-b border-gray-200">
-                <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>replay</a>
+              <td className="p-1 text-left border-b border-gray-100">
+                <a 
+                  href={`/api/rank/${item.id}?ruletype=${ruleType}`}
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  replay
+                </a>
               </td>
-              <td className="p-1 text-left border-b border-gray-200">
+              <td className="p-1 text-left border-b border-gray-100">
                 <button
                   onClick={() => handleLike(item.id)}
-                  className="inline-flex items-center bg-white text-blue-600 border border-blue-200 rounded-full px-2.5 py-1 text-xs cursor-pointer hover:bg-blue-50 transition-colors ml-2"
+                  className="inline-flex items-center bg-white text-blue-600 border border-blue-200 rounded-full px-2.5 py-1 text-xs cursor-pointer hover:bg-blue-50 hover:shadow-sm transition-all ml-2"
                 >
                   👍 {item.likes || 0}
                 </button>
