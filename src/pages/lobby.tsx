@@ -10,8 +10,8 @@ import { Table } from "@/types/table"
 import { NchanSub } from "@/nchan/nchansub"
 import { Star } from "@/components/Star"
 import { markUsage } from "@/utils/usage"
-import { useServerStatus } from "@/components/hooks/useServerStatus"
 import { getUID } from "@/utils/uid"
+import { STATUS_PAGE_URL } from "@/utils/constants"
 
 export default function Lobby() {
   const [userId, setUserId] = useState("")
@@ -19,7 +19,6 @@ export default function Lobby() {
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const statusPage = "https://billiards-network.onrender.com/basic_status"
   const hasHandledAutoJoin = useRef(false)
   const [modalTable, setModalTable] = useState<{
     id: string
@@ -32,8 +31,6 @@ export default function Lobby() {
     setTables(data)
     setIsLoading(false)
   }, [])
-
-  useServerStatus(statusPage)
 
   useEffect(() => {
     if (!router.isReady) return
@@ -175,7 +172,7 @@ export default function Lobby() {
             onUserNameChange={handleUserNameChange}
           />
           <Star />
-          <ServerStatus statusPage={statusPage} />
+          <ServerStatus statusPage={STATUS_PAGE_URL} />
         </div>
       </div>
       <TableList

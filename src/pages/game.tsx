@@ -6,6 +6,7 @@ import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import LeaderboardTable from "@/components/LeaderboardTable"
+import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
   {
@@ -118,7 +119,7 @@ function GameGrid({
             }
           />
           {isHighscore && (
-            <div className="mt-2 w-full h-[87px] text-gray-500 text-sm overflow-hidden">
+            <div className="mt-2 w-full h-[84px] text-gray-500 text-sm overflow-hidden">
               <LeaderboardTable
                 ruleType={game.ruleType}
                 limit={3}
@@ -133,8 +134,7 @@ function GameGrid({
 }
 
 export default function Game() {
-  const statusPage = "https://billiards-network.onrender.com/basic_status"
-  const { activeUsers } = useServerStatus(statusPage)
+  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
