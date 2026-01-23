@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Image from "next/image"
+import Link from "next/link"
 import React from "react"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
@@ -63,6 +64,15 @@ function GameButton({
   const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
+    const isInternal = href.startsWith("/")
+    if (isInternal) {
+      return (
+        <Link href={href} className={commonClasses} aria-label={ariaLabel}>
+          {content}
+        </Link>
+      )
+    }
+
     return (
       <a
         href={href}

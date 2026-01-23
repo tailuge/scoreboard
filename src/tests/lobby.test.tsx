@@ -1,11 +1,11 @@
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import Lobby from "../pages/lobby"
-import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 
-// Mock next/navigation
-jest.mock("next/navigation", () => ({
-  useSearchParams: jest.fn(),
+// Mock next/router
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
 }))
 
 // Mock markUsage
@@ -59,8 +59,10 @@ const mockTables = [
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useSearchParams as jest.Mock).mockReturnValue({
-      get: (key: string) => (key === "username" ? "TestUser" : null),
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: { username: "TestUser" },
+      isReady: true,
+      push: jest.fn(),
     })
 
     // Mock globalThis fetch
@@ -127,13 +129,14 @@ describe("Lobby Redirection Tests", () => {
     jest.clearAllMocks()
 
     // Default search params mock (can be overridden in tests)
-    ;(useSearchParams as jest.Mock).mockReturnValue({
-      get: (key: string) => {
-        if (key === "username") return "TestUser"
-        if (key === "action") return "join"
-        if (key === "gameType") return "nineball"
-        return null
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {
+        username: "TestUser",
+        action: "join",
+        gameType: "nineball",
       },
+      isReady: true,
+      push: jest.fn(),
     })
 
     // Mock globalThis fetch

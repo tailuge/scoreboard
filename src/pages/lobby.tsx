@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
 import { PlayModal } from "@/components/PlayModal"
@@ -18,7 +18,7 @@ export default function Lobby() {
   const [userName, setUserName] = useState("")
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const searchParams = useSearchParams()
+  const router = useRouter()
   const statusPage = "https://billiards-network.onrender.com/basic_status"
   const hasHandledAutoJoin = useRef(false)
   const [modalTable, setModalTable] = useState<{
@@ -26,20 +26,22 @@ export default function Lobby() {
     ruleType: string
   } | null>(null)
 
-  const fetchTables = async () => {
+  const fetchTables = useCallback(async () => {
     const res = await fetch("/api/tables")
     const data = await res.json()
     setTables(data)
     setIsLoading(false)
-  }
+  }, [])
 
   useServerStatus(statusPage)
 
   useEffect(() => {
+    if (!router.isReady) return
+
     markUsage("lobby")
     const storedUserId = getUID()
 
-    const urlUserName = searchParams.get("username")
+    const urlUserName = router.query.username as string
     const storedUserName =
       urlUserName || localStorage.getItem("userName") || "Anonymous"
 
@@ -61,9 +63,9 @@ export default function Lobby() {
     })
     client.start()
     return () => client.stop()
-  }, [searchParams])
+  }, [router.isReady, router.query, fetchTables])
 
-  const tableAction = async (tableId: string, action: "join" | "spectate") => {
+  const tableAction = useCallback(async (tableId: string, action: "join" | "spectate") => {
     const response = await fetch(`/api/tables/${tableId}/${action}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -71,12 +73,14 @@ export default function Lobby() {
     })
     fetchTables()
     return response.status === 200
-  }
+  }, [userId, userName, fetchTables])
 
   const handleJoin = useCallback(
     async (tableId: string) => {
       const success = await tableAction(tableId, "join")
       if (success) {
+        // Note: 'tables' here will be stale if not careful, but we only need to find the ruleType.
+        // Ideally we'd fetch the latest table state, but for now we look at the current list.
         const table = tables.find((t) => t.id === tableId)
         if (table && !table.completed) {
           setModalTable({ id: table.id, ruleType: table.ruleType })
@@ -87,13 +91,13 @@ export default function Lobby() {
     [tables, tableAction]
   )
 
-  const handleSpectate = async (tableId: string) => {
+  const handleSpectate = useCallback(async (tableId: string) => {
     return tableAction(tableId, "spectate")
-  }
+  }, [tableAction])
 
-  const handleCreate = () => {
+  const handleCreate = useCallback(() => {
     fetchTables()
-  }
+  }, [fetchTables])
 
   const createTable = useCallback(
     async (ruleType: string) => {
@@ -104,14 +108,14 @@ export default function Lobby() {
       })
       fetchTables()
     },
-    [userId, userName]
+    [userId, userName, fetchTables]
   )
 
   useEffect(() => {
-    if (isLoading || hasHandledAutoJoin.current || !userId || !userName) return
+    if (isLoading || !router.isReady || hasHandledAutoJoin.current || !userId || !userName) return
 
-    const action = searchParams.get("action")
-    const gameType = searchParams.get("gameType")
+    const action = router.query.action
+    const gameType = router.query.gameType as string
 
     if (action === "join" && gameType) {
       hasHandledAutoJoin.current = true
@@ -125,8 +129,9 @@ export default function Lobby() {
     }
   }, [
     isLoading,
+    router.isReady,
+    router.query,
     tables,
-    searchParams,
     userId,
     userName,
     createTable,
