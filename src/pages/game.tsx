@@ -1,6 +1,8 @@
 import Head from "next/head"
 import Image from "next/image"
 import React from "react"
+import { GroupBox } from "../components/GroupBox"
+import { OnlineCount } from "../components/OnlineCount"
 
 const GAMES = [
   {
@@ -81,39 +83,32 @@ function GameButton({
   )
 }
 
-function GameSection({
-  title,
+function GameGrid({
   hoverBorderColor,
   isHighscore = false,
 }: {
-  readonly title: string
   readonly hoverBorderColor: string
   readonly isHighscore?: boolean
 }) {
   return (
-    <div className="relative w-full border border-gray-700/50 rounded-3xl p-6 bg-gray-800/20 shadow-inner">
-      <h2 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 px-4 text-xs font-light text-gray-400 tracking-wide uppercase">
-        {title}
-      </h2>
-      <div className="grid grid-cols-3 gap-4 w-full">
-        {GAMES.map((game) => (
-          <GameButton
-            key={`${game.name}-${title}`}
-            name={game.name}
-            icon={game.icon}
-            alt={game.alt}
-            hoverBorderColor={hoverBorderColor}
-            href={
-              isHighscore
-                ? game.highscoreUrl
-                : `/lobby?action=join&gameType=${game.ruleType}`
-            }
-            ariaLabel={
-              isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
-            }
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-3 gap-4 w-full">
+      {GAMES.map((game) => (
+        <GameButton
+          key={`${game.name}-${isHighscore ? "highscore" : "online"}`}
+          name={game.name}
+          icon={game.icon}
+          alt={game.alt}
+          hoverBorderColor={hoverBorderColor}
+          href={
+            isHighscore
+              ? game.highscoreUrl
+              : `/lobby?action=join&gameType=${game.ruleType}`
+          }
+          ariaLabel={
+            isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
+          }
+        />
+      ))}
     </div>
   )
 }
@@ -127,15 +122,18 @@ export default function Game() {
       </Head>
 
       <div className="flex flex-col gap-6 w-full max-w-lg items-center h-full justify-center">
-        <GameSection
-          title="Highscore Challenge"
-          hoverBorderColor="hover:border-blue-500"
-          isHighscore={true}
-        />
-        <GameSection
+        <GroupBox title="Highscore Challenge">
+          <GameGrid
+            hoverBorderColor="hover:border-blue-500"
+            isHighscore={true}
+          />
+        </GroupBox>
+        <GroupBox
           title="2-Player Online"
-          hoverBorderColor="hover:border-green-500"
-        />
+          rightBadge={<OnlineCount count={3} />}
+        >
+          <GameGrid hoverBorderColor="hover:border-green-500" />
+        </GroupBox>
       </div>
     </div>
   )
