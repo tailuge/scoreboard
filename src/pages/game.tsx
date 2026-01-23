@@ -4,6 +4,7 @@ import React from "react"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
+import LeaderboardTable from "@/components/LeaderboardTable"
 
 const GAMES = [
   {
@@ -92,20 +93,30 @@ function GameGrid({
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => (
-        <GameButton
-          key={`${game.name}-${isHighscore ? "highscore" : "online"}`}
-          icon={game.icon}
-          alt={game.alt}
-          hoverBorderColor={hoverBorderColor}
-          href={
-            isHighscore
-              ? game.highscoreUrl
-              : `/lobby?action=join&gameType=${game.ruleType}`
-          }
-          ariaLabel={
-            isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
-          }
-        />
+        <div key={`${game.name}-${isHighscore ? "highscore" : "online"}`} className="flex flex-col gap-2">
+          <GameButton
+            icon={game.icon}
+            alt={game.alt}
+            hoverBorderColor={hoverBorderColor}
+            href={
+              isHighscore
+                ? game.highscoreUrl
+                : `/lobby?action=join&gameType=${game.ruleType}`
+            }
+            ariaLabel={
+              isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
+            }
+          />
+          {isHighscore && (
+            <div className="mt-2">
+              <LeaderboardTable
+                ruleType={game.ruleType}
+                limit={3}
+                compact={true}
+              />
+            </div>
+          )}
+        </div>
       ))}
     </div>
   )

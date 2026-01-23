@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
 
 jest.mock("../nchan/nchansub", () => ({
@@ -15,7 +15,19 @@ jest.mock("../nchan/nchanpub", () => ({
 }))
 
 describe("Game Page", () => {
-  it("renders the game selection page with 3 buttons", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    globalThis.fetch = jest.fn().mockImplementation(() => {
+      return Promise.resolve({
+        json: () => Promise.resolve([
+            { id: '1', name: 'TopPlayer', score: 999, likes: 0 }
+        ]),
+        ok: true,
+      });
+    });
+  });
+
+  it("renders the game selection page with 3 buttons", async () => {
     render(<Game />)
 
     // Check main heading (Removed)
@@ -49,5 +61,10 @@ describe("Game Page", () => {
     expect(screen.getAllByAltText("Snooker Icon")).toHaveLength(2)
     expect(screen.getAllByAltText("Nine Ball Icon")).toHaveLength(2)
     expect(screen.getAllByAltText("Three Cushion Icon")).toHaveLength(2)
+
+    // Verify LeaderboardTable renders data
+    await waitFor(() => {
+        expect(screen.getAllByText('TopPlayer')).toHaveLength(3);
+    });
   })
 })

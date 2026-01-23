@@ -6,11 +6,13 @@ interface LeaderboardTableProps {
   ruleType: string;
   gameUrl?: string; // Made optional if not used for header link
   limit?: number;
+  compact?: boolean;
 }
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   ruleType,
   limit,
+  compact = false,
 }) => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
 
@@ -30,7 +32,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     fetchData();
   }, [ruleType]);
 
-  const handleLike = async (id: string) => {
+  const handleLike = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     try {
       const url = `/api/rank/${id}?ruletype=${ruleType}`;
       await fetch(url, { method: "PUT" });
@@ -42,6 +45,10 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     } catch (error) {
       console.error("Error updating likes:", error);
     }
+  };
+
+  const handleRowClick = (id: string) => {
+    window.location.href = `/api/rank/${id}?ruletype=${ruleType}`;
   };
 
   const renderTrophy = (index: number) => {
@@ -62,43 +69,54 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full border-collapse text-sm">
-        <thead>
-          <tr>
-            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
-            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
-            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
-            <th className="p-2 text-left border-b border-gray-700"></th>
-            <th className="p-2 text-left border-b border-gray-700"></th>
-          </tr>
-        </thead>
+        {!compact && (
+          <thead>
+            <tr>
+              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
+              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
+              <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
+              <th className="p-2 text-left border-b border-gray-700"></th>
+              <th className="p-2 text-left border-b border-gray-700"></th>
+            </tr>
+          </thead>
+        )}
         <tbody>
           {displayData.map((item, index) => (
-            <tr key={item.id} className="group hover:bg-gray-800/30 transition-colors">
-              <td className="p-2 text-left border-b border-gray-800">
+            <tr 
+              key={item.id} 
+              className="group hover:bg-gray-800/30 transition-colors cursor-pointer"
+              onClick={() => handleRowClick(item.id)}
+            >
+              <td className={`text-left border-b border-gray-800 ${compact ? 'p-1' : 'p-2'}`}>
                 {renderTrophy(index)}
               </td>
-              <td className="p-2 text-left border-b border-gray-800 text-gray-300">
+              <td className={`text-left border-b border-gray-800 text-gray-300 ${compact ? 'p-1' : 'p-2'}`}>
                 {item.score}
               </td>
-              <td className="p-2 text-left border-b border-gray-800 text-gray-200">
+              <td className={`text-left border-b border-gray-800 text-gray-200 ${compact ? 'p-1' : 'p-2'}`}>
                 <span className="font-semibold">{item.name}</span>
               </td>
-              <td className="p-2 text-left border-b border-gray-800">
-                <a 
-                  href={`/api/rank/${item.id}?ruletype=${ruleType}`}
-                  className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
-                >
-                  replay
-                </a>
-              </td>
-              <td className="p-2 text-left border-b border-gray-800">
-                <button
-                  onClick={() => handleLike(item.id)}
-                  className="inline-flex items-center bg-gray-700 text-gray-300 border border-gray-600 rounded-full px-2 py-0.5 text-xs cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-2"
-                >
-                  👍 {item.likes || 0}
-                </button>
-              </td>
+              {!compact && (
+                <>
+                  <td className="p-2 text-left border-b border-gray-800">
+                    <a 
+                      href={`/api/rank/${item.id}?ruletype=${ruleType}`}
+                      className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
+                      onClick={(e) => e.stopPropagation()} 
+                    >
+                      replay
+                    </a>
+                  </td>
+                  <td className="p-2 text-left border-b border-gray-800">
+                    <button
+                      onClick={(e) => handleLike(e, item.id)}
+                      className="inline-flex items-center bg-gray-700 text-gray-300 border border-gray-600 rounded-full px-2 py-0.5 text-xs cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-2"
+                    >
+                      👍 {item.likes || 0}
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
