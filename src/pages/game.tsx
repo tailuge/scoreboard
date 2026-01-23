@@ -132,7 +132,7 @@ export default function Game() {
         <GroupBox
           title="2-Player Online"
           rightBadge={
-            activeUsers !== null ? <OnlineCount count={activeUsers} /> : null
+            activeUsers === null ? null : <OnlineCount count={activeUsers} />
           }
         >
           <GameGrid hoverBorderColor="hover:border-green-500" />
