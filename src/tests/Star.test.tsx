@@ -4,7 +4,7 @@ import "@testing-library/jest-dom"
 
 describe("Star component", () => {
   it("opens the GitHub repository in a new tab when clicked", () => {
-    // Mock window.open
+    // Mock globalThis.open
     const mockOpen = jest.fn()
     globalThis.open = mockOpen
 
@@ -16,7 +16,7 @@ describe("Star component", () => {
     })
     fireEvent.click(starButton)
 
-    // Verify window.open was called
+    // Verify globalThis.open was called
     expect(mockOpen).toHaveBeenCalledWith(
       "https://github.com/tailuge/billiards",
       "_blank",

@@ -14,7 +14,7 @@ describe("PlayModal", () => {
       })
     ) as jest.Mock
 
-    // Mock window.open
+    // Mock globalThis.open
     globalThis.open = jest.fn()
 
     mockOnClose.mockClear()

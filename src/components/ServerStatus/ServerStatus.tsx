@@ -10,7 +10,7 @@ export const ServerStatus: FC<ServerStatusProps> = ({ statusPage }) => {
   const serverState = useServerStatus(statusPage)
 
   const handleStatusClick = () => {
-    window.open("/server-logs", "_blank")
+    globalThis.open("/server-logs", "_blank")
   }
 
   return (

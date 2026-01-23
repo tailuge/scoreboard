@@ -24,7 +24,7 @@ export default function ServerLogs() {
   }
 
   const handleTableClick = (tableId: string) => {
-    window.open(`/tablelogs?tableId=${tableId}`, "_blank")
+    globalThis.open(`/tablelogs?tableId=${tableId}`, "_blank")
   }
 
   useEffect(() => {
