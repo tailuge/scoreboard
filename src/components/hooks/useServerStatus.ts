@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react"
 import { NchanPub } from "../../nchan/nchanpub"
+import { NchanSub } from "../../nchan/nchansub"
 
 export interface ServerStatusState {
   serverStatus: string | null
@@ -70,6 +71,21 @@ export function useServerStatus(statusPage: string) {
   useEffect(() => {
     checkServerStatus()
   }, [checkServerStatus])
+
+  useEffect(() => {
+    const sub = new NchanSub("lobby", (e) => {
+      try {
+        const data = JSON.parse(e)
+        if (data?.action === "connected") {
+          fetchActiveUsers()
+        }
+      } catch {
+        // Ignore non-json or invalid messages
+      }
+    })
+    sub.start()
+    return () => sub.stop()
+  }, [fetchActiveUsers])
 
   return { ...state, fetchActiveUsers }
 }

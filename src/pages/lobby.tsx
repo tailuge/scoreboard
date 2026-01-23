@@ -33,7 +33,7 @@ export default function Lobby() {
     setIsLoading(false)
   }
 
-  const { fetchActiveUsers } = useServerStatus(statusPage)
+  useServerStatus(statusPage)
 
   useEffect(() => {
     markUsage("lobby")
@@ -50,15 +50,18 @@ export default function Lobby() {
 
     fetchTables()
     const client = new NchanSub("lobby", (e) => {
-      if (JSON.parse(e)?.action === "connected") {
-        fetchActiveUsers()
-        return
+      try {
+        if (JSON.parse(e)?.action === "connected") {
+          return
+        }
+      } catch (err) {
+        // Not JSON, continue to fetchTables
       }
       fetchTables()
     })
     client.start()
     return () => client.stop()
-  }, [searchParams, fetchActiveUsers])
+  }, [searchParams])
 
   const tableAction = async (tableId: string, action: "join" | "spectate") => {
     const response = await fetch(`/api/tables/${tableId}/${action}`, {

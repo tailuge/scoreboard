@@ -1,8 +1,10 @@
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { useServerStatus } from "../components/hooks/useServerStatus"
 import { NchanPub } from "../nchan/nchanpub"
+import { NchanSub } from "../nchan/nchansub"
 
 jest.mock("../nchan/nchanpub")
+jest.mock("../nchan/nchansub")
 
 describe("useServerStatus", () => {
   const mockStatusPage = "http://localhost:3000/status"
@@ -10,6 +12,10 @@ describe("useServerStatus", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     globalThis.fetch = jest.fn() as jest.Mock
+    ;(NchanSub as jest.Mock).mockImplementation(() => ({
+      start: jest.fn(),
+      stop: jest.fn(),
+    }))
   })
 
   it("should have the correct initial state", async () => {

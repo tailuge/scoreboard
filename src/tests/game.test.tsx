@@ -1,6 +1,19 @@
 import { render, screen } from "@testing-library/react"
 import Game from "../pages/game"
 
+jest.mock("../nchan/nchansub", () => ({
+  NchanSub: jest.fn().mockImplementation(() => ({
+    start: jest.fn(),
+    stop: jest.fn(),
+  })),
+}))
+
+jest.mock("../nchan/nchanpub", () => ({
+  NchanPub: jest.fn().mockImplementation(() => ({
+    get: jest.fn().mockResolvedValue(0),
+  })),
+}))
+
 describe("Game Page", () => {
   it("renders the game selection page with 3 buttons", () => {
     render(<Game />)
