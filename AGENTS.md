@@ -2,6 +2,14 @@
 
 This project is a scoreboard and lobby system for the [tailuge/billiards](https://github.com/tailuge/billiards) game. It is designed to run on Vercel and uses real-time communication via Nchan.
 
+## Getting Started
+
+First, install the project dependencies:
+
+```shell
+yarn install
+```
+
 ## Tech Stack
 
 - **Framework**: Next.js (using the `pages` router)
@@ -56,6 +64,16 @@ yarn e2e:local
 ```shell
 yarn docker:build
 yarn docker:push
+```
+
+## Pre-checkin Checklist
+
+Before committing any code, run the following commands to ensure the codebase is in a good state:
+
+```shell
+yarn lint
+yarn test
+yarn build
 ```
 
 ## Important Notes for Agents
