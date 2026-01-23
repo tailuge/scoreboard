@@ -31,7 +31,7 @@ export class TableService {
     //delete these tables
     if (expiredEntries.length > 0) {
       // Use hdel to remove multiple fields from the hash
-      const keysToDelete = expiredEntries.map(([key, _]) => key)
+      const keysToDelete = expiredEntries.map(([key]) => key)
       await this.store.hdel(KEY, ...keysToDelete)
 
       console.log(`Expired ${expiredEntries.length} tables.`)

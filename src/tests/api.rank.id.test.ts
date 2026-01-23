@@ -22,7 +22,7 @@ describe("/api/rank/[id] handler", () => {
   it("should redirect on GET request", async () => {
     const getSpy = jest
       .spyOn(mockScoreTable.prototype, "get")
-      .mockResolvedValue("http://some-url.com")
+      .mockResolvedValue("https://some-url.com")
 
     const ruletype = "eightball"
     const id = "123"
@@ -36,7 +36,7 @@ describe("/api/rank/[id] handler", () => {
 
     expect(getSpy).toHaveBeenCalledWith(ruletype, id)
     expect(response.status).toBe(302)
-    expect(response.headers.get("Location")).toBe("http://some-url.com")
+    expect(response.headers.get("Location")).toBe("https://some-url.com")
   })
 
   it("should call like on PUT request", async () => {

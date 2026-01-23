@@ -31,7 +31,6 @@ const GAMES = [
 ]
 
 type GameButtonProps = {
-  readonly name: string
   readonly icon: string
   readonly alt: string
   readonly href?: string
@@ -41,7 +40,6 @@ type GameButtonProps = {
 }
 
 function GameButton({
-  name,
   icon,
   alt,
   href,

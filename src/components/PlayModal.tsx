@@ -7,7 +7,7 @@ import { IFrameOverlay } from "./IFrameOverlay"
 const isInsideIframe = () => {
   try {
     return globalThis.self !== globalThis.top
-  } catch (e) {
+  } catch {
     return true
   }
 }

@@ -233,7 +233,7 @@ export class MockKV {
   /**
    * Adapter function to match @vercel/kv's set signature using ioredis-mock's set.
    */
-  async set(key: string, value: any, _opts?: any): Promise<any> {
+  async set(key: string, value: any): Promise<any> {
     const stringValue = JSON.stringify(value)
     // Basic support for opts if needed in future, currently just simple set
     return this.mockRedis.set(key, stringValue)

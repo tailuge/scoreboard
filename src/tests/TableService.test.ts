@@ -21,7 +21,7 @@ describe("TableService", () => {
   let tableService: TableService
 
   beforeAll(() => {
-    tableService = new TableService(undefined, (_) => Promise.resolve())
+    tableService = new TableService(undefined, () => Promise.resolve())
   })
 
   afterEach(async () => {

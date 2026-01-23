@@ -6,7 +6,7 @@ export function Star() {
   const [clicked, setClicked] = useState(false)
 
   const handleClick = () => {
-    window.open("https://github.com/tailuge/billiards", "_blank")
+    window.open("https://github.com/tailuge/billiards", "_blank", "noopener,noreferrer")
     setClicked(true)
   }
 

@@ -9,7 +9,7 @@ export class NchanSub {
 
   constructor(
     channel: string,
-    notify: (event: string) => void = (_) => {},
+    notify: (event: string) => void = () => {},
     channelType: string = "lobby"
   ) {
     this.channel = channel

@@ -54,7 +54,7 @@ export default function Lobby() {
         if (JSON.parse(e)?.action === "connected") {
           return
         }
-      } catch (err) {
+      } catch {
         // Not JSON, continue to fetchTables
       }
       fetchTables()

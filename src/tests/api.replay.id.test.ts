@@ -21,7 +21,7 @@ describe("/api/replay/[id] handler", () => {
   })
 
   it("should redirect to the replayed URL", async () => {
-    const replayUrl = "http://replayed-url.com"
+    const replayUrl = "https://replayed-url.com"
     const replaySpy = jest
       .spyOn(mockShortener.prototype, "replay")
       .mockResolvedValue(replayUrl)

@@ -19,7 +19,8 @@ describe("Star component", () => {
     // Verify window.open was called
     expect(mockOpen).toHaveBeenCalledWith(
       "https://github.com/tailuge/billiards",
-      "_blank"
+      "_blank",
+      "noopener,noreferrer"
     )
   })
 })
