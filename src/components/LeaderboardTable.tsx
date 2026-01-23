@@ -66,7 +66,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const displayData = limit ? data.slice(0, limit) : data;
   const rows = limit 
-    ? [...displayData, ...new Array(Math.max(0, limit - displayData.length)).fill(null)]
+    ? [...displayData, ...Array.from({ length: Math.max(0, limit - displayData.length) }, () => null)]
     : displayData;
 
   return (
