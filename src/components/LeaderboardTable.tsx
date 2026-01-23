@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { LeaderboardItem } from "@/types/leaderboard";
 
 interface LeaderboardTableProps {
-  title: string;
+  title?: string; // Kept for API calls/logic if needed, but not rendered as header
   ruleType: string;
-  gameUrl: string;
+  gameUrl?: string; // Made optional if not used for header link
+  limit?: number;
 }
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
-  title,
   ruleType,
-  gameUrl,
+  limit,
 }) => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
 
@@ -57,45 +57,44 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     }
   };
 
+  const displayData = limit ? data.slice(0, limit) : data;
+
   return (
-    <div className="bg-white p-2.5 rounded shadow-md flex-1 min-w-[300px]">
-      <h2 className="text-xl font-semibold mb-2 text-center text-gray-700">
-        <a href={gameUrl} className="hover:underline decoration-1">{title}</a>
-      </h2>
-      <table className="w-full border-collapse">
+    <div className="w-full overflow-x-auto">
+      <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
-            <th className="p-1 text-left border-b border-gray-200 w-8"></th>
-            <th className="p-1 text-left border-b border-gray-200 text-gray-600 text-sm font-normal">Score</th>
-            <th className="p-1 text-left border-b border-gray-200 text-gray-600 text-sm font-normal">Player</th>
-            <th className="p-1 text-left border-b border-gray-200"></th>
-            <th className="p-1 text-left border-b border-gray-200"></th>
+            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
+            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
+            <th className="p-2 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
+            <th className="p-2 text-left border-b border-gray-700"></th>
+            <th className="p-2 text-left border-b border-gray-700"></th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={item.id}>
-              <td className="p-1 text-left border-b border-gray-100">
+          {displayData.map((item, index) => (
+            <tr key={item.id} className="group hover:bg-gray-800/30 transition-colors">
+              <td className="p-2 text-left border-b border-gray-800">
                 {renderTrophy(index)}
               </td>
-              <td className="p-1 text-left border-b border-gray-100">
+              <td className="p-2 text-left border-b border-gray-800 text-gray-300">
                 {item.score}
               </td>
-              <td className="p-1 text-left border-b border-gray-100">
-                <b>{item.name}</b>
+              <td className="p-2 text-left border-b border-gray-800 text-gray-200">
+                <span className="font-semibold">{item.name}</span>
               </td>
-              <td className="p-1 text-left border-b border-gray-100">
+              <td className="p-2 text-left border-b border-gray-800">
                 <a 
                   href={`/api/rank/${item.id}?ruletype=${ruleType}`}
-                  className="text-blue-600 hover:underline text-sm"
+                  className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
                 >
                   replay
                 </a>
               </td>
-              <td className="p-1 text-left border-b border-gray-100">
+              <td className="p-2 text-left border-b border-gray-800">
                 <button
                   onClick={() => handleLike(item.id)}
-                  className="inline-flex items-center bg-white text-blue-600 border border-blue-200 rounded-full px-2.5 py-1 text-xs cursor-pointer hover:bg-blue-50 hover:shadow-sm transition-all ml-2"
+                  className="inline-flex items-center bg-gray-700 text-gray-300 border border-gray-600 rounded-full px-2 py-0.5 text-xs cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-2"
                 >
                   👍 {item.likes || 0}
                 </button>

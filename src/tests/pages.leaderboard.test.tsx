@@ -38,7 +38,7 @@ describe('LeaderboardPage', () => {
     // Check for specific table headers
     expect(screen.getByText('Snooker')).toBeInTheDocument();
     expect(screen.getByText('9-Ball')).toBeInTheDocument();
-    expect(screen.getByText('Three Cushion Billiards')).toBeInTheDocument();
+    expect(screen.getByText('Three Cushion')).toBeInTheDocument();
 
     // Wait for any data to load to prevent act warning
     await waitFor(() => {
