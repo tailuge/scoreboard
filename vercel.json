@@ -18,5 +18,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/leaderboard.html",
+      "destination": "/leaderboard",
+      "permanent": true
+    }
   ]
 }
