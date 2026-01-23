@@ -11,15 +11,6 @@ This project is a work in progress experiment to get AI LLMs to code a complex t
 
 I have to intervene and untangle things now and then but these tools allowed me to get away with minimal understanding of react and nextjs. I am blown away with it all - could never have imagined this a couple of years ago. It is a thrill to witness these advances (being put use to nonsense).
 
-## Tech Stack
-
-- **Framework**: Next.js (using the `pages` router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS, Framer Motion, Heroicons
-- **Database/Storage**: Vercel KV (@vercel/kv / Redis)
-- **Real-time**: Nchan (external server, configuration in `src/nchan`)
-- **Testing**: Jest (Unit/Integration) and Playwright (E2E)
-- **Formatting/Linting**: Prettier, ESLint
 
 ## scripts
 
@@ -27,7 +18,6 @@ I have to intervene and untangle things now and then but these tools allowed me 
 
 ```shell
 yarn dev
-yarn start
 yarn build
 yarn deps
 yarn prettify
