@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { LeaderboardItem } from "../types/leaderboard";
+import { LeaderboardItem } from "@/types/leaderboard";
 
 interface LeaderboardTableProps {
   title: string;
