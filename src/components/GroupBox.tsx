@@ -10,22 +10,26 @@ type GroupBoxProps = {
 
 export function GroupBox({ title, children, rightBadge, leftBadge }: GroupBoxProps) {
   const maskImage = `
-    linear-gradient(to right, 
+    linear-gradient(to right,
+      /* Left Badge Fade Out */
       ${
         leftBadge
-          ? "black 10px, transparent 20px, transparent 150px, black 160px"
+          ? "black 10px, transparent 50px, transparent 130px, black 150px"
           : "black 0%"
       },
-      black calc(50% - 80px), 
-      transparent 50%, 
-      black calc(50% + 80px), 
+      /* Center Title Fade Out */
+      black calc(50% - 100px),
+      transparent calc(50% - 60px),
+      transparent calc(50% + 60px),
+      black calc(50% + 100px),
+      /* Right Badge Fade Out */
       ${
         rightBadge
-          ? "black calc(100% - 230px), transparent calc(100% - 220px), transparent calc(100% - 30px), black calc(100% - 20px)"
+          ? "black calc(100% - 140px), transparent calc(100% - 100px), transparent calc(100% - 30px), black calc(100% - 10px)"
           : "black 100%"
       }
-    ) top / 100% 24px no-repeat,
-    linear-gradient(black, black) bottom / 100% calc(100% - 24px) no-repeat
+    ) top / 100% 2px no-repeat,
+    linear-gradient(black, black) bottom / 100% calc(100% - 2px) no-repeat
   `
 
   return (
