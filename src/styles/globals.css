@@ -45,23 +45,23 @@ body {
 
 /* Server Status Component Styles */
 .status-indicator {
-  @apply inline-flex items-center gap-1 text-xs px-2 py-2 rounded-sm;
+  @apply inline-flex items-center gap-1 text-xs px-2 py-1 rounded-sm transition-colors;
 }
 
 .status-connecting {
-  @apply bg-yellow-200;
+  @apply bg-yellow-900/20;
 }
 
 .status-online {
-  @apply bg-green-200;
+  @apply bg-green-900/10;
 }
 
 .status-offline {
-  @apply bg-red-200;
+  @apply bg-red-900/20;
 }
 
 .status-icon {
-  @apply h-4 w-4;
+  @apply h-3.5 w-3.5;
 }
 
 .status-icon-connecting {
@@ -73,11 +73,11 @@ body {
 }
 
 .status-icon-offline {
-  @apply text-gray-400;
+  @apply text-gray-500;
 }
 
 .status-text {
-  @apply text-gray-500;
+  @apply text-gray-400;
 }
 
 /* CreateTable Component Styles */
@@ -323,15 +323,15 @@ body {
 
 /* Star Button Styles */
 .star-button {
-  @apply flex items-center justify-center cursor-pointer transition-all duration-300 p-1 text-gray-600 rounded-md;
+  @apply flex items-center justify-center cursor-pointer transition-all duration-300 p-1.5 rounded-sm;
 }
 
 .star-button--clicked {
-  @apply bg-green-100;
+  @apply bg-green-900/20 text-yellow-500;
 }
 
 .star-button--unclicked {
-  @apply bg-gray-100;
+  @apply bg-gray-800/40 text-gray-400 hover:text-yellow-500;
 }
 
 .star-button:hover {

@@ -5,6 +5,9 @@ import { CreateTable } from "@/components/createtable"
 import { PlayModal } from "@/components/PlayModal"
 import { ServerStatus } from "@/components/ServerStatus/ServerStatus"
 import { User } from "@/components/User"
+import { GroupBox } from "@/components/GroupBox"
+import { OnlineCount } from "@/components/OnlineCount"
+import { useServerStatus } from "@/components/hooks/useServerStatus"
 import Head from "next/head"
 import { Table } from "@/types/table"
 import { NchanSub } from "@/nchan/nchansub"
@@ -24,6 +27,7 @@ export default function Lobby() {
     id: string
     ruleType: string
   } | null>(null)
+  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
 
   const fetchTables = useCallback(async () => {
     const res = await fetch("/api/tables")
@@ -153,35 +157,46 @@ export default function Lobby() {
   }
 
   return (
-    <main className="lobby-container">
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
       <Head>
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="lobby-header">
-        <div className="lobby-header-group">
-          <CreateTable
-            userId={userId}
-            userName={userName}
-            onCreate={handleCreate}
-          />
-        </div>
-        <div className="lobby-header-group">
-          <User
-            userName={userName}
-            userId={userId}
-            onUserNameChange={handleUserNameChange}
-          />
-          <Star />
-          <ServerStatus statusPage={STATUS_PAGE_URL} />
-        </div>
+      <div className="w-full max-w-6xl mt-4">
+        <GroupBox
+          title="Lobby"
+          leftBadge={
+            <User
+              userName={userName}
+              userId={userId}
+              onUserNameChange={handleUserNameChange}
+            />
+          }
+          rightBadge={
+            <div className="flex items-center gap-4">
+              <Star />
+              <ServerStatus statusPage={STATUS_PAGE_URL} />
+              {activeUsers !== null && <OnlineCount count={activeUsers} />}
+            </div>
+          }
+        >
+          <div className="flex flex-col gap-6">
+            <div className="flex justify-start items-center px-2">
+              <CreateTable
+                userId={userId}
+                userName={userName}
+                onCreate={handleCreate}
+              />
+            </div>
+            <TableList
+              userId={userId}
+              userName={userName}
+              onJoin={handleJoin}
+              onSpectate={handleSpectate}
+              tables={tables}
+            />
+          </div>
+        </GroupBox>
       </div>
-      <TableList
-        userId={userId}
-        userName={userName}
-        onJoin={handleJoin}
-        onSpectate={handleSpectate}
-        tables={tables}
-      />
       <PlayModal
         isOpen={!!modalTable}
         onClose={() => setModalTable(null)}
@@ -190,6 +205,6 @@ export default function Lobby() {
         userId={userId}
         ruleType={modalTable?.ruleType || "nineball"}
       />
-    </main>
+    </div>
   )
 }
