@@ -15,7 +15,7 @@ yarn install
 - **Framework**: Next.js (using the `pages` router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS, Framer Motion, Heroicons
-- **Database/Storage**: Vercel KV (@vercel/kv / Redis)
+- **Database/Storage**: Verrcel KV (@vercel/kv / Redis)
 - **Real-time**: Nchan (external server, configuration in `src/nchan`)
 - **Testing**: Jest (Unit/Integration) and Playwright (E2E)
 - **Formatting/Linting**: Prettier, ESLint
@@ -84,6 +84,7 @@ yarn build
 4. **Nchan**: Real-time updates (like lobby status) are handled via Nchan. See `src/nchan` for implementation details.
 5. **Testing**: Always run `yarn test` after completing a task to ensure no regressions were introduced.
 6. **`globalThis`**: Always use `globalThis` instead of environment-specific globals like `window`, `global`, or `self`. Before submitting, search the codebase for any instances of these to ensure code portability.
+7. **`yarn dev`**: Do not run `yarn dev` as the process does not terminate and blocks further action. Page previews are not possible.
 
 ## Common Tasks
 - **Adding an API route**: Add a new file in `src/pages/api`.
