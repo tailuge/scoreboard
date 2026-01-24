@@ -3,14 +3,7 @@ import { createPortal } from "react-dom"
 import { GameUrl } from "@/utils/GameUrl"
 import { Table } from "@/types/table"
 import { IFrameOverlay } from "./IFrameOverlay"
-
-const isInsideIframe = () => {
-  try {
-    return globalThis.self !== globalThis.top
-  } catch {
-    return true
-  }
-}
+import { isInsideIframe } from "@/utils/iframe"
 
 async function markComplete(tableId: string): Promise<string> {
   const response = await fetch(`/api/tables/${tableId}/complete`, {
