@@ -1,6 +1,10 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { PlayModal } from "@/components/PlayModal"
 import "@testing-library/jest-dom"
+import { isInsideIframe } from "@/utils/iframe"
+
+jest.mock("@/utils/iframe")
+const mockedIsInsideIframe = isInsideIframe as jest.Mock
 
 describe("PlayModal", () => {
   const mockOnClose = jest.fn()
@@ -18,6 +22,7 @@ describe("PlayModal", () => {
     globalThis.open = jest.fn()
 
     mockOnClose.mockClear()
+    mockedIsInsideIframe.mockReturnValue(false)
   })
 
   it("renders the modal when isOpen is true", () => {
@@ -84,6 +89,63 @@ describe("PlayModal", () => {
     )
     fireEvent.click(screen.getByText("Cancel"))
     expect(globalThis.fetch).not.toHaveBeenCalled()
+    expect(mockOnClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('displays an error message when "Start Game" fails', async () => {
+    // Mock a failed fetch response
+    globalThis.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: false,
+      })
+    ) as jest.Mock
+
+    render(
+      <PlayModal
+        isOpen={true}
+        onClose={mockOnClose}
+        tableId="table-1"
+        userName="test"
+        userId="user-123"
+        ruleType="nineball"
+      />
+    )
+    fireEvent.click(screen.getByText("Start Game"))
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Failed to start the game. Please try again.")
+      ).toBeInTheDocument()
+    })
+
+    expect(mockOnClose).not.toHaveBeenCalled()
+  })
+
+  it("renders IFrameOverlay when inside an iframe", async () => {
+    mockedIsInsideIframe.mockReturnValue(true)
+
+    render(
+      <PlayModal
+        isOpen={true}
+        onClose={mockOnClose}
+        tableId="table-1"
+        userName="test"
+        userId="user-123"
+        ruleType="nineball"
+      />
+    )
+
+    fireEvent.click(screen.getByText("Start Game"))
+
+    await waitFor(() => {
+      expect(screen.getByTitle("Game Window")).toBeInTheDocument()
+    })
+
+    expect(globalThis.open).not.toHaveBeenCalled()
+    expect(mockOnClose).not.toHaveBeenCalled()
+
+    // Click the close button on the iframe overlay
+    fireEvent.click(screen.getByText("Close"))
     expect(mockOnClose).toHaveBeenCalledTimes(1)
   })
 })
