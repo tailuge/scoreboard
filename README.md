@@ -135,3 +135,56 @@ A minimalist, login-free online billiards lobby system where players can:
 3. Are there specific visual themes or animations preferred for the "busy" atmosphere?
 
 ---
+
+Minimal Effort Vercel Solution
+
+Tech Stack:
+
+1. Next.js App Router (you're already using)
+2. Vercel KV (Redis) - Free tier available
+3. HTTP-only cookies - No JWT complexity needed
+
+Approach: Simple Session Flow
+
+1. Cookie-Based Sessions (No JWT)
+
+· Set anonymous session ID in HTTP-only cookie
+· Store session data in Vercel KV (Redis)
+· Sessions persist for 30 days
+· No token encoding/decoding needed
+
+2. Database Schema Ready for Migration
+
+```
+Resources table:
+- id
+- data
+- session_id (for anonymous users)
+- user_id (null initially, populated after registration)
+- created_at
+```
+
+3. Migration Path
+
+1. Now: All resources linked to session_id
+2. Later: User registers with email
+3. Migration: Transfer session_id → user_id records
+4. Auth: Use NextAuth.js or similar (add later)
+
+Why This is Minimal Effort:
+
+1. No JWT setup - Just cookies + KV
+2. Vercel-native - Uses their Redis service
+3. Zero auth code now - Add authentication later
+4. Automatic migration - Schema already supports both
+5. Edge compatible - Works with Vercel Edge Runtime
+
+Implementation Steps:
+
+1. Enable Vercel KV in dashboard
+2. Create 3 API routes: session, resources, register
+3. Use cookies middleware for session handling
+4. Store everything with session_id
+5. Add auth later with NextAuth.js
+
+This gives you security, scalability, and easy future migration with almost no upfront auth work.
