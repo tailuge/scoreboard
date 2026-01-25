@@ -49,3 +49,89 @@ yarn docker:push
 [multi lobby](https://scoreboard-tailuge.vercel.app/test.html)
 
 [usage](https://scoreboard-tailuge.vercel.app/usage.html)
+
+# Online Billiards Lobby System - Specification
+
+## Overview
+A minimalist, login-free online billiards lobby system where players can:
+- Find opponents for live games
+- Spectate ongoing matches
+- View game results
+- Experience a lively, engaging lobby atmosphere
+
+---
+
+## Features
+
+### 1. Lobby Interface (UI/UX Analysis Required)
+**Status:** Existing, needs analysis and improvement
+- **Current UI:** [Brief description of existing UI elements and layout]
+- **Improvement Goals:**
+  - Minimalist design: clean lines, ample whitespace, intuitive navigation
+  - Visual cues for active tables, spectator counts, and game results
+  - Dynamic elements to create a "busy" atmosphere (e.g., real-time updates, animations)
+
+### 2. Table Management
+**Status:** Done
+- **Create a New Table:** Players can create a new billiards table for a game.
+- **Join a Table:** Players can join an open table to play against an opponent.
+- **Spectate a Table:** Players can watch ongoing games as spectators.
+
+### 3. Game Results Display
+**Status:** To be implemented
+- **Requirements:**
+  - Display recent game results (winner, score, duration) in the lobby.
+  - Minimalist design: subtle but visible, e.g., a sidebar or overlay.
+  - Optional: Highlight notable wins or streaks to encourage engagement.
+
+### 4. Lobby Atmosphere
+**Status:** To be implemented
+- **Requirements:**
+  - Visual/sound cues to simulate a busy, social environment (e.g., ambient sounds, animated player avatars).
+  - Real-time updates for table statuses (e.g., "Player X joined Table Y").
+  - Optional: Chat or emote system for minimal social interaction.
+
+### 5. Spectator Experience
+**Status:** Done (basic functionality)
+- **Improvement Goals:**
+  - Enhance spectator UI: clear view of the table, player stats, and game progress.
+  - Optional: Allow spectators to "cheer" or react minimally (e.g., emojis).
+
+---
+
+## Technical Considerations
+- **No Login Required:** Anonymous play with optional guest IDs for continuity.
+- **Real-Time Updates:** Use WebSockets or similar for live table statuses and game results.
+- **Scalability:** Ensure the system can handle multiple concurrent games and spectators.
+
+---
+
+## UI/UX Analysis Tasks
+1. **Audit Existing UI:**
+   - Identify clutter, confusing elements, or missing visual cues.
+   - Test usability for creating/joining tables and spectating.
+2. **Propose Improvements:**
+   - Wireframes or mockups for a minimalist redesign.
+   - Focus on clarity, accessibility, and the "busy lobby" feel.
+3. **Prototype and Test:**
+   - Iterate based on user feedback for intuitiveness and engagement.
+
+---
+
+## Roadmap
+| Feature               | Status       | Priority |
+|-----------------------|--------------|----------|
+| Table Management      | Done         | High     |
+| Game Results Display  | To Implement | High     |
+| Lobby Atmosphere      | To Implement | Medium   |
+| UI/UX Analysis        | Ongoing      | High     |
+| Spectator Enhancements| To Improve   | Low      |
+
+---
+
+## Open Questions
+1. Should game results persist after a session, or only show recent games?
+2. What minimal social features (e.g., chat, emotes) would enhance the lobby without clutter?
+3. Are there specific visual themes or animations preferred for the "busy" atmosphere?
+
+---
