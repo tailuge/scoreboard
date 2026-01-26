@@ -4,6 +4,7 @@ import { GameUrl } from "@/utils/GameUrl"
 import { Table } from "@/types/table"
 import { IFrameOverlay } from "./IFrameOverlay"
 import { isInsideIframe } from "@/utils/iframe"
+import { logger } from "@/utils/logger"
 
 async function markComplete(tableId: string): Promise<string> {
   const response = await fetch(`/api/tables/${tableId}/complete`, {
@@ -73,7 +74,7 @@ export function PlayModal({
       }
     } catch (error) {
       setError("Failed to start the game. Please try again.")
-      console.error("Error starting game:", error)
+      logger.log("Error starting game:", error)
     }
   }
 

@@ -50,7 +50,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   };
 
   const handleRowClick = (id: string) => {
-    globalThis.location.href = `${gameUrl}&replayId=${id}`;
+    const replayUrl = `/api/rank/${id}?ruletype=${ruleType}`;
+    globalThis.location.href = replayUrl;
   };
 
   const renderTrophy = (index: number) => {
@@ -119,7 +120,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                   <>
                     <td className="px-2 py-1 text-left border-b border-gray-800">
                       <a
-                        href={`${gameUrl}&replayId=${item.id}`}
+                        href={`/api/rank/${item.id}?ruletype=${ruleType}`}
                       >
                         replay
                       </a>

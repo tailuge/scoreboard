@@ -13,7 +13,6 @@ export default async function handler(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const ruletype = searchParams.get("ruletype")
   const id = searchParams.get("id")
-  logger.log(`rank called with ${ruletype} id ${id}`)
 
   if (request.method === "GET") {
     const url = await scoretable.get(ruletype, id)
