@@ -1,7 +1,7 @@
 # Implementation Plan: Game Results Display & History
 
 ## Phase 1: Data Infrastructure
-- [ ] Task: Define the match result schema in TypeScript.
+- [x] Task: Define the match result schema in TypeScript. e830983
 - [ ] Task: Create a `MatchResultService` in `src/services/` to handle Vercel KV operations (push, fetch).
 - [ ] Task: Write unit tests for `MatchResultService`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Infrastructure' (Protocol in workflow.md)
