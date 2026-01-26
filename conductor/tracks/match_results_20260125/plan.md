@@ -2,8 +2,8 @@
 
 ## Phase 1: Data Infrastructure
 - [x] Task: Define the match result schema in TypeScript. e830983
-- [ ] Task: Create a `MatchResultService` in `src/services/` to handle Vercel KV operations (push, fetch).
-- [ ] Task: Write unit tests for `MatchResultService`.
+- [x] Task: Create a `MatchResultService` in `src/services/` to handle Vercel KV operations (push, fetch). 53ecfc9
+- [x] Task: Write unit tests for `MatchResultService`. 53ecfc9
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: API Layer
