@@ -4,7 +4,7 @@ import { MatchHistoryList } from "../components/MatchHistoryList"
 
 describe("MatchHistoryList", () => {
   beforeEach(() => {
-    global.fetch = jest.fn()
+    globalThis.fetch = jest.fn()
   })
 
   afterEach(() => {
@@ -12,13 +12,13 @@ describe("MatchHistoryList", () => {
   })
 
   it("renders loading state initially", () => {
-    ;(global.fetch as jest.Mock).mockReturnValue(new Promise(() => {}))
+    ;(globalThis.fetch as jest.Mock).mockReturnValue(new Promise(() => {}))
     render(<MatchHistoryList />)
     expect(screen.getByText(/loading match history/i)).toBeInTheDocument()
   })
 
   it("renders empty state when no results", async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => [],
     })
@@ -42,7 +42,7 @@ describe("MatchHistoryList", () => {
       },
     ]
 
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResults,
     })
@@ -54,7 +54,7 @@ describe("MatchHistoryList", () => {
   })
 
   it("handles fetch error gracefully", async () => {
-    ;(global.fetch as jest.Mock).mockRejectedValue(new Error("Fetch failed"))
+    ;(globalThis.fetch as jest.Mock).mockRejectedValue(new Error("Fetch failed"))
     render(<MatchHistoryList />)
     // Should still show loading or just not crash.
     // In our implementation it just logs and stays in loading/empty state.
