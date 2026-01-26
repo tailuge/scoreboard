@@ -9,7 +9,7 @@
 ## Phase 2: API Layer
 - [x] Task: Implement `GET /api/match-results` to retrieve the rolling history. e3df38a
 - [x] Task: Implement `POST /api/match-results` to record a match outcome. e3df38a
-- [ ] Task: Write integration tests for the new API routes.
+- [x] Task: Write integration tests for the new API routes. e3df38a
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: API Layer' (Protocol in workflow.md)
 
 ## Phase 3: Frontend Integration
