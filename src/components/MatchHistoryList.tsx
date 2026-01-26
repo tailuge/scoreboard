@@ -27,22 +27,32 @@ export function MatchHistoryList() {
     return () => clearInterval(interval)
   }, [])
 
+  const renderContent = () => {
+    if (loading && results.length === 0) {
+      return (
+        <div className="text-center py-8 text-gray-500 text-sm animate-pulse">
+          Loading match history...
+        </div>
+      )
+    }
+
+    if (results.length === 0) {
+      return (
+        <div className="text-center py-8 text-gray-500 text-sm italic">
+          No matches recorded yet.
+        </div>
+      )
+    }
+
+    return results.map((result) => (
+      <MatchResultCard key={result.id} result={result} />
+    ))
+  }
+
   return (
     <GroupBox title="Recent Matches">
       <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-        {loading && results.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 text-sm animate-pulse">
-            Loading match history...
-          </div>
-        ) : results.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 text-sm italic">
-            No matches recorded yet.
-          </div>
-        ) : (
-          results.map((result) => (
-            <MatchResultCard key={result.id} result={result} />
-          ))
-        )}
+        {renderContent()}
       </div>
     </GroupBox>
   )

@@ -33,7 +33,7 @@ export class MatchResultService {
   async getMatchResults(limit: number = HISTORY_LIMIT): Promise<MatchResult[]> {
     // zrange with negative indices to get latest (highest scores)
     // -1 is the last element, -limit is the limit-th from the end
-    const results = await this.store.zrange<MatchResult>(KEY, 0, -1, {
+    const results = await this.store.zrange<MatchResult[]>(KEY, 0, -1, {
       rev: true,
     })
     

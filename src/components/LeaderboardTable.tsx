@@ -6,14 +6,12 @@ interface LeaderboardTableProps {
   ruleType: string;
   limit?: number;
   compact?: boolean;
-  gameUrl: string;
 }
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   ruleType,
   limit,
   compact = false,
-  gameUrl,
 }) => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
 

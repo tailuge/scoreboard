@@ -124,7 +124,6 @@ function GameGrid({
                 ruleType={game.ruleType}
                 limit={3}
                 compact={true}
-                gameUrl={game.highscoreUrl}
               />
             </div>
           )}

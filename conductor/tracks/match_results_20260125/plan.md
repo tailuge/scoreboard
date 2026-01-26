@@ -22,4 +22,4 @@
 ## Phase 4: Final Polish & Verification
 - [x] Task: Verify end-to-end flow with Playwright tests. (skipped per user)
 - [x] Task: Check 80% test coverage for new code. 306cc3d
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish & Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Polish & Verification' (Protocol in workflow.md) 6566e92
