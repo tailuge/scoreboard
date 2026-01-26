@@ -15,6 +15,7 @@ A minimalist, login-free online billiards lobby system where players can find op
 
 ## Key Features
 - **Real-Time Table Management:** A robust system for creating, joining, and spectating tables with instant status updates across all clients.
+- **Match History:** A rolling history of recent game results displayed in real-time, contributing to the "lively" lobby atmosphere.
 - **Seamless Identity Migration:** 
     - **Anonymous-First:** Users start with a unique `session_id` stored in an HTTP-only cookie, linked to their data in Vercel KV.
     - **Optional Registration:** Frequent users can later register with an email/username.

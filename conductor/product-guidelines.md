@@ -4,7 +4,7 @@
 The application follows a "Modern Bento-Minimalist" aesthetic, blending clean functional design with the existing grid-based layout found in the game selection screen.
 
 - **Theme:** High-contrast Dark Mode (`bg-gray-900`) with a dark gray color palette (`gray-800` for cards, `gray-700` for borders).
-- **Layout:** A grid of interactive "cards" (Bento style) that serve as the primary interface for game selection, lobby status, and social indicators.
+- **Layout:** A grid of interactive "cards" (Bento style) that serve as the primary interface for game selection, lobby status, match history, and social indicators.
 - **UI Elements:**
     - Rounded corners (`rounded-xl`) for cards and buttons.
     - Subtle shadow effects and scale transitions (`group-hover:scale-110`) to provide tactile feedback.
