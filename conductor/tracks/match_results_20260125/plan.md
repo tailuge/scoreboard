@@ -6,7 +6,7 @@
 - [x] Task: Write unit tests for `MatchResultService`. 53ecfc9
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Infrastructure' (Protocol in workflow.md)
 
-## Phase 2: API Layer
+## Phase 2: API Layer [checkpoint: ee4f58e]
 - [x] Task: Implement `GET /api/match-results` to retrieve the rolling history. e3df38a
 - [x] Task: Implement `POST /api/match-results` to record a match outcome. e3df38a
 - [x] Task: Write integration tests for the new API routes. e3df38a
