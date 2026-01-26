@@ -114,7 +114,7 @@ export default function TableLogs() {
         >
           <button
             type="button"
-            className="w-full text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center text-left appearance-none bg-transparent"
+            className="w-full text-xs p-px cursor-pointer hover:bg-gray-100 flex items-center text-left appearance-none bg-transparent text-black"
             onClick={() => toggleMessage(message.id)}
           >
             {isExpanded ? (
