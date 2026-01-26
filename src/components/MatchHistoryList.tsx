@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { MatchResult } from "@/types/match"
 import { MatchResultCard } from "./MatchResultCard"
 import { GroupBox } from "./GroupBox"
+import { logger } from "@/utils/logger"
 
 export function MatchHistoryList() {
   const [results, setResults] = useState<MatchResult[]>([])
@@ -15,7 +16,7 @@ export function MatchHistoryList() {
         setResults(data)
       }
     } catch (error) {
-      console.error("Error fetching match history:", error)
+      logger.log("Error fetching match history:", error)
     } finally {
       setLoading(false)
     }

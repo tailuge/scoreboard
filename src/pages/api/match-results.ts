@@ -2,6 +2,7 @@ import { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
 import { getUID } from "@/utils/uid"
+import { logger } from "@/utils/logger"
 
 export const config = {
   runtime: "edge",
@@ -30,7 +31,7 @@ async function handleGet() {
     const results = await matchResultService.getMatchResults()
     return Response.json(results)
   } catch (error) {
-    console.error("Error fetching match results:", error)
+    logger.log("Error fetching match results:", error)
     return new Response("Internal Server Error", { status: 500 })
   }
 }
@@ -38,7 +39,7 @@ async function handleGet() {
 async function handlePost(request: NextRequest) {
   try {
     const data = await request.json()
-    
+
     // Basic validation
     if (!data.winner || !data.loser || typeof data.winnerScore !== 'number' || typeof data.loserScore !== 'number') {
       return new Response("Missing required fields", { status: 400 })
@@ -53,7 +54,7 @@ async function handlePost(request: NextRequest) {
     await matchResultService.addMatchResult(newResult)
     return Response.json(newResult, { status: 201 })
   } catch (error) {
-    console.error("Error adding match result:", error)
+    logger.log("Error adding match result:", error)
     return new Response("Internal Server Error", { status: 500 })
   }
 }

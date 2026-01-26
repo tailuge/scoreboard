@@ -43,6 +43,14 @@ globalThis.Response ??= class Response {
     this.headers = new (globalThis.Headers as any)(init?.headers)
   }
 
+  async json() {
+    return JSON.parse(this.body)
+  }
+
+  async text() {
+    return this.body
+  }
+
   static json(data: any, init?: any) {
     const body = JSON.stringify(data)
     const headers = new (globalThis.Headers as any)(init?.headers)

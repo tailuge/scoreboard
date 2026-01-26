@@ -76,7 +76,7 @@ describe("Lobby Component Functional Tests", () => {
       return Promise.resolve({
         ok: true,
         status: 200,
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve([]),
       })
     })
   })
@@ -157,7 +157,7 @@ describe("Lobby Redirection Tests", () => {
       return Promise.resolve({
         ok: true,
         status: 200,
-        json: () => Promise.resolve({}),
+        json: () => Promise.resolve([]),
       })
     })
   })
