@@ -17,31 +17,31 @@ const LeaderboardPage: React.FC = () => {
           Leaderboard
         </a>
       </h1>
-      
+
       <div className="flex flex-wrap justify-center gap-6 items-start max-w-7xl mx-auto">
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-            <GroupBox title="Snooker">
-                <LeaderboardTable
-                ruleType="snooker"
-                gameUrl="https://tailuge.github.io/billiards/dist?ruletype=snooker"
-                />
-            </GroupBox>
+          <GroupBox title="Snooker">
+            <LeaderboardTable
+              ruleType="snooker"
+              gameUrl="https://tailuge.github.io/billiards/dist?ruletype=snooker"
+            />
+          </GroupBox>
         </div>
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-            <GroupBox title="9-Ball">
-                <LeaderboardTable
-                ruleType="nineball"
-                gameUrl="https://tailuge.github.io/billiards/dist"
-                />
-            </GroupBox>
+          <GroupBox title="9-Ball">
+            <LeaderboardTable
+              ruleType="nineball"
+              gameUrl="https://tailuge.github.io/billiards/dist?ruletype=nineball"
+            />
+          </GroupBox>
         </div>
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-            <GroupBox title="Three Cushion">
-                <LeaderboardTable
-                ruleType="threecushion"
-                gameUrl="https://tailuge.github.io/billiards/dist?ruletype=threecushion"
-                />
-            </GroupBox>
+          <GroupBox title="Three Cushion">
+            <LeaderboardTable
+              ruleType="threecushion"
+              gameUrl="https://tailuge.github.io/billiards/dist?ruletype=threecushion"
+            />
+          </GroupBox>
         </div>
       </div>
     </div>
