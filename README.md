@@ -11,6 +11,11 @@ This project is a work in progress experiment to get AI LLMs to code a complex t
 
 I have to intervene and untangle things now and then but these tools allowed me to get away with minimal understanding of react and nextjs. I am blown away with it all - could never have imagined this a couple of years ago. It is a thrill to witness these advances (being put use to nonsense).
 
+[multi lobby](https://scoreboard-tailuge.vercel.app/test.html)
+
+[usage](https://scoreboard-tailuge.vercel.app/usage.html)
+
+[logs](https://scoreboard-tailuge.vercel.app/server-logs)
 
 ## scripts
 
@@ -46,9 +51,8 @@ yarn e2e:local
 yarn docker:build
 yarn docker:push
 ```
-[multi lobby](https://scoreboard-tailuge.vercel.app/test.html)
 
-[usage](https://scoreboard-tailuge.vercel.app/usage.html)
+
 
 # Online Billiards Lobby System - Specification
 
