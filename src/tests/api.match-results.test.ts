@@ -3,7 +3,9 @@ import { NextRequest } from "next/server"
 import { MatchResultService } from "../services/MatchResultService"
 
 jest.mock("../services/MatchResultService")
-const MockMatchResultService = MatchResultService as jest.MockedClass<typeof MatchResultService>
+const MockMatchResultService = MatchResultService as jest.MockedClass<
+  typeof MatchResultService
+>
 
 describe("/api/match-results handler", () => {
   let req: NextRequest
@@ -28,10 +30,19 @@ describe("/api/match-results handler", () => {
 
   it("should return match results on GET request", async () => {
     const mockResults = [
-      { id: "1", winner: "A", loser: "B", winnerScore: 10, loserScore: 5, gameType: "snooker", timestamp: 123 }
+      {
+        id: "1",
+        winner: "A",
+        loser: "B",
+        winnerScore: 10,
+        loserScore: 5,
+        gameType: "snooker",
+        timestamp: 123,
+      },
     ]
-    
-    const getSpy = jest.spyOn(MockMatchResultService.prototype, "getMatchResults")
+
+    const getSpy = jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue(mockResults)
 
     req = {
@@ -47,9 +58,17 @@ describe("/api/match-results handler", () => {
   })
 
   it("should add a match result on POST request", async () => {
-    const newResult = { winner: "A", loser: "B", winnerScore: 10, loserScore: 5, gameType: "snooker", timestamp: 123 }
-    
-    const addSpy = jest.spyOn(MockMatchResultService.prototype, "addMatchResult")
+    const newResult = {
+      winner: "A",
+      loser: "B",
+      winnerScore: 10,
+      loserScore: 5,
+      gameType: "snooker",
+      timestamp: 123,
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
       .mockResolvedValue(undefined)
 
     req = {
@@ -59,7 +78,7 @@ describe("/api/match-results handler", () => {
     } as unknown as NextRequest
 
     const response = await handler(req)
-    
+
     expect(response.status).toBe(201)
     expect(addSpy).toHaveBeenCalled()
   })
@@ -76,7 +95,8 @@ describe("/api/match-results handler", () => {
   })
 
   it("should return 500 if service fails on GET request", async () => {
-    jest.spyOn(MockMatchResultService.prototype, "getMatchResults")
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
       .mockRejectedValue(new Error("KV error"))
 
     req = {
@@ -89,13 +109,21 @@ describe("/api/match-results handler", () => {
   })
 
   it("should return 500 if service fails on POST request", async () => {
-    jest.spyOn(MockMatchResultService.prototype, "addMatchResult")
+    jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
       .mockRejectedValue(new Error("KV error"))
 
     req = {
       method: "POST",
       nextUrl: new URL("https://localhost/api/match-results"),
-      json: jest.fn().mockResolvedValue({ winner: "A", loser: "B", winnerScore: 10, loserScore: 5 }),
+      json: jest
+        .fn()
+        .mockResolvedValue({
+          winner: "A",
+          loser: "B",
+          winnerScore: 10,
+          loserScore: 5,
+        }),
     } as unknown as NextRequest
 
     const response = await handler(req)

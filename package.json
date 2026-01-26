@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint:smells": "oxlint src && jscpd src",
+    "lint:smells": "oxlint src && jscpd src --ignore \"src/tests/**\"",
     "prettify": "prettier --write --no-error-on-unmatched-pattern --trailing-comma es5 --no-semi {src,public}/**/*.{ts,tsx,html,css} *.json",
     "deps": "npx yarn-check --skip-unused",
     "coverage": "jest --coverage --config src/tests/jest.config.js",

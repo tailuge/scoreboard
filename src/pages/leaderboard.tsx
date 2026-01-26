@@ -1,7 +1,7 @@
-import React from 'react';
-import Head from 'next/head';
-import LeaderboardTable from '../components/LeaderboardTable';
-import { GroupBox } from '../components/GroupBox';
+import React from "react"
+import Head from "next/head"
+import LeaderboardTable from "../components/LeaderboardTable"
+import { GroupBox } from "../components/GroupBox"
 
 const LeaderboardPage: React.FC = () => {
   return (
@@ -13,7 +13,10 @@ const LeaderboardPage: React.FC = () => {
       </Head>
 
       <h1 className="text-4xl font-light text-center mb-8 text-gray-200 tracking-wider">
-        <a href="https://github.com/tailuge/billiards" className="text-inherit no-underline hover:text-white transition-colors">
+        <a
+          href="https://github.com/tailuge/billiards"
+          className="text-inherit no-underline hover:text-white transition-colors"
+        >
           Leaderboard
         </a>
       </h1>
@@ -21,28 +24,22 @@ const LeaderboardPage: React.FC = () => {
       <div className="flex flex-wrap justify-center gap-6 items-start max-w-7xl mx-auto">
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
           <GroupBox title="Snooker">
-            <LeaderboardTable
-              ruleType="snooker"
-            />
+            <LeaderboardTable ruleType="snooker" />
           </GroupBox>
         </div>
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
           <GroupBox title="9-Ball">
-            <LeaderboardTable
-              ruleType="nineball"
-            />
+            <LeaderboardTable ruleType="nineball" />
           </GroupBox>
         </div>
         <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
           <GroupBox title="Three Cushion">
-            <LeaderboardTable
-              ruleType="threecushion"
-            />
+            <LeaderboardTable ruleType="threecushion" />
           </GroupBox>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LeaderboardPage;
+export default LeaderboardPage

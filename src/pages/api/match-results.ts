@@ -41,7 +41,12 @@ async function handlePost(request: NextRequest) {
     const data = await request.json()
 
     // Basic validation
-    if (!data.winner || !data.loser || typeof data.winnerScore !== 'number' || typeof data.loserScore !== 'number') {
+    if (
+      !data.winner ||
+      !data.loser ||
+      typeof data.winnerScore !== "number" ||
+      typeof data.loserScore !== "number"
+    ) {
       return new Response("Missing required fields", { status: 400 })
     }
 

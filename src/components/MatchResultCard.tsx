@@ -20,7 +20,9 @@ export function MatchResultCard({ result }: MatchResultCardProps) {
         </div>
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-200 truncate">{result.winner}</span>
+            <span className="font-bold text-gray-200 truncate">
+              {result.winner}
+            </span>
             <span className="text-gray-500 text-xs">vs</span>
             <span className="text-gray-400 truncate">{result.loser}</span>
           </div>

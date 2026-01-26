@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { LeaderboardItem } from "@/types/leaderboard";
+import React, { useState, useEffect } from "react"
+import { LeaderboardItem } from "@/types/leaderboard"
 import { logger } from "@/utils/logger"
 
 interface LeaderboardTableProps {
-  ruleType: string;
-  limit?: number;
-  compact?: boolean;
+  ruleType: string
+  limit?: number
+  compact?: boolean
 }
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
@@ -13,72 +13,84 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   limit,
   compact = false,
 }) => {
-  const [data, setData] = useState<LeaderboardItem[]>([]);
+  const [data, setData] = useState<LeaderboardItem[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const params = new URLSearchParams({ ruletype: ruleType });
-        const url = `/api/rank?${params.toString()}`;
-        const response = await fetch(url);
-        const jsonData = await response.json();
-        logger.log(`fetched leaderboard data: ${jsonData}`);
-        setData(jsonData);
+        const params = new URLSearchParams({ ruletype: ruleType })
+        const url = `/api/rank?${params.toString()}`
+        const response = await fetch(url)
+        const jsonData = await response.json()
+        logger.log(`fetched leaderboard data: ${jsonData}`)
+        setData(jsonData)
       } catch (error) {
-        console.error("Error fetching leaderboard data:", error);
+        console.error("Error fetching leaderboard data:", error)
       }
-    };
+    }
 
-    fetchData();
-  }, [ruleType]);
+    fetchData()
+  }, [ruleType])
 
   const handleLike = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
+    e.stopPropagation()
     try {
-      const url = `/api/rank/${id}?ruletype=${ruleType}`;
-      await fetch(url, { method: "PUT" });
+      const url = `/api/rank/${id}?ruletype=${ruleType}`
+      await fetch(url, { method: "PUT" })
       setData((prevData) =>
         prevData.map((item) =>
           item.id === id ? { ...item, likes: (item.likes || 0) + 1 } : item
         )
-      );
+      )
     } catch (error) {
-      console.error("Error updating likes:", error);
+      console.error("Error updating likes:", error)
     }
-  };
+  }
 
   const handleRowClick = (id: string) => {
-    const replayUrl = `/api/rank/${id}?ruletype=${ruleType}`;
-    globalThis.location.href = replayUrl;
-  };
+    const replayUrl = `/api/rank/${id}?ruletype=${ruleType}`
+    globalThis.location.href = replayUrl
+  }
 
   const renderTrophy = (index: number) => {
     switch (index) {
       case 0:
-        return <span className="text-xl">🏆</span>;
+        return <span className="text-xl">🏆</span>
       case 1:
-        return <span className="text-xl">🥈</span>;
+        return <span className="text-xl">🥈</span>
       case 2:
-        return <span className="text-xl">🥉</span>;
+        return <span className="text-xl">🥉</span>
       default:
-        return null;
+        return null
     }
-  };
+  }
 
-  const displayData = limit ? data.slice(0, limit) : data;
+  const displayData = limit ? data.slice(0, limit) : data
   const rows = limit
-    ? [...displayData, ...Array.from({ length: Math.max(0, limit - displayData.length) }, () => null)]
-    : displayData;
+    ? [
+        ...displayData,
+        ...Array.from(
+          { length: Math.max(0, limit - displayData.length) },
+          () => null
+        ),
+      ]
+    : displayData
 
   return (
     <div className="w-full overflow-x-auto">
-      <table className={`w-full border-collapse ${compact ? 'text-[11px]' : 'text-sm'}`}>
+      <table
+        className={`w-full border-collapse ${compact ? "text-[11px]" : "text-sm"}`}
+      >
         {!compact && (
           <thead>
             <tr>
               <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium w-8"></th>
-              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">Score</th>
-              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">Player</th>
+              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">
+                Score
+              </th>
+              <th className="px-2 py-1 text-left border-b border-gray-700 text-gray-400 font-medium">
+                Player
+              </th>
               <th className="px-2 py-1 text-left border-b border-gray-700"></th>
               <th className="px-2 py-1 text-left border-b border-gray-700"></th>
             </tr>
@@ -89,13 +101,33 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
             if (!item) {
               return (
                 // Using index as a key is acceptable here for non-interactive placeholder rows.
-                <tr key={`empty-${index}`} className={compact ? "h-[22px]" : "h-[28px]"}>
-                  <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
-                  <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
-                  <td className={`text-left border-b border-gray-800/50 ${compact ? 'px-1 py-0' : 'px-2 py-1'}`}>&nbsp;</td>
-                  {!compact && <><td /><td /></>}
+                <tr
+                  key={`empty-${index}`}
+                  className={compact ? "h-[22px]" : "h-[28px]"}
+                >
+                  <td
+                    className={`text-left border-b border-gray-800/50 ${compact ? "px-1 py-0" : "px-2 py-1"}`}
+                  >
+                    &nbsp;
+                  </td>
+                  <td
+                    className={`text-left border-b border-gray-800/50 ${compact ? "px-1 py-0" : "px-2 py-1"}`}
+                  >
+                    &nbsp;
+                  </td>
+                  <td
+                    className={`text-left border-b border-gray-800/50 ${compact ? "px-1 py-0" : "px-2 py-1"}`}
+                  >
+                    &nbsp;
+                  </td>
+                  {!compact && (
+                    <>
+                      <td />
+                      <td />
+                    </>
+                  )}
                 </tr>
-              );
+              )
             }
             return (
               <tr
@@ -103,23 +135,29 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                 className="group hover:bg-gray-800/30 transition-colors cursor-pointer"
                 onClick={() => handleRowClick(item.id)}
               >
-                <td className={`text-left border-b border-gray-800 ${compact ? 'px-1 py-0 text-gray-600' : 'px-2 py-1'}`}>
-                  <div className={compact ? 'scale-75 origin-left' : ''}>
+                <td
+                  className={`text-left border-b border-gray-800 ${compact ? "px-1 py-0 text-gray-600" : "px-2 py-1"}`}
+                >
+                  <div className={compact ? "scale-75 origin-left" : ""}>
                     {renderTrophy(index)}
                   </div>
                 </td>
-                <td className={`text-left border-b border-gray-800 ${compact ? 'px-1 py-0 text-gray-500/70' : 'px-2 py-1 text-gray-400'}`}>
+                <td
+                  className={`text-left border-b border-gray-800 ${compact ? "px-1 py-0 text-gray-500/70" : "px-2 py-1 text-gray-400"}`}
+                >
                   {item.score}
                 </td>
-                <td className={`text-left border-b border-gray-800 truncate ${compact ? 'px-1 py-0 text-gray-500/70 max-w-[60px]' : 'px-2 py-1 text-gray-300 max-w-[120px]'}`}>
-                  <span className={compact ? "font-medium" : "font-semibold"}>{item.name}</span>
+                <td
+                  className={`text-left border-b border-gray-800 truncate ${compact ? "px-1 py-0 text-gray-500/70 max-w-[60px]" : "px-2 py-1 text-gray-300 max-w-[120px]"}`}
+                >
+                  <span className={compact ? "font-medium" : "font-semibold"}>
+                    {item.name}
+                  </span>
                 </td>
                 {!compact && (
                   <>
                     <td className="px-2 py-1 text-left border-b border-gray-800">
-                      <a
-                        href={`/api/rank/${item.id}?ruletype=${ruleType}`}
-                      >
+                      <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>
                         replay
                       </a>
                     </td>
@@ -134,12 +172,12 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                   </>
                 )}
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default LeaderboardTable;
+export default LeaderboardTable

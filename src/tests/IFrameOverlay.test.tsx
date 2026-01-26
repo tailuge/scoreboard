@@ -8,7 +8,9 @@ describe("IFrameOverlay", () => {
   const title = "Test IFrame"
 
   it("renders correctly", () => {
-    render(<IFrameOverlay target={target} onClose={mockOnClose} title={title} />)
+    render(
+      <IFrameOverlay target={target} onClose={mockOnClose} title={title} />
+    )
 
     const iframe = screen.getByTitle(title)
     expect(iframe).toBeInTheDocument()
@@ -19,7 +21,9 @@ describe("IFrameOverlay", () => {
   })
 
   it("calls onClose when close button is clicked", () => {
-    render(<IFrameOverlay target={target} onClose={mockOnClose} title={title} />)
+    render(
+      <IFrameOverlay target={target} onClose={mockOnClose} title={title} />
+    )
 
     const closeButton = screen.getByText("Close")
     fireEvent.click(closeButton)

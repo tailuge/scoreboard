@@ -16,16 +16,17 @@ jest.mock("../nchan/nchanpub", () => ({
 
 describe("Game Page", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
     globalThis.fetch = jest.fn().mockImplementation(() => {
       return Promise.resolve({
-        json: () => Promise.resolve([
-            { id: '1', name: 'TopPlayer', score: 999, likes: 0 }
-        ]),
+        json: () =>
+          Promise.resolve([
+            { id: "1", name: "TopPlayer", score: 999, likes: 0 },
+          ]),
         ok: true,
-      });
-    });
-  });
+      })
+    })
+  })
 
   it("renders the game selection page with 3 buttons", async () => {
     render(<Game />)
@@ -64,7 +65,7 @@ describe("Game Page", () => {
 
     // Verify LeaderboardTable renders data
     await waitFor(() => {
-        expect(screen.getAllByText('TopPlayer')).toHaveLength(3);
-    });
+      expect(screen.getAllByText("TopPlayer")).toHaveLength(3)
+    })
   })
 })

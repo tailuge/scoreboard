@@ -6,7 +6,7 @@ import { Table } from "@/types/table"
 describe("TableItem", () => {
   const mockOnJoin = jest.fn()
   const mockOnSpectate = jest.fn()
-  
+
   const baseTable: Table = {
     id: "table-1",
     creator: { id: "user-1", name: "User 1" },
@@ -35,7 +35,9 @@ describe("TableItem", () => {
     )
 
     expect(screen.getByText("nineball")).toBeInTheDocument()
-    expect(screen.getByText("User 1 - waiting for opponent")).toBeInTheDocument()
+    expect(
+      screen.getByText("User 1 - waiting for opponent")
+    ).toBeInTheDocument()
     expect(screen.getByLabelText("Join Table")).toBeInTheDocument()
   })
 
@@ -66,10 +68,10 @@ describe("TableItem", () => {
 
     fireEvent.click(spectateButton)
     expect(mockOnSpectate).toHaveBeenCalledWith("table-1")
-    
+
     // Should show IFrameOverlay
     expect(screen.getByTitle("Spectator Window")).toBeInTheDocument()
-    
+
     // Test closing spectate
     fireEvent.click(screen.getByText("Close"))
     expect(screen.queryByTitle("Spectator Window")).not.toBeInTheDocument()

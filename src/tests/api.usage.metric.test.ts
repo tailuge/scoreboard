@@ -16,7 +16,7 @@ describe("/api/usage/[metric] handler", () => {
       status: init?.status || 200,
     })) as any
 
-    mockResponseConstructor.json = jest.fn(data => ({
+    mockResponseConstructor.json = jest.fn((data) => ({
       status: 200,
       json: () => Promise.resolve(data),
     }))

@@ -50,7 +50,11 @@ export function CreateTable({
       // `addEventListener` accepts `AddEventListenerOptions` (which includes `passive`),
       // but `removeEventListener` only accepts `EventListenerOptions` (which doesn't).
       // However, to correctly remove the listener, the same options object must be passed.
-      document.removeEventListener("mousedown", handleClickOutside, options as any)
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+        options as any
+      )
     }
   }, [])
 

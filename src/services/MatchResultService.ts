@@ -19,7 +19,7 @@ export class MatchResultService {
     })
 
     // Trim to HISTORY_LIMIT (remove older entries)
-    // zremrangebyrank uses 0-based indices. 
+    // zremrangebyrank uses 0-based indices.
     // To keep the latest 50, we remove from 0 to -(HISTORY_LIMIT + 1)
     // Wait, if we want to keep TOP 50, and they are sorted by timestamp (ascending)
     // The highest timestamps are at the end.
@@ -36,11 +36,11 @@ export class MatchResultService {
     const results = await this.store.zrange<MatchResult[]>(KEY, 0, -1, {
       rev: true,
     })
-    
+
     // Vercel KV's zrange with { rev: true } gives latest first.
     // If our mock doesn't support { rev: true } yet, we might need to adjust.
     // Let's check mockkv.ts
-    
+
     return results.slice(0, limit)
   }
 }

@@ -7,10 +7,14 @@ type GroupBoxProps = {
   readonly rightBadge?: React.ReactNode
   readonly leftBadge?: React.ReactNode
 }
-export function GroupBox({ title, children, rightBadge, leftBadge }: GroupBoxProps) {
-
-  const TITLE_GAP = 180     // fully invisible region
-  const TITLE_FADE = 80    // long fade = smooth
+export function GroupBox({
+  title,
+  children,
+  rightBadge,
+  leftBadge,
+}: GroupBoxProps) {
+  const TITLE_GAP = 180 // fully invisible region
+  const TITLE_FADE = 80 // long fade = smooth
   const TOP_BORDER_HEIGHT = 40
 
   const maskImage = `
@@ -45,9 +49,11 @@ export function GroupBox({ title, children, rightBadge, leftBadge }: GroupBoxPro
         }}
       />
 
-      <h2 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2
+      <h2
+        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2
                      text-xs font-light text-gray-400 tracking-wide uppercase
-                     pointer-events-none bg-gray-900/80 px-2">
+                     pointer-events-none bg-gray-900/80 px-2"
+      >
         {title}
       </h2>
 

@@ -67,15 +67,18 @@ export default function Lobby() {
     return () => client.stop()
   }, [router.isReady, router.query, fetchTables])
 
-  const tableAction = useCallback(async (tableId: string, action: "join" | "spectate") => {
-    const response = await fetch(`/api/tables/${tableId}/${action}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, userName }),
-    })
-    fetchTables()
-    return response.status === 200
-  }, [userId, userName, fetchTables])
+  const tableAction = useCallback(
+    async (tableId: string, action: "join" | "spectate") => {
+      const response = await fetch(`/api/tables/${tableId}/${action}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, userName }),
+      })
+      fetchTables()
+      return response.status === 200
+    },
+    [userId, userName, fetchTables]
+  )
 
   const handleJoin = useCallback(
     async (tableId: string) => {
@@ -93,9 +96,12 @@ export default function Lobby() {
     [tables, tableAction]
   )
 
-  const handleSpectate = useCallback(async (tableId: string) => {
-    return tableAction(tableId, "spectate")
-  }, [tableAction])
+  const handleSpectate = useCallback(
+    async (tableId: string) => {
+      return tableAction(tableId, "spectate")
+    },
+    [tableAction]
+  )
 
   const handleCreate = useCallback(() => {
     fetchTables()
@@ -114,7 +120,14 @@ export default function Lobby() {
   )
 
   useEffect(() => {
-    if (isLoading || !router.isReady || hasHandledAutoJoin.current || !userId || !userName) return
+    if (
+      isLoading ||
+      !router.isReady ||
+      hasHandledAutoJoin.current ||
+      !userId ||
+      !userName
+    )
+      return
 
     const action = router.query.action
     const gameType = router.query.gameType as string

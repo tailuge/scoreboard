@@ -104,7 +104,10 @@ function GameGrid({
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => (
-        <div key={`${game.name}-${isHighscore ? "highscore" : "online"}`} className="flex flex-col gap-2 items-center">
+        <div
+          key={`${game.name}-${isHighscore ? "highscore" : "online"}`}
+          className="flex flex-col gap-2 items-center"
+        >
           <GameButton
             icon={game.icon}
             alt={game.alt}

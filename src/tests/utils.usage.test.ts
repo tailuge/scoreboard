@@ -13,9 +13,12 @@ describe("Usage Utils", () => {
     it("should call the usage API with the correct metric", () => {
       globalThis.fetch = jest.fn()
       markUsage(testMetric)
-      expect(globalThis.fetch).toHaveBeenCalledWith(`/api/usage/${testMetric}`, {
-        method: "PUT",
-      })
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        `/api/usage/${testMetric}`,
+        {
+          method: "PUT",
+        }
+      )
     })
   })
 
