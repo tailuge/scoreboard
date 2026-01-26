@@ -20,6 +20,6 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Frontend Integration' (Protocol in workflow.md)
 
 ## Phase 4: Final Polish & Verification
-- [ ] Task: Verify end-to-end flow with Playwright tests.
-- [ ] Task: Check 80% test coverage for new code.
+- [x] Task: Verify end-to-end flow with Playwright tests. (skipped per user)
+- [x] Task: Check 80% test coverage for new code. 306cc3d
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish & Verification' (Protocol in workflow.md)
