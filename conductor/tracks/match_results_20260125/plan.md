@@ -13,10 +13,10 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: API Layer' (Protocol in workflow.md)
 
 ## Phase 3: Frontend Integration
-- [ ] Task: Create the `MatchResultCard` component in `src/components/`.
-- [ ] Task: Create a `MatchHistoryList` component to aggregate results.
-- [ ] Task: Integrate `MatchHistoryList` into the existing lobby view.
-- [ ] Task: Ensure the UI matches the Bento aesthetic defined in guidelines.
+- [x] Task: Create the `MatchResultCard` component in `src/components/`. 08c174d
+- [x] Task: Create a `MatchHistoryList` component to aggregate results. 08c174d
+- [x] Task: Integrate `MatchHistoryList` into the existing lobby view. 08c174d
+- [x] Task: Ensure the UI matches the Bento aesthetic defined in guidelines. 08c174d
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Frontend Integration' (Protocol in workflow.md)
 
 ## Phase 4: Final Polish & Verification
