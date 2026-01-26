@@ -59,15 +59,17 @@ export class MockKV {
     key: string,
     start: number,
     stop: number,
-    options?: { withScores?: boolean }
+    options?: { withScores?: boolean; rev?: boolean }
   ): Promise<any> {
     // Determine if scores should be included
     const withScores = options?.withScores ?? false
+    const rev = options?.rev ?? false
 
-    // Call ioredis-mock's zrange with or without 'WITHSCORES'
+    // Call ioredis-mock's zrange/zrevrange with or without 'WITHSCORES'
+    const command = rev ? "zrevrange" : "zrange"
     const result = withScores
-      ? await this.mockRedis.zrange(key, start, stop, "WITHSCORES")
-      : await this.mockRedis.zrange(key, start, stop)
+      ? await this.mockRedis[command](key, start, stop, "WITHSCORES")
+      : await this.mockRedis[command](key, start, stop)
 
     return result.map((item) => {
       try {
