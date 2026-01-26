@@ -12,7 +12,7 @@
 - [x] Task: Write integration tests for the new API routes. e3df38a
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: API Layer' (Protocol in workflow.md)
 
-## Phase 3: Frontend Integration
+## Phase 3: Frontend Integration [checkpoint: e93386e]
 - [x] Task: Create the `MatchResultCard` component in `src/components/`. 08c174d
 - [x] Task: Create a `MatchHistoryList` component to aggregate results. 08c174d
 - [x] Task: Integrate `MatchHistoryList` into the existing lobby view. 08c174d
