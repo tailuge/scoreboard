@@ -7,8 +7,8 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: API Layer
-- [ ] Task: Implement `GET /api/match-results` to retrieve the rolling history.
-- [ ] Task: Implement `POST /api/match-results` to record a match outcome.
+- [x] Task: Implement `GET /api/match-results` to retrieve the rolling history. e3df38a
+- [x] Task: Implement `POST /api/match-results` to record a match outcome. e3df38a
 - [ ] Task: Write integration tests for the new API routes.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: API Layer' (Protocol in workflow.md)
 
