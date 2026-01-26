@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
+import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { PlayModal } from "@/components/PlayModal"
 import { ServerStatus } from "@/components/ServerStatus/ServerStatus"
 import { User } from "@/components/User"
@@ -161,41 +162,46 @@ export default function Lobby() {
       <Head>
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="w-full max-w-6xl mt-4">
-        <GroupBox
-          title="Lobby"
-          leftBadge={
-            <User
-              userName={userName}
-              userId={userId}
-              onUserNameChange={handleUserNameChange}
-            />
-          }
-          rightBadge={
-            <div className="flex items-center gap-4">
-              <Star />
-              <ServerStatus statusPage={STATUS_PAGE_URL} />
-              {activeUsers !== null && <OnlineCount count={activeUsers} />}
-            </div>
-          }
-        >
-          <div className="flex flex-col gap-6">
-            <div className="flex justify-start items-center px-2">
-              <CreateTable
+      <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <GroupBox
+            title="Lobby"
+            leftBadge={
+              <User
+                userName={userName}
+                userId={userId}
+                onUserNameChange={handleUserNameChange}
+              />
+            }
+            rightBadge={
+              <div className="flex items-center gap-4">
+                <Star />
+                <ServerStatus statusPage={STATUS_PAGE_URL} />
+                {activeUsers !== null && <OnlineCount count={activeUsers} />}
+              </div>
+            }
+          >
+            <div className="flex flex-col gap-6">
+              <div className="flex justify-start items-center px-2">
+                <CreateTable
+                  userId={userId}
+                  userName={userName}
+                  onCreate={handleCreate}
+                />
+              </div>
+              <TableList
                 userId={userId}
                 userName={userName}
-                onCreate={handleCreate}
+                onJoin={handleJoin}
+                onSpectate={handleSpectate}
+                tables={tables}
               />
             </div>
-            <TableList
-              userId={userId}
-              userName={userName}
-              onJoin={handleJoin}
-              onSpectate={handleSpectate}
-              tables={tables}
-            />
-          </div>
-        </GroupBox>
+          </GroupBox>
+        </div>
+        <div className="lg:col-span-1">
+          <MatchHistoryList />
+        </div>
       </div>
       <PlayModal
         isOpen={!!modalTable}
