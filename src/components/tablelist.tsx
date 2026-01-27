@@ -2,7 +2,6 @@ import { Table } from "@/types/table"
 import { useMemo } from "react"
 import { TableItem } from "./table"
 import { AnimatePresence, motion } from "framer-motion"
-import { useUser } from "@/contexts/UserContext"
 
 export function TableList({
   onJoin,
@@ -13,7 +12,6 @@ export function TableList({
   readonly onSpectate: (tableId: string) => void
   readonly tables: Table[]
 }) {
-  const { userId, userName } = useUser()
   const handleJoin = async (tableId: string) => {
     const success = await onJoin(tableId)
     if (!success) {

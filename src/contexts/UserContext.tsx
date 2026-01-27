@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react"
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react"
 import { getUID } from "@/utils/uid"
 import { useRouter } from "next/router"
 
@@ -10,7 +10,7 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
-export function UserProvider({ children }: { children: React.ReactNode }) {
+export function UserProvider({ children }: { readonly children: React.ReactNode }) {
   const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("")
   const router = useRouter()
@@ -34,8 +34,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("userName", name)
   }, [])
 
+  const contextValue = useMemo(() => ({
+    userId,
+    userName,
+    setUserName: handleSetUserName
+  }), [userId, userName, handleSetUserName])
+
   return (
-    <UserContext.Provider value={{ userId, userName, setUserName: handleSetUserName }}>
+    <UserContext.Provider value={contextValue}>
       {children}
     </UserContext.Provider>
   )
