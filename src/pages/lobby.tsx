@@ -34,22 +34,22 @@ export default function Lobby() {
 
   const handleJoin = useCallback(
     async (tableId: string) => {
-      const success = await tableAction(tableId, "join")
-      if (success) {
-        const table = tables.find((t) => t.id === tableId)
-        if (table && !table.completed) {
-          setModalTable({ id: table.id, ruleType: table.ruleType })
-          shownModals.current.add(table.id)
+      const updatedTable = await tableAction(tableId, "join")
+      if (updatedTable) {
+        if (!updatedTable.completed) {
+          setModalTable({ id: updatedTable.id, ruleType: updatedTable.ruleType })
+          shownModals.current.add(updatedTable.id)
         }
+        return true
       }
-      return success
+      return false
     },
-    [tables, tableAction]
+    [tableAction]
   )
 
   const handleSpectate = useCallback(
     async (tableId: string) => {
-      return tableAction(tableId, "spectate")
+      await tableAction(tableId, "spectate")
     },
     [tableAction]
   )

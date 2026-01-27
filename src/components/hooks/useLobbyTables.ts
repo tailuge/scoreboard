@@ -36,19 +36,23 @@ export function useLobbyTables(userId: string | null, userName: string | null) {
   }, [fetchTables])
 
   const tableAction = useCallback(
-    async (tableId: string, action: "join" | "spectate") => {
-      if (!userId || !userName) return false
+    async (tableId: string, action: "join" | "spectate"): Promise<Table | null> => {
+      if (!userId || !userName) return null
       try {
         const response = await fetch(`/api/tables/${tableId}/${action}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, userName }),
         })
-        fetchTables()
-        return response.ok
+        if (response.ok) {
+          const updatedTable = await response.json()
+          fetchTables()
+          return updatedTable
+        }
+        return null
       } catch (error) {
         console.error(`Error performing ${action} on table:`, error)
-        return false
+        return null
       }
     },
     [userId, userName, fetchTables]

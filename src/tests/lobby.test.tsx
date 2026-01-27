@@ -168,7 +168,7 @@ describe("Lobby Redirection Tests", () => {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve({}),
+          json: () => Promise.resolve(mockTables[0]),
         })
       }
       return Promise.resolve({
