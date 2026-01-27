@@ -33,7 +33,7 @@ export function CreateTable({
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside: EventListenerOrEventListenerObject = (event) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -42,19 +42,12 @@ export function CreateTable({
       }
     }
 
-    const options = { passive: true }
+    const options: AddEventListenerOptions = { passive: true }
     document.addEventListener("mousedown", handleClickOutside, options)
 
     return () => {
-      // The `as any` is a workaround for a discrepancy in TypeScript's DOM typings.
-      // `addEventListener` accepts `AddEventListenerOptions` (which includes `passive`),
-      // but `removeEventListener` only accepts `EventListenerOptions` (which doesn't).
-      // However, to correctly remove the listener, the same options object must be passed.
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-        options as any
-      )
+      // To correctly remove the listener, the same options object must be passed.
+      document.removeEventListener("mousedown", handleClickOutside, options)
     }
   }, [])
 
