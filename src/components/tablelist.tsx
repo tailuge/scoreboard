@@ -21,11 +21,7 @@ export function TableList({
   }
 
   const sortedTables = useMemo(
-    () =>
-      [...tables].sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      ),
+    () => [...tables].sort((a, b) => a.createdAt - b.createdAt),
     [tables]
   )
 
