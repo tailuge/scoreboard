@@ -20,11 +20,12 @@ export function CreateTable({
   const handleCreate = async () => {
     setIsLoading(true)
     try {
-      await fetch("/api/tables", {
+      const response = await fetch("/api/tables", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, userName, ruleType }),
       })
+      if (!response.ok) throw new Error("Failed to create table")
       onCreate()
     } finally {
       setIsLoading(false)

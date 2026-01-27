@@ -29,9 +29,16 @@ export function useServerStatus(statusPage: string) {
   }, [])
 
   const registerConnected = useCallback(async () => {
-    await fetch("/api/connected", {
-      method: "GET",
-    })
+    try {
+      const response = await fetch("/api/connected", {
+        method: "GET",
+      })
+      if (!response.ok) {
+        logger.log("Failed to register connection")
+      }
+    } catch (error) {
+      logger.log("Error registering connection:", error)
+    }
   }, [])
 
   const checkServerStatus = useCallback(async () => {

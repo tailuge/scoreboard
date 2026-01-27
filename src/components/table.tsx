@@ -132,32 +132,31 @@ export function TableItem({
     isCreator: false,
   })
 
-  if (isSpectating) {
-    return (
-      <IFrameOverlay
-        target={spectatorUrl}
-        onClose={handleCloseSpectate}
-        title="Spectator Window"
-      />
-    )
-  }
-
   return (
-    <div
-      className={`table-card ${tableClass} ${isCreator ? "table-card-creator" : ""}`}
-    >
-      <div className="table-container">
-        <div className="table-inner">
-          <div className={`table-felt ${feltClass}`}></div>
-          <TableContent
-            table={table}
-            isCreator={isCreator}
-            onJoin={onJoin}
-            onSpectate={handleSpectate}
-          />
-          {table.ruleType !== "threecushion" && <TablePockets />}
+    <>
+      {isSpectating && (
+        <IFrameOverlay
+          target={spectatorUrl}
+          onClose={handleCloseSpectate}
+          title="Spectator Window"
+        />
+      )}
+      <div
+        className={`table-card ${tableClass} ${isCreator ? "table-card-creator" : ""}`}
+      >
+        <div className="table-container">
+          <div className="table-inner">
+            <div className={`table-felt ${feltClass}`}></div>
+            <TableContent
+              table={table}
+              isCreator={isCreator}
+              onJoin={onJoin}
+              onSpectate={handleSpectate}
+            />
+            {table.ruleType !== "threecushion" && <TablePockets />}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

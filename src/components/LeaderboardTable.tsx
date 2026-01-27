@@ -21,6 +21,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         const params = new URLSearchParams({ ruletype: ruleType })
         const url = `/api/rank?${params.toString()}`
         const response = await fetch(url)
+        if (!response.ok) throw new Error("Failed to fetch leaderboard data")
         const jsonData = await response.json()
         logger.log(`fetched leaderboard data: ${jsonData}`)
         setData(jsonData)
@@ -36,7 +37,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     e.stopPropagation()
     try {
       const url = `/api/rank/${id}?ruletype=${ruleType}`
-      await fetch(url, { method: "PUT" })
+      const response = await fetch(url, { method: "PUT" })
+      if (!response.ok) throw new Error("Failed to update likes")
       setData((prevData) =>
         prevData.map((item) =>
           item.id === id ? { ...item, likes: (item.likes || 0) + 1 } : item

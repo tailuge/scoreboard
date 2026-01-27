@@ -30,10 +30,16 @@ export default function Lobby() {
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
 
   const fetchTables = useCallback(async () => {
-    const res = await fetch("/api/tables")
-    const data = await res.json()
-    setTables(data)
-    setIsLoading(false)
+    try {
+      const res = await fetch("/api/tables")
+      if (!res.ok) throw new Error("Failed to fetch tables")
+      const data = await res.json()
+      setTables(data)
+    } catch (error) {
+      console.error("Error fetching tables:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -68,13 +74,18 @@ export default function Lobby() {
 
   const tableAction = useCallback(
     async (tableId: string, action: "join" | "spectate") => {
-      const response = await fetch(`/api/tables/${tableId}/${action}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, userName }),
-      })
-      fetchTables()
-      return response.status === 200
+      try {
+        const response = await fetch(`/api/tables/${tableId}/${action}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, userName }),
+        })
+        fetchTables()
+        return response.ok
+      } catch (error) {
+        console.error(`Error performing ${action} on table:`, error)
+        return false
+      }
     },
     [userId, userName, fetchTables]
   )
@@ -108,12 +119,17 @@ export default function Lobby() {
 
   const createTable = useCallback(
     async (ruleType: string) => {
-      await fetch("/api/tables", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, userName, ruleType }),
-      })
-      fetchTables()
+      try {
+        const response = await fetch("/api/tables", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, userName, ruleType }),
+        })
+        if (!response.ok) throw new Error("Failed to create table")
+        fetchTables()
+      } catch (error) {
+        console.error("Error creating table:", error)
+      }
     },
     [userId, userName, fetchTables]
   )

@@ -17,7 +17,10 @@ export function TableList({
   readonly tables: Table[]
 }) {
   const handleJoin = async (tableId: string) => {
-    await onJoin(tableId)
+    const success = await onJoin(tableId)
+    if (!success) {
+      console.error("Failed to join table:", tableId)
+    }
   }
 
   const sortedTables = useMemo(

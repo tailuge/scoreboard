@@ -11,10 +11,9 @@ export function MatchHistoryList() {
   const fetchResults = async () => {
     try {
       const response = await fetch("/api/match-results")
-      if (response.ok) {
-        const data = await response.json()
-        setResults(data)
-      }
+      if (!response.ok) throw new Error("Failed to fetch match history")
+      const data = await response.json()
+      setResults(data)
     } catch (error) {
       logger.log("Error fetching match history:", error)
     } finally {
