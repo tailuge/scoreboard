@@ -4,7 +4,6 @@ import { TableList } from "@/components/tablelist"
 import { CreateTable } from "@/components/createtable"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { PlayModal } from "@/components/PlayModal"
-import { ServerStatus } from "@/components/ServerStatus/ServerStatus"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineCount } from "@/components/OnlineCount"
@@ -189,7 +188,6 @@ export default function Lobby() {
             rightBadge={
               <div className="flex items-center gap-4">
                 <Star />
-                <ServerStatus statusPage={STATUS_PAGE_URL} />
                 {activeUsers !== null && <OnlineCount count={activeUsers} />}
               </div>
             }
