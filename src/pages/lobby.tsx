@@ -9,84 +9,37 @@ import { GroupBox } from "@/components/GroupBox"
 import { OnlineCount } from "@/components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import Head from "next/head"
-import { Table } from "@/types/table"
-import { NchanSub } from "@/nchan/nchansub"
 import { Star } from "@/components/Star"
 import { markUsage } from "@/utils/usage"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 import { useUser } from "@/contexts/UserContext"
+import { useLobbyTables } from "@/components/hooks/useLobbyTables"
+import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 
 export default function Lobby() {
   const { userId, userName } = useUser()
-  const [tables, setTables] = useState<Table[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const hasHandledAutoJoin = useRef(false)
+  const { tables, isLoading, fetchTables, tableAction, createTable } = useLobbyTables(userId, userName)
   const [modalTable, setModalTable] = useState<{
     id: string
     ruleType: string
   } | null>(null)
+  const shownModals = useRef<Set<string>>(new Set())
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
-
-  const fetchTables = useCallback(async () => {
-    try {
-      const res = await fetch("/api/tables")
-      if (!res.ok) throw new Error("Failed to fetch tables")
-      const data = await res.json()
-      setTables(data)
-    } catch (error) {
-      console.error("Error fetching tables:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
 
   useEffect(() => {
     if (!router.isReady) return
-
     markUsage("lobby")
-    fetchTables()
-    const client = new NchanSub("lobby", (e) => {
-      try {
-        if (JSON.parse(e)?.action === "connected") {
-          return
-        }
-      } catch {
-        // Not JSON, continue to fetchTables
-      }
-      fetchTables()
-    })
-    client.start()
-    return () => client.stop()
-  }, [router.isReady, fetchTables])
-
-  const tableAction = useCallback(
-    async (tableId: string, action: "join" | "spectate") => {
-      try {
-        const response = await fetch(`/api/tables/${tableId}/${action}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, userName }),
-        })
-        fetchTables()
-        return response.ok
-      } catch (error) {
-        console.error(`Error performing ${action} on table:`, error)
-        return false
-      }
-    },
-    [userId, userName, fetchTables]
-  )
+  }, [router.isReady])
 
   const handleJoin = useCallback(
     async (tableId: string) => {
       const success = await tableAction(tableId, "join")
       if (success) {
-        // Note: 'tables' here will be stale if not careful, but we only need to find the ruleType.
-        // Ideally we'd fetch the latest table state, but for now we look at the current list.
         const table = tables.find((t) => t.id === tableId)
         if (table && !table.completed) {
           setModalTable({ id: table.id, ruleType: table.ruleType })
+          shownModals.current.add(table.id)
         }
       }
       return success
@@ -101,69 +54,18 @@ export default function Lobby() {
     [tableAction]
   )
 
-  const handleCreate = useCallback(() => {
-    fetchTables()
-  }, [fetchTables])
-
-  const createTable = useCallback(
-    async (ruleType: string) => {
-      try {
-        const response = await fetch("/api/tables", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, userName, ruleType }),
-        })
-        if (!response.ok) throw new Error("Failed to create table")
-        fetchTables()
-      } catch (error) {
-        console.error("Error creating table:", error)
-      }
-    },
-    [userId, userName, fetchTables]
-  )
-
-  useEffect(() => {
-    if (
-      isLoading ||
-      !router.isReady ||
-      hasHandledAutoJoin.current ||
-      !userId ||
-      !userName
-    )
-      return
-
-    const action = router.query.action
-    const gameType = router.query.gameType as string
-
-    if (action === "join" && gameType) {
-      hasHandledAutoJoin.current = true
-      const existingTable = tables.find((t) => t.ruleType === gameType)
-
-      if (existingTable) {
-        handleJoin(existingTable.id)
-      } else {
-        createTable(gameType)
-      }
-    }
-  }, [
-    isLoading,
-    router.isReady,
-    router.query,
-    tables,
-    userId,
-    userName,
-    createTable,
-    handleJoin,
-  ])
+  useAutoJoin(router, isLoading, userId, userName, tables, handleJoin, createTable)
 
   useEffect(() => {
     tables.forEach((table) => {
       if (
         table.creator.id === userId &&
         table.players.length === 2 &&
-        !table.completed
+        !table.completed &&
+        !shownModals.current.has(table.id)
       ) {
         setModalTable({ id: table.id, ruleType: table.ruleType })
+        shownModals.current.add(table.id)
       }
     })
   }, [tables, userId])
@@ -187,7 +89,7 @@ export default function Lobby() {
           >
             <div className="flex flex-col gap-6">
               <div className="flex justify-start items-center px-2">
-                <CreateTable onCreate={handleCreate} />
+                <CreateTable onCreate={fetchTables} />
               </div>
               <TableList
                 onJoin={handleJoin}
