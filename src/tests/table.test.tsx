@@ -2,6 +2,13 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import { TableItem } from "@/components/table"
 import "@testing-library/jest-dom"
 import { Table } from "@/types/table"
+import { useUser } from "@/contexts/UserContext"
+
+// Mock the useUser hook
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 describe("TableItem", () => {
   const mockOnJoin = jest.fn()
@@ -21,6 +28,11 @@ describe("TableItem", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockedUseUser.mockReturnValue({
+      userId: "user-2",
+      userName: "User 2",
+      setUserName: jest.fn(),
+    })
   })
 
   it("renders a waiting table correctly", () => {
@@ -29,8 +41,6 @@ describe("TableItem", () => {
         table={baseTable}
         onJoin={mockOnJoin}
         onSpectate={mockOnSpectate}
-        userId="user-2"
-        userName="User 2"
       />
     )
 
@@ -42,6 +52,11 @@ describe("TableItem", () => {
   })
 
   it("renders an occupied table correctly and allows spectating", () => {
+    mockedUseUser.mockReturnValue({
+      userId: "user-3",
+      userName: "User 3",
+      setUserName: jest.fn(),
+    })
     const occupiedTable: Table = {
       ...baseTable,
       players: [
@@ -56,8 +71,6 @@ describe("TableItem", () => {
         table={occupiedTable}
         onJoin={mockOnJoin}
         onSpectate={mockOnSpectate}
-        userId="user-3"
-        userName="User 3"
       />
     )
 
@@ -79,6 +92,11 @@ describe("TableItem", () => {
   })
 
   it("renders a completed table with correct class", () => {
+    mockedUseUser.mockReturnValue({
+      userId: "user-3",
+      userName: "User 3",
+      setUserName: jest.fn(),
+    })
     const completedTable: Table = {
       ...baseTable,
       players: [
@@ -93,8 +111,6 @@ describe("TableItem", () => {
         table={completedTable}
         onJoin={mockOnJoin}
         onSpectate={mockOnSpectate}
-        userId="user-3"
-        userName="User 3"
       />
     )
 
@@ -114,8 +130,6 @@ describe("TableItem", () => {
         table={threecushionTable}
         onJoin={mockOnJoin}
         onSpectate={mockOnSpectate}
-        userId="user-2"
-        userName="User 2"
       />
     )
 
@@ -123,13 +137,16 @@ describe("TableItem", () => {
   })
 
   it("identifies creator and adds table-card-creator class", () => {
+    mockedUseUser.mockReturnValue({
+      userId: "user-1",
+      userName: "User 1",
+      setUserName: jest.fn(),
+    })
     const { container } = render(
       <TableItem
         table={baseTable}
         onJoin={mockOnJoin}
         onSpectate={mockOnSpectate}
-        userId="user-1"
-        userName="User 1"
       />
     )
 

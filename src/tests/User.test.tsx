@@ -1,18 +1,27 @@
 import { render, screen, fireEvent } from "@testing-library/react"
 import { User } from "@/components/User"
 import "@testing-library/jest-dom"
+import { useUser } from "@/contexts/UserContext"
+
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 describe("User component", () => {
-  const mockOnUserNameChange = jest.fn()
+  const mockSetUserName = jest.fn()
+
+  beforeEach(() => {
+    mockSetUserName.mockClear()
+    mockedUseUser.mockReturnValue({
+      userName: "TestUser",
+      userId: "user-123",
+      setUserName: mockSetUserName,
+    })
+  })
 
   it("renders with user name and enters edit mode on click", () => {
-    render(
-      <User
-        userName="TestUser"
-        userId="user-123"
-        onUserNameChange={mockOnUserNameChange}
-      />
-    )
+    render(<User />)
 
     // Initial render check
     expect(screen.getByText("TestUser")).toBeInTheDocument()
@@ -32,6 +41,6 @@ describe("User component", () => {
     fireEvent.keyDown(input, { key: "Enter", code: "Enter" })
 
     // Verify callback
-    expect(mockOnUserNameChange).toHaveBeenCalledWith("NewName")
+    expect(mockSetUserName).toHaveBeenCalledWith("NewName")
   })
 })

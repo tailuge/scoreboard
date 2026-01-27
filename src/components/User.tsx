@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react"
 import { UserIcon } from "@heroicons/react/24/solid"
+import { useUser } from "@/contexts/UserContext"
 
-interface UserPillProps {
-  readonly userName: string
-  readonly userId: string
-  readonly onUserNameChange: (newUserName: string) => void
-}
-
-export function User({ userName, userId, onUserNameChange }: UserPillProps) {
+export function User() {
+  const { userName, userId, setUserName } = useUser()
   const [isEditing, setIsEditing] = useState(false)
   const [newUserName, setNewUserName] = useState(userName)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setNewUserName(userName)
+  }, [userName])
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -19,7 +19,7 @@ export function User({ userName, userId, onUserNameChange }: UserPillProps) {
   }, [isEditing])
 
   const handleSave = () => {
-    onUserNameChange(newUserName)
+    setUserName(newUserName)
     setIsEditing(false)
   }
 

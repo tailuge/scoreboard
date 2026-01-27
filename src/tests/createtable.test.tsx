@@ -1,6 +1,13 @@
 import { render, screen, fireEvent, act } from "@testing-library/react"
 import { CreateTable } from "@/components/createtable"
 import "@testing-library/jest-dom"
+import { useUser } from "@/contexts/UserContext"
+
+// Mock the useUser hook
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 // Mock the useServerStatus hook
 jest.mock("@/components/hooks/useServerStatus", () => ({
@@ -19,16 +26,15 @@ describe("CreateTable component", () => {
       })
     ) as jest.Mock
     mockOnCreate.mockClear()
+    mockedUseUser.mockReturnValue({
+      userId: "user-1",
+      userName: "TestUser",
+      setUserName: jest.fn(),
+    })
   })
 
   it("renders the component and creates a table on click", async () => {
-    render(
-      <CreateTable
-        userId="user-1"
-        userName="TestUser"
-        onCreate={mockOnCreate}
-      />
-    )
+    render(<CreateTable onCreate={mockOnCreate} />)
 
     // Check initial render
     const playButton = screen.getByText("Play Nineball")
@@ -54,13 +60,7 @@ describe("CreateTable component", () => {
   })
 
   it("opens the dropdown and changes the game type", () => {
-    render(
-      <CreateTable
-        userId="user-1"
-        userName="TestUser"
-        onCreate={mockOnCreate}
-      />
-    )
+    render(<CreateTable onCreate={mockOnCreate} />)
 
     const dropdownButton = screen.getByText("▼")
     fireEvent.click(dropdownButton)

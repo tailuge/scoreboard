@@ -2,9 +2,15 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { PlayModal } from "@/components/PlayModal"
 import "@testing-library/jest-dom"
 import { isInsideIframe } from "@/utils/iframe"
+import { useUser } from "@/contexts/UserContext"
 
 jest.mock("@/utils/iframe")
 const mockedIsInsideIframe = isInsideIframe as jest.Mock
+
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 describe("PlayModal", () => {
   const mockOnClose = jest.fn()
@@ -23,6 +29,11 @@ describe("PlayModal", () => {
 
     mockOnClose.mockClear()
     mockedIsInsideIframe.mockReturnValue(false)
+    mockedUseUser.mockReturnValue({
+      userId: "user-123",
+      userName: "test",
+      setUserName: jest.fn(),
+    })
   })
 
   it("renders the modal when isOpen is true", () => {
@@ -31,8 +42,6 @@ describe("PlayModal", () => {
         isOpen={true}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )
@@ -47,8 +56,6 @@ describe("PlayModal", () => {
         isOpen={false}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )
@@ -61,8 +68,6 @@ describe("PlayModal", () => {
         isOpen={true}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )
@@ -82,8 +87,6 @@ describe("PlayModal", () => {
         isOpen={true}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )
@@ -105,8 +108,6 @@ describe("PlayModal", () => {
         isOpen={true}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )
@@ -129,8 +130,6 @@ describe("PlayModal", () => {
         isOpen={true}
         onClose={mockOnClose}
         tableId="table-1"
-        userName="test"
-        userId="user-123"
         ruleType="nineball"
       />
     )

@@ -2,11 +2,18 @@ import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import Lobby from "../pages/lobby"
 import { useRouter } from "next/router"
+import { useUser } from "@/contexts/UserContext"
 
 // Mock next/router
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
+
+// Mock useUser
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 // Mock markUsage
 jest.mock("@/utils/usage", () => ({
@@ -63,6 +70,11 @@ describe("Lobby Component Functional Tests", () => {
       query: { username: "TestUser" },
       isReady: true,
       push: jest.fn(),
+    })
+    mockedUseUser.mockReturnValue({
+      userId: "test-user-id",
+      userName: "TestUser",
+      setUserName: jest.fn(),
     })
 
     // Mock globalThis fetch
@@ -137,6 +149,11 @@ describe("Lobby Redirection Tests", () => {
       },
       isReady: true,
       push: jest.fn(),
+    })
+    mockedUseUser.mockReturnValue({
+      userId: "test-user-id",
+      userName: "TestUser",
+      setUserName: jest.fn(),
     })
 
     // Mock globalThis fetch

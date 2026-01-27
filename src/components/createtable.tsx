@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from "react"
 import { useServerStatus } from "./hooks/useServerStatus"
 import { STATUS_PAGE_URL } from "@/utils/constants"
+import { useUser } from "@/contexts/UserContext"
 
 export function CreateTable({
-  userId,
-  userName,
   onCreate,
 }: {
-  readonly userId: string
-  readonly userName: string
   readonly onCreate: () => void
 }) {
+  const { userId, userName } = useUser()
   const [isLoading, setIsLoading] = useState(false)
   const [ruleType, setRuleType] = useState("nineball")
   const [dropdownOpen, setDropdownOpen] = useState(false)

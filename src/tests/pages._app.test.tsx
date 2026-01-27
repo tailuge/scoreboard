@@ -1,6 +1,14 @@
 import { render } from "@testing-library/react"
 import App from "@/pages/_app"
 
+// Mock next/router
+jest.mock("next/router", () => ({
+  useRouter: () => ({
+    query: {},
+    isReady: true,
+  }),
+}))
+
 // Mock the Vercel analytics components
 jest.mock("@vercel/speed-insights/next", () => ({
   SpeedInsights: () => <div>SpeedInsights</div>,

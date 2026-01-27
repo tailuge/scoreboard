@@ -3,6 +3,7 @@ import { UserPlusIcon, EyeIcon } from "@heroicons/react/24/solid"
 import { GameUrl } from "@/utils/GameUrl"
 import { IFrameOverlay } from "./IFrameOverlay"
 import { useState } from "react"
+import { useUser } from "@/contexts/UserContext"
 
 const TablePockets = () => (
   <>
@@ -89,15 +90,12 @@ export function TableItem({
   table,
   onJoin,
   onSpectate,
-  userId,
-  userName,
 }: {
   readonly table: Table
   readonly onJoin: (tableId: string) => void
   readonly onSpectate: (tableId: string) => void
-  readonly userId: string
-  readonly userName: string
 }) {
+  const { userId, userName } = useUser()
   const [isSpectating, setIsSpectating] = useState(false)
   const isCreator = table.creator.id === userId
 

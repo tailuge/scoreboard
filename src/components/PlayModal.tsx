@@ -5,6 +5,7 @@ import { Table } from "@/types/table"
 import { IFrameOverlay } from "./IFrameOverlay"
 import { isInsideIframe } from "@/utils/iframe"
 import { logger } from "@/utils/logger"
+import { useUser } from "@/contexts/UserContext"
 
 async function markComplete(tableId: string): Promise<string> {
   const response = await fetch(`/api/tables/${tableId}/complete`, {
@@ -21,8 +22,6 @@ interface PlayModalProps {
   readonly isOpen: boolean
   readonly onClose: () => void
   readonly tableId: string
-  readonly userName: string
-  readonly userId: string
   readonly ruleType: string
 }
 
@@ -30,10 +29,9 @@ export function PlayModal({
   isOpen,
   onClose,
   tableId,
-  userName,
-  userId,
   ruleType,
 }: PlayModalProps) {
+  const { userId, userName } = useUser()
   const [showIframe, setShowIframe] = useState(false)
   const [gameUrl, setGameUrl] = useState<URL | null>(null)
   const [error, setError] = useState<string | null>(null)

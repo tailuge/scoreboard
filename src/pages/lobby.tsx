@@ -13,12 +13,11 @@ import { Table } from "@/types/table"
 import { NchanSub } from "@/nchan/nchansub"
 import { Star } from "@/components/Star"
 import { markUsage } from "@/utils/usage"
-import { getUID } from "@/utils/uid"
 import { STATUS_PAGE_URL } from "@/utils/constants"
+import { useUser } from "@/contexts/UserContext"
 
 export default function Lobby() {
-  const [userId, setUserId] = useState("")
-  const [userName, setUserName] = useState("")
+  const { userId, userName } = useUser()
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
@@ -46,17 +45,6 @@ export default function Lobby() {
     if (!router.isReady) return
 
     markUsage("lobby")
-    const storedUserId = getUID()
-
-    const urlUserName = router.query.username as string
-    const storedUserName =
-      urlUserName || localStorage.getItem("userName") || "Anonymous"
-
-    setUserId(storedUserId)
-    setUserName(storedUserName)
-    localStorage.setItem("userId", storedUserId)
-    localStorage.setItem("userName", storedUserName)
-
     fetchTables()
     const client = new NchanSub("lobby", (e) => {
       try {
@@ -70,7 +58,7 @@ export default function Lobby() {
     })
     client.start()
     return () => client.stop()
-  }, [router.isReady, router.query, fetchTables])
+  }, [router.isReady, fetchTables])
 
   const tableAction = useCallback(
     async (tableId: string, action: "join" | "spectate") => {
@@ -180,11 +168,6 @@ export default function Lobby() {
     })
   }, [tables, userId])
 
-  const handleUserNameChange = (newUserName: string) => {
-    setUserName(newUserName)
-    localStorage.setItem("userName", newUserName)
-  }
-
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
       <Head>
@@ -194,13 +177,7 @@ export default function Lobby() {
         <div className="lg:col-span-2">
           <GroupBox
             title="Lobby"
-            leftBadge={
-              <User
-                userName={userName}
-                userId={userId}
-                onUserNameChange={handleUserNameChange}
-              />
-            }
+            leftBadge={<User />}
             rightBadge={
               <div className="flex items-center gap-4">
                 <Star />
@@ -210,15 +187,9 @@ export default function Lobby() {
           >
             <div className="flex flex-col gap-6">
               <div className="flex justify-start items-center px-2">
-                <CreateTable
-                  userId={userId}
-                  userName={userName}
-                  onCreate={handleCreate}
-                />
+                <CreateTable onCreate={handleCreate} />
               </div>
               <TableList
-                userId={userId}
-                userName={userName}
                 onJoin={handleJoin}
                 onSpectate={handleSpectate}
                 tables={tables}
@@ -234,8 +205,6 @@ export default function Lobby() {
         isOpen={!!modalTable}
         onClose={() => setModalTable(null)}
         tableId={modalTable?.id || ""}
-        userName={userName}
-        userId={userId}
         ruleType={modalTable?.ruleType || "nineball"}
       />
     </div>

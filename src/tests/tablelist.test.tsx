@@ -2,6 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { TableList } from '../components/tablelist';
 import { Table } from '../types/table';
+import { useUser } from "@/contexts/UserContext"
+
+// Mock the useUser hook
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
 
 describe('TableList', () => {
   const mockTables: Table[] = [
@@ -40,11 +47,17 @@ describe('TableList', () => {
     },
   ];
 
+  beforeEach(() => {
+    mockedUseUser.mockReturnValue({
+      userId: "test-user",
+      userName: "Test User",
+      setUserName: jest.fn(),
+    })
+  })
+
   it('renders tables in ascending order of createdAt', () => {
     render(
       <TableList
-        userId="test-user"
-        userName="Test User"
         onJoin={jest.fn()}
         onSpectate={jest.fn()}
         tables={mockTables}
