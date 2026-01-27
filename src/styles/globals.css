@@ -349,3 +349,60 @@ body {
 .star-icon--outline:hover {
   @apply text-red-500;
 }
+
+/* GroupBox Component Styles */
+.groupbox-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 1px;
+  pointer-events: none;
+  background:
+    /* vertical lighting */
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255,255,255,0.08) 30%,
+      rgba(255,255,255,0.12) 50%,
+      rgba(255,255,255,0.08) 70%,
+      transparent 100%
+    ),
+    /* horizontal fade around title */
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.15) 0%,
+      rgba(255,255,255,0.15) 30%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255,255,255,0.15) 70%,
+      rgba(255,255,255,0.15) 100%
+    );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.groupbox-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px 20px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(180,190,210,0.7);
+  background: linear-gradient(
+    180deg,
+    rgba(20,22,28,0.95),
+    rgba(13,14,18,1)
+  );
+  border-radius: 4px;
+  box-shadow:
+    0 0 20px rgba(13,14,18,0.9),
+    0 0 40px rgba(13,14,18,0.6);
+  pointer-events: none;
+  z-index: 2;
+}
