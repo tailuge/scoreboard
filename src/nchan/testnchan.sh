@@ -56,14 +56,20 @@ printf "\nSubscriber received message and exited.\n"
 
 printf "\n--- Test: WebSocket Handshake (ws/wss) ---\n"
 # Simulate a WebSocket handshake. Nchan should return 101 Switching Protocols.
-curl -i -N --max-time 5 \
+# We use grep -m 1 to exit as soon as we see the handshake success, avoiding the timeout.
+if curl -s -i -N --max-time 5 \
      -H "Connection: Upgrade" \
      -H "Upgrade: websocket" \
      -H "Host: localhost" \
      -H "Origin: http://localhost" \
      -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" \
      -H "Sec-WebSocket-Version: 13" \
-     "http://localhost:$PORT/subscribe/lobby/handshake" 2>&1 | head -n 10
+     "http://localhost:$PORT/subscribe/lobby/handshake" | grep -m 1 "HTTP/1.1 101"; then
+    echo "Handshake successful (HTTP 101 received)"
+else
+    echo "Handshake failed or timed out"
+    exit 1
+fi
 
 echo "--- Test Completed successfully ---"
 
