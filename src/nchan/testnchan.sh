@@ -30,29 +30,40 @@ echo "--- Waiting for image to initialize ---"
 sleep 2
 
 printf "\n\n--- Health Check: /basic_status ---\n"
-curl -s http://localhost:$PORT/basic_status
+curl -s --max-time 5 http://localhost:$PORT/basic_status
 
 printf "\n\n--- Stats: /nchan_stats ---\n"
-curl -s http://localhost:$PORT/nchan_stats
+curl -s --max-time 5 http://localhost:$PORT/nchan_stats
 echo ""
 
 printf "\n\n--- Index: /index.html ---\n"
-curl -s http://localhost:$PORT/index.html
+curl -s --max-time 5 http://localhost:$PORT/index.html
 echo ""
 
 printf "\n--- Test: Publish to Lobby ---\n"
-curl -s -X POST -d "{\"event\": \"test\"}" http://localhost:$PORT/publish/lobby/testchannel
+curl -s --max-time 5 -X POST -d "{\"event\": \"test\"}" http://localhost:$PORT/publish/lobby/testchannel
 echo ""
 
 printf "\n--- Test: Pub/Sub Demo (Lobby) ---\n"
 echo "Starting subscriber in background..."
-curl -s http://localhost:$PORT/subscribe/lobby/demo &
+curl -s --max-time 5 http://localhost:$PORT/subscribe/lobby/demo &
 SUB_PID=$!
 sleep 1
 echo "Publishing message to demo channel..."
-curl -s -X POST -d "Hello from Pub/Sub test" http://localhost:$PORT/publish/lobby/demo
+curl -s --max-time 5 -X POST -d "Hello from Pub/Sub test" http://localhost:$PORT/publish/lobby/demo
 wait $SUB_PID
 printf "\nSubscriber received message and exited.\n"
+
+printf "\n--- Test: WebSocket Handshake (ws/wss) ---\n"
+# Simulate a WebSocket handshake. Nchan should return 101 Switching Protocols.
+curl -i -N --max-time 5 \
+     -H "Connection: Upgrade" \
+     -H "Upgrade: websocket" \
+     -H "Host: localhost" \
+     -H "Origin: http://localhost" \
+     -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" \
+     -H "Sec-WebSocket-Version: 13" \
+     "http://localhost:$PORT/subscribe/lobby/handshake" 2>&1 | head -n 10
 
 echo "--- Test Completed successfully ---"
 
