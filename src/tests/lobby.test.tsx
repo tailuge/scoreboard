@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import Lobby from "../pages/lobby"
 import { useRouter } from "next/router"
 import { useUser } from "@/contexts/UserContext"
+import { LobbyProvider } from "@/contexts/LobbyContext"
 
 // Mock next/router
 jest.mock("next/router", () => ({
@@ -94,7 +95,11 @@ describe("Lobby Component Functional Tests", () => {
   })
 
   it("should create a new game when 'Play Nineball' is clicked", async () => {
-    render(<Lobby />)
+    render(
+      <LobbyProvider>
+        <Lobby />
+      </LobbyProvider>
+    )
 
     // Wait for initial tables to load
     const createButton = await screen.findByText(/Play Nineball/i)
@@ -113,7 +118,11 @@ describe("Lobby Component Functional Tests", () => {
   })
 
   it("should join a game when 'Join' is clicked on a table", async () => {
-    render(<Lobby />)
+    render(
+      <LobbyProvider>
+        <Lobby />
+      </LobbyProvider>
+    )
 
     // Wait for table to appear (Check for creator name or Join button)
     const joinButton = await screen.findByLabelText("Join Table")
@@ -180,7 +189,11 @@ describe("Lobby Redirection Tests", () => {
   })
 
   it("should attempt to join table and show PlayModal when redirecting with action=join", async () => {
-    render(<Lobby />)
+    render(
+      <LobbyProvider>
+        <Lobby />
+      </LobbyProvider>
+    )
 
     // Check if fetch was called with PUT to join endpoint automatically
     await waitFor(() => {

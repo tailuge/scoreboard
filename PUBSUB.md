@@ -1,32 +1,16 @@
-# Nchan Usage Investigation
+# Nchan Usage Investigation (COMPLETED)
 
-## Findings: Duplicate Connections to "lobby"
+## Findings: Duplicate Connections to "lobby" (RESOLVED)
 
-The investigation into `nchansub.ts` usage reveals that the application opens **two concurrent WebSocket connections** to the "lobby" channel for every user on the Lobby page. This explains the "higher user numbers than expected".
+The investigation into `nchansub.ts` usage revealed that the application was opening **two concurrent WebSocket connections** to the "lobby" channel for every user on the Lobby page.
 
-### Root Cause
-The `src/pages/lobby.tsx` component uses two custom hooks, both of which instantiate their own `NchanSub` for the same channel ("lobby").
+### Root Cause (FIXED)
+The `src/pages/lobby.tsx` component used two custom hooks, both of which instantiated their own `NchanSub` for the same channel ("lobby").
 
-1.  **`src/components/hooks/useLobbyTables.ts`**:
-    ```typescript
-    useEffect(() => {
-      fetchTables()
-      const client = new NchanSub("lobby", (e) => { ... })
-      client.start()
-      return () => client.stop()
-    }, [fetchTables])
-    ```
-
-2.  **`src/components/hooks/useServerStatus.ts`**:
-    ```typescript
-    useEffect(() => {
-      const sub = new NchanSub("lobby", (e) => { ... })
-      sub.start()
-      return () => sub.stop()
-    }, [fetchActiveUsers])
-    ```
-
-When `Lobby` renders, it calls both hooks, establishing two independent WebSockets.
+### Solution
+1.  **LobbyContext**: A new React Context was created to manage a single `NchanSub` instance for the "lobby" channel.
+2.  **Hook Refactoring**: `useLobbyTables` and `useServerStatus` were refactored to consume `lastMessage` from `LobbyContext`.
+3.  **Global Provider**: `LobbyProvider` was added to `src/pages/_app.tsx` to ensure availability across the application.
 
 ## General Review of Nchan Code
 
@@ -35,23 +19,16 @@ When `Lobby` renders, it calls both hooks, establishing two independent WebSocke
 *   **Pros:**
     *   **Cleanup:** The class correctly implements a `stop()` method that clears timeouts and closes the socket.
     *   **Resilience:** Contains logic for automatic reconnection (`shouldReconnect`, `reconnectTimeout`).
-    *   **Lifecycle:** Usages in hooks correctly utilize the cleanup function in `useEffect` (returning `sub.stop()`).
+    *   **Lifecycle:** Usages in hooks correctly utilize the cleanup function in `useEffect`.
 
 *   **Cons / Risks:**
-    *   **Hardcoded Domain:** The base URL `billiards-network.onrender.com` is hardcoded. This makes local testing or environment switching difficult. It should be moved to an environment variable or configuration file.
-    *   **Error Handling:** `JSON.parse` is used inside callbacks. While wrapped in try-catch in the hooks, it's safer to have the transport layer handle basic validation or expose a safer interface.
-    *   **Architecture:** The current design encourages "one connection per concern" rather than "one connection per channel".
+    *   **Externalized Configuration:** Fixed. Now uses `process.env.NEXT_PUBLIC_WEBSOCKET_HOST`.
+    *   **Architecture:** Improved via `LobbyContext`.
 
-## Recommendations
+## Implementation Status
 
-1.  **Centralize Lobby Subscription:**
-    Create a React Context (e.g., `LobbyContext`) that manages a *single* `NchanSub` instance for the "lobby" channel.
-    *   This context can expose the latest message or specific data points (e.g., `activeUsers`, `tablesChanged`).
-    *   Both `useLobbyTables` and `useServerStatus` (when used in the lobby) should consume this context instead of opening new connections.
-
-2.  **Externalize Configuration:**
-    Move the `base` URL in `NchanSub` to `process.env.NEXT_PUBLIC_WEBSOCKET_URL` or similar.
-Suggested change:
-
-   1 -  private readonly base = "billiards-network.onrender.com"
-   2 +  private readonly base = process.env.NEXT_PUBLIC_WEBSOCKET_HOST || "billiards-network.onrender.com"
+- [x] Centralize Lobby Subscription via `LobbyContext`
+- [x] Refactor `useLobbyTables` to use context
+- [x] Refactor `useServerStatus` to use context
+- [x] Externalize WebSocket host configuration
+- [x] Fix and verify tests

@@ -2,6 +2,7 @@ import { renderHook, act, waitFor } from "@testing-library/react"
 import { useServerStatus } from "../components/hooks/useServerStatus"
 import { NchanPub } from "../nchan/nchanpub"
 import { NchanSub } from "../nchan/nchansub"
+import { LobbyProvider } from "../contexts/LobbyContext"
 
 jest.mock("../nchan/nchanpub")
 jest.mock("../nchan/nchansub")
@@ -24,7 +25,9 @@ describe("useServerStatus", () => {
       status: 500,
       statusText: "Internal Server Error",
     })
-    const { result } = renderHook(() => useServerStatus(mockStatusPage))
+    const { result } = renderHook(() => useServerStatus(mockStatusPage), {
+      wrapper: LobbyProvider,
+    })
     expect(result.current.isConnecting).toBe(true)
     expect(result.current.isOnline).toBe(false)
     expect(result.current.serverStatus).toBe(null)
@@ -51,7 +54,9 @@ describe("useServerStatus", () => {
       }
     })
 
-    const { result } = renderHook(() => useServerStatus(mockStatusPage))
+    const { result } = renderHook(() => useServerStatus(mockStatusPage), {
+      wrapper: LobbyProvider,
+    })
 
     await waitFor(() => {
       expect(result.current.isConnecting).toBe(false)
@@ -69,7 +74,9 @@ describe("useServerStatus", () => {
       statusText: "Internal Server Error",
     })
 
-    const { result } = renderHook(() => useServerStatus(mockStatusPage))
+    const { result } = renderHook(() => useServerStatus(mockStatusPage), {
+      wrapper: LobbyProvider,
+    })
 
     await waitFor(() => {
       expect(result.current.isConnecting).toBe(false)
@@ -88,7 +95,9 @@ describe("useServerStatus", () => {
       new Error(errorMessage)
     )
 
-    const { result } = renderHook(() => useServerStatus(mockStatusPage))
+    const { result } = renderHook(() => useServerStatus(mockStatusPage), {
+      wrapper: LobbyProvider,
+    })
 
     await waitFor(() => {
       expect(result.current.isConnecting).toBe(false)
@@ -116,7 +125,9 @@ describe("useServerStatus", () => {
       }
     })
 
-    const { result } = renderHook(() => useServerStatus(mockStatusPage))
+    const { result } = renderHook(() => useServerStatus(mockStatusPage), {
+      wrapper: LobbyProvider,
+    })
 
     await waitFor(() => {
       expect(result.current.isConnecting).toBe(false)

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { NchanPub } from "../../nchan/nchanpub"
-import { NchanSub } from "../../nchan/nchansub"
 import { logger } from "../../utils/logger"
+import { useLobbyContext } from "@/contexts/LobbyContext"
 
 export interface ServerStatusState {
   serverStatus: string | null
@@ -10,7 +10,8 @@ export interface ServerStatusState {
   activeUsers: number | null
 }
 
-export function useServerStatus(statusPage: string) {
+export function useServerStatus(statusPage: string, enableSubscription: boolean = true) {
+  const { lastMessage } = useLobbyContext()
   const [state, setState] = useState<ServerStatusState>({
     serverStatus: null,
     isOnline: false,
@@ -81,19 +82,12 @@ export function useServerStatus(statusPage: string) {
   }, [checkServerStatus])
 
   useEffect(() => {
-    const sub = new NchanSub("lobby", (e) => {
-      try {
-        const data = JSON.parse(e)
-        if (data?.action === "connected") {
-          fetchActiveUsers()
-        }
-      } catch {
-        // Ignore non-json or invalid messages
-      }
-    })
-    sub.start()
-    return () => sub.stop()
-  }, [fetchActiveUsers])
+    if (!enableSubscription || !lastMessage) return
+
+    if (lastMessage?.action === "connected") {
+      fetchActiveUsers()
+    }
+  }, [fetchActiveUsers, enableSubscription, lastMessage])
 
   return { ...state, fetchActiveUsers }
 }

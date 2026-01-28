@@ -1,8 +1,13 @@
 import { useState, useCallback, useEffect } from "react"
 import { Table } from "@/types/table"
-import { NchanSub } from "@/nchan/nchansub"
+import { useLobbyContext } from "@/contexts/LobbyContext"
 
-export function useLobbyTables(userId: string | null, userName: string | null) {
+export function useLobbyTables(
+  userId: string | null,
+  userName: string | null,
+  enableSubscription: boolean = true
+) {
+  const { lastMessage } = useLobbyContext()
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -21,19 +26,16 @@ export function useLobbyTables(userId: string | null, userName: string | null) {
 
   useEffect(() => {
     fetchTables()
-    const client = new NchanSub("lobby", (e) => {
-      try {
-        if (JSON.parse(e)?.action === "connected") {
-          return
-        }
-      } catch {
-        // Not JSON
-      }
-      fetchTables()
-    })
-    client.start()
-    return () => client.stop()
   }, [fetchTables])
+
+  useEffect(() => {
+    if (!enableSubscription || !lastMessage) return
+
+    if (lastMessage.action === "connected") {
+      return
+    }
+    fetchTables()
+  }, [fetchTables, enableSubscription, lastMessage])
 
   const tableAction = useCallback(
     async (tableId: string, action: "join" | "spectate"): Promise<Table | null> => {

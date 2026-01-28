@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
+import { LobbyProvider } from "@/contexts/LobbyContext"
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
@@ -29,7 +30,11 @@ describe("Game Page", () => {
   })
 
   it("renders the game selection page with 3 buttons", async () => {
-    render(<Game />)
+    render(
+      <LobbyProvider>
+        <Game />
+      </LobbyProvider>
+    )
 
     // Check main heading (Removed)
     // expect(screen.getByText("Choose Your Game")).toBeInTheDocument()
