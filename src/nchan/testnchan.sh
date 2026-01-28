@@ -40,5 +40,19 @@ echo -e "\n\n--- Index: /index.html ---"
 curl -s http://localhost:$PORT/index.html
 echo ""
 
+echo "\n--- Test: Publish to Lobby ---"
+curl -s -X POST -d "{\"event\": \"test\"}" http://localhost:$PORT/publish/lobby/testchannel
+echo ""
+
+echo "\n--- Test: Pub/Sub Demo (Lobby) ---"
+echo "Starting subscriber in background..."
+curl -s http://localhost:$PORT/subscribe/lobby/demo &
+SUB_PID=$!
+sleep 1
+echo "Publishing message to demo channel..."
+curl -s -X POST -d "Hello from Pub/Sub test" http://localhost:$PORT/publish/lobby/demo
+wait $SUB_PID
+echo "\nSubscriber received message and exited."
+
 echo "--- Test Completed successfully ---"
 
