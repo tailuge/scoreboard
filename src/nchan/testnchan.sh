@@ -24,27 +24,27 @@ echo "---------------------------------------"
 echo ""
 
 # Cleanup on exit or failure
-trap "echo '--- Shutting down ---'; docker stop $CONTAINER_NAME" EXIT
+trap 'echo "--- Shutting down ---"; docker stop "$CONTAINER_NAME"' EXIT
 
 echo "--- Waiting for image to initialize ---"
 sleep 2
 
-echo "\n\n--- Health Check: /basic_status ---"
+printf "\n\n--- Health Check: /basic_status ---\n"
 curl -s http://localhost:$PORT/basic_status
 
-echo -e "\n\n--- Stats: /nchan_stats ---"
+printf "\n\n--- Stats: /nchan_stats ---\n"
 curl -s http://localhost:$PORT/nchan_stats
 echo ""
 
-echo -e "\n\n--- Index: /index.html ---"
+printf "\n\n--- Index: /index.html ---\n"
 curl -s http://localhost:$PORT/index.html
 echo ""
 
-echo "\n--- Test: Publish to Lobby ---"
+printf "\n--- Test: Publish to Lobby ---\n"
 curl -s -X POST -d "{\"event\": \"test\"}" http://localhost:$PORT/publish/lobby/testchannel
 echo ""
 
-echo "\n--- Test: Pub/Sub Demo (Lobby) ---"
+printf "\n--- Test: Pub/Sub Demo (Lobby) ---\n"
 echo "Starting subscriber in background..."
 curl -s http://localhost:$PORT/subscribe/lobby/demo &
 SUB_PID=$!
@@ -52,7 +52,7 @@ sleep 1
 echo "Publishing message to demo channel..."
 curl -s -X POST -d "Hello from Pub/Sub test" http://localhost:$PORT/publish/lobby/demo
 wait $SUB_PID
-echo "\nSubscriber received message and exited."
+printf "\nSubscriber received message and exited.\n"
 
 echo "--- Test Completed successfully ---"
 
