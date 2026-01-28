@@ -100,12 +100,12 @@ run_curl_tests() {
 	# Extract host for the Host header
 	HOST=$(echo "$BASE_URL" | sed -E 's@^[[:space:]]*https?://([^/]+).*@\1@')
 
-	if curl -s -i -N --max-time 5 \
+	if curl -s -i -N --http1.1 --max-time 5 \
 		-H "Connection: Upgrade" \
 		-H "Upgrade: websocket" \
 		-H "Host: $HOST" \
 		-H "Origin: $BASE_URL" \
-		-H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" \
+		-H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
 		-H "Sec-WebSocket-Version: 13" \
 		"$BASE_URL/subscribe/lobby/handshake" | grep -m 1 "HTTP/1.1 101"; then
 		echo "Handshake successful (HTTP 101 received)"
