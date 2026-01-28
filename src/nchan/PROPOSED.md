@@ -1,118 +1,41 @@
 # Proposed Nchan Deployment Strategy
 
-## Strategy (what we’ll do)
+## Status: [COMPLETED]
+- **Strategy Selection**: Official `nginx:alpine` with dynamic Nchan module. [DONE]
+- **Dockerfile Implementation**: Multi-stage build with security hardening and GCC 15 compatibility. [DONE]
+- **Nginx Configuration**: `nginx.conf` updated for non-root execution and module loading. [DONE]
+- **Local Verification**: Image successfully built as `scoreboard-nchan:latest`. [DONE]
+- **Tooling**: `package.json` updated with efficient build scripts. [DONE]
 
-1.  **Use official nginx:alpine**: Small, secure, and regularly maintained.
-2.  **Build Nchan as a dynamic module**: This allows us to use the official image without re-building all of Nginx.
-3.  **Load it with `load_module`**: Standard Nginx way for dynamic modules.
-4.  **Drop in existing configuration**: Maintain compatibility with current `nchan.conf`.
+---
 
-## Implementation
+## Strategy (what we’ve do)
 
-### Dockerfile
+1.  **Use official nginx:alpine**: Small, secure, and regularly maintained. [DONE]
+2.  **Build Nchan as a dynamic module**: This allows us to use the official image without re-building all of Nginx. [DONE]
+3.  **Load it with `load_module`**: Standard Nginx way for dynamic modules. [DONE]
+4.  **Drop in existing configuration**: Maintain compatibility with current `nchan.conf`. [DONE]
 
-```dockerfile
-# ---------- build stage ----------
-# Use BuildKit for better performance: DOCKER_BUILDKIT=1 docker build .
-FROM nginx:alpine AS builder
+## Implementation Details
 
-# Using a stable version of Nchan
-ARG NCHAN_VERSION=1.3.6
+### Tagging and Versioning Strategy [NEW]
+To maintain compatibility with `render.com` (which pulls `latest`) and adhere to code review best practices (which require explicit versions), the following dual-tagging strategy is adopted:
 
-# Install build dependencies with cache mounting
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache \
-    build-base \
-    pcre2-dev \
-    zlib-dev \
-    openssl-dev \
-    linux-headers \
-    git \
-    wget
+- **Immutable Tags**: Every build is tagged with the version from `package.json` (e.g., `1.0.0`).
+- **Rolling Tags**: Every build is also tagged as `latest` to trigger automated deployments.
 
-# Get nginx source that MATCHES the binary version exactly
-RUN VERSION=$(nginx -v 2>&1 | cut -d '/' -f 2) && \
-    wget http://nginx.org/download/nginx-${VERSION}.tar.gz && \
-    tar zxvf nginx-${VERSION}.tar.gz && \
-    mv nginx-${VERSION} /nginx-src
+#### Updated Scripts in `package.json`:
+```bash
+# Build with dual tags
+docker build -t tailuge/billiards-network:$(node -p "require('./package.json').version") -t tailuge/billiards-network:latest src/nchan
 
-# Get nchan source
-RUN git clone --branch v${NCHAN_VERSION} https://github.com/slact/nchan.git /nchan
-
-WORKDIR /nginx-src
-
-# Compile the module with compatibility flags
-RUN ./configure --with-compat --add-dynamic-module=/nchan && \
-    make modules
-
-# ---------- runtime stage ----------
-FROM nginx:alpine
-
-# Copy nchan module
-COPY --from=builder /nginx-src/objs/ngx_nchan_module.so /etc/nginx/modules/
-
-# Copy custom nginx.conf to load the module
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy site-specific configuration and assets
-# Note: we copy nchan.conf to default.conf to replace the default server block
-COPY nchan.conf /etc/nginx/conf.d/default.conf
-COPY index.html /usr/share/nginx/html/index.html
-
-# Security hardening: ensure nginx has permissions for its files without needing root
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /usr/share/nginx/html /etc/nginx
-
-# Healthcheck to ensure Nchan is responding
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost/basic_status || exit 1
-
-EXPOSE 80
-
-# Run as non-root user
-USER nginx
-
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-### nginx.conf
-
-```nginx
-# Load Nchan dynamic module
-load_module modules/ngx_nchan_module.so;
-
-user nginx;
-worker_processes auto;
-error_log /var/log/nginx/error.log warn;
-pid /var/run/nginx.pid;
-
-events {
-    worker_connections 1024;
-}
-
-http {
-    include       /etc/nginx/mime.types;
-    default_type  application/octet-stream;
-
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" ' 
-                      '"$http_user_agent" "$http_x_forwarded_for"';
-
-    access_log  /var/log/nginx/access.log  main;
-
-    sendfile        on;
-    keepalive_timeout  65;
-
-    # Nchan shared memory configuration (optional, adjust as needed)
-    # nchan_shared_memory_size 128M;
-
-    # Include all configs from conf.d
-    include /etc/nginx/conf.d/*.conf;
-}
+# Push both tags
+docker push tailuge/billiards-network:$(node -p "require('./package.json').version")
+docker push tailuge/billiards-network:latest
 ```
 
 ## Benefits
 - **Smaller Image**: Alpine-based images are significantly smaller than Debian/Ubuntu ones.
-- **Security**: Official images receive faster security updates.
-- **Up-to-date**: We can easily bump Nginx or Nchan versions by updating the `ARG` or the base image tag.
-- **Dynamic**: No need to compile all of Nginx, only the Nchan module.
+- **Security**: Official images receive faster security updates and run as non-root.
+- **Traceability**: Explicit version tags allow for easy rollbacks and auditing.
+- **Automation**: Maintains "push-to-deploy" workflow on Render.
