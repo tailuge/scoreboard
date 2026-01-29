@@ -1,5 +1,5 @@
 #!/bin/bash
-# Minimal Nchan test script following karpathy-guidelines
+# Minimal Nchan test script 
 set -e
 
 # Defaults
@@ -18,7 +18,6 @@ usage() {
 	echo "Usage: $0 [-p]"
 	echo "  -p: Production mode (points to $PROD_BASE_URL)"
 	exit 1
-	return 1
 }
 
 # Parse command line options
@@ -72,23 +71,19 @@ run_curl_tests() {
 	printf "\n--- Health Check: /basic_status ---\n"
 	curl -s --max-time 5 "$BASE_URL/basic_status"
 
-	printf "\n\n--- Stats: /nchan_stats ---
-"
+	printf "\n\n--- Stats: /nchan_stats ---"
 	curl -s --max-time 5 "$BASE_URL/nchan_stats"
 	echo ""
 
-	printf "\n\n--- Index: /index.html ---
-"
+	printf "\n\n--- Index: /index.html ---"
 	curl -s --max-time 5 "$BASE_URL/index.html"
 	echo ""
 
-	printf "\n--- Test: Publish to Lobby ---
-"
+	printf "\n--- Test: Publish to Lobby ---"
 	curl -s --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel"
 	echo ""
 
-	printf "\n--- Test: Pub/Sub Demo (Lobby) ---
-"
+	printf "\n--- Test: Pub/Sub Demo (Lobby) ---"
 	echo "Starting subscriber in background..."
 	curl -s --max-time 5 "$BASE_URL/subscribe/lobby/demo" &
 	SUB_PID=$!
@@ -98,8 +93,7 @@ run_curl_tests() {
 	wait $SUB_PID
 	printf "\nSubscriber received message and exited.\n"
 
-	printf "\n--- Test: WebSocket Handshake (ws/wss) ---
-"
+	printf "\n--- Test: WebSocket Handshake (ws/wss) ---"
 	# Extract host for the Host header
 	HOST=$(echo "$BASE_URL" | sed -E 's@^[[:space:]]*https?://([^/]+).*@\1@')
 
