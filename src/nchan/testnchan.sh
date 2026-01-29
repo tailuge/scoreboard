@@ -18,6 +18,7 @@ usage() {
 	echo "Usage: $0 [-p]"
 	echo "  -p: Production mode (points to $PROD_BASE_URL)"
 	exit 1
+	return 1
 }
 
 # Parse command line options
@@ -34,9 +35,9 @@ while getopts "p" opt; do
 done
 
 setup_docker() {
-	if [ "$PRODUCTION" = true ]; then
+	if [[ "$PRODUCTION" == "true" ]]; then
 		echo "--- Production mode: skipping Docker setup ---"
-		return
+		return 0
 	fi
 
 	echo "--- Building Nchan Docker image ---"
@@ -50,13 +51,15 @@ setup_docker() {
 
 	echo "--- Waiting for image to initialize ---"
 	sleep 2
+	return 0
 }
 
 cleanup() {
-	if [ "$PRODUCTION" = false ]; then
+	if [[ "$PRODUCTION" == "false" ]]; then
 		echo "--- Shutting down local container ---"
 		docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 	fi
+	return 0
 }
 
 run_curl_tests() {
@@ -115,6 +118,7 @@ run_curl_tests() {
 	fi
 
 	echo "--- Test Completed successfully ---"
+	return 0
 }
 
 # Set cleanup trap
