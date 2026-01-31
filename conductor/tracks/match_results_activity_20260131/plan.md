@@ -18,9 +18,9 @@
     - [x] Write tests for `MatchResultCard` solo display in `src/tests/MatchResultCard.test.tsx`
     - [x] Update `src/components/MatchResultCard.tsx` to handle missing `loser`
     - [x] Add `compact` prop to `MatchResultCard` for use in game grids
-- [ ] Task: Create `CompactMatchHistory` component
-    - [ ] Create `src/components/CompactMatchHistory.tsx` that fetches results for a specific `gameType`
-    - [ ] Add tests for `CompactMatchHistory` in `src/tests/CompactMatchHistory.test.tsx`
+- [x] Task: Create `CompactMatchHistory` component (2b0cd98)
+    - [x] Create `src/components/CompactMatchHistory.tsx` that fetches results for a specific `gameType`
+    - [x] Add tests for `CompactMatchHistory` in `src/tests/CompactMatchHistory.test.tsx`
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Component Updates' (Protocol in workflow.md)
 
 ## Phase 3: Integration into game.tsx
