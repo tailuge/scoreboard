@@ -15,7 +15,7 @@ export default async function handler(request: NextRequest) {
 
   switch (method) {
     case "GET":
-      return handleGet()
+      return handleGet(request)
     case "POST":
       return handlePost(request)
     default:
@@ -26,9 +26,13 @@ export default async function handler(request: NextRequest) {
   }
 }
 
-async function handleGet() {
+async function handleGet(request: NextRequest) {
   try {
-    const results = await matchResultService.getMatchResults()
+    const { searchParams } = request.nextUrl
+    const gameType = searchParams.get("gameType") || undefined
+    const limit = parseInt(searchParams.get("limit") || "50", 10)
+
+    const results = await matchResultService.getMatchResults(limit, gameType)
     return Response.json(results)
   } catch (error) {
     logger.log("Error fetching match results:", error)
@@ -41,12 +45,9 @@ async function handlePost(request: NextRequest) {
     const data = await request.json()
 
     // Basic validation
-    if (
-      !data.winner ||
-      !data.loser ||
-      typeof data.winnerScore !== "number" ||
-      typeof data.loserScore !== "number"
-    ) {
+    // winner and winnerScore are required.
+    // loser and loserScore are optional for solo results.
+    if (!data.winner || typeof data.winnerScore !== "number") {
       return new Response("Missing required fields", { status: 400 })
     }
 

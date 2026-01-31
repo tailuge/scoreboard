@@ -57,6 +57,20 @@ describe("/api/match-results handler", () => {
     expect(getSpy).toHaveBeenCalled()
   })
 
+  it("should support gameType filtering on GET request", async () => {
+    const getSpy = jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([])
+
+    req = {
+      method: "GET",
+      nextUrl: new URL("https://localhost/api/match-results?gameType=snooker"),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(getSpy).toHaveBeenCalledWith(50, "snooker")
+  })
+
   it("should add a match result on POST request", async () => {
     const newResult = {
       winner: "A",
@@ -75,6 +89,30 @@ describe("/api/match-results handler", () => {
       method: "POST",
       nextUrl: new URL("https://localhost/api/match-results"),
       json: jest.fn().mockResolvedValue(newResult),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(201)
+    expect(addSpy).toHaveBeenCalled()
+  })
+
+  it("should support solo match result on POST request", async () => {
+    const soloResult = {
+      winner: "A",
+      winnerScore: 10,
+      gameType: "snooker",
+      timestamp: 123,
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
+      .mockResolvedValue(undefined)
+
+    req = {
+      method: "POST",
+      nextUrl: new URL("https://localhost/api/match-results"),
+      json: jest.fn().mockResolvedValue(soloResult),
     } as unknown as NextRequest
 
     const response = await handler(req)
