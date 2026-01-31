@@ -24,9 +24,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: UI Component Updates' (Protocol in workflow.md)
 
 ## Phase 3: Integration into game.tsx
-- [ ] Task: Update `game.tsx` to include match activity
-    - [ ] Modify `src/pages/game.tsx` to include `CompactMatchHistory` under game buttons in the "2-Player Online" section
-    - [ ] Ensure polling is set to 30 seconds (as per spec)
+- [x] Task: Update `game.tsx` to include match activity (7cb4e92)
+    - [x] Modify `src/pages/game.tsx` to include `CompactMatchHistory` under game buttons in the "2-Player Online" section
+    - [x] Ensure polling is set to 30 seconds (as per spec)
 - [ ] Task: Verify overall visual consistency and responsiveness
     - [ ] Run end-to-end tests or manual checks to ensure the layout remains stable on mobile and desktop
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration into game.tsx' (Protocol in workflow.md)
