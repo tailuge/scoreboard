@@ -6,6 +6,7 @@ import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import LeaderboardTable from "@/components/LeaderboardTable"
+import CompactMatchHistory from "@/components/CompactMatchHistory"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
@@ -121,15 +122,17 @@ function GameGrid({
               isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
             }
           />
-          {isHighscore && (
-            <div className="mt-2 w-full h-[84px] text-gray-500 text-sm overflow-hidden">
+          <div className="mt-2 w-full h-[124px] text-gray-500 text-sm overflow-hidden">
+            {isHighscore ? (
               <LeaderboardTable
                 ruleType={game.ruleType}
                 limit={3}
                 compact={true}
               />
-            </div>
-          )}
+            ) : (
+              <CompactMatchHistory gameType={game.ruleType} limit={3} />
+            )}
+          </div>
         </div>
       ))}
     </div>
