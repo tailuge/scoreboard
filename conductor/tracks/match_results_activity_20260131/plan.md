@@ -7,10 +7,10 @@
     - [x] Add tests to `src/tests/MatchResultService.test.ts` for saving/retrieving matches without a loser
 - [x] Task: Implement solo result support in `MatchResultService` (f22f1b4)
     - [x] Ensure `addMatchResult` and `getMatchResults` handle optional fields correctly
-- [ ] Task: Update Match Results API tests for solo results and filtering
-    - [ ] Modify `src/tests/api.match-results.test.ts` to include solo result cases and `gameType` filtering
-- [ ] Task: Enhance Match Results API with filtering
-    - [ ] Update `src/pages/api/match-results.ts` to support `gameType` query parameter
+- [x] Task: Update Match Results API tests for solo results and filtering (b68ba29)
+    - [x] Modify `src/tests/api.match-results.test.ts` to include solo result cases and `gameType` filtering
+- [x] Task: Enhance Match Results API with filtering (b68ba29)
+    - [x] Update `src/pages/api/match-results.ts` to support `gameType` query parameter
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Service Enhancements' (Protocol in workflow.md)
 
 ## Phase 2: UI Component Updates
