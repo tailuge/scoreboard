@@ -1,0 +1,8 @@
+{
+  "track_id": "match_results_activity_20260131",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-31T12:00:00Z",
+  "updated_at": "2026-01-31T12:00:00Z",
+  "description": "Show match results on game.tsx under 2-player online and support 1-player results in MatchResultService."
+}
