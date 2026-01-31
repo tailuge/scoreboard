@@ -3,10 +3,10 @@
 ## Phase 1: Data Model and Service Enhancements
 - [x] Task: Update `MatchResult` interface to support solo results (8749ef5)
     - [x] Modify `src/types/match.ts` to make `loser` and `loserScore` optional
-- [ ] Task: Update `MatchResultService` tests for solo results
-    - [ ] Add tests to `src/tests/MatchResultService.test.ts` for saving/retrieving matches without a loser
-- [ ] Task: Implement solo result support in `MatchResultService`
-    - [ ] Ensure `addMatchResult` and `getMatchResults` handle optional fields correctly
+- [x] Task: Update `MatchResultService` tests for solo results (f22f1b4)
+    - [x] Add tests to `src/tests/MatchResultService.test.ts` for saving/retrieving matches without a loser
+- [x] Task: Implement solo result support in `MatchResultService` (f22f1b4)
+    - [x] Ensure `addMatchResult` and `getMatchResults` handle optional fields correctly
 - [ ] Task: Update Match Results API tests for solo results and filtering
     - [ ] Modify `src/tests/api.match-results.test.ts` to include solo result cases and `gameType` filtering
 - [ ] Task: Enhance Match Results API with filtering
