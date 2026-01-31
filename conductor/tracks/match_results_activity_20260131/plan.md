@@ -14,10 +14,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Service Enhancements' (Protocol in workflow.md)
 
 ## Phase 2: UI Component Updates
-- [ ] Task: Update `MatchResultCard` for Solo and Compact display
-    - [ ] Write tests for `MatchResultCard` solo display in `src/tests/MatchResultCard.test.tsx`
-    - [ ] Update `src/components/MatchResultCard.tsx` to handle missing `loser`
-    - [ ] Add `compact` prop to `MatchResultCard` for use in game grids
+- [x] Task: Update `MatchResultCard` for Solo and Compact display (5688c52)
+    - [x] Write tests for `MatchResultCard` solo display in `src/tests/MatchResultCard.test.tsx`
+    - [x] Update `src/components/MatchResultCard.tsx` to handle missing `loser`
+    - [x] Add `compact` prop to `MatchResultCard` for use in game grids
 - [ ] Task: Create `CompactMatchHistory` component
     - [ ] Create `src/components/CompactMatchHistory.tsx` that fetches results for a specific `gameType`
     - [ ] Add tests for `CompactMatchHistory` in `src/tests/CompactMatchHistory.test.tsx`
