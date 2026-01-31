@@ -30,4 +30,25 @@ describe("MatchResultCard", () => {
     render(<MatchResultCard result={mockResult} />)
     expect(screen.getByText(/snooker/i)).toBeInTheDocument()
   })
+
+  it("renders solo result correctly", () => {
+    const soloResult: MatchResult = {
+      id: "2",
+      winner: "Charlie",
+      winnerScore: 50,
+      gameType: "nineball",
+      timestamp: Date.now(),
+    }
+    render(<MatchResultCard result={soloResult} />)
+    expect(screen.getByText("Charlie")).toBeInTheDocument()
+    expect(screen.queryByText("vs")).not.toBeInTheDocument()
+    expect(screen.getByText("50")).toBeInTheDocument()
+  })
+
+  it("renders in compact mode", () => {
+    render(<MatchResultCard result={mockResult} compact={true} />)
+    // In compact mode we might hide some elements or change style, 
+    // for now just check it still renders
+    expect(screen.getByText("Alice")).toBeInTheDocument()
+  })
 })
