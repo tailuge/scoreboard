@@ -1,0 +1,66 @@
+import React, { useEffect, useState } from "react"
+import { MatchResult } from "@/types/match"
+import { MatchResultCard } from "./MatchResultCard"
+import { logger } from "@/utils/logger"
+
+interface CompactMatchHistoryProps {
+  readonly gameType: string
+  readonly limit?: number
+  readonly pollingInterval?: number
+}
+
+export function CompactMatchHistory({
+  gameType,
+  limit = 3,
+  pollingInterval = 30000,
+}: CompactMatchHistoryProps) {
+  const [results, setResults] = useState<MatchResult[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchResults = async () => {
+    try {
+      const response = await fetch(`/api/match-results?gameType=${gameType}&limit=${limit}`)
+      if (!response.ok) throw new Error("Failed to fetch match history")
+      const data = await response.json()
+      setResults(data)
+    } catch (error) {
+      logger.log(`Error fetching match history for ${gameType}:`, error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchResults()
+    const interval = setInterval(fetchResults, pollingInterval)
+    return () => clearInterval(interval)
+  }, [gameType, limit, pollingInterval])
+
+  if (loading && results.length === 0) {
+    return (
+      <div className="flex flex-col gap-1">
+        {[...Array(limit)].map((_, i) => (
+          <div key={i} className="h-10 bg-gray-800/50 rounded-xl animate-pulse" />
+        ))}
+      </div>
+    )
+  }
+
+  if (results.length === 0) {
+    return (
+      <div className="text-center py-2 text-gray-500 text-[10px] italic">
+        No matches
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      {results.map((result) => (
+        <MatchResultCard key={result.id} result={result} compact={true} />
+      ))}
+    </div>
+  )
+}
+
+export default CompactMatchHistory
