@@ -13,4 +13,16 @@ describe("MatchResult Schema", () => {
     }
     expect(result.winner).toBe("Player1")
   })
+
+  it("should support solo match results (no loser)", () => {
+    const result: MatchResult = {
+      id: "solo-match-id",
+      winner: "SoloPlayer",
+      winnerScore: 100,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+    expect(result.winner).toBe("SoloPlayer")
+    expect(result.loser).toBeUndefined()
+  })
 })

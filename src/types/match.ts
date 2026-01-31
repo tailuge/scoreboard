@@ -1,9 +1,9 @@
 export interface MatchResult {
   id: string
   winner: string
-  loser: string
+  loser?: string
   winnerScore: number
-  loserScore: number
+  loserScore?: number
   gameType: string
   timestamp: number
 }
