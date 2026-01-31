@@ -49,4 +49,48 @@ describe("MatchResultService", () => {
     // Should be latest matches (59 down to 10)
     expect(history[0].id).toBe("match59")
   })
+
+  it("should support adding and retrieving solo match results", async () => {
+    const result: MatchResult = {
+      id: "solo-match",
+      winner: "SoloPlayer",
+      winnerScore: 100,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+
+    await service.addMatchResult(result)
+    const history = await service.getMatchResults()
+
+    expect(history).toHaveLength(1)
+    expect(history[0]).toEqual(result)
+    expect(history[0].loser).toBeUndefined()
+  })
+
+  it("should filter results by gameType", async () => {
+    const match1: MatchResult = {
+      id: "match1",
+      winner: "P1",
+      winnerScore: 10,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+    const match2: MatchResult = {
+      id: "match2",
+      winner: "P2",
+      winnerScore: 20,
+      gameType: "nineball",
+      timestamp: Date.now() + 1,
+    }
+
+    await service.addMatchResult(match1)
+    await service.addMatchResult(match2)
+
+    const snookerOnly = await service.getMatchResults(50, "snooker")
+    expect(snookerOnly).toHaveLength(1)
+    expect(snookerOnly[0].id).toBe("match1")
+
+    const all = await service.getMatchResults()
+    expect(all).toHaveLength(2)
+  })
 })

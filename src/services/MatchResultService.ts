@@ -30,17 +30,20 @@ export class MatchResultService {
   /**
    * Retrieves the match history, sorted by latest first.
    */
-  async getMatchResults(limit: number = HISTORY_LIMIT): Promise<MatchResult[]> {
+  async getMatchResults(
+    limit: number = HISTORY_LIMIT,
+    gameType?: string
+  ): Promise<MatchResult[]> {
     // zrange with negative indices to get latest (highest scores)
     // -1 is the last element, -limit is the limit-th from the end
     const results = await this.store.zrange<MatchResult[]>(KEY, 0, -1, {
       rev: true,
     })
 
-    // Vercel KV's zrange with { rev: true } gives latest first.
-    // If our mock doesn't support { rev: true } yet, we might need to adjust.
-    // Let's check mockkv.ts
+    const filtered = gameType
+      ? results.filter((r) => r.gameType === gameType)
+      : results
 
-    return results.slice(0, limit)
+    return filtered.slice(0, limit)
   }
 }
