@@ -13,7 +13,7 @@
     - [x] Update `src/pages/api/match-results.ts` to support `gameType` query parameter
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Service Enhancements' (Protocol in workflow.md)
 
-## Phase 2: UI Component Updates
+## Phase 2: UI Component Updates [checkpoint: cbff366]
 - [x] Task: Update `MatchResultCard` for Solo and Compact display (5688c52)
     - [x] Write tests for `MatchResultCard` solo display in `src/tests/MatchResultCard.test.tsx`
     - [x] Update `src/components/MatchResultCard.tsx` to handle missing `loser`
@@ -21,7 +21,7 @@
 - [x] Task: Create `CompactMatchHistory` component (2b0cd98)
     - [x] Create `src/components/CompactMatchHistory.tsx` that fetches results for a specific `gameType`
     - [x] Add tests for `CompactMatchHistory` in `src/tests/CompactMatchHistory.test.tsx`
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Component Updates' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Component Updates' (Protocol in workflow.md)
 
 ## Phase 3: Integration into game.tsx
 - [ ] Task: Update `game.tsx` to include match activity
