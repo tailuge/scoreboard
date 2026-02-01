@@ -911,29 +911,29 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@jscpd/badge-reporter@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@jscpd/badge-reporter/-/badge-reporter-4.0.3.tgz"
-  integrity sha512-ZDBQzbVRK2v9U1yxHIkvzbwBMgSHTZM4s0vbiDf9NKBwrpxiAvSYWSwdAtlC8xQeMpJlBNls/cTXakXmiKGb8g==
+"@jscpd/badge-reporter@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@jscpd/badge-reporter/-/badge-reporter-4.0.4.tgz#fa6c6765df56220e69884354dc5358f031950ca0"
+  integrity sha512-I9b4MmLXPM2vo0SxSUWnNGKcA4PjQlD3GzXvFK60z43cN/EIdLbOq3FVwCL+dg2obUqGXKIzAm7EsDFTg0D+mQ==
   dependencies:
     badgen "^3.2.3"
     colors "^1.4.0"
     fs-extra "^11.2.0"
 
-"@jscpd/core@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@jscpd/core/-/core-4.0.3.tgz"
-  integrity sha512-7C//TeHQlyt0Tm/jEynir4VsyWpVmwS6GPzw0mPPhgYE1/5F6knYYWQiwUZEEAEfNwkwW3EoG4YcKPAkdOJISA==
+"@jscpd/core@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@jscpd/core/-/core-4.0.4.tgz#ead3bbd413460823c36b931e05d2bcd7a8830e95"
+  integrity sha512-QGMT3iXEX1fI6lgjPH+x8eyJwhwr2KkpSF5uBpjC0Z5Xloj0yFTFLtwJT+RhxP/Ob4WYrtx2jvpKB269oIwgMQ==
   dependencies:
     eventemitter3 "^5.0.1"
 
-"@jscpd/finder@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@jscpd/finder/-/finder-4.0.3.tgz"
-  integrity sha512-qHi5jlG/8s2uF3Kr6QX1zZEwpj8L8RRHSHQekQxOyqm9sgWqXaaIgoR1+dZqn+XhQWFXhY8CKrrFS9T6u6GKUg==
+"@jscpd/finder@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@jscpd/finder/-/finder-4.0.4.tgz#30be5b35c83fc0ddac8341d4930a48e7be7e9020"
+  integrity sha512-qVUWY7Nzuvfd5OIk+n7/5CM98LmFroLqblRXAI2gDABwZrc7qS+WH2SNr0qoUq0f4OqwM+piiwKvwL/VDNn/Cg==
   dependencies:
-    "@jscpd/core" "4.0.3"
-    "@jscpd/tokenizer" "4.0.3"
+    "@jscpd/core" "4.0.4"
+    "@jscpd/tokenizer" "4.0.4"
     blamer "^1.0.6"
     bytes "^3.1.2"
     cli-table3 "^0.6.5"
@@ -943,21 +943,21 @@
     markdown-table "^2.0.0"
     pug "^3.0.3"
 
-"@jscpd/html-reporter@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@jscpd/html-reporter/-/html-reporter-4.0.3.tgz"
-  integrity sha512-1WxywVjdx35Kd1X1S2gfMJ9Tod1NDDMpmctP9ybVZURjq3xdShDiShg5ry2kj+1qOBqMnMVvc21r9AD+IwEK2g==
+"@jscpd/html-reporter@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@jscpd/html-reporter/-/html-reporter-4.0.4.tgz#4cf290064606f02841833cfe9594bbea92b0c942"
+  integrity sha512-YiepyeYkeH74Kx59PJRdUdonznct0wHPFkf6FLQN+mCBoy6leAWCcOfHtcexnp+UsBFDlItG5nRdKrDSxSH+Kg==
   dependencies:
     colors "1.4.0"
     fs-extra "^11.2.0"
     pug "^3.0.3"
 
-"@jscpd/tokenizer@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.npmjs.org/@jscpd/tokenizer/-/tokenizer-4.0.3.tgz"
-  integrity sha512-EosztK2+i2TPnLZuroC5jfvSPVuSDRsPtrAOL2UhwNttcK3L8F0/ERih6zRySMNUgL77OOhch5QX0I3YE8HLcQ==
+"@jscpd/tokenizer@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@jscpd/tokenizer/-/tokenizer-4.0.4.tgz#8075ce426d2c2180103ed150e63d2c485910e007"
+  integrity sha512-xxYYY/qaLah/FlwogEbGIxx9CjDO+G9E6qawcy26WwrflzJb6wsnhjwdneN6Wb0RNCDsqvzY+bzG453jsin4UQ==
   dependencies:
-    "@jscpd/core" "4.0.3"
+    "@jscpd/core" "4.0.4"
     reprism "^0.0.11"
     spark-md5 "^3.0.2"
 
@@ -1107,12 +1107,12 @@
   resolved "https://registry.npmjs.org/@pkgr/core/-/core-0.2.9.tgz"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@playwright/test@1.58.0":
-  version "1.58.0"
-  resolved "https://registry.npmjs.org/@playwright/test/-/test-1.58.0.tgz"
-  integrity sha512-fWza+Lpbj6SkQKCrU6si4iu+fD2dD3gxNHFhUPxsfXBPhnv3rRSQVd0NtBUT9Z/RhF/boCBcuUaMUSTRTopjZg==
+"@playwright/test@1.58.1":
+  version "1.58.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.58.1.tgz#891dcd1da815cb1042490531f6d8778988509d22"
+  integrity sha512-6LdVIUERWxQMmUSSQi0I53GgCBYgM2RpGngCPY7hSeju+VrKjq3lvs7HpJoPbDiY5QM5EYRtRX5fvrinnMAz3w==
   dependencies:
-    playwright "1.58.0"
+    playwright "1.58.1"
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"
@@ -4190,30 +4190,30 @@ js-yaml@^4.1.1:
   dependencies:
     argparse "^2.0.1"
 
-jscpd-sarif-reporter@4.0.5:
-  version "4.0.5"
-  resolved "https://registry.npmjs.org/jscpd-sarif-reporter/-/jscpd-sarif-reporter-4.0.5.tgz"
-  integrity sha512-cD1MtUdpomUPM5C0YD0vKZmdj+Gyr0KD5Bk47yGMrPCtwtgsK+7v59OzBIUjYOL8AuxNAt6hvPFo0PH+PYJh0Q==
+jscpd-sarif-reporter@4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/jscpd-sarif-reporter/-/jscpd-sarif-reporter-4.0.6.tgz#6f740de78c00c365251a96e964fe5079bf0ea5e1"
+  integrity sha512-b9Sm3IPZ3+m8Lwa4gZa+4/LhDhlc/ZLEsLXKSOy1DANQ6kx0ueqZT+fUHWEdQ6m0o3+RIVIa7DmvLSojQD05ng==
   dependencies:
     colors "^1.4.0"
     fs-extra "^11.2.0"
-    node-sarif-builder "^3.1.0"
+    node-sarif-builder "^3.4.0"
 
-jscpd@4.0.7:
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/jscpd/-/jscpd-4.0.7.tgz"
-  integrity sha512-ftw3OKgJUmAoS48TqeNOPRQbBdzzapKPF7L8auMKAp04kdOtoUuMonjVN0mruzb0zWObsh6CIWM78fzeeU29AA==
+jscpd@4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/jscpd/-/jscpd-4.0.8.tgz#638f6ff7aeaf5b913ff2b7fa444fe340d7acc24e"
+  integrity sha512-d2VNT/2Hv4dxT2/59He8Lyda4DYOxPRyRG9zBaOpTZAqJCVf2xLrBlZkT8Va6Lo9u3X2qz8Bpq4HrDi4JsrQhA==
   dependencies:
-    "@jscpd/badge-reporter" "4.0.3"
-    "@jscpd/core" "4.0.3"
-    "@jscpd/finder" "4.0.3"
-    "@jscpd/html-reporter" "4.0.3"
-    "@jscpd/tokenizer" "4.0.3"
+    "@jscpd/badge-reporter" "4.0.4"
+    "@jscpd/core" "4.0.4"
+    "@jscpd/finder" "4.0.4"
+    "@jscpd/html-reporter" "4.0.4"
+    "@jscpd/tokenizer" "4.0.4"
     colors "^1.4.0"
     commander "^5.0.0"
     fs-extra "^11.2.0"
     gitignore-to-glob "^0.3.0"
-    jscpd-sarif-reporter "4.0.5"
+    jscpd-sarif-reporter "4.0.6"
 
 jsdom@^26.1.0:
   version "26.1.0"
@@ -4657,9 +4657,9 @@ node-releases@^2.0.27:
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.27.tgz"
   integrity sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==
 
-node-sarif-builder@^3.1.0:
+node-sarif-builder@^3.4.0:
   version "3.4.0"
-  resolved "https://registry.npmjs.org/node-sarif-builder/-/node-sarif-builder-3.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/node-sarif-builder/-/node-sarif-builder-3.4.0.tgz#9c1ac026919f5977e1014f0e26d4f69f0f45becd"
   integrity sha512-tGnJW6OKRii9u/b2WiUViTJS+h7Apxx17qsMUjsUeNDiMMX5ZFf8F8Fcz7PAQ6omvOxHZtvDTmOYKJQwmfpjeg==
   dependencies:
     "@types/sarif" "^2.1.7"
@@ -4914,17 +4914,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.58.0:
-  version "1.58.0"
-  resolved "https://registry.npmjs.org/playwright-core/-/playwright-core-1.58.0.tgz"
-  integrity sha512-aaoB1RWrdNi3//rOeKuMiS65UCcgOVljU46At6eFcOFPFHWtd2weHRRow6z/n+Lec0Lvu0k9ZPKJSjPugikirw==
+playwright-core@1.58.1:
+  version "1.58.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.58.1.tgz#d63be2c9b7dcbdb035beddd4b42437bd3ca89107"
+  integrity sha512-bcWzOaTxcW+VOOGBCQgnaKToLJ65d6AqfLVKEWvexyS3AS6rbXl+xdpYRMGSRBClPvyj44njOWoxjNdL/H9UNg==
 
-playwright@1.58.0:
-  version "1.58.0"
-  resolved "https://registry.npmjs.org/playwright/-/playwright-1.58.0.tgz"
-  integrity sha512-2SVA0sbPktiIY/MCOPX8e86ehA/e+tDNq+e5Y8qjKYti2Z/JG7xnronT/TXTIkKbYGWlCbuucZ6dziEgkoEjQQ==
+playwright@1.58.1:
+  version "1.58.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.58.1.tgz#63300e77a604c77264e1b499c0d94b54ed96d6ba"
+  integrity sha512-+2uTZHxSCcxjvGc5C891LrS1/NlxglGxzrC4seZiVjcYVQfUa87wBL6rTDqzGjuoWNjnBzRqKmF6zRYGMvQUaQ==
   dependencies:
-    playwright-core "1.58.0"
+    playwright-core "1.58.1"
   optionalDependencies:
     fsevents "2.3.2"
 

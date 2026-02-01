@@ -54,9 +54,10 @@ async function handlePost(request: NextRequest) {
     }
 
     const newResult = {
+      gameType: "nineball",
       ...data,
-      id: data.id || getUID(),
-      timestamp: data.timestamp || Date.now(),
+      id: getUID(),
+      timestamp: Date.now(),
     }
 
     await matchResultService.addMatchResult(newResult)

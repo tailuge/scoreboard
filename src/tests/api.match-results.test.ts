@@ -94,7 +94,17 @@ describe("/api/match-results handler", () => {
     const response = await handler(req)
 
     expect(response.status).toBe(201)
-    expect(addSpy).toHaveBeenCalled()
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        winner: "A",
+        loser: "B",
+        winnerScore: 10,
+        loserScore: 5,
+        gameType: "snooker",
+        id: expect.any(String),
+        timestamp: expect.any(Number),
+      })
+    )
   })
 
   it("should support solo match result on POST request", async () => {
@@ -118,7 +128,45 @@ describe("/api/match-results handler", () => {
     const response = await handler(req)
 
     expect(response.status).toBe(201)
-    expect(addSpy).toHaveBeenCalled()
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        winner: "A",
+        winnerScore: 10,
+        gameType: "snooker",
+        id: expect.any(String),
+        timestamp: expect.any(Number),
+      })
+    )
+  })
+
+  it("should default gameType to nineball on POST request if missing", async () => {
+    const resultNoGameType = {
+      winner: "A",
+      winnerScore: 10,
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
+      .mockResolvedValue(undefined)
+
+    req = {
+      method: "POST",
+      nextUrl: new URL("https://localhost/api/match-results"),
+      json: jest.fn().mockResolvedValue(resultNoGameType),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(201)
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        winner: "A",
+        winnerScore: 10,
+        gameType: "nineball",
+        id: expect.any(String),
+        timestamp: expect.any(Number),
+      })
+    )
   })
 
   it("should return 400 if required fields are missing in POST request", async () => {
