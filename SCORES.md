@@ -12,6 +12,9 @@ Retrieves the most recent match results, sorted by completion time (newest first
 
 - **Endpoint:** `/match-results`
 - **Method:** `GET`
+- **Query Parameters:**
+  - `gameType` (string, optional): Filter by game type (e.g., `snooker`, `nineball`, `threecushion`).
+  - `limit` (number, optional): Limit the number of results returned (default: 10, max: 50).
 - **Response Format:** JSON Array of `MatchResult` objects
 
 **Example Response:**
