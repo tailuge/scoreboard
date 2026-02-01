@@ -19,9 +19,9 @@ export function MatchResultCard({
     <div
       className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "p-2"} gap-4`}
     >
-      <div className="flex items-center gap-2 overflow-hidden">
+      <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
-          <span className={compact ? "scale-75 origin-left inline-block" : "text-xl"}>
+          <span className={compact ? "scale-75 origin-left inline-block" : "text-lg"}>
             🏆
           </span>
         </div>
