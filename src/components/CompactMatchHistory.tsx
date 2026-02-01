@@ -40,11 +40,11 @@ export function CompactMatchHistory({
 
   if (loading && results.length === 0) {
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col">
         {[...Array(limit)].map((_, i) => (
           <div
             key={i}
-            className="h-10 bg-gray-800/50 rounded-xl animate-pulse"
+            className="h-8 border-b border-gray-800/50 animate-pulse"
           />
         ))}
       </div>
@@ -60,7 +60,7 @@ export function CompactMatchHistory({
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
       {results.map((result) => (
         <MatchResultCard key={result.id} result={result} compact={true} />
       ))}
