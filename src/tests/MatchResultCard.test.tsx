@@ -22,8 +22,8 @@ describe("MatchResultCard", () => {
 
   it("renders scores", () => {
     render(<MatchResultCard result={mockResult} />)
-    expect(screen.getByText("100")).toBeInTheDocument()
-    expect(screen.getByText("85")).toBeInTheDocument()
+    expect(screen.getByText("(100)")).toBeInTheDocument()
+    expect(screen.getByText("(85)")).toBeInTheDocument()
   })
 
   it("renders game type", () => {

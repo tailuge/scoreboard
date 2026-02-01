@@ -26,21 +26,31 @@ export function MatchResultCard({
           </span>
         </div>
         <div className="flex flex-col min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span
-              className={`font-bold text-gray-200 truncate ${compact ? "text-[11px]" : "text-sm"}`}
-            >
-              {result.winner}
-            </span>
-            {result.loser && (
+          <div className="flex items-center gap-1.5 min-w-0">
+            {result.loser ? (
               <>
-                <span className="text-gray-500 text-[10px]">vs</span>
+                <span
+                  className={`font-semibold text-gray-100 truncate ${compact ? "text-[11px]" : "text-sm"}`}
+                >
+                  {result.winner}{" "}
+                  <span className="text-gray-400 font-normal">
+                    ({result.winnerScore})
+                  </span>
+                </span>
+                <span className="text-gray-500 text-[10px] flex-shrink-0">vs</span>
                 <span
                   className={`text-gray-400 truncate ${compact ? "text-[11px]" : "text-sm"}`}
                 >
-                  {result.loser}
+                  {result.loser}{" "}
+                  <span className="text-gray-500">({result.loserScore})</span>
                 </span>
               </>
+            ) : (
+              <span
+                className={`font-bold text-gray-200 truncate ${compact ? "text-[11px]" : "text-sm"}`}
+              >
+                {result.winner}
+              </span>
             )}
           </div>
           <div
@@ -58,12 +68,8 @@ export function MatchResultCard({
       <div
         className={`flex items-center gap-1.5 font-mono ${compact ? "text-[11px]" : "text-sm"}`}
       >
-        <span className="text-green-400/80 font-bold">{result.winnerScore}</span>
-        {result.loserScore !== undefined && (
-          <>
-            <span className="text-gray-600">-</span>
-            <span className="text-gray-500">{result.loserScore}</span>
-          </>
+        {!result.loser && (
+          <span className="text-green-400/80 font-bold">{result.winnerScore}</span>
         )}
       </div>
     </div>
