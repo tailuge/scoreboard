@@ -31,6 +31,11 @@ describe("MatchResultCard", () => {
     expect(screen.getByText(/snooker/i)).toBeInTheDocument()
   })
 
+  it("renders trophy emoji", () => {
+    render(<MatchResultCard result={mockResult} />)
+    expect(screen.getByText("🏆")).toBeInTheDocument()
+  })
+
   it("renders solo result correctly", () => {
     const soloResult: MatchResult = {
       id: "2",

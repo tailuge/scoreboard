@@ -1,6 +1,5 @@
 import React from "react"
 import { MatchResult } from "@/types/match"
-import { TrophyIcon } from "@heroicons/react/24/solid"
 
 interface MatchResultCardProps {
   readonly result: MatchResult
@@ -22,9 +21,7 @@ export function MatchResultCard({
     >
       <div className="flex items-center gap-3 overflow-hidden">
         <div className="flex-shrink-0">
-          <TrophyIcon
-            className={`h-5 w-5 text-yellow-500 ${compact ? "h-4 w-4" : ""}`}
-          />
+          <span className={compact ? "text-sm" : "text-xl"}>🏆</span>
         </div>
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-2">
