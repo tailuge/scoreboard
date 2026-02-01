@@ -24,5 +24,5 @@ Align `MatchHistoryList` and `MatchResultCard` with the high scores table style 
 
 ## Phase 4: Documentation & Final Verification
 - [x] Task: Update `SCORES.md` with current `/api/match-results` usage (query params: `gameType`, `limit`) [062895f].
-- [ ] Task: Perform manual verification on `game.tsx` and the main lobby/match history page.
-- [ ] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md)
+- [x] Task: Perform manual verification on `game.tsx` and the main lobby/match history page.
+- [x] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md)
