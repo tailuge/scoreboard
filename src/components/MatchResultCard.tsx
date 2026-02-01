@@ -17,24 +17,26 @@ export function MatchResultCard({
 
   return (
     <div
-      className={`flex items-center justify-between p-3 rounded-xl bg-gray-900/40 border border-gray-700/30 hover:border-gray-600/50 transition-colors gap-4 ${compact ? "py-2 px-3" : ""}`}
+      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "p-2"} gap-4`}
     >
-      <div className="flex items-center gap-3 overflow-hidden">
+      <div className="flex items-center gap-2 overflow-hidden">
         <div className="flex-shrink-0">
-          <span className={compact ? "text-sm" : "text-xl"}>🏆</span>
+          <span className={compact ? "scale-75 origin-left inline-block" : "text-xl"}>
+            🏆
+          </span>
         </div>
         <div className="flex flex-col min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <span
-              className={`font-bold text-gray-200 truncate ${compact ? "text-xs" : ""}`}
+              className={`font-bold text-gray-200 truncate ${compact ? "text-[11px]" : "text-sm"}`}
             >
               {result.winner}
             </span>
             {result.loser && (
               <>
-                <span className="text-gray-500 text-xs">vs</span>
+                <span className="text-gray-500 text-[10px]">vs</span>
                 <span
-                  className={`text-gray-400 truncate ${compact ? "text-xs" : ""}`}
+                  className={`text-gray-400 truncate ${compact ? "text-[11px]" : "text-sm"}`}
                 >
                   {result.loser}
                 </span>
@@ -42,25 +44,25 @@ export function MatchResultCard({
             )}
           </div>
           <div
-            className={`text-[10px] text-gray-500 uppercase tracking-wider ${compact ? "hidden" : ""}`}
+            className={`text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
             {result.gameType} • {formattedTime}
           </div>
           {compact && (
-            <div className="text-[8px] text-gray-500 uppercase tracking-wider">
+            <div className="text-[8px] text-gray-500/70 uppercase tracking-tight">
               {formattedTime}
             </div>
           )}
         </div>
       </div>
       <div
-        className={`flex items-center gap-2 font-mono ${compact ? "text-xs" : "text-sm"}`}
+        className={`flex items-center gap-1.5 font-mono ${compact ? "text-[11px]" : "text-sm"}`}
       >
-        <span className="text-green-400 font-bold">{result.winnerScore}</span>
+        <span className="text-green-400/80 font-bold">{result.winnerScore}</span>
         {result.loserScore !== undefined && (
           <>
             <span className="text-gray-600">-</span>
-            <span className="text-gray-400">{result.loserScore}</span>
+            <span className="text-gray-500">{result.loserScore}</span>
           </>
         )}
       </div>

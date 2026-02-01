@@ -36,6 +36,13 @@ describe("MatchResultCard", () => {
     expect(screen.getByText("🏆")).toBeInTheDocument()
   })
 
+  it("has the correct border classes", () => {
+    const { container } = render(<MatchResultCard result={mockResult} />)
+    const card = container.firstChild as HTMLElement
+    expect(card).toHaveClass("border-b")
+    expect(card).toHaveClass("border-gray-800")
+  })
+
   it("renders solo result correctly", () => {
     const soloResult: MatchResult = {
       id: "2",
