@@ -31,9 +31,19 @@ describe("MatchResultCard", () => {
     expect(screen.getByText(/snooker/i)).toBeInTheDocument()
   })
 
-  it("renders trophy emoji", () => {
-    render(<MatchResultCard result={mockResult} />)
+  it("renders trophy emoji only for solo results", () => {
+    const soloResult: MatchResult = {
+      id: "2",
+      winner: "Charlie",
+      winnerScore: 50,
+      gameType: "nineball",
+      timestamp: Date.now(),
+    }
+    const { rerender } = render(<MatchResultCard result={soloResult} />)
     expect(screen.getByText("🏆")).toBeInTheDocument()
+
+    rerender(<MatchResultCard result={mockResult} />)
+    expect(screen.queryByText("🏆")).not.toBeInTheDocument()
   })
 
   it("has the correct border classes", () => {
