@@ -16,6 +16,8 @@ export default async function handler(
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
+  } else if (req.method === "OPTIONS") {
+    res.status(200).end()
   } else {
     res.status(405).json({ error: "Method not allowed" })
   }

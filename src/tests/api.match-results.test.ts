@@ -154,18 +154,26 @@ describe("/api/match-results handler", () => {
     req = {
       method: "POST",
       nextUrl: new URL("https://localhost/api/match-results"),
-      json: jest
-        .fn()
-        .mockResolvedValue({
-          winner: "A",
-          loser: "B",
-          winnerScore: 10,
-          loserScore: 5,
-        }),
+      json: jest.fn().mockResolvedValue({
+        winner: "A",
+        loser: "B",
+        winnerScore: 10,
+        loserScore: 5,
+      }),
     } as unknown as NextRequest
 
     const response = await handler(req)
     expect(response.status).toBe(500)
+  })
+
+  it("should return 200 for OPTIONS request", async () => {
+    req = {
+      method: "OPTIONS",
+      nextUrl: new URL("https://localhost/api/match-results"),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    expect(response.status).toBe(200)
   })
 
   it("should return 405 for unsupported methods", async () => {

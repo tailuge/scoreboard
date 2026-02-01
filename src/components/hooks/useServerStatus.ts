@@ -10,7 +10,10 @@ export interface ServerStatusState {
   activeUsers: number | null
 }
 
-export function useServerStatus(statusPage: string, enableSubscription: boolean = true) {
+export function useServerStatus(
+  statusPage: string,
+  enableSubscription: boolean = true
+) {
   const { lastMessage } = useLobbyContext()
   const [state, setState] = useState<ServerStatusState>({
     serverStatus: null,

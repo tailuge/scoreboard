@@ -19,7 +19,9 @@ export function CompactMatchHistory({
 
   const fetchResults = async () => {
     try {
-      const response = await fetch(`/api/match-results?gameType=${gameType}&limit=${limit}`)
+      const response = await fetch(
+        `/api/match-results?gameType=${gameType}&limit=${limit}`
+      )
       if (!response.ok) throw new Error("Failed to fetch match history")
       const data = await response.json()
       setResults(data)
@@ -40,7 +42,10 @@ export function CompactMatchHistory({
     return (
       <div className="flex flex-col gap-1">
         {[...Array(limit)].map((_, i) => (
-          <div key={i} className="h-10 bg-gray-800/50 rounded-xl animate-pulse" />
+          <div
+            key={i}
+            className="h-10 bg-gray-800/50 rounded-xl animate-pulse"
+          />
         ))}
       </div>
     )

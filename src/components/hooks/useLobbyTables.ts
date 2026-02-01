@@ -38,7 +38,10 @@ export function useLobbyTables(
   }, [fetchTables, enableSubscription, lastMessage])
 
   const tableAction = useCallback(
-    async (tableId: string, action: "join" | "spectate"): Promise<Table | null> => {
+    async (
+      tableId: string,
+      action: "join" | "spectate"
+    ): Promise<Table | null> => {
       if (!userId || !userName) return null
       try {
         const response = await fetch(`/api/tables/${tableId}/${action}`, {

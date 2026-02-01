@@ -28,7 +28,9 @@ export function useAutoJoin(
 
     if (action === "join" && gameType) {
       hasHandledAutoJoin.current = true
-      const existingTable = tables.find((t) => t.ruleType === gameType && !t.completed)
+      const existingTable = tables.find(
+        (t) => t.ruleType === gameType && !t.completed
+      )
 
       if (existingTable) {
         handleJoin(existingTable.id)

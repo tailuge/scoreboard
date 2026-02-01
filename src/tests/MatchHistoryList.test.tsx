@@ -54,7 +54,9 @@ describe("MatchHistoryList", () => {
   })
 
   it("handles fetch error gracefully", async () => {
-    ;(globalThis.fetch as jest.Mock).mockRejectedValue(new Error("Fetch failed"))
+    ;(globalThis.fetch as jest.Mock).mockRejectedValue(
+      new Error("Fetch failed")
+    )
     render(<MatchHistoryList />)
     // Should still show loading or just not crash.
     // In our implementation it just logs and stays in loading/empty state.

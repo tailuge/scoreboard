@@ -18,5 +18,7 @@ export default async function handler(
     const newTable = await tableService.createTable(userId, userName, ruleType)
     markUsageFromServer("createTable")
     res.status(201).json(newTable)
+  } else if (req.method === "OPTIONS") {
+    res.status(200).end()
   }
 }

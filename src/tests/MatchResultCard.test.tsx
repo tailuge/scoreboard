@@ -47,7 +47,7 @@ describe("MatchResultCard", () => {
 
   it("renders in compact mode", () => {
     render(<MatchResultCard result={mockResult} compact={true} />)
-    // In compact mode we might hide some elements or change style, 
+    // In compact mode we might hide some elements or change style,
     // for now just check it still renders
     expect(screen.getByText("Alice")).toBeInTheDocument()
   })

@@ -62,5 +62,9 @@ export default async function handler(
     return DELETE(request, { params: { tableId: ctx.params?.tableId || "" } })
   }
 
+  if (method === "OPTIONS") {
+    return new Response(null, { status: 200 })
+  }
+
   return Response.json({ error: "Method not allowed" }, { status: 405 })
 }

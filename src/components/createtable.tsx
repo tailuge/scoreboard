@@ -3,11 +3,7 @@ import { useServerStatus } from "./hooks/useServerStatus"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 import { useUser } from "@/contexts/UserContext"
 
-export function CreateTable({
-  onCreate,
-}: {
-  readonly onCreate: () => void
-}) {
+export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
   const { userId, userName } = useUser()
   const [isLoading, setIsLoading] = useState(false)
   const [ruleType, setRuleType] = useState("nineball")

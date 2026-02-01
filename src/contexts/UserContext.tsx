@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react"
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react"
 import { getUID } from "@/utils/uid"
 import { useRouter } from "next/router"
 
@@ -10,7 +17,11 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
-export function UserProvider({ children }: { readonly children: React.ReactNode }) {
+export function UserProvider({
+  children,
+}: {
+  readonly children: React.ReactNode
+}) {
   const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("")
   const router = useRouter()
@@ -20,11 +31,12 @@ export function UserProvider({ children }: { readonly children: React.ReactNode 
 
     const storedUserId = getUID()
     const urlUserName = router.query.username as string
-    const storedUserName = urlUserName || localStorage.getItem("userName") || "Anonymous"
+    const storedUserName =
+      urlUserName || localStorage.getItem("userName") || "Anonymous"
 
     setUserId(storedUserId)
     setUserName(storedUserName)
-    
+
     localStorage.setItem("userId", storedUserId)
     localStorage.setItem("userName", storedUserName)
   }, [router.isReady, router.query.username])
@@ -34,16 +46,17 @@ export function UserProvider({ children }: { readonly children: React.ReactNode 
     localStorage.setItem("userName", name)
   }, [])
 
-  const contextValue = useMemo(() => ({
-    userId,
-    userName,
-    setUserName: handleSetUserName
-  }), [userId, userName, handleSetUserName])
+  const contextValue = useMemo(
+    () => ({
+      userId,
+      userName,
+      setUserName: handleSetUserName,
+    }),
+    [userId, userName, handleSetUserName]
+  )
 
   return (
-    <UserContext.Provider value={contextValue}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   )
 }
 

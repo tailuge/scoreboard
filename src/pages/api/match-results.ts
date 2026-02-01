@@ -18,10 +18,12 @@ export default async function handler(request: NextRequest) {
       return handleGet(request)
     case "POST":
       return handlePost(request)
+    case "OPTIONS":
+      return new Response(null, { status: 200 })
     default:
       return new Response(`Method ${method} Not Allowed`, {
         status: 405,
-        headers: { Allow: "GET, POST" },
+        headers: { Allow: "GET, POST, OPTIONS" },
       })
   }
 }
