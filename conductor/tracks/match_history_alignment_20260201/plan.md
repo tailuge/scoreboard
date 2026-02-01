@@ -1,4 +1,4 @@
-# Implementation Plan: Match History Visual Alignment
+# Implementation Plan: Match History Visual Alignment [checkpoint: 90a0242]
 
 Align `MatchHistoryList` and `MatchResultCard` with the high scores table style from `game.tsx`.
 
