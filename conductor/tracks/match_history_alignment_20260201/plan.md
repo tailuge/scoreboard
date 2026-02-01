@@ -16,10 +16,10 @@ Align `MatchHistoryList` and `MatchResultCard` with the high scores table style 
 - [ ] Task: Conductor - User Manual Verification 'Refactor MatchResultCard' (Protocol in workflow.md)
 
 ## Phase 3: Refactor MatchHistoryList & CompactMatchHistory
-- [ ] Task: Adjust `MatchHistoryList.tsx` container styling (remove `gap` if necessary to favor row borders).
-- [ ] Task: Adjust `CompactMatchHistory.tsx` to ensure consistent spacing with the new row borders.
-- [ ] Task: Write Tests: Verify `MatchHistoryList` renders children with proper separation.
-- [ ] Task: Implement: Update `MatchHistoryList.tsx` and `CompactMatchHistory.tsx`.
+- [x] Task: Adjust `MatchHistoryList.tsx` container styling (remove `gap` if necessary to favor row borders) [9c3c5dd].
+- [x] Task: Adjust `CompactMatchHistory.tsx` to ensure consistent spacing with the new row borders [9c3c5dd].
+- [x] Task: Write Tests: Verify `MatchHistoryList` renders children with proper separation.
+- [x] Task: Implement: Update `MatchHistoryList.tsx` and `CompactMatchHistory.tsx`.
 - [ ] Task: Conductor - User Manual Verification 'Refactor MatchHistoryList & CompactMatchHistory' (Protocol in workflow.md)
 
 ## Phase 4: Documentation & Final Verification
