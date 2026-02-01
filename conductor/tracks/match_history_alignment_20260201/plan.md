@@ -9,10 +9,10 @@ Align `MatchHistoryList` and `MatchResultCard` with the high scores table style 
 
 ## Phase 2: Refactor MatchResultCard
 - [x] Task: Replace `TrophyIcon` with 🏆 emoji in `MatchResultCard.tsx` [3b9a713]
-- [ ] Task: Update `MatchResultCard` layout to use `border-b border-gray-800` and align padding with `LeaderboardTable`.
-- [ ] Task: Verify `MatchResultCard` styling in both `compact` and standard modes.
-- [ ] Task: Write Tests: Verify `MatchResultCard` renders the trophy emoji and has the correct border class.
-- [ ] Task: Implement: Apply styling changes to `MatchResultCard.tsx`.
+- [x] Task: Update `MatchResultCard` layout to use `border-b border-gray-800` and align padding with `LeaderboardTable` [3141e5c].
+- [x] Task: Verify `MatchResultCard` styling in both `compact` and standard modes.
+- [x] Task: Write Tests: Verify `MatchResultCard` renders the trophy emoji and has the correct border class.
+- [x] Task: Implement: Apply styling changes to `MatchResultCard.tsx`.
 - [ ] Task: Conductor - User Manual Verification 'Refactor MatchResultCard' (Protocol in workflow.md)
 
 ## Phase 3: Refactor MatchHistoryList & CompactMatchHistory
