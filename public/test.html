@@ -1,62 +1,76 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>multiplayer test helper</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
-      .container {
-        display: flex;
-        flex: 1;
-        flex-wrap: wrap;
-      }
-      .panel {
-        flex: 1 1 300px; /* Each panel takes up a minimum of 300px and grows */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #ccc;
-        position: relative;
-      }
-      .panel:nth-child(1) {
-        background: #f8b400;
-      }
-      .panel:nth-child(2) {
-        background: #34a853;
-      }
-      .panel:nth-child(3) {
-        background: #4285f4;
-      }
-      .panel iframe {
-        width: 99.5%;
-        height: 99.5%;
-        border: none; /* Remove border from iframe */
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="panel">
-        <iframe src="/lobby?username=user1"></iframe>
-      </div>
-      <div class="panel">
-        <iframe src="/lobby?username=user2"></iframe>
-      </div>
-      <div class="panel" id="panel3">
-        <button onclick="document.getElementById('panel3').remove()" style="position: absolute; top: 10px; right: 10px; z-index: 10;">X</button>
-        <iframe src="/lobby?username=user3"></iframe>
-      </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>multiplayer test helper</title>
+  <link rel="icon" type="image/png" href="golden-cup.png" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .panel {
+      flex: 1 1 300px;
+      /* Each panel takes up a minimum of 300px and grows */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+
+    .panel:nth-child(1) {
+      background: #f8b400;
+    }
+
+    .panel:nth-child(2) {
+      background: #34a853;
+    }
+
+    .panel:nth-child(3) {
+      background: #4285f4;
+    }
+
+    .panel iframe {
+      width: 99.5%;
+      height: 99.5%;
+      border: none;
+      /* Remove border from iframe */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="panel">
+      <iframe src="/lobby?username=user1"></iframe>
     </div>
-  </body>
+    <div class="panel">
+      <iframe src="/lobby?username=user2"></iframe>
+    </div>
+    <div class="panel" id="panel3">
+      <button onclick="document.getElementById('panel3').remove()"
+        style="position: absolute; top: 10px; right: 10px; z-index: 10;">X</button>
+      <iframe src="/lobby?username=user3"></iframe>
+    </div>
+  </div>
+</body>
+
 </html>
