@@ -84,9 +84,6 @@ export default function Lobby() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
-      <Head>
-        <link rel="icon" href="/favicon.png" />
-      </Head>
       <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
           <GroupBox

@@ -9,7 +9,6 @@ const LeaderboardPage: React.FC = () => {
       <Head>
         <title>High Break!</title>
         <meta name="description" content="billiards scoreboard" />
-        <link rel="icon" type="image/png" href="/golden-cup.png" />
       </Head>
 
       <h1 className="text-4xl font-light text-center mb-8 text-gray-200 tracking-wider">
