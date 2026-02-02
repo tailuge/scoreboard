@@ -72,5 +72,10 @@
     "ts-jest": "^29.4.6",
     "typescript": "5.9.3",
     "typescript-eslint": "8.54.0"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "ios >= 12",
+    "safari >= 12"
+  ]
 }
