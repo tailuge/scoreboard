@@ -1,14 +1,21 @@
-import React from "react"
-import Head from "next/head"
-import LeaderboardTable from "../components/LeaderboardTable"
-import { GroupBox } from "../components/GroupBox"
+import React from "react";
+import Head from "next/head";
+import LeaderboardTable from "../components/LeaderboardTable";
+import { GroupBox } from "../components/GroupBox";
 
 const LeaderboardPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-4 md:p-8 font-sans text-gray-100">
       <Head>
-        <title>High Break!</title>
-        <meta name="description" content="billiards scoreboard" />
+        <title>Billiards Leaderboard | Top Scores & Rankings</title>
+        <meta
+          name="description"
+          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+        />
+        <link
+          rel="canonical"
+          href="https://scoreboard-tailuge.vercel.app/leaderboard"
+        />
       </Head>
 
       <h1 className="text-4xl font-light text-center mb-8 text-gray-200 tracking-wider">
@@ -38,7 +45,7 @@ const LeaderboardPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LeaderboardPage
+export default LeaderboardPage;
