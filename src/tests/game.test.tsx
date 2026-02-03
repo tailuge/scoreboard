@@ -64,9 +64,21 @@ describe("Game Page", () => {
     ).toBeInTheDocument()
 
     // Check if images are present (using alt text) - now duplicated
-    expect(screen.getAllByAltText("Snooker Icon")).toHaveLength(2)
-    expect(screen.getAllByAltText("Nine Ball Icon")).toHaveLength(2)
-    expect(screen.getAllByAltText("Three Cushion Icon")).toHaveLength(2)
+    expect(
+      screen.getAllByAltText(
+        "Play classic Snooker billiards online with 22 balls on a full-size table"
+      )
+    ).toHaveLength(2)
+    expect(
+      screen.getAllByAltText(
+        "Play 9-Ball pool online - fast-paced pocket billiards game"
+      )
+    ).toHaveLength(2)
+    expect(
+      screen.getAllByAltText(
+        "Play Three Cushion carom billiards online - no pockets, hit three rails"
+      )
+    ).toHaveLength(2)
 
     // Verify LeaderboardTable renders data
     await waitFor(() => {

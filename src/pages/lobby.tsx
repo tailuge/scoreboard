@@ -94,6 +94,36 @@ export default function Lobby() {
           rel="canonical"
           href="https://scoreboard-tailuge.vercel.app/lobby"
         />
+        <meta
+          property="og:title"
+          content="Billiards Lobby | Join Multiplayer Games Online"
+        />
+        <meta
+          property="og:description"
+          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://scoreboard-tailuge.vercel.app/lobby"
+        />
+        <meta
+          property="og:image"
+          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
+        />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content="Billiards Lobby | Join Multiplayer Games Online"
+        />
+        <meta
+          name="twitter:description"
+          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+        />
+        <meta
+          name="twitter:image"
+          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
+        />
       </Head>
       <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
         <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">

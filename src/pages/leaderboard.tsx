@@ -1,7 +1,7 @@
-import React from "react";
-import Head from "next/head";
-import LeaderboardTable from "../components/LeaderboardTable";
-import { GroupBox } from "../components/GroupBox";
+import React from "react"
+import Head from "next/head"
+import LeaderboardTable from "../components/LeaderboardTable"
+import { GroupBox } from "../components/GroupBox"
 
 const LeaderboardPage: React.FC = () => {
   return (
@@ -15,6 +15,36 @@ const LeaderboardPage: React.FC = () => {
         <link
           rel="canonical"
           href="https://scoreboard-tailuge.vercel.app/leaderboard"
+        />
+        <meta
+          property="og:title"
+          content="Billiards Leaderboard | Top Scores & Rankings"
+        />
+        <meta
+          property="og:description"
+          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://scoreboard-tailuge.vercel.app/leaderboard"
+        />
+        <meta
+          property="og:image"
+          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
+        />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content="Billiards Leaderboard | Top Scores & Rankings"
+        />
+        <meta
+          name="twitter:description"
+          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+        />
+        <meta
+          name="twitter:image"
+          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
         />
       </Head>
 
@@ -45,7 +75,7 @@ const LeaderboardPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LeaderboardPage;
+export default LeaderboardPage
