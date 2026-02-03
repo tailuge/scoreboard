@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://scoreboard-tailuge.vercel.app/sitemap.xml

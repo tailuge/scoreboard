@@ -83,41 +83,54 @@ export default function Lobby() {
   }, [tables, userId])
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
-      <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <GroupBox
-            title="Lobby"
-            leftBadge={<User />}
-            rightBadge={
-              <div className="flex items-center gap-4">
-                <Star />
-                {activeUsers !== null && <OnlineCount count={activeUsers} />}
+    <>
+      <Head>
+        <title>Billiards Lobby | Join Multiplayer Games Online</title>
+        <meta
+          name="description"
+          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+        />
+        <link
+          rel="canonical"
+          href="https://scoreboard-tailuge.vercel.app/lobby"
+        />
+      </Head>
+      <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
+        <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <GroupBox
+              title="Lobby"
+              leftBadge={<User />}
+              rightBadge={
+                <div className="flex items-center gap-4">
+                  <Star />
+                  {activeUsers !== null && <OnlineCount count={activeUsers} />}
+                </div>
+              }
+            >
+              <div className="flex flex-col gap-6">
+                <div className="flex justify-start items-center px-2">
+                  <CreateTable onCreate={fetchTables} />
+                </div>
+                <TableList
+                  onJoin={handleJoin}
+                  onSpectate={handleSpectate}
+                  tables={tables}
+                />
               </div>
-            }
-          >
-            <div className="flex flex-col gap-6">
-              <div className="flex justify-start items-center px-2">
-                <CreateTable onCreate={fetchTables} />
-              </div>
-              <TableList
-                onJoin={handleJoin}
-                onSpectate={handleSpectate}
-                tables={tables}
-              />
-            </div>
-          </GroupBox>
+            </GroupBox>
+          </div>
+          <div className="lg:col-span-1">
+            <MatchHistoryList />
+          </div>
         </div>
-        <div className="lg:col-span-1">
-          <MatchHistoryList />
-        </div>
+        <PlayModal
+          isOpen={!!modalTable}
+          onClose={() => setModalTable(null)}
+          tableId={modalTable?.id || ""}
+          ruleType={modalTable?.ruleType || "nineball"}
+        />
       </div>
-      <PlayModal
-        isOpen={!!modalTable}
-        onClose={() => setModalTable(null)}
-        tableId={modalTable?.id || ""}
-        ruleType={modalTable?.ruleType || "nineball"}
-      />
-    </div>
+    </>
   )
 }

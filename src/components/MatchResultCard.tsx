@@ -23,7 +23,11 @@ export function MatchResultCard({
         {/* Do not show emoji in 2-player mode to save space for text */}
         {!result.loser && (
           <div className="flex-shrink-0">
-            <span className={compact ? "scale-75 origin-left inline-block" : "text-lg"}>
+            <span
+              className={
+                compact ? "scale-75 origin-left inline-block" : "text-lg"
+              }
+            >
               🏆
             </span>
           </div>
@@ -40,7 +44,9 @@ export function MatchResultCard({
                     ({result.winnerScore})
                   </span>
                 </span>
-                <span className="text-gray-500 text-[9px] flex-shrink-0">vs</span>
+                <span className="text-gray-500 text-[9px] flex-shrink-0">
+                  vs
+                </span>
                 <span
                   className={`text-gray-400 truncate ${compact ? "text-[10px]" : "text-xs"}`}
                 >
@@ -72,7 +78,9 @@ export function MatchResultCard({
         className={`flex items-center gap-1.5 font-mono ${compact ? "text-[11px]" : "text-sm"}`}
       >
         {!result.loser && (
-          <span className="text-green-400/80 font-bold">{result.winnerScore}</span>
+          <span className="text-green-400/80 font-bold">
+            {result.winnerScore}
+          </span>
         )}
       </div>
     </div>
