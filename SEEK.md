@@ -52,3 +52,46 @@ A new API endpoint, for example `POST /api/tables/find-or-create`, should be cre
 The client-side `useAutoJoin` hook should be updated to call this new endpoint instead of performing the logic itself.
 
 This server-centric approach ensures that the process of finding and joining a table is an atomic transaction, eliminating the race condition and ensuring that players are correctly paired.
+
+### 5. Implementation Tasks
+
+Please follow these steps to implement the server-side matchmaking.
+
+- [ ] **Step 1: Create the API Endpoint Shell**
+    - Create a new file: `src/pages/api/tables/find-or-create.ts`.
+    - Set up a standard Next.js API handler that accepts `POST` requests.
+    - Validate that the request body contains `gameType` and a user identifier (or use the session).
+
+- [ ] **Step 2: Implement TableService Logic**
+    - Open `src/services/TableService.ts`.
+    - Add a new method `findPendingTable(gameType: string): Promise<Table | null>`.
+        - This should iterate through existing tables and find one where:
+            - `gameType` matches.
+            - `players` array has exactly 1 entry.
+            - `status` is not 'COMPLETED' or 'in-progress' (depending on definitions).
+    - Add a new method `findOrCreate(userId: string, userName: string, gameType: string): Promise<Table>`.
+        - logic:
+            ```typescript
+            const pending = await this.findPendingTable(gameType);
+            if (pending) {
+                return this.joinTable(pending.id, userId, userName); // Reuse existing join logic
+            } else {
+                return this.createTable(userId, userName, gameType); // Reuse existing create logic
+            }
+            ```
+    - *Note: For this initial implementation, we will accept the small race condition window between find and join to get the feature working, before optimizing for Redis atomicity.*
+
+- [ ] **Step 3: Connect API to Service**
+    - In `src/pages/api/tables/find-or-create.ts`, import `TableService`.
+    - Call `TableService.findOrCreate` with the data from the request.
+    - Return the resulting table JSON.
+
+- [ ] **Step 4: Update Frontend Hook**
+    - Open `src/components/hooks/useAutoJoin.ts`.
+    - Remove the logic that fetches *all* tables and filters them client-side.
+    - Instead, make a single `POST` request to `/api/tables/find-or-create` when `action=join`.
+    - Use the response to redirect the user to the table or show the game room.
+
+- [ ] **Step 5: Cleanup**
+    - Verify `useLobbyTables.ts` does not contain unused logic if we moved it.
+    - Ensure `src/pages/lobby.tsx` still works for "Create New Table" manual actions (if any).
