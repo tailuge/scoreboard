@@ -17,24 +17,43 @@ export class TableService {
   ) {}
 
   async getTables() {
-    await this.expireTables()
-    const tables = await this.store.hgetall<Record<string, Table>>(KEY)
-    return Object.values(tables || {}).sort((a, b) => b.createdAt - a.createdAt)
+    const allTables = (await this.store.hgetall<Record<string, Table>>(KEY)) || {}
+    const now = Date.now()
+    const expiredKeys: string[] = []
+    const activeTables: Table[] = []
+
+    for (const [id, table] of Object.entries(allTables)) {
+      const timeout =
+        table.players.length > 1 ? TABLE_TIMEOUT * 10 : TABLE_TIMEOUT
+      if (now - table.lastUsedAt > timeout) {
+        expiredKeys.push(id)
+      } else {
+        activeTables.push(table)
+      }
+    }
+
+    if (expiredKeys.length > 0) {
+      // Background cleanup of expired tables
+      this.store.hdel(KEY, ...expiredKeys).catch((err) => {
+        logger.error("Failed to delete expired tables:", err)
+      })
+      logger.log(`Found ${expiredKeys.length} expired tables.`)
+    }
+
+    return activeTables.sort((a, b) => b.createdAt - a.createdAt)
   }
 
   async expireTables() {
+    // This method is now used mostly for side-effect cleanup
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
     const expiredEntries = Object.entries(tables || {}).filter(
       ([, table]) =>
         Date.now() - table.lastUsedAt >
         (table.players.length > 1 ? TABLE_TIMEOUT * 10 : TABLE_TIMEOUT)
     )
-    //delete these tables
     if (expiredEntries.length > 0) {
-      // Use hdel to remove multiple fields from the hash
       const keysToDelete = expiredEntries.map(([key]) => key)
       await this.store.hdel(KEY, ...keysToDelete)
-
       logger.log(`Expired ${expiredEntries.length} tables.`)
     }
     return expiredEntries.length

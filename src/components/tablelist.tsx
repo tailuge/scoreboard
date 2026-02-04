@@ -1,5 +1,5 @@
 import { Table } from "@/types/table"
-import { useMemo } from "react"
+import { useMemo, useCallback } from "react"
 import { TableItem } from "./table"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -12,12 +12,16 @@ export function TableList({
   readonly onSpectate: (tableId: string) => void
   readonly tables: Table[]
 }) {
-  const handleJoin = async (tableId: string) => {
-    const success = await onJoin(tableId)
-    if (!success) {
-      console.error("Failed to join table:", tableId)
-    }
-  }
+  // Use useCallback to maintain stable function reference for memoized TableItem
+  const handleJoin = useCallback(
+    async (tableId: string) => {
+      const success = await onJoin(tableId)
+      if (!success) {
+        console.error("Failed to join table:", tableId)
+      }
+    },
+    [onJoin]
+  )
 
   const sortedTables = useMemo(
     () => [...tables].sort((a, b) => a.createdAt - b.createdAt),

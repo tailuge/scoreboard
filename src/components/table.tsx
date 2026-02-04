@@ -2,7 +2,7 @@ import { Table } from "@/types/table"
 import { UserPlusIcon, EyeIcon } from "@heroicons/react/24/solid"
 import { GameUrl } from "@/utils/GameUrl"
 import { IFrameOverlay } from "./IFrameOverlay"
-import { useState } from "react"
+import { useState, memo, useMemo } from "react"
 import { useUser } from "@/contexts/UserContext"
 
 const TablePockets = () => (
@@ -86,7 +86,7 @@ function getStatusClass(
   return base === "table" ? "table-occupied" : "felt-default"
 }
 
-export function TableItem({
+function TableItemComponent({
   table,
   onJoin,
   onSpectate,
@@ -121,14 +121,19 @@ export function TableItem({
     setIsSpectating(false)
   }
 
-  const spectatorUrl = GameUrl.create({
-    tableId: table.id,
-    userName,
-    userId,
-    ruleType: table.ruleType,
-    isSpectator: true,
-    isCreator: false,
-  })
+  // Memoize the spectator URL as it involves multiple URLSearchParams appends
+  const spectatorUrl = useMemo(
+    () =>
+      GameUrl.create({
+        tableId: table.id,
+        userName,
+        userId,
+        ruleType: table.ruleType,
+        isSpectator: true,
+        isCreator: false,
+      }),
+    [table.id, userName, userId, table.ruleType]
+  )
 
   return (
     <>
@@ -158,3 +163,14 @@ export function TableItem({
     </>
   )
 }
+
+// Optimization: Prevent re-renders of table items if the table data hasn't changed.
+// We use lastUsedAt as a version marker for the table state.
+export const TableItem = memo(TableItemComponent, (prev, next) => {
+  return (
+    prev.table.id === next.table.id &&
+    prev.table.lastUsedAt === next.table.lastUsedAt &&
+    prev.onJoin === next.onJoin &&
+    prev.onSpectate === next.onSpectate
+  )
+})
