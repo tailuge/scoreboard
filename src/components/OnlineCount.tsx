@@ -8,8 +8,12 @@ type OnlineCountProps = {
 
 export function OnlineCount({ count }: OnlineCountProps) {
   return (
-    <div className="flex items-center gap-1 text-green-400">
-      <UsersIcon className="h-3 w-3" />
+    <div
+      className="flex items-center gap-1 text-green-400"
+      role="status"
+      aria-label={`${count} users online`}
+    >
+      <UsersIcon className="h-3 w-3" aria-hidden="true" />
       <span className="text-xs font-light tracking-wide uppercase">
         {count}
       </span>

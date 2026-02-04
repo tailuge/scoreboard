@@ -68,6 +68,8 @@ export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
           className={`game-button-dropdown ${
             isOnline ? "game-button-enabled" : "game-button-disabled"
           }`}
+          aria-label="Select game type"
+          aria-expanded={dropdownOpen}
         >
           ▼
         </button>
