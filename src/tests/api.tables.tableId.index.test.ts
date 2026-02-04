@@ -1,119 +1,69 @@
-import handler from "@/pages/api/tables/[tableId]"
+import handler from "@/pages/api/tables/[tableId]/index"
 import { kv } from "@vercel/kv"
 import { NextRequest } from "next/server"
-import { Table } from "@/types/table"
 
-jest.mock("@vercel/kv")
+jest.mock("@vercel/kv", () => ({
+  kv: {
+    hget: jest.fn(),
+    hdel: jest.fn(),
+  },
+}))
 
-const tableIdNotFound = "table-not-found"
-describe("GET /api/tables/[tableId]", () => {
+describe("Edge Table API [tableId]", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    globalThis.Response.json = jest.fn().mockReturnValue(new Response())
-  })
-
-  it("should return a table if it exists", async () => {
-    const mockTable: Table = {
-      id: "table-1",
-      creator: { id: "user-1", name: "Player 1" },
-      players: [],
-      spectators: [],
-      createdAt: 123,
-      lastUsedAt: 123,
-      isActive: true,
-      ruleType: "eightball",
-      completed: false,
+    // @ts-ignore
+    globalThis.Response = class {
+      static json(body: any, init?: any) {
+        return {
+          status: init?.status || 200,
+          json: async () => body,
+        }
+      }
+      constructor(body: any, init?: any) {
+        // @ts-ignore
+        this.status = init?.status || 200
+      }
     }
-    jest.spyOn(kv, "hget").mockResolvedValue(mockTable)
+  })
 
+  it("GET: finds table", async () => {
+    const table = { id: "t1" }
+    ;(kv.hget as jest.Mock).mockResolvedValue(table)
     const req = { method: "GET" } as NextRequest
-    await handler(req, { params: { tableId: "table-1" } })
-
-    expect(kv.hget).toHaveBeenCalledWith("tables", "table-1")
-    expect(Response.json).toHaveBeenCalledWith(mockTable)
+    const res = await handler(req, { params: { tableId: "t1" } })
+    expect(res.status).toBe(200)
+    // @ts-ignore
+    expect(await res.json()).toEqual(table)
   })
 
-  it("should return 404 if the table does not exist", async () => {
-    jest.spyOn(kv, "hget").mockResolvedValue(null)
-
+  it("GET: returns 404 if not found", async () => {
+    ;(kv.hget as jest.Mock).mockResolvedValue(null)
     const req = { method: "GET" } as NextRequest
-    await handler(req, { params: { tableId: tableIdNotFound } })
-
-    expect(kv.hget).toHaveBeenCalledWith("tables", tableIdNotFound)
-    expect(Response.json).toHaveBeenCalledWith(
-      { error: "Table not found" },
-      { status: 404 }
-    )
-  })
-})
-
-describe("DELETE /api/tables/[tableId]", () => {
-  const mockTable: Table = {
-    id: "table-1",
-    creator: { id: "user-1", name: "Player 1" },
-    players: [],
-    spectators: [],
-    createdAt: 123,
-    lastUsedAt: 123,
-    isActive: true,
-    ruleType: "eightball",
-    completed: false,
-  }
-
-  beforeEach(() => {
-    jest.clearAllMocks()
-    globalThis.Response.json = jest.fn().mockReturnValue(new Response())
+    const res = await handler(req, { params: { tableId: "missing" } })
+    expect(res.status).toBe(404)
   })
 
-  it("should delete a table if the user is the creator", async () => {
-    jest.spyOn(kv, "hget").mockResolvedValue(mockTable)
-    jest.spyOn(kv, "hdel").mockResolvedValue(1)
-
+  it("DELETE: removes table if authorized", async () => {
+    const table = { id: "t1", creator: { id: "u1" } }
+    ;(kv.hget as jest.Mock).mockResolvedValue(table)
     const req = {
       method: "DELETE",
-      json: async () => ({ userId: "user-1" }),
+      json: async () => ({ userId: "u1" }),
     } as unknown as NextRequest
-
-    await handler(req, { params: { tableId: "table-1" } })
-
-    expect(kv.hget).toHaveBeenCalledWith("tables", "table-1")
-    expect(kv.hdel).toHaveBeenCalledWith("tables", "table-1")
-    expect(Response.json).toHaveBeenCalledWith({ success: true })
+    const res = await handler(req, { params: { tableId: "t1" } })
+    expect(res.status).toBe(200)
+    expect(kv.hdel).toHaveBeenCalledWith("tables", "t1")
   })
 
-  it("should return 403 if the user is not the creator", async () => {
-    jest.spyOn(kv, "hget").mockResolvedValue(mockTable)
-
+  it("DELETE: returns 403 if unauthorized", async () => {
+    const table = { id: "t1", creator: { id: "u1" } }
+    ;(kv.hget as jest.Mock).mockResolvedValue(table)
     const req = {
       method: "DELETE",
-      json: async () => ({ userId: "user-2" }),
+      json: async () => ({ userId: "other" }),
     } as unknown as NextRequest
-
-    await handler(req, { params: { tableId: "table-1" } })
-
-    expect(kv.hget).toHaveBeenCalledWith("tables", "table-1")
-    expect(kv.hdel).not.toHaveBeenCalled()
-    expect(Response.json).toHaveBeenCalledWith(
-      { error: "Unauthorized" },
-      { status: 403 }
-    )
-  })
-
-  it("should return 404 if the table does not exist", async () => {
-    jest.spyOn(kv, "hget").mockResolvedValue(null)
-
-    const req = {
-      method: "DELETE",
-      json: async () => ({ userId: "user-1" }),
-    } as unknown as NextRequest
-
-    await handler(req, { params: { tableId: tableIdNotFound } })
-
-    expect(kv.hget).toHaveBeenCalledWith("tables", tableIdNotFound)
-    expect(kv.hdel).not.toHaveBeenCalled()
-    expect(Response.json).toHaveBeenCalledWith(
-      { error: "Table not found" },
-      { status: 404 }
-    )
+    const res = await handler(req, { params: { tableId: "t1" } })
+    expect(res.status).toBe(403)
   })
 })

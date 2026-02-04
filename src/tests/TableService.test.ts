@@ -1,6 +1,9 @@
 import { Table } from "@/types/table"
 import { TableService } from "../services/TableService"
 import { mockKv } from "./mockkv"
+import { NchanPub } from "@/nchan/nchanpub"
+
+jest.mock("@/nchan/nchanpub")
 
 function makeTable(lastUsed: number, tableId: string): Table {
   const newTable: Table = {
@@ -145,5 +148,14 @@ describe("TableService", () => {
       expect(table2.players).toHaveLength(2)
       expect(table2.players[1].id).toBe("u2")
     })
+  })
+
+  it("should use defaultNotify if no notify function provided", async () => {
+    const serviceWithDefaultNotify = new TableService()
+    const mockPost = jest.fn().mockResolvedValue({})
+    ;(NchanPub as jest.Mock).mockImplementation(() => ({ post: mockPost }))
+
+    await serviceWithDefaultNotify.createTable("u1", "n1", "type")
+    expect(mockPost).toHaveBeenCalled()
   })
 })
