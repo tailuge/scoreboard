@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { MatchResult } from "@/types/match"
 
 interface MatchResultCardProps {
@@ -6,7 +6,7 @@ interface MatchResultCardProps {
   readonly compact?: boolean
 }
 
-export function MatchResultCard({
+function MatchResultCardComponent({
   result,
   compact = false,
 }: MatchResultCardProps) {
@@ -86,5 +86,11 @@ export function MatchResultCard({
     </div>
   )
 }
+
+// Optimization: memoize match result cards as they are rendered in potentially long lists
+// and often fetched via polling even if they haven't changed.
+export const MatchResultCard = memo(MatchResultCardComponent, (prev, next) => {
+  return prev.result.id === next.result.id && prev.compact === next.compact
+})
 
 export default MatchResultCard

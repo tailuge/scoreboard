@@ -34,9 +34,9 @@ export class MatchResultService {
     limit: number = HISTORY_LIMIT,
     gameType?: string
   ): Promise<MatchResult[]> {
-    // zrange with negative indices to get latest (highest scores)
-    // -1 is the last element, -limit is the limit-th from the end
-    const results = await this.store.zrange<MatchResult[]>(KEY, 0, -1, {
+    // Optimization: if no gameType filter, only fetch the requested limit from Redis
+    const fetchLimit = gameType ? -1 : limit - 1
+    const results = await this.store.zrange<MatchResult[]>(KEY, 0, fetchLimit, {
       rev: true,
     })
 
@@ -44,6 +44,7 @@ export class MatchResultService {
       ? results.filter((r) => r.gameType === gameType)
       : results
 
+    // Even if we fetched with limit, we slice here for consistency
     return filtered.slice(0, limit)
   }
 }
