@@ -109,6 +109,13 @@ describe("TableService", () => {
       expect(pending).toBeNull()
     })
 
+    it("should return null if hgetall returns null", async () => {
+      // @ts-expect-error store is Partial and might not have hgetall in type but we know it does or we mock it
+      jest.spyOn(tableService.store, "hgetall").mockResolvedValueOnce(null)
+      const pending = await tableService.findPendingTable("nineball")
+      expect(pending).toBeNull()
+    })
+
     it("should return null if only full tables exist", async () => {
       const table = await tableService.createTable("u1", "user1", "nineball")
       await tableService.joinTable(table.id, "u2", "user2")

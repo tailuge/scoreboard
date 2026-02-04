@@ -142,6 +142,53 @@ describe("Lobby Component Functional Tests", () => {
     await waitFor(() => {
       expect(screen.getByText("Opponent Ready")).toBeInTheDocument()
     })
+
+    // Test closing the modal
+    const cancelButton = screen.getByText(/Cancel/i)
+    fireEvent.click(cancelButton)
+    await waitFor(() => {
+      expect(screen.queryByText("Opponent Ready")).not.toBeInTheDocument()
+    })
+  })
+
+  it("should call spectate when spectate button is clicked", async () => {
+    // Add a full table to mockTables
+    const fullTable = {
+      ...mockTables[0],
+      id: "table-full",
+      players: [
+        { id: "creator-1", name: "Creator 1" },
+        { id: "player-2", name: "Player 2" },
+      ],
+    }
+    ;(globalThis.fetch as jest.Mock).mockImplementation((url) => {
+      if (url === TABLES_API_ENDPOINT) {
+        return Promise.resolve({
+          json: () => Promise.resolve([fullTable]),
+          ok: true,
+        })
+      }
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve([]) })
+    })
+
+    render(
+      <LobbyProvider>
+        <Lobby />
+      </LobbyProvider>
+    )
+
+    // Wait for tables to load
+    const spectateButtons = await screen.findAllByLabelText(/Spectate Table/i)
+    fireEvent.click(spectateButtons[0])
+
+    await waitFor(() => {
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        expect.stringMatching(/\/api\/tables\/table-full\/spectate/),
+        expect.objectContaining({
+          method: "PUT",
+        })
+      )
+    })
   })
 })
 
