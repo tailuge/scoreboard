@@ -153,4 +153,46 @@ describe("TableItem", () => {
     const tableCard = container.querySelector(".table-card")
     expect(tableCard).toHaveClass("table-card-creator")
   })
+
+  it("handles re-renders for memoization", () => {
+    const { rerender } = render(
+      <TableItem
+        table={baseTable}
+        onJoin={mockOnJoin}
+        onSpectate={mockOnSpectate}
+      />
+    )
+    expect(screen.getByText("nineball")).toBeInTheDocument()
+
+    // Same props
+    rerender(
+      <TableItem
+        table={baseTable}
+        onJoin={mockOnJoin}
+        onSpectate={mockOnSpectate}
+      />
+    )
+    expect(screen.getByText("nineball")).toBeInTheDocument()
+
+    // Updated table
+    const updatedTable = { ...baseTable, lastUsedAt: baseTable.lastUsedAt + 1 }
+    rerender(
+      <TableItem
+        table={updatedTable}
+        onJoin={mockOnJoin}
+        onSpectate={mockOnSpectate}
+      />
+    )
+    expect(screen.getByText("nineball")).toBeInTheDocument()
+
+    // Different functions
+    rerender(
+      <TableItem
+        table={updatedTable}
+        onJoin={() => {}}
+        onSpectate={() => {}}
+      />
+    )
+    expect(screen.getByText("nineball")).toBeInTheDocument()
+  })
 })

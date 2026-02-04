@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { TableList } from "../components/tablelist"
 import { Table } from "../types/table"
 import { useUser } from "@/contexts/UserContext"
@@ -68,5 +68,28 @@ describe("TableList", () => {
     expect(tableTitles[0]).toHaveTextContent("snooker") // createdAt: 1000
     expect(tableTitles[1]).toHaveTextContent("nineball") // createdAt: 2000
     expect(tableTitles[2]).toHaveTextContent("threecushion") // createdAt: 3000
+  })
+
+  it("handles join table failure", async () => {
+    const onJoinMock = jest.fn().mockResolvedValue(false)
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+
+    render(
+      <TableList
+        onJoin={onJoinMock}
+        onSpectate={jest.fn()}
+        tables={[mockTables[0]]}
+      />
+    )
+
+    const joinButton = screen.getByLabelText("Join Table")
+    fireEvent.click(joinButton)
+
+    await waitFor(() => {
+      expect(onJoinMock).toHaveBeenCalledWith("1")
+      expect(consoleSpy).toHaveBeenCalledWith("Failed to join table:", "1")
+    })
+
+    consoleSpy.mockRestore()
   })
 })

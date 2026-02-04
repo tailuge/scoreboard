@@ -73,4 +73,21 @@ describe("MatchResultCard", () => {
     // for now just check it still renders
     expect(screen.getByText("Alice")).toBeInTheDocument()
   })
+
+  it("handles re-renders with same or different props for memoization", () => {
+    const { rerender } = render(<MatchResultCard result={mockResult} />)
+    expect(screen.getByText("Alice")).toBeInTheDocument()
+
+    // Same props
+    rerender(<MatchResultCard result={mockResult} />)
+    expect(screen.getByText("Alice")).toBeInTheDocument()
+
+    // Different props
+    rerender(<MatchResultCard result={mockResult} compact={true} />)
+    expect(screen.getByText("Alice")).toBeInTheDocument()
+
+    const differentResult = { ...mockResult, id: "different" }
+    rerender(<MatchResultCard result={differentResult} compact={true} />)
+    expect(screen.getByText("Alice")).toBeInTheDocument()
+  })
 })
