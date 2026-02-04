@@ -81,6 +81,16 @@ Please follow these steps to implement the server-side matchmaking.
             ```
     - *Note: For this initial implementation, we will accept the small race condition window between find and join to get the feature working, before optimizing for Redis atomicity.*
 
+- [ ] **Step 3: Unit Testing**
+    - Create or update `src/tests/TableService.test.ts`.
+    - Test `findPendingTable`:
+        - Should return null if no tables exist.
+        - Should return null if only full tables exist.
+        - Should return a table if a valid pending table exists.
+    - Test `findOrCreate`:
+        - Should create a new table if none exist.
+        - Should join an existing table if one is pending.
+
 - [ ] **Step 3: Connect API to Service**
     - In `src/pages/api/tables/find-or-create.ts`, import `TableService`.
     - Call `TableService.findOrCreate` with the data from the request.
