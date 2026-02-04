@@ -1,6 +1,8 @@
 import { Table } from "@/types/table"
 import { TableService } from "../services/TableService"
 import { mockKv } from "./mockkv"
+import { NchanPub } from "@/nchan/nchanpub"
+import { logger } from "@/utils/logger"
 
 function makeTable(lastUsed: number, tableId: string): Table {
   const newTable: Table = {
@@ -41,7 +43,7 @@ describe("TableService", () => {
     expect(tables).toHaveLength(1)
   })
 
-  it("should expire old tables", async () => {
+  it("should expire old tables in getTables", async () => {
     const oldTable = makeTable(Date.now() - 61 * 1000, "oldId")
     const currentTable = makeTable(Date.now(), "newId")
     await mockKv.hset("tables", { [oldTable.id]: oldTable })
@@ -49,6 +51,54 @@ describe("TableService", () => {
     const tables = await tableService.getTables()
     expect(tables).toHaveLength(1)
     expect(tables[0].id).toBe(currentTable.id)
+  })
+
+  it("should expire old tables in expireTables", async () => {
+    const oldTable = makeTable(Date.now() - 61 * 1000, "oldId")
+    await mockKv.hset("tables", { [oldTable.id]: oldTable })
+    const expiredCount = await tableService.expireTables()
+    expect(expiredCount).toBe(1)
+    const tables = await mockKv.hgetall("tables")
+    // ioredis-mock returns {} for empty hash, while @vercel/kv might return null
+    if (tables !== null) {
+      expect(Object.keys(tables)).toHaveLength(0)
+    }
+  })
+
+  it("should use defaultNotify if no notify function provided", async () => {
+    const serviceWithDefaultNotify = new TableService(mockKv as any)
+    const postSpy = jest
+      .spyOn(NchanPub.prototype, "post")
+      .mockResolvedValue(undefined)
+
+    await serviceWithDefaultNotify.createTable("u1", "user1", "rule")
+
+    expect(postSpy).toHaveBeenCalledWith({ action: "create" })
+    postSpy.mockRestore()
+  })
+
+  it("should handle error in background cleanup", async () => {
+    const oldTable = makeTable(Date.now() - 61 * 1000, "oldId")
+    await mockKv.hset("tables", { [oldTable.id]: oldTable })
+
+    // Force hdel to fail
+    const hdelSpy = jest
+      .spyOn(tableService["store"], "hdel")
+      .mockRejectedValueOnce(new Error("Redis error"))
+    const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => {})
+
+    await tableService.getTables()
+
+    // Wait for the background catch to execute
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      "Failed to delete expired tables:",
+      expect.any(Error)
+    )
+
+    hdelSpy.mockRestore()
+    errorSpy.mockRestore()
   })
 
   describe("joinTable", () => {

@@ -92,4 +92,19 @@ describe("MatchResultService", () => {
     const all = await service.getMatchResults()
     expect(all).toHaveLength(2)
   })
+
+  it("should respect limit when no gameType is provided", async () => {
+    for (let i = 0; i < 10; i++) {
+      await service.addMatchResult({
+        id: `m${i}`,
+        winner: "P",
+        winnerScore: 10,
+        gameType: "nineball",
+        timestamp: Date.now() + i,
+      })
+    }
+    const limited = await service.getMatchResults(5)
+    expect(limited).toHaveLength(5)
+    expect(limited[0].id).toBe("m9")
+  })
 })
