@@ -113,6 +113,33 @@ export class TableService {
     return table
   }
 
+  async findPendingTable(gameType: string): Promise<Table | null> {
+    const tables = await this.store.hgetall<Record<string, Table>>(KEY)
+    if (!tables) return null
+
+    const pending = Object.values(tables).find(
+      (table) =>
+        table.ruleType === gameType &&
+        table.players.length === 1 &&
+        !table.completed
+    )
+
+    return pending || null
+  }
+
+  async findOrCreate(
+    userId: string,
+    userName: string,
+    gameType: string
+  ): Promise<Table> {
+    const pending = await this.findPendingTable(gameType)
+    if (pending) {
+      return this.joinTable(pending.id, userId, userName)
+    } else {
+      return this.createTable(userId, userName, gameType)
+    }
+  }
+
   async defaultNotify(event: any) {
     await new NchanPub("lobby").post(event)
   }

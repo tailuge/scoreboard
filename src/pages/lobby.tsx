@@ -19,8 +19,13 @@ import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 export default function Lobby() {
   const { userId, userName } = useUser()
   const router = useRouter()
-  const { tables, isLoading, fetchTables, tableAction, createTable } =
-    useLobbyTables(userId, userName)
+  const {
+    tables,
+    isLoading,
+    fetchTables,
+    tableAction,
+    findOrCreateTable,
+  } = useLobbyTables(userId, userName)
   const [modalTable, setModalTable] = useState<{
     id: string
     ruleType: string
@@ -58,15 +63,23 @@ export default function Lobby() {
     [tableAction]
   )
 
-  useAutoJoin(
-    router,
-    isLoading,
-    userId,
-    userName,
-    tables,
-    handleJoin,
-    createTable
+  const handleFindOrCreate = useCallback(
+    async (gameType: string) => {
+      const updatedTable = await findOrCreateTable(gameType)
+      if (updatedTable) {
+        if (!updatedTable.completed) {
+          setModalTable({
+            id: updatedTable.id,
+            ruleType: updatedTable.ruleType,
+          })
+          shownModals.current.add(updatedTable.id)
+        }
+      }
+    },
+    [findOrCreateTable]
   )
+
+  useAutoJoin(router, isLoading, userId, userName, handleFindOrCreate)
 
   useEffect(() => {
     tables.forEach((table) => {

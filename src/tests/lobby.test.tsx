@@ -173,7 +173,7 @@ describe("Lobby Redirection Tests", () => {
           ok: true,
         })
       }
-      if (url.includes("/join")) {
+      if (url.includes("/join") || url.includes("/find-or-create")) {
         return Promise.resolve({
           ok: true,
           status: 200,
@@ -195,12 +195,13 @@ describe("Lobby Redirection Tests", () => {
       </LobbyProvider>
     )
 
-    // Check if fetch was called with PUT to join endpoint automatically
+    // Check if fetch was called with POST to find-or-create endpoint automatically
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringMatching(/\/api\/tables\/table-1\/join/),
+        expect.stringMatching(/\/api\/tables\/find-or-create/),
         expect.objectContaining({
-          method: "PUT",
+          method: "POST",
+          body: expect.stringContaining('"gameType":"nineball"'),
         })
       )
     })

@@ -63,6 +63,27 @@ export function useLobbyTables(
     [userId, userName, fetchTables]
   )
 
+  const findOrCreateTable = useCallback(
+    async (gameType: string): Promise<Table | null> => {
+      if (!userId || !userName) return null
+      try {
+        const response = await fetch("/api/tables/find-or-create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, userName, gameType }),
+        })
+        if (!response.ok) throw new Error("Failed to find or create table")
+        const table = await response.json()
+        fetchTables()
+        return table
+      } catch (error) {
+        console.error("Error finding or creating table:", error)
+        return null
+      }
+    },
+    [userId, userName, fetchTables]
+  )
+
   const createTable = useCallback(
     async (ruleType: string) => {
       if (!userId || !userName) return false
@@ -89,5 +110,6 @@ export function useLobbyTables(
     fetchTables,
     tableAction,
     createTable,
+    findOrCreateTable,
   }
 }
