@@ -23,3 +23,12 @@ The current `useEffect` that sets `modalTable` based on `tables` updates will re
 **Status: DONE**
 `handleJoin` and `handleSpectate` rely on `tables` being in scope. If `tables` updates during the async `tableAction` call, the subsequent `find` might use stale data.
 - **Action:** Ensure `tableAction` returns the updated table data from the API response instead of relying on a separate `fetchTables` call and searching the local state.
+
+
+Q:
+
+investigate how action=join queryparam works in lobby.tsx - I believe the intent is that if no table is            
+   available it will create one (seek) and when second joiner arrives they should pair. However currently I think     
+   second joiner is also creating a table. Please check the logic and generate a report in SEEK.md . DO NOT CHANGE    
+   CODE. There may be a timing issue, I beileve that the tables/ route is using a dtabase to check for waiting        
+   tables.  
