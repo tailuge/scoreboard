@@ -23,15 +23,10 @@ export function User() {
     setIsEditing(false)
   }
 
-  return (
-    <button
-      type="button"
-      className="user-pill"
-      title={`${userName}\n${userId}`}
-      onClick={() => setIsEditing(true)}
-    >
-      <UserIcon className="user-pill-icon" />
-      {isEditing ? (
+  if (isEditing) {
+    return (
+      <div className="user-pill">
+        <UserIcon className="user-pill-icon" aria-hidden="true" />
         <input
           ref={inputRef}
           type="text"
@@ -41,10 +36,22 @@ export function User() {
           onBlur={handleSave}
           onKeyDown={(e) => e.key === "Enter" && handleSave()}
           className="user-pill-input"
+          aria-label="New username"
         />
-      ) : (
-        userName
-      )}
+      </div>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      className="user-pill"
+      title={`${userName}\n${userId}`}
+      onClick={() => setIsEditing(true)}
+      aria-label={`Edit username: ${userName}`}
+    >
+      <UserIcon className="user-pill-icon" aria-hidden="true" />
+      {userName}
     </button>
   )
 }
