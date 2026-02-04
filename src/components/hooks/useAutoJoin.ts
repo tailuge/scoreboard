@@ -1,15 +1,12 @@
 import { useEffect, useRef } from "react"
 import { NextRouter } from "next/router"
-import { Table } from "@/types/table"
 
 export function useAutoJoin(
   router: NextRouter,
   isLoading: boolean,
   userId: string | null,
   userName: string | null,
-  tables: Table[],
-  handleJoin: (tableId: string) => Promise<boolean>,
-  createTable: (ruleType: string) => Promise<boolean>
+  handleAutoJoin: (gameType: string) => Promise<void>
 ) {
   const hasHandledAutoJoin = useRef(false)
 
@@ -28,24 +25,14 @@ export function useAutoJoin(
 
     if (action === "join" && gameType) {
       hasHandledAutoJoin.current = true
-      const existingTable = tables.find(
-        (t) => t.ruleType === gameType && !t.completed
-      )
-
-      if (existingTable) {
-        handleJoin(existingTable.id)
-      } else {
-        createTable(gameType)
-      }
+      handleAutoJoin(gameType)
     }
   }, [
     isLoading,
     router.isReady,
     router.query,
-    tables,
     userId,
     userName,
-    createTable,
-    handleJoin,
+    handleAutoJoin,
   ])
 }

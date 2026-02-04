@@ -102,4 +102,41 @@ describe("TableService", () => {
       )
     })
   })
+
+  describe("findPendingTable", () => {
+    it("should return null if no tables exist", async () => {
+      const pending = await tableService.findPendingTable("nineball")
+      expect(pending).toBeNull()
+    })
+
+    it("should return null if only full tables exist", async () => {
+      const table = await tableService.createTable("u1", "user1", "nineball")
+      await tableService.joinTable(table.id, "u2", "user2")
+      const pending = await tableService.findPendingTable("nineball")
+      expect(pending).toBeNull()
+    })
+
+    it("should return a table if a valid pending table exists", async () => {
+      const table = await tableService.createTable("u1", "user1", "nineball")
+      const pending = await tableService.findPendingTable("nineball")
+      expect(pending).not.toBeNull()
+      expect(pending?.id).toBe(table.id)
+    })
+  })
+
+  describe("findOrCreate", () => {
+    it("should create a new table if none exist", async () => {
+      const table = await tableService.findOrCreate("u1", "user1", "nineball")
+      expect(table.players).toHaveLength(1)
+      expect(table.players[0].id).toBe("u1")
+    })
+
+    it("should join an existing table if one is pending", async () => {
+      const table1 = await tableService.createTable("u1", "user1", "nineball")
+      const table2 = await tableService.findOrCreate("u2", "user2", "nineball")
+      expect(table2.id).toBe(table1.id)
+      expect(table2.players).toHaveLength(2)
+      expect(table2.players[1].id).toBe("u2")
+    })
+  })
 })
