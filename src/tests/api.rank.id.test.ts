@@ -42,7 +42,7 @@ describe("/api/rank/[id] handler", () => {
   it("should call like on PUT request", async () => {
     const likeSpy = jest
       .spyOn(mockScoreTable.prototype, "like")
-      .mockResolvedValue()
+      .mockResolvedValue(0)
 
     const ruletype = "nineball"
     const id = "456"

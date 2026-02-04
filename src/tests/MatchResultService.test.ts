@@ -6,7 +6,6 @@ describe("MatchResultService", () => {
   let service: MatchResultService
 
   beforeEach(async () => {
-    // @ts-expect-error - mockKv might not have flushall in its Partial type
     await mockKv.flushall()
     service = new MatchResultService(mockKv as any)
   })

@@ -20,7 +20,10 @@ describe("/api/rank handler", () => {
   })
 
   it("should return top ten scores", async () => {
-    const topTenData = [{ score: 100 }, { score: 90 }]
+    const topTenData = [
+      { name: "Player1", likes: 10, id: "abc", score: 100 },
+      { name: "Player2", likes: 5, id: "def", score: 90 },
+    ]
     const topTenSpy = jest
       .spyOn(mockScoreTable.prototype, "topTen")
       .mockResolvedValue(topTenData)

@@ -25,7 +25,10 @@ describe("/api/usage/[metric] handler", () => {
   })
 
   it("should return all counts on GET request", async () => {
-    const counts = { "2024-01-01": 10 }
+    const counts = [
+      { date: "2024-01-01" },
+      "10", // Scores are returned as strings from vercel/kv zrange withScores
+    ]
     const getAllCountsSpy = jest
       .spyOn(mockUsageService.prototype, "getAllCounts")
       .mockResolvedValue(counts)

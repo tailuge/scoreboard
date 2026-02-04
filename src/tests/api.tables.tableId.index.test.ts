@@ -15,12 +15,14 @@ describe("GET /api/tables/[tableId]", () => {
   it("should return a table if it exists", async () => {
     const mockTable: Table = {
       id: "table-1",
-      game: "billiards",
       creator: { id: "user-1", name: "Player 1" },
       players: [],
-      state: "open",
-      created: 123,
-      rules: { type: "eightball" },
+      spectators: [],
+      createdAt: 123,
+      lastUsedAt: 123,
+      isActive: true,
+      ruleType: "eightball",
+      completed: false,
     }
     jest.spyOn(kv, "hget").mockResolvedValue(mockTable)
 
@@ -48,12 +50,14 @@ describe("GET /api/tables/[tableId]", () => {
 describe("DELETE /api/tables/[tableId]", () => {
   const mockTable: Table = {
     id: "table-1",
-    game: "billiards",
     creator: { id: "user-1", name: "Player 1" },
     players: [],
-    state: "open",
-    created: 123,
-    rules: { type: "eightball" },
+    spectators: [],
+    createdAt: 123,
+    lastUsedAt: 123,
+    isActive: true,
+    ruleType: "eightball",
+    completed: false,
   }
 
   beforeEach(() => {

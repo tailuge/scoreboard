@@ -23,7 +23,7 @@ describe("PUT /api/tables/[tableId]/complete", () => {
 
   it("should complete a table and return it", async () => {
     req.method = "PUT"
-    const mockTable: Partial<Table> = { id: "table-1", state: "completed" }
+    const mockTable: Partial<Table> = { id: "table-1", completed: true }
     ;(mockTableService.prototype.completeTable as jest.Mock).mockResolvedValue(
       mockTable
     )
