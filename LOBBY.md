@@ -1,47 +1,49 @@
-# Lobby Rework Plan
+# Lobby Seeking Flow Plan
 
-This plan outlines the steps to hide the "Create New Game" button in the lobby when there is a game currently waiting for an opponent.
+This plan outlines the improvements to the lobby to support a "seeking" state when a player is waiting for an opponent.
 
 ## Objective
-To improve matchmaking by encouraging players to join existing waiting tables instead of creating new ones, thereby reducing fragmentation in the lobby.
+Provide a better user experience when a player initiates a game search from the `/game` page. Instead of showing a static lobby with a redundant "Create Table" button, the lobby will show a progress spinner and handle timeouts gracefully.
 
 ## Proposed Changes
 
-### 1. Identify "Waiting" Tables
-A table is considered "waiting" if:
-- It has exactly **one player** (`players.length === 1`).
-- It is **not completed** (`completed === false`).
+### 1. Simplify Lobby UI
+- Remove the `CreateTable` component from `lobby.tsx`. Users should now initiate games from the `/game` page.
+- This reduces UI clutter and centralizes game entry points.
 
-### 2. Update `src/pages/lobby.tsx`
-- Calculate a boolean `hasWaitingTable` by checking if any table in the `tables` array matches the "waiting" criteria.
-- Use `useMemo` to optimize this calculation.
-- Pass a `hidden` state or conditionally render the `CreateTable` component.
+### 2. Implement Seeking State
+- Add a `seekingGameType` state to the `Lobby` component.
+- When `useAutoJoin` triggers `handleFindOrCreate`, set `seekingGameType` to the requested game type.
+- Display a spinner and a "Seeking [GameType] Opponent..." message when `seekingGameType` is active.
 
-```tsx
-const hasWaitingTable = useMemo(() =>
-  tables.some(table => table.players.length === 1 && !table.completed),
-  [tables]
-);
+### 3. Handle Match Found
+- The lobby already monitors `tables` for a table where `table.creator.id === userId` and `table.players.length === 2`.
+- When this condition is met, the `PlayModal` opens.
+- We should clear `seekingGameType` when the modal opens or when we detect a match.
 
-// ... in JSX ...
-{!hasWaitingTable && (
-  <div className="flex justify-start items-center px-2">
-    <CreateTable onCreate={fetchTables} />
-  </div>
-)}
-```
-
-### 3. Handle Timeouts
-- Tables with 1 player have a **60-second timeout** of inactivity (defined as `TABLE_TIMEOUT` in `src/services/TableService.ts`).
-- If a table is not joined within this minute, it will be automatically removed from the list by the server's `expireTables` logic.
-- Once the waiting table is removed (or once it is joined and starts), the "Create New Game" button will automatically reappear in the lobby.
+### 4. Implement Timeout and Redirection
+- If no opponent is found within a specific period (e.g., 45 seconds), the seeking state should time out.
+- On timeout, show a brief message and redirect the user back to `/game`.
 
 ## Step-by-Step Implementation
-1. Open `src/pages/lobby.tsx`.
-2. Import `useMemo` from `react` if not already present.
-3. Add the `hasWaitingTable` constant using `useMemo` based on the `tables` state.
-4. Locate the `CreateTable` component inside the `GroupBox`.
-5. Wrap the `CreateTable` container with a conditional check for `!hasWaitingTable`.
-6. Save the file and verify the UI behavior:
-   - Create a table and ensure the button disappears.
-   - Wait 60 seconds (or join with another user) and ensure the button reappears.
+
+### Phase 1: State Management
+1. Add `seekingGameType` (string | null) state to `Lobby` component.
+2. Update `handleFindOrCreate` to set `seekingGameType`.
+3. Add a `useEffect` to clear `seekingGameType` if a match is found (existing logic for `modalTable`).
+
+### Phase 2: UI Updates
+1. Replace `<CreateTable />` with a conditional render:
+   - If `seekingGameType` is set, show a spinner and status message.
+   - Otherwise, show nothing (or a simplified "Select a game from the Game page" if appropriate, but the user wants it redundant).
+
+### Phase 3: Timeout Logic
+1. Add a `useEffect` that starts a timer when `seekingGameType` is set.
+2. If the timer reaches the limit, use `router.push('/game')`.
+3. Ensure the timer is cleared if `seekingGameType` is cleared or the component unmounts.
+
+### Phase 4: Verification
+1. Navigate from `/game` to `/lobby` by clicking a game.
+2. Verify the spinner appears.
+3. Verify that joining from another tab opens the `PlayModal` and clears the spinner.
+4. Verify that waiting for the timeout redirects back to `/game`.
