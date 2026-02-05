@@ -210,7 +210,7 @@ export default function Lobby() {
                   <div className="flex flex-col items-center justify-center p-12 bg-gray-800 rounded-xl border border-blue-500/50 shadow-2xl animate-in fade-in zoom-in duration-300">
                     <div className="relative w-20 h-20 mb-8">
                       <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
-                      <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">
                       Seeking {seekingGameType} Match...
