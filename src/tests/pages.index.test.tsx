@@ -8,11 +8,11 @@ jest.mock("next/router", () => ({
 
 describe("Home page", () => {
   it("should redirect to /game", () => {
-    const push = jest.fn()
-    ;(useRouter as jest.Mock).mockReturnValue({ push })
+    const replace = jest.fn()
+    ;(useRouter as jest.Mock).mockReturnValue({ replace })
 
     render(<Home />)
 
-    expect(push).toHaveBeenCalledWith("/game")
+    expect(replace).toHaveBeenCalledWith("/game")
   })
 })
