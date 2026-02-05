@@ -206,33 +206,41 @@ export default function Lobby() {
               }
             >
               <div className="flex flex-col gap-6">
-                {seekingGameType ? (
-                  <div className="flex flex-col items-center justify-center p-12 bg-gray-800 rounded-xl border border-blue-500/50 shadow-2xl animate-in fade-in zoom-in duration-300">
-                    <div className="relative w-20 h-20 mb-8">
-                      <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
-                      <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+                {seekingGameType && (
+                  <div className="mx-auto w-full max-w-md rounded-xl border border-blue-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
+                    <div className="relative mx-auto mb-5 h-14 w-14">
+                      <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
+                      <div className="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin-slow motion-reduce:animate-none"></div>
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      Seeking {seekingGameType} Match...
+                    <h3 className="text-xl font-bold text-white text-balance">
+                      Finding a {seekingGameType} opponent…
                     </h3>
-                    <p className="text-gray-400 mb-8 text-center max-w-sm">
-                      We&apos;re looking for an opponent for you. This usually
-                      takes less than 45 seconds.
+                    <p className="mt-2 text-sm text-gray-300">
+                      Usually under 45 seconds. You can cancel anytime.
                     </p>
-                    <button
-                      onClick={handleCancelSeeking}
-                      className="px-8 py-3 bg-gray-700 hover:bg-red-600 text-white rounded-xl transition-all duration-200 font-bold shadow-lg hover:shadow-red-500/20 active:scale-95"
-                    >
-                      Cancel Search
-                    </button>
+                    <div className="mt-5 flex flex-wrap justify-center gap-3">
+                      <a
+                        href="#open-tables"
+                        className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 active:scale-95"
+                      >
+                        Browse Open Tables
+                      </a>
+                      <button
+                        onClick={handleCancelSeeking}
+                        className="rounded-lg border border-gray-600 px-6 py-2.5 text-sm font-semibold text-gray-200 transition-colors duration-200 hover:bg-gray-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400/60 active:scale-95"
+                      >
+                        Cancel Search
+                      </button>
+                    </div>
                   </div>
-                ) : (
+                )}
+                <div id="open-tables">
                   <TableList
                     onJoin={handleJoin}
                     onSpectate={handleSpectate}
                     tables={tables}
                   />
-                )}
+                </div>
               </div>
             </GroupBox>
           </div>

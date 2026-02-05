@@ -120,7 +120,7 @@ describe("Lobby Component Functional Tests", () => {
     )
 
     // Verify seeking message appears
-    const seekingMessage = await screen.findByText(/Seeking nineball Match/i)
+    const seekingMessage = await screen.findByText(/Finding a nineball opponent/i)
     expect(seekingMessage).toBeInTheDocument()
     expect(screen.getByText(/Cancel Search/i)).toBeInTheDocument()
 
@@ -129,7 +129,7 @@ describe("Lobby Component Functional Tests", () => {
     fireEvent.click(cancelButton)
 
     await waitFor(() => {
-      expect(screen.queryByText(/Seeking nineball Match/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Finding a nineball opponent/i)).not.toBeInTheDocument()
     })
   })
 
