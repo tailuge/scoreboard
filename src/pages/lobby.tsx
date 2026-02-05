@@ -128,8 +128,8 @@ export default function Lobby() {
         }
         setSeekingGameType(null)
         setSeekingTableId(null)
-        router.push("/game?error=timeout")
-      }, 45000)
+        router.push("/game")
+      }, 60000)
     }
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -216,15 +216,9 @@ export default function Lobby() {
                       Finding a {seekingGameType} opponent…
                     </h3>
                     <p className="mt-2 text-sm text-gray-300">
-                      Usually under 45 seconds. You can cancel anytime.
+                      Usually under a minute. You can cancel anytime.
                     </p>
                     <div className="mt-5 flex flex-wrap justify-center gap-3">
-                      <a
-                        href="#open-tables"
-                        className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 active:scale-95"
-                      >
-                        Browse Open Tables
-                      </a>
                       <button
                         onClick={handleCancelSeeking}
                         className="rounded-lg border border-gray-600 px-6 py-2.5 text-sm font-semibold text-gray-200 transition-colors duration-200 hover:bg-gray-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400/60 active:scale-95"
@@ -239,6 +233,7 @@ export default function Lobby() {
                     onJoin={handleJoin}
                     onSpectate={handleSpectate}
                     tables={tables}
+                    disableActions={!!seekingGameType}
                   />
                 </div>
               </div>

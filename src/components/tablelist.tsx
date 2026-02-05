@@ -7,10 +7,12 @@ export function TableList({
   onJoin,
   onSpectate,
   tables,
+  disableActions = false,
 }: {
   readonly onJoin: (tableId: string) => Promise<boolean>
   readonly onSpectate: (tableId: string) => void
   readonly tables: Table[]
+  readonly disableActions?: boolean
 }) {
   // Use useCallback to maintain stable function reference for memoized TableItem
   const handleJoin = useCallback(
@@ -46,6 +48,7 @@ export function TableList({
                 table={table}
                 onJoin={handleJoin}
                 onSpectate={onSpectate}
+                disableActions={disableActions}
               />
             </motion.div>
           ))}
