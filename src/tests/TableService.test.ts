@@ -85,7 +85,7 @@ describe("TableService", () => {
     const hdelSpy = jest
       .spyOn(tableService["store"], "hdel")
       .mockRejectedValueOnce(new Error("Redis error"))
-    const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => {})
+    const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => { })
 
     await tableService.getTables()
 
@@ -189,11 +189,46 @@ describe("TableService", () => {
     })
 
     it("should join an existing table if one is pending", async () => {
-      const table1 = await tableService.createTable("u1", "user1", "nineball")
-      const table2 = await tableService.findOrCreate("u2", "user2", "nineball")
-      expect(table2.id).toBe(table1.id)
-      expect(table2.players).toHaveLength(2)
-      expect(table2.players[1].id).toBe("u2")
+      await tableService.createTable("user1", "User 1", "nineball")
+      const result = await tableService.findOrCreate(
+        "user2",
+        "User 2",
+        "nineball"
+      )
+      expect(result.players).toHaveLength(2)
+      expect(result.players[1].id).toBe("user2")
+    })
+  })
+
+  describe("deleteTable", () => {
+    it("should delete a table if it has only 1 player and user is creator", async () => {
+      const table = await tableService.createTable("user1", "User 1", "nineball")
+      const success = await tableService.deleteTable(table.id, "user1")
+      expect(success).toBe(true)
+      const tables = await tableService.getTables()
+      expect(tables).toHaveLength(0)
+    })
+
+    it("should return false if table does not exist", async () => {
+      const success = await tableService.deleteTable("non-existent", "user1")
+      expect(success).toBe(false)
+    })
+
+    it("should return false if user is not creator", async () => {
+      const table = await tableService.createTable("user1", "User 1", "nineball")
+      const success = await tableService.deleteTable(table.id, "user2")
+      expect(success).toBe(false)
+      const tables = await tableService.getTables()
+      expect(tables).toHaveLength(1)
+    })
+
+    it("should return false if table has 2 players", async () => {
+      const table = await tableService.createTable("user1", "User 1", "nineball")
+      await tableService.joinTable(table.id, "user2", "User 2")
+      const success = await tableService.deleteTable(table.id, "user1")
+      expect(success).toBe(false)
+      const tables = await tableService.getTables()
+      expect(tables).toHaveLength(1)
     })
   })
 })

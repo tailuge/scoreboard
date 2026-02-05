@@ -27,20 +27,21 @@ Provide a better user experience when a player initiates a game search from the 
 
 ## Step-by-Step Implementation
 
-### Phase 1: State Management
+### Phase 1: State Management [DONE]
 1. Add `seekingGameType` (string | null) state to `Lobby` component.
 2. Update `handleFindOrCreate` to set `seekingGameType`.
 3. Add a `useEffect` to clear `seekingGameType` if a match is found (existing logic for `modalTable`).
 
-### Phase 2: UI Updates
+### Phase 2: UI Updates [DONE]
 1. Replace `<CreateTable />` with a conditional render:
    - If `seekingGameType` is set, show a spinner and status message.
    - Otherwise, show nothing (or a simplified "Select a game from the Game page" if appropriate, but the user wants it redundant).
 
-### Phase 3: Timeout Logic
+### Phase 3: Timeout Logic [DONE]
 1. Add a `useEffect` that starts a timer when `seekingGameType` is set.
 2. If the timer reaches the limit, use `router.push('/game')`.
 3. Ensure the timer is cleared if `seekingGameType` is cleared or the component unmounts.
+4. Added server-side cleanup (delete table) on timeout or unmount.
 
 ### Phase 4: Verification
 1. Navigate from `/game` to `/lobby` by clicking a game.

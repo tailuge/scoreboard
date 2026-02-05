@@ -67,11 +67,11 @@ const mockTables = [
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: { username: "TestUser" },
-      isReady: true,
-      push: jest.fn(),
-    })
+      ; (useRouter as jest.Mock).mockReturnValue({
+        query: { username: "TestUser" },
+        isReady: true,
+        push: jest.fn(),
+      })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
@@ -86,6 +86,17 @@ describe("Lobby Component Functional Tests", () => {
           ok: true,
         })
       }
+      if (
+        url.includes("/join") ||
+        url.includes("/spectate") ||
+        url.includes("/find-or-create")
+      ) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve(mockTables[0]),
+        })
+      }
       return Promise.resolve({
         ok: true,
         status: 200,
@@ -94,26 +105,31 @@ describe("Lobby Component Functional Tests", () => {
     })
   })
 
-  it("should create a new game when 'Play Nineball' is clicked", async () => {
+  it("should show seeking UI when action=join is triggered and no pending table found", async () => {
+    // Override useRouter for this test
+    ; (useRouter as jest.Mock).mockReturnValue({
+      query: { action: "join", gameType: "nineball" },
+      isReady: true,
+      push: jest.fn(),
+    })
+
     render(
       <LobbyProvider>
         <Lobby />
       </LobbyProvider>
     )
 
-    // Wait for initial tables to load
-    const createButton = await screen.findByText(/Play Nineball/i)
-    fireEvent.click(createButton)
+    // Verify seeking message appears
+    const seekingMessage = await screen.findByText(/Seeking nineball Match/i)
+    expect(seekingMessage).toBeInTheDocument()
+    expect(screen.getByText(/Cancel Search/i)).toBeInTheDocument()
 
-    // Check if fetch was called with POST to /api/tables
+    // Test Cancel Search
+    const cancelButton = screen.getByText(/Cancel Search/i)
+    fireEvent.click(cancelButton)
+
     await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        TABLES_API_ENDPOINT,
-        expect.objectContaining({
-          method: "POST",
-          body: expect.stringContaining('"ruleType":"nineball"'),
-        })
-      )
+      expect(screen.queryByText(/Seeking nineball Match/i)).not.toBeInTheDocument()
     })
   })
 
@@ -161,19 +177,19 @@ describe("Lobby Component Functional Tests", () => {
         { id: "player-2", name: "Player 2" },
       ],
     }
-    ;(globalThis.fetch as jest.Mock).mockImplementation((url) => {
-      if (url === TABLES_API_ENDPOINT) {
+      ; (globalThis.fetch as jest.Mock).mockImplementation((url) => {
+        if (url === TABLES_API_ENDPOINT) {
+          return Promise.resolve({
+            json: () => Promise.resolve([fullTable]),
+            ok: true,
+          })
+        }
         return Promise.resolve({
-          json: () => Promise.resolve([fullTable]),
           ok: true,
+          status: 200,
+          json: () => Promise.resolve([]),
         })
-      }
-      return Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve([]),
       })
-    })
 
     render(
       <LobbyProvider>
@@ -200,16 +216,16 @@ describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Default search params mock (can be overridden in tests)
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: {
-        username: "TestUser",
-        action: "join",
-        gameType: "nineball",
-      },
-      isReady: true,
-      push: jest.fn(),
-    })
+      // Default search params mock (can be overridden in tests)
+      ; (useRouter as jest.Mock).mockReturnValue({
+        query: {
+          username: "TestUser",
+          action: "join",
+          gameType: "nineball",
+        },
+        isReady: true,
+        push: jest.fn(),
+      })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
@@ -228,7 +244,14 @@ describe("Lobby Redirection Tests", () => {
         return Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(mockTables[0]),
+          json: () =>
+            Promise.resolve({
+              ...mockTables[0],
+              players: [
+                { id: "creator-1", name: "Creator 1" },
+                { id: "test-user-id", name: "TestUser" },
+              ],
+            }),
         })
       }
       return Promise.resolve({

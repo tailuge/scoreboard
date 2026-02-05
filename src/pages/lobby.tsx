@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 import { TableList } from "@/components/tablelist"
-import { CreateTable } from "@/components/createtable"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
@@ -19,7 +18,7 @@ import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 export default function Lobby() {
   const { userId, userName } = useUser()
   const router = useRouter()
-  const { tables, isLoading, fetchTables, tableAction, findOrCreateTable } =
+  const { tables, isLoading, tableAction, findOrCreateTable, deleteTable } =
     useLobbyTables(userId, userName)
   const [modalTable, setModalTable] = useState<{
     id: string
@@ -27,6 +26,24 @@ export default function Lobby() {
   } | null>(null)
   const shownModals = useRef<Set<string>>(new Set())
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
+
+  const [seekingGameType, setSeekingGameType] = useState<string | null>(null)
+  const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const seekingTableIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    seekingTableIdRef.current = seekingTableId
+  }, [seekingTableId])
+
+  const handleCancelSeeking = useCallback(async () => {
+    if (seekingTableId) {
+      await deleteTable(seekingTableId)
+    }
+    setSeekingGameType(null)
+    setSeekingTableId(null)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+  }, [seekingTableId, deleteTable])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -60,15 +77,23 @@ export default function Lobby() {
 
   const handleFindOrCreate = useCallback(
     async (gameType: string) => {
+      setSeekingGameType(gameType)
       const updatedTable = await findOrCreateTable(gameType)
       if (updatedTable) {
-        if (!updatedTable.completed) {
-          setModalTable({
-            id: updatedTable.id,
-            ruleType: updatedTable.ruleType,
-          })
-          shownModals.current.add(updatedTable.id)
+        if (updatedTable.players.length === 2) {
+          setSeekingGameType(null)
+          if (!updatedTable.completed) {
+            setModalTable({
+              id: updatedTable.id,
+              ruleType: updatedTable.ruleType,
+            })
+            shownModals.current.add(updatedTable.id)
+          }
+        } else {
+          setSeekingTableId(updatedTable.id)
         }
+      } else {
+        setSeekingGameType(null)
       }
     },
     [findOrCreateTable]
@@ -84,11 +109,45 @@ export default function Lobby() {
         !table.completed &&
         !shownModals.current.has(table.id)
       ) {
+        setSeekingGameType(null)
+        setSeekingTableId(null)
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
         setModalTable({ id: table.id, ruleType: table.ruleType })
         shownModals.current.add(table.id)
       }
     })
   }, [tables, userId])
+
+  // Timeout logic
+  useEffect(() => {
+    if (seekingGameType) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(async () => {
+        if (seekingTableIdRef.current) {
+          await deleteTable(seekingTableIdRef.current)
+        }
+        setSeekingGameType(null)
+        setSeekingTableId(null)
+        router.push("/game?error=timeout")
+      }, 45000)
+    }
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [seekingGameType, deleteTable, router])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (seekingTableIdRef.current) {
+        fetch(`/api/tables/${seekingTableIdRef.current}/delete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        })
+      }
+    }
+  }, [userId])
 
   return (
     <>
@@ -147,14 +206,33 @@ export default function Lobby() {
               }
             >
               <div className="flex flex-col gap-6">
-                <div className="flex justify-start items-center px-2">
-                  <CreateTable onCreate={fetchTables} />
-                </div>
-                <TableList
-                  onJoin={handleJoin}
-                  onSpectate={handleSpectate}
-                  tables={tables}
-                />
+                {seekingGameType ? (
+                  <div className="flex flex-col items-center justify-center p-12 bg-gray-800 rounded-xl border border-blue-500/50 shadow-2xl animate-in fade-in zoom-in duration-300">
+                    <div className="relative w-20 h-20 mb-8">
+                      <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+                      <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      Seeking {seekingGameType} Match...
+                    </h3>
+                    <p className="text-gray-400 mb-8 text-center max-w-sm">
+                      We&apos;re looking for an opponent for you. This usually
+                      takes less than 45 seconds.
+                    </p>
+                    <button
+                      onClick={handleCancelSeeking}
+                      className="px-8 py-3 bg-gray-700 hover:bg-red-600 text-white rounded-xl transition-all duration-200 font-bold shadow-lg hover:shadow-red-500/20 active:scale-95"
+                    >
+                      Cancel Search
+                    </button>
+                  </div>
+                ) : (
+                  <TableList
+                    onJoin={handleJoin}
+                    onSpectate={handleSpectate}
+                    tables={tables}
+                  />
+                )}
               </div>
             </GroupBox>
           </div>

@@ -104,6 +104,28 @@ export function useLobbyTables(
     [userId, userName, fetchTables]
   )
 
+  const deleteTable = useCallback(
+    async (tableId: string) => {
+      if (!userId) return false
+      try {
+        const response = await fetch(`/api/tables/${tableId}/delete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        })
+        if (response.ok) {
+          fetchTables()
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error("Error deleting table:", error)
+        return false
+      }
+    },
+    [userId, fetchTables]
+  )
+
   return {
     tables,
     isLoading,
@@ -111,5 +133,6 @@ export function useLobbyTables(
     tableAction,
     createTable,
     findOrCreateTable,
+    deleteTable,
   }
 }

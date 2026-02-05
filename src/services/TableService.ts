@@ -14,7 +14,7 @@ export class TableService {
   constructor(
     private readonly store: VercelKV | Partial<VercelKV> = kv,
     private readonly notify: (event: any) => Promise<void> = this.defaultNotify
-  ) {}
+  ) { }
 
   async getTables() {
     const allTables =
@@ -131,6 +131,19 @@ export class TableService {
     await this.store.hset(KEY, { [tableId]: table })
     await this.notify({ action: "complete" })
     return table
+  }
+
+  async deleteTable(tableId: string, userId: string) {
+    const table = await this.store.hget<Table>(KEY, tableId)
+    if (!table) return false
+
+    // Only creator can delete if they are the only one, or maybe just allow it for one-player tables
+    if (table.creator.id === userId && table.players.length === 1) {
+      await this.store.hdel(KEY, tableId)
+      await this.notify({ action: "delete" })
+      return true
+    }
+    return false
   }
 
   async findPendingTable(gameType: string): Promise<Table | null> {
