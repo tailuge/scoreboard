@@ -36,7 +36,9 @@ describe("useLobbyTables", () => {
   })
 
   it("should handle fetch error", async () => {
-    ;(globalThis.fetch as jest.Mock).mockRejectedValue(new Error("Fetch failed"))
+    ;(globalThis.fetch as jest.Mock).mockRejectedValue(
+      new Error("Fetch failed")
+    )
     const consoleSpy = jest.spyOn(console, "error").mockImplementation()
 
     const { result } = renderHook(() => useLobbyTables(userId, userName))
@@ -242,7 +244,6 @@ describe("useLobbyTables", () => {
     const { rerender } = renderHook(() => useLobbyTables(userId, userName))
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-
     ;(useLobbyContext as jest.Mock).mockReturnValue({
       lastMessage: { action: "create" },
     })
@@ -261,7 +262,6 @@ describe("useLobbyTables", () => {
     const { rerender } = renderHook(() => useLobbyTables(userId, userName))
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-
     ;(useLobbyContext as jest.Mock).mockReturnValue({
       lastMessage: { action: "connected" },
     })

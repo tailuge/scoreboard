@@ -19,13 +19,8 @@ import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 export default function Lobby() {
   const { userId, userName } = useUser()
   const router = useRouter()
-  const {
-    tables,
-    isLoading,
-    fetchTables,
-    tableAction,
-    findOrCreateTable,
-  } = useLobbyTables(userId, userName)
+  const { tables, isLoading, fetchTables, tableAction, findOrCreateTable } =
+    useLobbyTables(userId, userName)
   const [modalTable, setModalTable] = useState<{
     id: string
     ruleType: string

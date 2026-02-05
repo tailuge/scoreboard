@@ -17,7 +17,8 @@ export class TableService {
   ) {}
 
   async getTables() {
-    const allTables = (await this.store.hgetall<Record<string, Table>>(KEY)) || {}
+    const allTables =
+      (await this.store.hgetall<Record<string, Table>>(KEY)) || {}
     const now = Date.now()
     const expiredKeys: string[] = []
     const activeTables: Table[] = []

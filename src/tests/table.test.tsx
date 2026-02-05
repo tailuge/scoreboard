@@ -187,11 +187,7 @@ describe("TableItem", () => {
 
     // Different functions
     rerender(
-      <TableItem
-        table={updatedTable}
-        onJoin={() => {}}
-        onSpectate={() => {}}
-      />
+      <TableItem table={updatedTable} onJoin={() => {}} onSpectate={() => {}} />
     )
     expect(screen.getByText("nineball")).toBeInTheDocument()
   })

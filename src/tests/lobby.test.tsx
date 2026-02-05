@@ -168,7 +168,11 @@ describe("Lobby Component Functional Tests", () => {
           ok: true,
         })
       }
-      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve([]) })
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve([]),
+      })
     })
 
     render(

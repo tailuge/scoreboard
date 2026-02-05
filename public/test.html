@@ -1,118 +1,117 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>multiplayer test helper</title>
-  <link rel="icon" type="image/png" href="golden-cup.png" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .container {
-      display: flex;
-      flex: 1;
-      flex-wrap: wrap;
-    }
-
-    .panel {
-      flex: 1 1 300px;
-      /* Each panel takes up a minimum of 300px and grows */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #ccc;
-      position: relative;
-    }
-
-    .panel:nth-child(1) {
-      background: #f8b400;
-    }
-
-    .panel:nth-child(2) {
-      background: #34a853;
-    }
-
-    .panel:nth-child(3) {
-      background: #4285f4;
-    }
-
-    .panel iframe {
-      width: 99.5%;
-      height: 99.5%;
-      border: none;
-      /* Remove border from iframe */
-    }
-  </style>
-  <script type="module">
-    import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
-
-    // Function to create an iframe
-    function createIframe(options = {}) {
-      const username = options.username || faker.person.firstName();
-      const iframe = document.createElement("iframe");
-      let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`;
-
-      if (options.action) {
-        src += `&action=${options.action}`;
-      }
-      if (options.gameType) {
-        src += `&gameType=${options.gameType}`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>multiplayer test helper</title>
+    <link rel="icon" type="image/png" href="golden-cup.png" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      iframe.src = src;
-      iframe.width = "99.5%";
-      iframe.height = "99.5%";
-      iframe.frameBorder = "0";
-      return iframe;
-    }
-
-    const panel1 = document.getElementById("panel1");
-    const panel2 = document.getElementById("panel2");
-    const panel3 = document.getElementById("panel3");
-
-    // Panel 1: action=join&gameType=nineball
-    panel1.appendChild(createIframe({ action: "join", gameType: "nineball" }));
-
-    // Panel 2: action=join&gameType=nineball
-    panel2.appendChild(createIframe({ action: "join", gameType: "nineball" }));
-
-    // Panel 3: just a random name
-    if (panel3) {
-      panel3.appendChild(createIframe());
-      const closeButton = document.getElementById("closePanel3Button");
-      if (closeButton) {
-        closeButton.addEventListener("click", () => {
-          panel3.remove();
-        });
+      html,
+      body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
-    }
-  </script>
-</head>
 
-<body>
-  <div class="container">
-    <div class="panel" id="panel1">
-    </div>
-    <div class="panel" id="panel2">
-    </div>
-    <div class="panel" id="panel3">
-      <button id="closePanel3Button" style="position: absolute; top: 10px; right: 10px; z-index: 10">
-        X
-      </button>
-    </div>
-  </div>
-</body>
+      .container {
+        display: flex;
+        flex: 1;
+        flex-wrap: wrap;
+      }
 
+      .panel {
+        flex: 1 1 300px;
+        /* Each panel takes up a minimum of 300px and grows */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        position: relative;
+      }
+
+      .panel:nth-child(1) {
+        background: #f8b400;
+      }
+
+      .panel:nth-child(2) {
+        background: #34a853;
+      }
+
+      .panel:nth-child(3) {
+        background: #4285f4;
+      }
+
+      .panel iframe {
+        width: 99.5%;
+        height: 99.5%;
+        border: none;
+        /* Remove border from iframe */
+      }
+    </style>
+    <script type="module">
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm"
+
+      // Function to create an iframe
+      function createIframe(options = {}) {
+        const username = options.username || faker.person.firstName()
+        const iframe = document.createElement("iframe")
+        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`
+
+        if (options.action) {
+          src += `&action=${options.action}`
+        }
+        if (options.gameType) {
+          src += `&gameType=${options.gameType}`
+        }
+
+        iframe.src = src
+        iframe.width = "99.5%"
+        iframe.height = "99.5%"
+        iframe.frameBorder = "0"
+        return iframe
+      }
+
+      const panel1 = document.getElementById("panel1")
+      const panel2 = document.getElementById("panel2")
+      const panel3 = document.getElementById("panel3")
+
+      // Panel 1: action=join&gameType=nineball
+      panel1.appendChild(createIframe({ action: "join", gameType: "nineball" }))
+
+      // Panel 2: action=join&gameType=nineball
+      panel2.appendChild(createIframe({ action: "join", gameType: "nineball" }))
+
+      // Panel 3: just a random name
+      if (panel3) {
+        panel3.appendChild(createIframe())
+        const closeButton = document.getElementById("closePanel3Button")
+        if (closeButton) {
+          closeButton.addEventListener("click", () => {
+            panel3.remove()
+          })
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="panel" id="panel1"></div>
+      <div class="panel" id="panel2"></div>
+      <div class="panel" id="panel3">
+        <button
+          id="closePanel3Button"
+          style="position: absolute; top: 10px; right: 10px; z-index: 10"
+        >
+          X
+        </button>
+      </div>
+    </div>
+  </body>
 </html>
