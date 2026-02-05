@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    router.push("/game")
+    router.replace("/game")
   }, [router])
 
   return (
