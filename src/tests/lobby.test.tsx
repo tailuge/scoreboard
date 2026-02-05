@@ -133,80 +133,31 @@ describe("Lobby Component Functional Tests", () => {
     })
   })
 
-  it("should join a game when 'Join' is clicked on a table", async () => {
+  it("should hide table actions when rendering the lobby", async () => {
     render(
       <LobbyProvider>
         <Lobby />
       </LobbyProvider>
     )
 
-    // Wait for table to appear (Check for creator name or Join button)
-    const joinButton = await screen.findByLabelText("Join Table")
-    fireEvent.click(joinButton)
-
-    // Check if fetch was called with PUT to join endpoint
     await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringMatching(/\/api\/tables\/table-1\/join/),
-        expect.objectContaining({
-          method: "PUT",
-        })
-      )
-    })
-
-    // Verify that the PlayModal appears
-    await waitFor(() => {
-      expect(screen.getByText("Opponent Ready")).toBeInTheDocument()
-    })
-
-    // Test closing the modal
-    const cancelButton = screen.getByText(/Cancel/i)
-    fireEvent.click(cancelButton)
-    await waitFor(() => {
-      expect(screen.queryByText("Opponent Ready")).not.toBeInTheDocument()
+      expect(screen.queryByLabelText("Join Table")).not.toBeInTheDocument()
+      expect(
+        screen.queryByLabelText(/Spectate Table/i)
+      ).not.toBeInTheDocument()
     })
   })
 
-  it("should call spectate when spectate button is clicked", async () => {
-    // Add a full table to mockTables
-    const fullTable = {
-      ...mockTables[0],
-      id: "table-full",
-      players: [
-        { id: "creator-1", name: "Creator 1" },
-        { id: "player-2", name: "Player 2" },
-      ],
-    }
-      ; (globalThis.fetch as jest.Mock).mockImplementation((url) => {
-        if (url === TABLES_API_ENDPOINT) {
-          return Promise.resolve({
-            json: () => Promise.resolve([fullTable]),
-            ok: true,
-          })
-        }
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve([]),
-        })
-      })
-
+  it("should keep table data fetching active even when tables are hidden", async () => {
     render(
       <LobbyProvider>
         <Lobby />
       </LobbyProvider>
     )
 
-    // Wait for tables to load
-    const spectateButtons = await screen.findAllByLabelText(/Spectate Table/i)
-    fireEvent.click(spectateButtons[0])
-
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        expect.stringMatching(/\/api\/tables\/table-full\/spectate/),
-        expect.objectContaining({
-          method: "PUT",
-        })
+        TABLES_API_ENDPOINT
       )
     })
   })

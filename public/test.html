@@ -90,12 +90,6 @@
       // Panel 3: just a random name
       if (panel3) {
         panel3.appendChild(createIframe())
-        const closeButton = document.getElementById("closePanel3Button")
-        if (closeButton) {
-          closeButton.addEventListener("click", () => {
-            panel3.remove()
-          })
-        }
       }
     </script>
   </head>
@@ -104,14 +98,7 @@
     <div class="container">
       <div class="panel" id="panel1"></div>
       <div class="panel" id="panel2"></div>
-      <div class="panel" id="panel3">
-        <button
-          id="closePanel3Button"
-          style="position: absolute; top: 10px; right: 10px; z-index: 10"
-        >
-          X
-        </button>
-      </div>
+      <div class="panel" id="panel3"></div>
     </div>
   </body>
 </html>

@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
-import { TableList } from "@/components/tablelist"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
@@ -228,14 +227,6 @@ export default function Lobby() {
                     </div>
                   </div>
                 )}
-                <div id="open-tables">
-                  <TableList
-                    onJoin={handleJoin}
-                    onSpectate={handleSpectate}
-                    tables={tables}
-                    disableActions={!!seekingGameType}
-                  />
-                </div>
               </div>
             </GroupBox>
           </div>
