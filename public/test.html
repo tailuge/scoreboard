@@ -35,6 +35,30 @@
         position: relative;
       }
 
+      .panel-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 11px;
+        font-size: 14px;
+        line-height: 22px;
+        cursor: pointer;
+      }
+
+      .panel-close:hover {
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .panel-close:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+      }
+
       .panel:nth-child(1) {
         background: #f8b400;
       }
@@ -90,6 +114,18 @@
       // Panel 3: just a random name
       if (panel3) {
         panel3.appendChild(createIframe())
+      }
+
+      if (panel3) {
+        const closeButton = document.createElement("button")
+        closeButton.type = "button"
+        closeButton.className = "panel-close"
+        closeButton.setAttribute("aria-label", "Close panel")
+        closeButton.textContent = "x"
+        closeButton.addEventListener("click", () => {
+          panel3.remove()
+        })
+        panel3.appendChild(closeButton)
       }
     </script>
   </head>
