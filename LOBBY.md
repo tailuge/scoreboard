@@ -1,47 +1,29 @@
-# Lobby Rework Plan
+# Lobby Improvement Plan
 
-This plan outlines the steps to hide the "Create New Game" button in the lobby when there is a game currently waiting for an opponent.
+This plan outlines the improvements to `lobby.tsx` to support a better matchmaking experience, including a seeking spinner and automatic timeout redirection.
 
 ## Objective
-To improve matchmaking by encouraging players to join existing waiting tables instead of creating new ones, thereby reducing fragmentation in the lobby.
+To provide visual feedback when a user is waiting for an opponent and to streamline the lobby by removing redundant controls. Matches are now initiated from the `/game` page via query parameters.
 
-## Proposed Changes
+## Phase 1: State and Logic
+- **Seeking State**: Add a `seekingTableId` state (string | null) to `lobby.tsx` to track the table the user is waiting for.
+- **Find or Create Flow**:
+    - Update `handleFindOrCreate` to check the returned table's player count.
+    - If `players.length === 1`, set `seekingTableId` to the table's ID.
+    - If `players.length === 2`, show the `PlayModal` immediately.
+- **Table Monitoring**:
+    - Enhance the `useEffect` that monitors `tables` to track the `seekingTableId`.
+    - If the table acquires a second player, show `PlayModal` and clear `seekingTableId`.
+    - If the table is no longer present in the `tables` list (indicating a server-side timeout), redirect the user back to `/game`.
 
-### 1. Identify "Waiting" Tables
-A table is considered "waiting" if:
-- It has exactly **one player** (`players.length === 1`).
-- It is **not completed** (`completed === false`).
+## Phase 2: UI Updates
+- **Remove Redundant Button**: Delete the `CreateTable` component from `lobby.tsx`.
+- **Seeking Spinner**:
+    - When `seekingTableId` is set, display a loading spinner with a "Seeking Opponent..." message.
+    - The `TableList` and other lobby elements should be hidden or dimmed during this state to focus on matchmaking.
+- **Cancel Matchmaking**: Add a way to cancel the search, which clears `seekingTableId`.
 
-### 2. Update `src/pages/lobby.tsx`
-- Calculate a boolean `hasWaitingTable` by checking if any table in the `tables` array matches the "waiting" criteria.
-- Use `useMemo` to optimize this calculation.
-- Pass a `hidden` state or conditionally render the `CreateTable` component.
-
-```tsx
-const hasWaitingTable = useMemo(() =>
-  tables.some(table => table.players.length === 1 && !table.completed),
-  [tables]
-);
-
-// ... in JSX ...
-{!hasWaitingTable && (
-  <div className="flex justify-start items-center px-2">
-    <CreateTable onCreate={fetchTables} />
-  </div>
-)}
-```
-
-### 3. Handle Timeouts
-- Tables with 1 player have a **60-second timeout** of inactivity (defined as `TABLE_TIMEOUT` in `src/services/TableService.ts`).
-- If a table is not joined within this minute, it will be automatically removed from the list by the server's `expireTables` logic.
-- Once the waiting table is removed (or once it is joined and starts), the "Create New Game" button will automatically reappear in the lobby.
-
-## Step-by-Step Implementation
-1. Open `src/pages/lobby.tsx`.
-2. Import `useMemo` from `react` if not already present.
-3. Add the `hasWaitingTable` constant using `useMemo` based on the `tables` state.
-4. Locate the `CreateTable` component inside the `GroupBox`.
-5. Wrap the `CreateTable` container with a conditional check for `!hasWaitingTable`.
-6. Save the file and verify the UI behavior:
-   - Create a table and ensure the button disappears.
-   - Wait 60 seconds (or join with another user) and ensure the button reappears.
+## Phase 3: Verification
+- Verify that users arriving from `/game?action=join&gameType=...` see the spinner.
+- Verify that joining an existing table (2 players total) skips the spinner and shows the `PlayModal`.
+- Verify that if no one joins within the timeout period, the user is redirected back to `/game`.
