@@ -69,6 +69,7 @@ describe("/api/tables/find-or-create handler", () => {
     jest
       .spyOn(mockTableService.prototype, "findOrCreate")
       .mockRejectedValue(new Error("Database error"))
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation()
 
     req.method = "POST"
     req.body = { userId: "u1", userName: "user1", gameType: "nineball" }
@@ -77,5 +78,6 @@ describe("/api/tables/find-or-create handler", () => {
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ error: "Internal Server Error" })
+    consoleSpy.mockRestore()
   })
 })

@@ -60,6 +60,10 @@ describe("useLobbyTables", () => {
         ok: true,
         json: () => Promise.resolve(mockTable),
       })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([]),
+      })
 
     const { result } = renderHook(() => useLobbyTables(userId, userName))
 
@@ -90,6 +94,10 @@ describe("useLobbyTables", () => {
       .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve(mockTable),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([]),
       })
 
     const { result } = renderHook(() => useLobbyTables(userId, userName))
@@ -144,6 +152,10 @@ describe("useLobbyTables", () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([]),
       })
 
     const { result } = renderHook(() => useLobbyTables(userId, userName))
