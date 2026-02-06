@@ -217,7 +217,7 @@ export default function Lobby() {
                       Finding a {seekingGameType} opponent…
                     </h3>
                     <p className="mt-2 text-sm text-gray-300">
-                      Usually under a minute. You can cancel anytime.
+                      Game will start when opponent is found.
                     </p>
                     <div className="mt-5 flex flex-wrap justify-center gap-3">
                       <button
