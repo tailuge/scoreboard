@@ -128,99 +128,98 @@
       }
     </style>
     <script type="module">
-      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm"
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
 
       // Function to create an iframe
       function createIframe(options = {}) {
-        const username = options.username || faker.person.firstName()
-        const iframe = document.createElement("iframe")
-        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`
+        const username = options.username || faker.person.firstName();
+        const iframe = document.createElement("iframe");
+        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`;
 
         if (options.action) {
-          src += `&action=${options.action}`
+          src += `&action=${options.action}`;
         }
         if (options.gameType) {
-          src += `&gameType=${options.gameType}`
+          src += `&gameType=${options.gameType}`;
         }
         if (options.ruleType) {
-          src += `&ruletype=${options.ruleType}`
+          src += `&ruletype=${options.ruleType}`;
         }
 
-        iframe.src = src
-        iframe.width = "99.5%"
-        iframe.height = "99.5%"
-        iframe.frameBorder = "0"
-        return iframe
+        iframe.src = src;
+        iframe.width = "99.5%";
+        iframe.height = "99.5%";
+        iframe.frameBorder = "0";
+        return iframe;
       }
 
-      const panel1 = document.getElementById("panel1")
-      const panel2 = document.getElementById("panel2")
-      const panel3 = document.getElementById("panel3")
-      const controls = document.getElementById("controls")
-      const spectatorToggle = document.getElementById("spectator-toggle")
+      const panel1 = document.getElementById("panel1");
+      const panel2 = document.getElementById("panel2");
+      const panel3 = document.getElementById("panel3");
+      const controls = document.getElementById("controls");
+      const spectatorToggle = document.getElementById("spectator-toggle");
 
       const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join&gameType=ruleType
         panel1.appendChild(
           createIframe({ action: "join", gameType: ruleType, ruleType }),
-        )
+        );
 
         // Panel 2: action=join&gameType=ruleType
         panel2.appendChild(
           createIframe({ action: "join", gameType: ruleType, ruleType }),
-        )
+        );
 
         // Panel 3: just a random name
         if (panel3 && includeSpectator) {
-          panel3.appendChild(createIframe())
-          const closeButton = document.createElement("button")
-          closeButton.type = "button"
-          closeButton.className = "panel-close"
-          closeButton.setAttribute("aria-label", "Close panel")
-          closeButton.textContent = "x"
+          panel3.appendChild(createIframe());
+          const closeButton = document.createElement("button");
+          closeButton.type = "button";
+          closeButton.className = "panel-close";
+          closeButton.setAttribute("aria-label", "Close panel");
+          closeButton.textContent = "x";
           closeButton.addEventListener("click", () => {
-            panel3.remove()
-          })
-          panel3.appendChild(closeButton)
-          panel3.classList.remove("hidden")
+            panel3.remove();
+          });
+          panel3.appendChild(closeButton);
+          panel3.classList.remove("hidden");
         } else if (panel3) {
-          panel3.classList.add("hidden")
+          panel3.classList.add("hidden");
         }
-      }
+      };
 
       const hidePreGameUi = () => {
-        controls?.classList.add("hidden")
-        stats?.classList.add("hidden")
-      }
+        controls?.classList.add("hidden");
+        stats?.classList.add("hidden");
+      };
 
       const startGame = (ruleType) => {
-        hidePreGameUi()
-        createPanels(ruleType, spectatorToggle?.checked)
-      }
-
+        hidePreGameUi();
+        createPanels(ruleType, spectatorToggle?.checked);
+      };
 
       document
         .getElementById("button-nineball")
-        ?.addEventListener("click", () => startGame("nineball"))
+        ?.addEventListener("click", () => startGame("nineball"));
       document
         .getElementById("button-snooker")
-        ?.addEventListener("click", () => startGame("snooker"))
+        ?.addEventListener("click", () => startGame("snooker"));
 
-      const existingRuleType = new URLSearchParams(
-        window.location.search,
-      ).get("ruletype")
+      const existingRuleType = new URLSearchParams(window.location.search).get(
+        "ruletype",
+      );
 
       if (existingRuleType === "nineball" || existingRuleType === "snooker") {
-        hidePreGameUi()
-        createPanels(existingRuleType, spectatorToggle?.checked)
+        hidePreGameUi();
+        createPanels(existingRuleType, spectatorToggle?.checked);
       }
     </script>
   </head>
 
   <body>
     <div class="controls" id="controls">
-      <button type="button" id="button-nineball">Nineball</button>
-      <button type="button" id="button-snooker">Snooker</button>
+      <button type="button" id="button-nineball" disabled>Nineball</button>
+      <button type="button" id="button-snooker" disabled>Snooker</button>
       <label for="spectator-toggle">
         <input type="checkbox" id="spectator-toggle" />
         Spectator
@@ -228,8 +227,13 @@
     </div>
     <div class="stats" id="stats">
       <iframe
+        id="stats-iframe"
         src="https://billiards-network.onrender.com/nchan_stats"
         title="nchan stats"
+        onload="
+          document.getElementById('button-nineball').disabled = false;
+          document.getElementById('button-snooker').disabled = false;
+        "
       ></iframe>
     </div>
     <div class="container">
