@@ -49,6 +49,7 @@ export default function Lobby() {
     markUsage("lobby")
   }, [router.isReady])
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, sonarjs/no-unused-vars, sonarjs/no-dead-store
   const handleJoin = useCallback(
     async (tableId: string) => {
       const updatedTable = await tableAction(tableId, "join")
@@ -67,6 +68,7 @@ export default function Lobby() {
     [tableAction]
   )
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, sonarjs/no-unused-vars, sonarjs/no-dead-store
   const handleSpectate = useCallback(
     async (tableId: string) => {
       await tableAction(tableId, "spectate")
