@@ -298,7 +298,7 @@ body {
 }
 
 .iframe-container {
-  @apply relative bg-white rounded-lg w-[95%] h-[95%] shadow-lg;
+  @apply relative bg-white rounded-lg w-[95%] h-[85%] shadow-lg;
 }
 
 .iframe-element {
