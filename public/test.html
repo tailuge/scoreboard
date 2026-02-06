@@ -83,6 +83,7 @@
         gap: 12px;
         padding: 16px;
         justify-content: center;
+        align-items: center;
       }
 
       .controls button {
@@ -102,6 +103,14 @@
       .controls button:focus-visible {
         outline: 2px solid #111;
         outline-offset: 2px;
+      }
+
+      .controls label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #111;
       }
 
       .stats {
@@ -148,8 +157,9 @@
       const panel2 = document.getElementById("panel2")
       const panel3 = document.getElementById("panel3")
       const controls = document.getElementById("controls")
+      const spectatorToggle = document.getElementById("spectator-toggle")
 
-      const createPanels = (ruleType) => {
+      const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join&gameType=ruleType
         panel1.appendChild(
           createIframe({ action: "join", gameType: ruleType, ruleType }),
@@ -161,11 +171,8 @@
         )
 
         // Panel 3: just a random name
-        if (panel3) {
+        if (panel3 && includeSpectator) {
           panel3.appendChild(createIframe())
-        }
-
-        if (panel3) {
           const closeButton = document.createElement("button")
           closeButton.type = "button"
           closeButton.className = "panel-close"
@@ -175,6 +182,9 @@
             panel3.remove()
           })
           panel3.appendChild(closeButton)
+          panel3.classList.remove("hidden")
+        } else if (panel3) {
+          panel3.classList.add("hidden")
         }
       }
 
@@ -185,7 +195,7 @@
 
       const startGame = (ruleType) => {
         hidePreGameUi()
-        createPanels(ruleType)
+        createPanels(ruleType, spectatorToggle?.checked)
       }
 
 
@@ -202,7 +212,7 @@
 
       if (existingRuleType === "nineball" || existingRuleType === "snooker") {
         hidePreGameUi()
-        createPanels(existingRuleType)
+        createPanels(existingRuleType, spectatorToggle?.checked)
       }
     </script>
   </head>
@@ -211,6 +221,10 @@
     <div class="controls" id="controls">
       <button type="button" id="button-nineball">Nineball</button>
       <button type="button" id="button-snooker">Snooker</button>
+      <label for="spectator-toggle">
+        <input type="checkbox" id="spectator-toggle" />
+        Spectator
+      </label>
     </div>
     <div class="stats" id="stats">
       <iframe
@@ -221,7 +235,7 @@
     <div class="container">
       <div class="panel" id="panel1"></div>
       <div class="panel" id="panel2"></div>
-      <div class="panel" id="panel3"></div>
+      <div class="panel hidden" id="panel3"></div>
     </div>
   </body>
 </html>
