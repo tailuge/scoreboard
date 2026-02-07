@@ -33,6 +33,14 @@ export class ScoreTable {
   }
 
   private formatReplayUrl(data: string): string {
+    if (!data || typeof data !== "string") {
+      return this.notFound
+    }
+    // Prevent open redirect by ensuring data is not an absolute or protocol-relative URL
+    if (data.includes("://") || data.startsWith("//")) {
+      logger.warn(`Blocked potential open redirect in ScoreTable: ${data}`)
+      return this.notFound
+    }
     return this.replayUrl + data
   }
 
