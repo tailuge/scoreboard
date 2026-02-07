@@ -17,20 +17,35 @@ export class MatchResultService {
    */
   async addMatchResult(
     result: MatchResult,
-    _replayData?: string
+    replayData?: string
   ): Promise<void> {
+    if (replayData) {
+      await this.store.set(getMatchReplayKey(result.id), replayData)
+      result.hasReplay = true
+    }
+
     // Add to sorted set
     await this.store.zadd(KEY, {
       score: result.timestamp,
       member: result,
     })
 
+    // Identify matches that are about to be evicted from the sorted set (beyond the 50 limit).
+    // zrange(0, -(HISTORY_LIMIT + 1)) returns members that will be removed by zremrangebyrank(0, -(HISTORY_LIMIT + 1))
+    const toEvict = await this.store.zrange<MatchResult[]>(
+      KEY,
+      0,
+      -(HISTORY_LIMIT + 1)
+    )
+
+    if (toEvict.length > 0) {
+      const keysToDelete = toEvict.map((r) => getMatchReplayKey(r.id))
+      if (this.store.del) {
+        await this.store.del(...keysToDelete)
+      }
+    }
+
     // Trim to HISTORY_LIMIT (remove older entries)
-    // zremrangebyrank uses 0-based indices.
-    // To keep the latest 50, we remove from 0 to -(HISTORY_LIMIT + 1)
-    // Wait, if we want to keep TOP 50, and they are sorted by timestamp (ascending)
-    // The highest timestamps are at the end.
-    // So we want to remove from the start if count > HISTORY_LIMIT.
     await this.store.zremrangebyrank(KEY, 0, -(HISTORY_LIMIT + 1))
   }
 
