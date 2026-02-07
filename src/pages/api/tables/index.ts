@@ -5,6 +5,37 @@ import { logger } from "@/utils/logger"
 
 const tableService = new TableService()
 
+/**
+ * @swagger
+ * /api/tables:
+ *   get:
+ *     summary: Returns a list of all active tables
+ *     responses:
+ *       200:
+ *         description: A list of tables
+ *   post:
+ *     summary: Creates a new table
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - userName
+ *               - ruleType
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               userName:
+ *                 type: string
+ *               ruleType:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Table created
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

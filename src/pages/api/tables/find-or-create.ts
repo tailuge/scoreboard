@@ -5,6 +5,36 @@ import { logger } from "@/utils/logger"
 
 const tableService = new TableService()
 
+/**
+ * @swagger
+ * /api/tables/find-or-create:
+ *   post:
+ *     summary: Finds an existing table or creates a new one
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - userName
+ *               - gameType
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               userName:
+ *                 type: string
+ *               gameType:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Table found or created
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

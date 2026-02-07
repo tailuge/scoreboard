@@ -5,6 +5,34 @@ export const config = {
   runtime: "edge",
 }
 
+/**
+ * @swagger
+ * /api/usage/{metric}:
+ *   get:
+ *     summary: Returns usage counts for a specific metric
+ *     parameters:
+ *       - in: path
+ *         name: metric
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The metric name
+ *     responses:
+ *       200:
+ *         description: Usage counts
+ *   put:
+ *     summary: Increments the usage count for a specific metric
+ *     parameters:
+ *       - in: path
+ *         name: metric
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The metric name
+ *     responses:
+ *       200:
+ *         description: Count incremented
+ */
 export default async function handler(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const metric = searchParams.get("metric")
