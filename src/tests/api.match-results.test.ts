@@ -103,7 +103,34 @@ describe("/api/match-results handler", () => {
         gameType: "snooker",
         id: expect.any(String),
         timestamp: expect.any(Number),
-      })
+      }),
+      undefined
+    )
+  })
+
+  it("should pass replayData to service on POST request", async () => {
+    const dataWithReplay = {
+      winner: "A",
+      winnerScore: 10,
+      replayData: "my-replay-blob",
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
+      .mockResolvedValue(undefined)
+
+    req = {
+      method: "POST",
+      nextUrl: new URL("https://localhost/api/match-results"),
+      json: jest.fn().mockResolvedValue(dataWithReplay),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(201)
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.not.objectContaining({ replayData: "my-replay-blob" }),
+      "my-replay-blob"
     )
   })
 
@@ -135,7 +162,8 @@ describe("/api/match-results handler", () => {
         gameType: "snooker",
         id: expect.any(String),
         timestamp: expect.any(Number),
-      })
+      }),
+      undefined
     )
   })
 
@@ -165,7 +193,8 @@ describe("/api/match-results handler", () => {
         gameType: "nineball",
         id: expect.any(String),
         timestamp: expect.any(Number),
-      })
+      }),
+      undefined
     )
   })
 

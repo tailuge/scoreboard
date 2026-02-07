@@ -69,4 +69,11 @@ export class MatchResultService {
     // Even if we fetched with limit, we slice here for consistency
     return filtered.slice(0, limit)
   }
+
+  /**
+   * Retrieves the replay data for a given match ID.
+   */
+  async getMatchReplay(matchId: string): Promise<string | null> {
+    return this.store.get<string>(getMatchReplayKey(matchId))
+  }
 }

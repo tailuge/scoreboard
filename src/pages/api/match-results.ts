@@ -44,7 +44,7 @@ async function handleGet(request: NextRequest) {
 
 async function handlePost(request: NextRequest) {
   try {
-    const data = await request.json()
+    const { replayData, ...data } = await request.json()
 
     // Basic validation
     // winner and winnerScore are required.
@@ -60,7 +60,7 @@ async function handlePost(request: NextRequest) {
       timestamp: Date.now(),
     }
 
-    await matchResultService.addMatchResult(newResult)
+    await matchResultService.addMatchResult(newResult, replayData)
     return Response.json(newResult, { status: 201 })
   } catch (error) {
     logger.log("Error adding match result:", error)

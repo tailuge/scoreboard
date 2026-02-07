@@ -54,6 +54,26 @@ describe("MatchResultService", () => {
     expect(storedReplay).toBe("replay-data")
   })
 
+  it("should retrieve replay data using getMatchReplay", async () => {
+    const matchId = "match-with-replay"
+    const result: MatchResult = {
+      id: matchId,
+      winner: "Winner",
+      winnerScore: 100,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+
+    await service.addMatchResult(result, "some-blob")
+    const replay = await service.getMatchReplay(matchId)
+    expect(replay).toBe("some-blob")
+  })
+
+  it("should return null if replay data does not exist", async () => {
+    const replay = await service.getMatchReplay("non-existent")
+    expect(replay).toBeNull()
+  })
+
   it("should cleanup replay data when match is evicted from rolling history", async () => {
     const firstMatchId = "match-to-evict"
     const firstResult: MatchResult = {
@@ -86,7 +106,9 @@ describe("MatchResultService", () => {
     expect(history.find((r) => r.id === firstMatchId)).toBeUndefined()
 
     // Replay data should be gone
-    const storedReplay = await (mockKv as any).get(getMatchReplayKey(firstMatchId))
+    const storedReplay = await (mockKv as any).get(
+      getMatchReplayKey(firstMatchId)
+    )
     expect(storedReplay).toBeNull()
   })
 

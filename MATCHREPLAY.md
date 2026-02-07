@@ -59,12 +59,12 @@ The `MatchResultService` will be updated to ensure `match_replay:{id}` keys are 
   2. Identify matches that are about to be evicted from the sorted set (beyond the 50 limit).
   3. Delete the `match_replay:{id}` keys for those evicted matches to prevent data leaks.
 
-### Phase 3: API Integration
+### Phase 3: API Integration ✅ Done
 - Update `src/pages/api/match-results.ts` to pass `replayData` from the request body to the service.
 - Create `/src/pages/api/match-replay.ts` to serve the replay data from KV.
 - Ensure appropriate error handling if a replay is requested but not found.
 
-### Phase 4: Verification
+### Phase 4: Verification ✅ Done
 - Add unit tests to `src/tests/MatchResultService.test.ts` to verify:
   - Replay data is stored separately.
   - Replay data is cleaned up alongside match results.
