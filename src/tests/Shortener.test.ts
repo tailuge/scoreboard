@@ -48,4 +48,20 @@ describe("Shortener", () => {
     const replayUrl = await shortener.replay("999")
     expect(replayUrl).toContain("notfound.html")
   })
+
+  it("should throw error for invalid shorten input", async () => {
+    await expect(shortener.shorten(null)).rejects.toThrow("Invalid input")
+    await expect(shortener.shorten({ input: 123 })).rejects.toThrow("Invalid input")
+    await expect(shortener.shorten({ input: "a".repeat(2001) })).rejects.toThrow("Invalid input")
+  })
+
+  it("should prevent open redirect in replay", async () => {
+    // Protocol-relative URL
+    await shortener.shorten({ input: "//malicious.com" })
+    expect(await shortener.replay("1")).toContain("notfound.html")
+
+    // Absolute URL
+    await shortener.shorten({ input: "https://malicious.com" })
+    expect(await shortener.replay("2")).toContain("notfound.html")
+  })
 })
