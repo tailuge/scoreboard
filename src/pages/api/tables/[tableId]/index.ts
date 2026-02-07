@@ -48,6 +48,55 @@ export async function DELETE(
   }
 }
 
+/**
+ * @swagger
+ * /api/tables/{tableId}:
+ *   get:
+ *     summary: Returns details of a specific table
+ *     parameters:
+ *       - in: path
+ *         name: tableId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The table ID
+ *     responses:
+ *       200:
+ *         description: Table details
+ *       404:
+ *         description: Table not found
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     summary: Deletes a specific table
+ *     parameters:
+ *       - in: path
+ *         name: tableId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The table ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *             properties:
+ *               userId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Table deleted
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: Table not found
+ *       500:
+ *         description: Internal server error
+ */
 export default async function handler(
   request: NextRequest,
   ctx: { params?: { tableId?: string } } = {}

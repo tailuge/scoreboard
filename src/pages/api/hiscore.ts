@@ -11,6 +11,39 @@ export const config = {
 
 const scoretable = new ScoreTable(kv)
 
+/**
+ * @swagger
+ * /api/hiscore:
+ *   post:
+ *     summary: Submits a high score
+ *     parameters:
+ *       - in: query
+ *         name: ruletype
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The rule type
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: The player ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               state:
+ *                 type: string
+ *                 description: JSONCrushed score state
+ *     responses:
+ *       302:
+ *         description: Redirects to leaderboard
+ *       400:
+ *         description: Client version is outdated
+ */
 export default async function handler(request: NextRequest) {
   const url = request.nextUrl
   const body = await request.text()

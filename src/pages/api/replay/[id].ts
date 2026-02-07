@@ -7,6 +7,24 @@ export const config = {
   runtime: "edge",
 }
 
+/**
+ * @swagger
+ * /api/replay/{id}:
+ *   get:
+ *     summary: Redirects to the replay URL for a given ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The replay ID
+ *     responses:
+ *       302:
+ *         description: Redirects to replay URL
+ *       400:
+ *         description: ID is required
+ */
 export default async function handler(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id")
   if (!id) {

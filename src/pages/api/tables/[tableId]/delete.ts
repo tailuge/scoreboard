@@ -4,6 +4,68 @@ import { logger } from "@/utils/logger"
 
 const tableService = new TableService()
 
+/**
+ * @swagger
+ * /api/tables/{tableId}/delete:
+ *   post:
+ *     summary: Deletes a specific table
+ *     parameters:
+ *       - in: path
+ *         name: tableId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The table ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *             properties:
+ *               userId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Table deleted
+ *       400:
+ *         description: Missing userId
+ *       403:
+ *         description: Unauthorized or table not found
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     summary: Deletes a specific table
+ *     parameters:
+ *       - in: path
+ *         name: tableId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The table ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *             properties:
+ *               userId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Table deleted
+ *       400:
+ *         description: Missing userId
+ *       403:
+ *         description: Unauthorized or table not found
+ *       500:
+ *         description: Internal server error
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
