@@ -39,8 +39,8 @@ To save bandwidth, `replayData` is stored in separate keys rather than inside th
 - Since `replayData` is stored separately, the response size remains small.
 - The `hasReplay` flag allows the UI to display a "Watch Replay" button.
 
-#### `GET /api/replay?id={id}`
-- A new or updated endpoint to fetch the replay blob.
+#### `GET /api/match-replay?id={id}`
+- A new endpoint to fetch the replay blob.
 - Implementation: `kv.get("match_replay:" + id)`.
 
 ### 4. Cleanup Logic
@@ -53,7 +53,7 @@ The `MatchResultService` will be updated to ensure `match_replay:{id}` keys are 
 - Extend `MatchResultService.addMatchResult` to accept an optional `replayData` parameter.
 - Define the new storage key pattern `match_replay:{id}`.
 
-### Phase 2: Storage & Cleanup Logic
+### Phase 2: Storage & Cleanup Logic ✅ Done
 - Update `MatchResultService.addMatchResult` to:
   1. Save `replayData` to its own key if provided.
   2. Identify matches that are about to be evicted from the sorted set (beyond the 50 limit).
@@ -61,7 +61,7 @@ The `MatchResultService` will be updated to ensure `match_replay:{id}` keys are 
 
 ### Phase 3: API Integration
 - Update `src/pages/api/match-results.ts` to pass `replayData` from the request body to the service.
-- Create or update `/api/replay/[id].ts` to serve the replay data from KV.
+- Create `/src/pages/api/match-replay.ts` to serve the replay data from KV.
 - Ensure appropriate error handling if a replay is requested but not found.
 
 ### Phase 4: Verification
