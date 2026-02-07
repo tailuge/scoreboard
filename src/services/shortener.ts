@@ -21,6 +21,10 @@ export class Shortener {
   }
 
   async shorten(data: any) {
+    if (!data || typeof data.input !== "string" || data.input.length > 2000) {
+      logger.error("Invalid input for shorten", data)
+      throw new Error("Invalid input")
+    }
     const key = (await this.keyFountain()).toString()
     logger.log("next free key: ", key)
     const result = await this.store.set(this.dbKey(key), data)
@@ -35,7 +39,12 @@ export class Shortener {
   async replay(key: string) {
     const data = await this.store.get<any>(this.dbKey(key))
     logger.log(data)
-    if (!data) {
+    if (!data || typeof data.input !== "string") {
+      return this.notFound
+    }
+    // Prevent open redirect by ensuring input is not an absolute or protocol-relative URL
+    if (data.input.includes("://") || data.input.startsWith("//")) {
+      logger.warn(`Blocked potential open redirect: ${data.input}`)
       return this.notFound
     }
     return this.replayUrl + data.input

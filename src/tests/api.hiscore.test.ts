@@ -136,4 +136,100 @@ describe("/api/hiscore handler", () => {
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })
+
+  it("should return 400 if state is missing", async () => {
+    req = {
+      text: jest.fn().mockResolvedValue(""),
+      nextUrl: new URL("https://localhost/api/hiscore"),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(Response).toHaveBeenCalledWith("Missing state", { status: 400 })
+  })
+
+  it("should return 400 if state is invalid", async () => {
+    mockJsonCrush.uncrush.mockReturnValue("invalid-json")
+    req = {
+      text: jest.fn().mockResolvedValue("state=abc"),
+      nextUrl: new URL("https://localhost/api/hiscore"),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(Response).toHaveBeenCalledWith("Invalid state format", { status: 400 })
+  })
+
+  it("should return 400 if ruletype is invalid", async () => {
+    const validData = { v: 1, score: 150 }
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+    req = {
+      text: jest.fn().mockResolvedValue("state=abc"),
+      nextUrl: new URL("https://localhost/api/hiscore?ruletype=invalid"),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(Response).toHaveBeenCalledWith("Invalid ruletype", { status: 400 })
+  })
+
+  it("should handle error in urlState when URLSearchParams throws", async () => {
+    const validData = { v: 1, score: 250 }
+    const crushedString = "crushed-for-error-test"
+    const body = `state=${crushedString}`
+    const ruletype = "nineball"
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+
+    // URLSearchParams might throw if input is not a string (though TypeScript prevents it, runtime might differ)
+    // Or we can mock URLSearchParams to throw
+    const originalURLSearchParams = global.URLSearchParams
+    global.URLSearchParams = jest.fn().mockImplementation((input) => {
+      if (input === "trigger-error") {
+        throw new Error("Mocked error")
+      }
+      return new originalURLSearchParams(input)
+    }) as any
+
+    const errorScore = { data: "trigger-error" }
+    jest.spyOn(mockScoreTable.prototype, "topTen").mockResolvedValue([errorScore as any])
+
+    req = {
+      text: jest.fn().mockResolvedValue(body),
+      nextUrl: new URL(`https://localhost/api/hiscore?ruletype=${ruletype}`),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(Response.redirect).toHaveBeenCalledWith(leaderboardUrl)
+
+    global.URLSearchParams = originalURLSearchParams
+  })
+
+  it("should default score to 0 if json.score is missing", async () => {
+    const validData = { v: 1 } // missing score
+    const body = `state=some-crushed-string`
+    const ruletype = "nineball"
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+
+    jest.spyOn(mockScoreTable.prototype, "topTen").mockResolvedValue([])
+    const addSpy = jest.spyOn(mockScoreTable.prototype, "add").mockResolvedValue(1)
+
+    req = {
+      text: jest.fn().mockResolvedValue(body),
+      nextUrl: new URL(`https://localhost/api/hiscore?ruletype=${ruletype}`),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(addSpy).toHaveBeenCalledWith(ruletype, expect.any(Number), expect.any(String), body)
+    const calledScore = addSpy.mock.calls[0][1]
+    expect(calledScore).toBeGreaterThan(0) // base offset + small fractional part
+    expect(calledScore).toBeLessThan(1) // Since (Date.now() - base) / base should be small if base is 2024
+  })
+
+  it("should return 400 if json is null", async () => {
+    mockJsonCrush.uncrush.mockReturnValue("null")
+    req = {
+      text: jest.fn().mockResolvedValue("state=abc"),
+      nextUrl: new URL("https://localhost/api/hiscore"),
+    } as unknown as NextRequest
+
+    await handler(req)
+    expect(Response).toHaveBeenCalledWith(expect.any(String), { status: 400 })
+  })
 })

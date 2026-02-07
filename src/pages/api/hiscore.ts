@@ -4,6 +4,7 @@ import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
+import { isValidGameType } from "@/utils/gameTypes"
 
 export const config = {
   runtime: "edge",
@@ -18,8 +19,18 @@ export default async function handler(request: NextRequest) {
   logger.log(`url.searchParams = ${url.searchParams}`)
   const raw = new URLSearchParams(body).get("state")
   logger.log(raw)
-  const json = JSON.parse(JSONCrush.uncrush(raw))
-  logger.log(json)
+  if (!raw) {
+    return new Response("Missing state", { status: 400 })
+  }
+
+  let json: any
+  try {
+    json = JSON.parse(JSONCrush.uncrush(raw))
+    logger.log(json)
+  } catch (e) {
+    logger.error("Failed to parse state", e)
+    return new Response("Invalid state format", { status: 400 })
+  }
 
   // require up to date client version
   if (json?.v !== 1) {
@@ -31,11 +42,15 @@ export default async function handler(request: NextRequest) {
   }
 
   const ruletype = url.searchParams.get("ruletype")
+  if (!isValidGameType(ruletype)) {
+    return new Response("Invalid ruletype", { status: 400 })
+  }
+
   const base = new Date("2024").valueOf()
-  const score = json?.score + (Date.now() - base) / base
-  const player = url.searchParams.get("id") || "***"
+  const score = (Number(json?.score) || 0) + (Date.now() - base) / base
+  const player = (url.searchParams.get("id") || "***").slice(0, 50)
   logger.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
-  const data = await scoretable.topTen(url.searchParams.get("ruletype"))
+  const data = await scoretable.topTen(ruletype)
 
   if (
     !data.some((row) => {
