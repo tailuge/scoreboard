@@ -85,7 +85,7 @@ describe("TableService", () => {
     const hdelSpy = jest
       .spyOn(tableService["store"], "hdel")
       .mockRejectedValueOnce(new Error("Redis error"))
-    const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => { })
+    const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => {})
 
     await tableService.getTables()
 
@@ -202,7 +202,11 @@ describe("TableService", () => {
 
   describe("deleteTable", () => {
     it("should delete a table if it has only 1 player and user is creator", async () => {
-      const table = await tableService.createTable("user1", "User 1", "nineball")
+      const table = await tableService.createTable(
+        "user1",
+        "User 1",
+        "nineball"
+      )
       const success = await tableService.deleteTable(table.id, "user1")
       expect(success).toBe(true)
       const tables = await tableService.getTables()
@@ -215,7 +219,11 @@ describe("TableService", () => {
     })
 
     it("should return false if user is not creator", async () => {
-      const table = await tableService.createTable("user1", "User 1", "nineball")
+      const table = await tableService.createTable(
+        "user1",
+        "User 1",
+        "nineball"
+      )
       const success = await tableService.deleteTable(table.id, "user2")
       expect(success).toBe(false)
       const tables = await tableService.getTables()
@@ -223,7 +231,11 @@ describe("TableService", () => {
     })
 
     it("should return false if table has 2 players", async () => {
-      const table = await tableService.createTable("user1", "User 1", "nineball")
+      const table = await tableService.createTable(
+        "user1",
+        "User 1",
+        "nineball"
+      )
       await tableService.joinTable(table.id, "user2", "User 2")
       const success = await tableService.deleteTable(table.id, "user1")
       expect(success).toBe(false)

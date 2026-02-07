@@ -35,10 +35,8 @@ function TableContent({
     table.players.length > 1
       ? `vs ${table.players[1].name}`
       : "- waiting for opponent"
-  const canJoin =
-    !disableActions && !isCreator && table.players.length < 2
-  const canSpectate =
-    !disableActions && !isCreator && table.players.length >= 2
+  const canJoin = !disableActions && !isCreator && table.players.length < 2
+  const canSpectate = !disableActions && !isCreator && table.players.length >= 2
 
   return (
     <div className="table-content">

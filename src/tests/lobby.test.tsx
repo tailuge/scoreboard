@@ -67,11 +67,11 @@ const mockTables = [
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-      ; (useRouter as jest.Mock).mockReturnValue({
-        query: { username: "TestUser" },
-        isReady: true,
-        push: jest.fn(),
-      })
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: { username: "TestUser" },
+      isReady: true,
+      push: jest.fn(),
+    })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
@@ -107,7 +107,7 @@ describe("Lobby Component Functional Tests", () => {
 
   it("should show seeking UI when action=join is triggered and no pending table found", async () => {
     // Override useRouter for this test
-    ; (useRouter as jest.Mock).mockReturnValue({
+    ;(useRouter as jest.Mock).mockReturnValue({
       query: { action: "join", gameType: "nineball" },
       isReady: true,
       push: jest.fn(),
@@ -120,7 +120,9 @@ describe("Lobby Component Functional Tests", () => {
     )
 
     // Verify seeking message appears
-    const seekingMessage = await screen.findByText(/Finding a nineball opponent/i)
+    const seekingMessage = await screen.findByText(
+      /Finding a nineball opponent/i
+    )
     expect(seekingMessage).toBeInTheDocument()
     expect(screen.getByText(/Cancel Search/i)).toBeInTheDocument()
 
@@ -129,7 +131,9 @@ describe("Lobby Component Functional Tests", () => {
     fireEvent.click(cancelButton)
 
     await waitFor(() => {
-      expect(screen.queryByText(/Finding a nineball opponent/i)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(/Finding a nineball opponent/i)
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -142,9 +146,7 @@ describe("Lobby Component Functional Tests", () => {
 
     await waitFor(() => {
       expect(screen.queryByLabelText("Join Table")).not.toBeInTheDocument()
-      expect(
-        screen.queryByLabelText(/Spectate Table/i)
-      ).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/Spectate Table/i)).not.toBeInTheDocument()
     })
   })
 
@@ -156,9 +158,7 @@ describe("Lobby Component Functional Tests", () => {
     )
 
     await waitFor(() => {
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        TABLES_API_ENDPOINT
-      )
+      expect(globalThis.fetch).toHaveBeenCalledWith(TABLES_API_ENDPOINT)
     })
   })
 })
@@ -167,16 +167,16 @@ describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-      // Default search params mock (can be overridden in tests)
-      ; (useRouter as jest.Mock).mockReturnValue({
-        query: {
-          username: "TestUser",
-          action: "join",
-          gameType: "nineball",
-        },
-        isReady: true,
-        push: jest.fn(),
-      })
+    // Default search params mock (can be overridden in tests)
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {
+        username: "TestUser",
+        action: "join",
+        gameType: "nineball",
+      },
+      isReady: true,
+      push: jest.fn(),
+    })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
