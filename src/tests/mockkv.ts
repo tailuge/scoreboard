@@ -191,6 +191,15 @@ export class MockKV {
     return result === 0 ? 0 : 1
   }
 
+  /**
+   * Adapter function to match @vercel/kv's del signature using ioredis-mock's del.
+   * @param keys - The keys to delete.
+   * @returns A promise that resolves to the number of keys removed.
+   */
+  async del(...keys: string[]): Promise<number> {
+    return this.mockRedis.del(...keys)
+  }
+
   async printMockRedisData() {
     try {
       // Retrieve all keys

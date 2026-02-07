@@ -31,7 +31,7 @@ describe("MatchResultService", () => {
     expect(history[0]).toEqual(result)
   })
 
-  it("should accept replay data without altering the stored result", async () => {
+  it("should store replay data separately and set hasReplay flag", async () => {
     const result: MatchResult = {
       id: "match-replay",
       winner: "Winner",
@@ -46,7 +46,48 @@ describe("MatchResultService", () => {
     const history = await service.getMatchResults()
 
     expect(history).toHaveLength(1)
-    expect(history[0]).toEqual(result)
+    expect(history[0].hasReplay).toBe(true)
+
+    // Verify replay data is stored in a separate key
+    const replayKey = getMatchReplayKey("match-replay")
+    const storedReplay = await (mockKv as any).get(replayKey)
+    expect(storedReplay).toBe("replay-data")
+  })
+
+  it("should cleanup replay data when match is evicted from rolling history", async () => {
+    const firstMatchId = "match-to-evict"
+    const firstResult: MatchResult = {
+      id: firstMatchId,
+      winner: "Winner",
+      winnerScore: 100,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+
+    // Add the match with replay data
+    await service.addMatchResult(firstResult, "evict-me-replay")
+    expect(await (mockKv as any).get(getMatchReplayKey(firstMatchId))).toBe(
+      "evict-me-replay"
+    )
+
+    // Add 50 more matches to evict the first one (limit is 50)
+    for (let i = 0; i < 50; i++) {
+      await service.addMatchResult({
+        id: `m${i}`,
+        winner: "P",
+        winnerScore: 10,
+        gameType: "snooker",
+        timestamp: Date.now() + 1000 + i,
+      })
+    }
+
+    const history = await service.getMatchResults()
+    expect(history).toHaveLength(50)
+    expect(history.find((r) => r.id === firstMatchId)).toBeUndefined()
+
+    // Replay data should be gone
+    const storedReplay = await (mockKv as any).get(getMatchReplayKey(firstMatchId))
+    expect(storedReplay).toBeNull()
   })
 
   it("should build match replay keys consistently", () => {
