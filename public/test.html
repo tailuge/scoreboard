@@ -157,7 +157,11 @@
       const panel2 = document.getElementById("panel2");
       const panel3 = document.getElementById("panel3");
       const controls = document.getElementById("controls");
+      const stats = document.getElementById("stats");
       const spectatorToggle = document.getElementById("spectator-toggle");
+      const statsIframe = document.getElementById("stats-iframe");
+      const buttonNineball = document.getElementById("button-nineball");
+      const buttonSnooker = document.getElementById("button-snooker");
 
       const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join&gameType=ruleType
@@ -193,6 +197,23 @@
         stats?.classList.add("hidden");
       };
 
+      const enableStartButtons = () => {
+        if (buttonNineball) buttonNineball.disabled = false;
+        if (buttonSnooker) buttonSnooker.disabled = false;
+      };
+
+      const warmNchanStats = async () => {
+        const url = "https://billiards-network.onrender.com/nchan_stats";
+        try {
+          const response = await fetch(url, { mode: "cors" });
+          if (response.ok || response.type === "opaque") {
+            enableStartButtons();
+          }
+        } catch (error) {
+          // Ignore fetch failures; iframe load can still unlock buttons.
+        }
+      };
+
       const startGame = (ruleType) => {
         hidePreGameUi();
         createPanels(ruleType, spectatorToggle?.checked);
@@ -213,6 +234,8 @@
         hidePreGameUi();
         createPanels(existingRuleType, spectatorToggle?.checked);
       }
+
+      warmNchanStats();
     </script>
   </head>
 
@@ -230,10 +253,6 @@
         id="stats-iframe"
         src="https://billiards-network.onrender.com/nchan_stats"
         title="nchan stats"
-        onload="
-          document.getElementById('button-nineball').disabled = false;
-          document.getElementById('button-snooker').disabled = false;
-        "
       ></iframe>
     </div>
     <div class="container">
