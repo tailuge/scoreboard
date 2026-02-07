@@ -48,7 +48,7 @@ The `MatchResultService` will be updated to ensure `match_replay:{id}` keys are 
 
 ## Phased Implementation Plan
 
-### Phase 1: Foundation (Types & Service Interface)
+### Phase 1: Foundation (Types & Service Interface) ✅ Done
 - Add `hasReplay?: boolean` to the `MatchResult` interface.
 - Extend `MatchResultService.addMatchResult` to accept an optional `replayData` parameter.
 - Define the new storage key pattern `match_replay:{id}`.

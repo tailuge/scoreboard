@@ -3,6 +3,10 @@ import { MatchResult } from "../types/match"
 
 const KEY = "match_results"
 const HISTORY_LIMIT = 50
+export const MATCH_REPLAY_KEY_PREFIX = "match_replay:"
+
+export const getMatchReplayKey = (matchId: string): string =>
+  `${MATCH_REPLAY_KEY_PREFIX}${matchId}`
 
 export class MatchResultService {
   constructor(private readonly store: VercelKV | Partial<VercelKV> = kv) {}
@@ -11,7 +15,10 @@ export class MatchResultService {
    * Adds a match result to the rolling history.
    * Uses a sorted set where the score is the timestamp.
    */
-  async addMatchResult(result: MatchResult): Promise<void> {
+  async addMatchResult(
+    result: MatchResult,
+    _replayData?: string
+  ): Promise<void> {
     // Add to sorted set
     await this.store.zadd(KEY, {
       score: result.timestamp,

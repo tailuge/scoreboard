@@ -1,4 +1,7 @@
-import { MatchResultService } from "../services/MatchResultService"
+import {
+  getMatchReplayKey,
+  MatchResultService,
+} from "../services/MatchResultService"
 import { mockKv } from "./mockkv"
 import { MatchResult } from "../types/match"
 
@@ -26,6 +29,28 @@ describe("MatchResultService", () => {
 
     expect(history).toHaveLength(1)
     expect(history[0]).toEqual(result)
+  })
+
+  it("should accept replay data without altering the stored result", async () => {
+    const result: MatchResult = {
+      id: "match-replay",
+      winner: "Winner",
+      loser: "Loser",
+      winnerScore: 100,
+      loserScore: 50,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+
+    await service.addMatchResult(result, "replay-data")
+    const history = await service.getMatchResults()
+
+    expect(history).toHaveLength(1)
+    expect(history[0]).toEqual(result)
+  })
+
+  it("should build match replay keys consistently", () => {
+    expect(getMatchReplayKey("match123")).toBe("match_replay:match123")
   })
 
   it("should maintain a rolling history limit", async () => {

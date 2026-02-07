@@ -6,4 +6,5 @@ export interface MatchResult {
   loserScore?: number
   gameType: string
   timestamp: number
+  hasReplay?: boolean
 }
