@@ -61,7 +61,7 @@ These will be stacked vertically in the Lobby's right-hand column, with Live Gam
 
 ### Implementation Stages
 
-#### Stage 1: Create `LiveMatchesList` Component
+#### Stage 1: Create `LiveMatchesList` Component (Completed)
 -   **File**: `src/components/LiveMatchesList.tsx`
 -   **Props**:
     -   `tables`: `Table[]` (Active tables from `useLobbyTables`)

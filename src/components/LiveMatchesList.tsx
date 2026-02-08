@@ -29,23 +29,34 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                 minute: "2-digit",
               }
             )
+            const playerOne = table.players[0]?.name || "Player 1"
+            const playerTwo = table.players[1]?.name || "Player 2"
 
             return (
               <div
                 key={table.id}
-                className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 p-2 gap-4"
+                className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 p-2 gap-4 cursor-pointer"
+                role="button"
+                tabIndex={0}
+                onClick={() => onSpectate(table.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault()
+                    onSpectate(table.id)
+                  }
+                }}
               >
                 <div className="flex items-center gap-1 overflow-hidden">
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span className="font-medium text-gray-100 truncate text-xs">
-                        {table.players[0]?.name || "Player 1"}
+                        {playerOne}
                       </span>
                       <span className="text-gray-500 text-[9px] flex-shrink-0">
                         vs
                       </span>
                       <span className="text-gray-400 truncate text-xs">
-                        {table.players[1]?.name || "Player 2"}
+                        {playerTwo}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight">
@@ -53,8 +64,12 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                         {table.ruleType} • {formattedTime}
                       </span>
                       <button
-                        onClick={() => onSpectate(table.id)}
-                        className="inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-red-500 text-[9px] px-1.5 py-0.5 cursor-pointer"
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          onSpectate(table.id)
+                        }}
+                        className="inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-red-500 text-[9px] px-1.5 py-0.5"
                         title="Spectate game"
                       >
                         LIVE
@@ -62,6 +77,7 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                     </div>
                   </div>
                 </div>
+                <div className="flex items-center gap-1.5 font-mono text-sm" />
               </div>
             )
           })}
