@@ -26,24 +26,43 @@ describe("MatchResultCard", () => {
     expect(screen.getByText("(85)")).toBeInTheDocument()
   })
 
-  it("renders game type", () => {
+  it("does not render game type text", () => {
     render(<MatchResultCard result={mockResult} />)
-    expect(screen.getByText(/snooker/i)).toBeInTheDocument()
+    expect(screen.queryByText(/snooker/i)).not.toBeInTheDocument()
   })
 
-  it("renders trophy emoji only for solo results", () => {
-    const soloResult: MatchResult = {
-      id: "2",
-      winner: "Charlie",
-      winnerScore: 50,
+  it("renders correct icon for game type", () => {
+    const nineballResult: MatchResult = {
+      ...mockResult,
+      id: "nineball-1",
       gameType: "nineball",
-      timestamp: Date.now(),
     }
-    const { rerender } = render(<MatchResultCard result={soloResult} />)
-    expect(screen.getByText("🏆")).toBeInTheDocument()
+    const { rerender } = render(<MatchResultCard result={nineballResult} />)
+    expect(screen.getByText("⑨")).toBeInTheDocument()
 
-    rerender(<MatchResultCard result={mockResult} />)
-    expect(screen.queryByText("🏆")).not.toBeInTheDocument()
+    const snookerResult: MatchResult = {
+      ...mockResult,
+      id: "snooker-1",
+      gameType: "snooker",
+    }
+    rerender(<MatchResultCard result={snookerResult} />)
+    expect(screen.getByText("🔴")).toBeInTheDocument()
+
+    const threeCushionResult: MatchResult = {
+      ...mockResult,
+      id: "3c-1",
+      gameType: "threecushion",
+    }
+    rerender(<MatchResultCard result={threeCushionResult} />)
+    expect(screen.getByText("⚪")).toBeInTheDocument()
+
+    const eightballResult: MatchResult = {
+      ...mockResult,
+      id: "8ball-1",
+      gameType: "eightball",
+    }
+    rerender(<MatchResultCard result={eightballResult} />)
+    expect(screen.getByText("🎱")).toBeInTheDocument()
   })
 
   it("has the correct border classes", () => {

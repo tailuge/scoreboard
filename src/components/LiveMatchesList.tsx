@@ -3,6 +3,7 @@ import { Table } from "@/types/table"
 import { GroupBox } from "./GroupBox"
 import { useUser } from "@/contexts/UserContext"
 import { GameUrl } from "@/utils/GameUrl"
+import { getGameIcon } from "./MatchResultCard"
 
 interface LiveMatchesListProps {
   readonly tables: Table[]
@@ -62,6 +63,11 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                 }}
               >
                 <div className="flex items-center gap-1 overflow-hidden">
+                  <div className="flex-shrink-0">
+                    <span className="text-lg">
+                      {getGameIcon(table.ruleType)}
+                    </span>
+                  </div>
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span className="font-medium text-gray-100 truncate text-xs">
@@ -75,9 +81,7 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight">
-                      <span>
-                        {table.ruleType} • {formattedTime}
-                      </span>
+                      <span>{formattedTime}</span>
                       <button
                         type="button"
                         onClick={(event) => {

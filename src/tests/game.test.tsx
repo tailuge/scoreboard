@@ -18,12 +18,33 @@ jest.mock("../nchan/nchanpub", () => ({
 describe("Game Page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    globalThis.fetch = jest.fn().mockImplementation(() => {
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
+      if (url.includes("/api/rank")) {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve([
+              { id: "1", name: "TopPlayer", score: 999, likes: 0 },
+            ]),
+          ok: true,
+        })
+      }
+      if (url.includes("/api/match-results")) {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve([
+              {
+                id: "1",
+                winner: "Alice",
+                winnerScore: 10,
+                gameType: "nineball",
+                timestamp: Date.now(),
+              },
+            ]),
+          ok: true,
+        })
+      }
       return Promise.resolve({
-        json: () =>
-          Promise.resolve([
-            { id: "1", name: "TopPlayer", score: 999, likes: 0 },
-          ]),
+        json: () => Promise.resolve([]),
         ok: true,
       })
     })

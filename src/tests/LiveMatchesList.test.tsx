@@ -39,6 +39,8 @@ describe("LiveMatchesList", () => {
     expect(screen.getByText("Live Games")).toBeInTheDocument()
     expect(screen.getByText("Player One")).toBeInTheDocument()
     expect(screen.getByText("Player Two")).toBeInTheDocument()
+    expect(screen.getByText("⑨")).toBeInTheDocument()
+    expect(screen.queryByText(/nineball/i)).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("LIVE"))
     expect(onSpectate).toHaveBeenCalledWith("table-1")

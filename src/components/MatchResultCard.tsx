@@ -6,6 +6,22 @@ interface MatchResultCardProps {
   readonly compact?: boolean
 }
 
+export function getGameIcon(gameType: string): string {
+  if (!gameType) return "🎱"
+  switch (gameType.toLowerCase()) {
+    case "eightball":
+      return "🎱"
+    case "nineball":
+      return "⑨"
+    case "snooker":
+      return "🔴"
+    case "threecushion":
+      return "⚪"
+    default:
+      return "🎱" // Fallback to 8-ball or existing trophy if preferred, but user request implies specific mapping.
+  }
+}
+
 function MatchResultCardComponent({
   result,
   compact = false,
@@ -36,17 +52,15 @@ function MatchResultCardComponent({
     >
       <div className="flex items-center gap-1 overflow-hidden">
         {/* Do not show emoji in 2-player mode to save space for text */}
-        {!result.loser && (
-          <div className="flex-shrink-0">
-            <span
-              className={
-                compact ? "scale-75 origin-left inline-block" : "text-lg"
-              }
-            >
-              🏆
-            </span>
-          </div>
-        )}
+        <div className="flex-shrink-0">
+          <span
+            className={
+              compact ? "scale-75 origin-left inline-block" : "text-lg"
+            }
+          >
+            {getGameIcon(result.gameType)}
+          </span>
+        </div>
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5 min-w-0">
             {result.loser ? (
@@ -81,8 +95,8 @@ function MatchResultCardComponent({
             className={`flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
             <span className="truncate">
-              {result.gameType}
-              {locationInfo && ` • ${locationInfo}`} • {formattedTime}
+              {locationInfo ? `${locationInfo} • ` : ""}
+              {formattedTime}
             </span>
             {replayBadge}
           </div>
