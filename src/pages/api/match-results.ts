@@ -100,6 +100,12 @@ async function handlePost(request: NextRequest) {
   try {
     const { replayData, ...data } = await request.json()
 
+    const locationCountry =
+      request.headers?.get("x-vercel-ip-country") || undefined
+    const locationRegion =
+      request.headers?.get("x-vercel-ip-region") || undefined
+    const locationCity = request.headers?.get("x-vercel-ip-city") || undefined
+
     // Basic validation
     // winner and winnerScore are required.
     // loser and loserScore are optional for solo results.
@@ -112,6 +118,9 @@ async function handlePost(request: NextRequest) {
       ...data,
       id: getUID(),
       timestamp: Date.now(),
+      locationCountry,
+      locationRegion,
+      locationCity,
     }
 
     await matchResultService.addMatchResult(newResult, replayData)

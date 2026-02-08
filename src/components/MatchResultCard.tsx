@@ -14,6 +14,11 @@ function MatchResultCardComponent({
     hour: "2-digit",
     minute: "2-digit",
   })
+
+  const locationInfo = [result.locationCity, result.locationCountry]
+    .filter(Boolean)
+    .join(", ")
+
   const replayBadge = result.hasReplay ? (
     <a
       href={`/api/match-replay?id=${result.id}`}
@@ -76,14 +81,18 @@ function MatchResultCardComponent({
           <div
             className={`flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
-            <span>
+            <span className="truncate">
               {result.gameType} • {formattedTime}
+              {locationInfo && ` • ${locationInfo}`}
             </span>
             {replayBadge}
           </div>
           {compact && (
             <div className="flex items-center gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
-              <span>{formattedTime}</span>
+              <span className="truncate">
+                {formattedTime}
+                {locationInfo && ` • ${locationInfo}`}
+              </span>
               {replayBadge}
             </div>
           )}
