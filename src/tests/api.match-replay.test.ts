@@ -34,6 +34,17 @@ describe("/api/match-replay handler", () => {
     const getSpy = jest
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
       .mockResolvedValue(mockReplay)
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([
+        {
+          id: "match123",
+          winner: "A",
+          winnerScore: 10,
+          gameType: "nineball",
+          timestamp: Date.now(),
+        },
+      ])
 
     req = {
       method: "GET",
@@ -45,7 +56,7 @@ describe("/api/match-replay handler", () => {
 
     expect(response.status).toBe(307)
     expect(location).toBe(
-      `https://tailuge.github.io/billiards/dist/${mockReplay}`
+      `https://tailuge.github.io/billiards/dist/?ruletype=nineball&state=${encodeURIComponent(mockReplay)}`
     )
     expect(getSpy).toHaveBeenCalledWith("match123")
   })
@@ -64,6 +75,23 @@ describe("/api/match-replay handler", () => {
     jest
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
       .mockResolvedValue(null)
+
+    req = {
+      method: "GET",
+      nextUrl: new URL("https://localhost/api/match-replay?id=missing"),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    expect(response.status).toBe(404)
+  })
+
+  it("should return 404 if match result is not found", async () => {
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchReplay")
+      .mockResolvedValue("replay-blob-data")
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([])
 
     req = {
       method: "GET",

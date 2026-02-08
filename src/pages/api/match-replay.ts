@@ -53,8 +53,17 @@ export default async function handler(request: NextRequest) {
       return new Response("Replay not found", { status: 404 })
     }
 
-    const viewerUrl = `https://tailuge.github.io/billiards/dist/${replayData}`
-    return Response.redirect(viewerUrl, 307)
+    const matchResults = await matchResultService.getMatchResults()
+    const matchResult = matchResults.find((result) => result.id === id)
+
+    if (!matchResult?.gameType) {
+      return new Response("Match result not found", { status: 404 })
+    }
+
+    const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
+    viewerUrl.searchParams.set("ruletype", matchResult.gameType)
+    viewerUrl.searchParams.set("state", replayData)
+    return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {
     logger.log("Error fetching match replay:", error)
     return new Response("Internal Server Error", { status: 500 })
