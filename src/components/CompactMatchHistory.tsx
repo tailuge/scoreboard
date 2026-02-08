@@ -39,7 +39,11 @@ export function CompactMatchHistory({
   }, [gameType, limit, pollingInterval])
 
   const skeletonIds = useMemo(
-    () => [...new Array(limit)].map((_, i) => `skeleton-${gameType}-${i}`),
+    () =>
+      Array.from(
+        { length: limit },
+        (_, i) => `skeleton-${gameType}-${i}`
+      ),
     [limit, gameType]
   )
 
