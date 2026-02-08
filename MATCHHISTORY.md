@@ -81,7 +81,7 @@ These will be stacked vertically in the Lobby's right-hand column, with Live Gam
     -   **Action**: Clicking the badge (or the card) triggers `onSpectate`.
     -   **Empty State**: If no active games, render nothing.
 
-#### Stage 2: Integrate into Lobby
+#### Stage 2: Integrate into Lobby (Completed)
 -   **File**: `src/pages/lobby.tsx`
 -   **Action**:
     -   Import `LiveMatchesList`.

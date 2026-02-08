@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
+import { LiveMatchesList } from "@/components/LiveMatchesList"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
@@ -68,7 +69,7 @@ export default function Lobby() {
     [tableAction]
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, sonarjs/no-unused-vars, sonarjs/no-dead-store
+   
   const handleSpectate = useCallback(
     async (tableId: string) => {
       await tableAction(tableId, "spectate")
@@ -233,6 +234,7 @@ export default function Lobby() {
             </GroupBox>
           </div>
           <div className="lg:col-span-1">
+            <LiveMatchesList tables={tables} onSpectate={handleSpectate} />
             <MatchHistoryList />
           </div>
         </div>
