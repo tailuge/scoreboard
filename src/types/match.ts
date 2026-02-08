@@ -7,4 +7,7 @@ export interface MatchResult {
   gameType: string
   timestamp: number
   hasReplay?: boolean
+  locationCountry?: string
+  locationRegion?: string
+  locationCity?: string
 }

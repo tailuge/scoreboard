@@ -198,6 +198,44 @@ describe("/api/match-results handler", () => {
     )
   })
 
+  it("should capture geolocation headers on POST request", async () => {
+    const result = {
+      winner: "A",
+      winnerScore: 10,
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
+      .mockResolvedValue(undefined)
+
+    const headers = new Map([
+      ["x-vercel-ip-country", "US"],
+      ["x-vercel-ip-region", "CA"],
+      ["x-vercel-ip-city", "San Francisco"],
+    ])
+
+    req = {
+      method: "POST",
+      nextUrl: new URL("https://localhost/api/match-results"),
+      json: jest.fn().mockResolvedValue(result),
+      headers: {
+        get: (name: string) => headers.get(name) || null,
+      },
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(201)
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        locationCountry: "US",
+        locationRegion: "CA",
+        locationCity: "San Francisco",
+      }),
+      undefined
+    )
+  })
+
   it("should return 400 if required fields are missing in POST request", async () => {
     req = {
       method: "POST",
