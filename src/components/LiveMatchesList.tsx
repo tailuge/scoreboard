@@ -8,9 +8,9 @@ interface LiveMatchesListProps {
 }
 
 export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
-  // Filter for active games: 2 players and not completed
+  // Filter for active games: 2 players and started (completed flag set on start)
   const activeGames = tables.filter(
-    (t) => t.players.length === 2 && !t.completed
+    (t) => t.players.length === 2 && t.completed
   )
 
   if (activeGames.length === 0) {

@@ -16,7 +16,7 @@ describe("LiveMatchesList", () => {
     lastUsedAt: Date.now(),
     isActive: true,
     ruleType: "nineball",
-    completed: false,
+    completed: true,
   }
 
   it("renders active games and triggers spectate", () => {
@@ -37,7 +37,7 @@ describe("LiveMatchesList", () => {
 
     render(
       <LiveMatchesList
-        tables={[{ ...activeTable, players: [activeTable.players[0]] }]}
+        tables={[{ ...activeTable, completed: false }]}
         onSpectate={onSpectate}
       />
     )
