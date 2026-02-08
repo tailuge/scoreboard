@@ -135,7 +135,7 @@
 
       .controls button:disabled {
         background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
-        color: #94a3b8;
+        color: #475569;
         border-color: #e2e8f0;
         cursor: not-allowed;
         box-shadow: none;
@@ -298,6 +298,7 @@
           }
         } catch (error) {
           // Ignore fetch failures; iframe load can still unlock buttons.
+          console.warn("Failed to warm nchan stats:", error)
         }
       }
 
@@ -313,9 +314,9 @@
         .getElementById("button-snooker")
         ?.addEventListener("click", () => startGame("snooker"))
 
-      const existingRuleType = new URLSearchParams(window.location.search).get(
-        "ruletype"
-      )
+      const existingRuleType = new URLSearchParams(
+        globalThis.location.search
+      ).get("ruletype")
 
       if (existingRuleType === "nineball" || existingRuleType === "snooker") {
         hidePreGameUi()
@@ -336,10 +337,10 @@
       </label>
     </div>
     <div class="stats" id="stats">
-      <div class="nchan-wait" role="status" aria-live="polite">
+      <output class="nchan-wait">
         <span class="nchan-spinner" aria-hidden="true"></span>
         <span>Waiting for render.com to start nchan server...</span>
-      </div>
+      </output>
     </div>
     <div class="container">
       <div class="panel" id="panel1"></div>
