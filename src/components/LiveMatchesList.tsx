@@ -23,13 +23,12 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
   return (
     <div className="mb-4">
       <GroupBox title="Live Games">
-        <div className="flex flex-col max-h-[200px] overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col max-h-[200px] overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
           {activeGames.map((table) => {
             const formattedTime = new Date(table.createdAt).toLocaleTimeString(
               [],
               {
-                hour: "2-digit",
-                minute: "2-digit",
+                hour: "numeric",
               }
             )
             const playerOne = table.players[0]?.name || "Player 1"
@@ -51,7 +50,7 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
             return (
               <div
                 key={table.id}
-                className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 p-2 gap-4 cursor-pointer"
+                className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 py-1 px-2 gap-4 cursor-pointer"
                 role="button"
                 tabIndex={0}
                 onClick={handleSpectate}

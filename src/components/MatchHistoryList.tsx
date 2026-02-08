@@ -51,7 +51,7 @@ export function MatchHistoryList() {
 
   return (
     <GroupBox title="Recent Matches">
-      <div className="flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
+      <div className="flex flex-col max-h-[400px] overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
         {renderContent()}
       </div>
     </GroupBox>

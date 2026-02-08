@@ -11,8 +11,7 @@ function MatchResultCardComponent({
   compact = false,
 }: MatchResultCardProps) {
   const formattedTime = new Date(result.timestamp).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: "numeric",
   })
 
   const locationInfo = [result.locationCity, result.locationCountry]
@@ -33,7 +32,7 @@ function MatchResultCardComponent({
 
   return (
     <div
-      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "p-2"} gap-4`}
+      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "py-1 px-2"} gap-4`}
     >
       <div className="flex items-center gap-1 overflow-hidden">
         {/* Do not show emoji in 2-player mode to save space for text */}
@@ -82,16 +81,16 @@ function MatchResultCardComponent({
             className={`flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
             <span className="truncate">
-              {result.gameType} • {formattedTime}
-              {locationInfo && ` • ${locationInfo}`}
+              {result.gameType}
+              {locationInfo && ` • ${locationInfo}`} • {formattedTime}
             </span>
             {replayBadge}
           </div>
           {compact && (
             <div className="flex items-center gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
               <span className="truncate">
+                {locationInfo && `${locationInfo} • `}
                 {formattedTime}
-                {locationInfo && ` • ${locationInfo}`}
               </span>
               {replayBadge}
             </div>
@@ -101,11 +100,7 @@ function MatchResultCardComponent({
       <div
         className={`flex items-center gap-1.5 font-mono ${compact ? "text-[11px]" : "text-sm"}`}
       >
-        {!result.loser && (
-          <span className="text-green-400/80 font-bold">
-            {result.winnerScore}
-          </span>
-        )}
+        {/* Score removed for single player results */}
       </div>
     </div>
   )

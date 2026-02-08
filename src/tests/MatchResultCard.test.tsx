@@ -64,7 +64,7 @@ describe("MatchResultCard", () => {
     render(<MatchResultCard result={soloResult} />)
     expect(screen.getByText("Charlie")).toBeInTheDocument()
     expect(screen.queryByText("vs")).not.toBeInTheDocument()
-    expect(screen.getByText("50")).toBeInTheDocument()
+    expect(screen.queryByText("50")).not.toBeInTheDocument()
   })
 
   it("renders in compact mode", () => {
