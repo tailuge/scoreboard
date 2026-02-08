@@ -86,7 +86,7 @@ async function handleGet(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
     const gameType = searchParams.get("gameType") || undefined
-    const limit = parseInt(searchParams.get("limit") || "50", 10)
+    const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
 
     const results = await matchResultService.getMatchResults(limit, gameType)
     return Response.json(results)

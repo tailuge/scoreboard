@@ -4,7 +4,7 @@ import { CompactMatchHistory } from "../components/CompactMatchHistory"
 
 // Mock fetch
 const mockFetch = jest.fn()
-global.fetch = mockFetch
+globalThis.fetch = mockFetch
 
 describe("CompactMatchHistory", () => {
   const mockResults = [

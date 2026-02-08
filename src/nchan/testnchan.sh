@@ -18,6 +18,7 @@ usage() {
 	echo "Usage: $0 [-p]"
 	echo "  -p: Production mode (points to $PROD_BASE_URL)"
 	exit 1
+	return 1
 }
 
 # Parse command line options
