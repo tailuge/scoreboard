@@ -1,6 +1,6 @@
-import { withSwagger } from 'next-swagger-doc';
-import { swaggerConfig } from '@/lib/swagger';
+import { withSwagger } from "next-swagger-doc"
+import { swaggerConfig } from "@/lib/swagger"
 
-const swaggerHandler = withSwagger(swaggerConfig);
+const swaggerHandler = withSwagger(swaggerConfig)
 
-export default swaggerHandler();
+export default swaggerHandler()

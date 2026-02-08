@@ -69,7 +69,6 @@ export default function Lobby() {
     [tableAction]
   )
 
-   
   const handleSpectate = useCallback(
     async (tableId: string) => {
       await tableAction(tableId, "spectate")

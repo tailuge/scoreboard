@@ -1,6 +1,8 @@
 import React from "react"
 import { Table } from "@/types/table"
 import { GroupBox } from "./GroupBox"
+import { useUser } from "@/contexts/UserContext"
+import { GameUrl } from "@/utils/GameUrl"
 
 interface LiveMatchesListProps {
   readonly tables: Table[]
@@ -8,6 +10,7 @@ interface LiveMatchesListProps {
 }
 
 export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
+  const { userId, userName } = useUser()
   // Filter for active games: 2 players and started (completed flag set on start)
   const activeGames = tables.filter(
     (t) => t.players.length === 2 && t.completed
@@ -31,6 +34,19 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
             )
             const playerOne = table.players[0]?.name || "Player 1"
             const playerTwo = table.players[1]?.name || "Player 2"
+            const handleSpectate = () => {
+              onSpectate(table.id)
+              if (!userId || !userName) return
+              const spectatorUrl = GameUrl.create({
+                tableId: table.id,
+                userName,
+                userId,
+                ruleType: table.ruleType,
+                isSpectator: true,
+                isCreator: false,
+              })
+              globalThis.open(spectatorUrl.toString(), "_blank")
+            }
 
             return (
               <div
@@ -38,11 +54,11 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                 className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 p-2 gap-4 cursor-pointer"
                 role="button"
                 tabIndex={0}
-                onClick={() => onSpectate(table.id)}
+                onClick={handleSpectate}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault()
-                    onSpectate(table.id)
+                    handleSpectate()
                   }
                 }}
               >
@@ -67,7 +83,7 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                         type="button"
                         onClick={(event) => {
                           event.stopPropagation()
-                          onSpectate(table.id)
+                          handleSpectate()
                         }}
                         className="inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-red-500 text-[9px] px-1.5 py-0.5"
                         title="Spectate game"
