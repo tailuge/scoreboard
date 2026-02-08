@@ -20,10 +20,16 @@ describe("/api/match-replay handler", () => {
       headers: new Map(Object.entries(init?.headers || {})),
     })) as any
 
+    mockResponseConstructor.redirect = (url: string, status = 307) => ({
+      status,
+      headers: new Map([["Location", url]]),
+      text: () => Promise.resolve(""),
+    })
+
     globalThis.Response = mockResponseConstructor
   })
 
-  it("should return replay data on GET request", async () => {
+  it("should redirect to viewer on GET request", async () => {
     const mockReplay = "replay-blob-data"
     const getSpy = jest
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
@@ -35,10 +41,12 @@ describe("/api/match-replay handler", () => {
     } as unknown as NextRequest
 
     const response = await handler(req)
-    const text = await response.text()
+    const location = response.headers.get("Location")
 
-    expect(response.status).toBe(200)
-    expect(text).toBe(mockReplay)
+    expect(response.status).toBe(307)
+    expect(location).toBe(
+      `https://tailuge.github.io/billiards/dist/${mockReplay}`
+    )
     expect(getSpy).toHaveBeenCalledWith("match123")
   })
 

@@ -74,6 +74,26 @@ describe("MatchResultCard", () => {
     expect(screen.getByText("Alice")).toBeInTheDocument()
   })
 
+  it("renders replay badge when replay is available", () => {
+    const replayResult: MatchResult = {
+      ...mockResult,
+      id: "replay-1",
+      hasReplay: true,
+    }
+    render(<MatchResultCard result={replayResult} />)
+    const badge = screen.getByRole("link", { name: /replay/i })
+
+    expect(badge).toBeInTheDocument()
+    expect(badge).toHaveAttribute("href", "/api/match-replay?id=replay-1")
+    expect(badge).toHaveAttribute("target", "_blank")
+    expect(badge).toHaveAttribute("rel", "noreferrer")
+  })
+
+  it("does not render replay badge when replay is missing", () => {
+    render(<MatchResultCard result={mockResult} />)
+    expect(screen.queryByRole("link", { name: /replay/i })).toBeNull()
+  })
+
   it("handles re-renders with same or different props for memoization", () => {
     const { rerender } = render(<MatchResultCard result={mockResult} />)
     expect(screen.getByText("Alice")).toBeInTheDocument()

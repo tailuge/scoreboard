@@ -11,7 +11,7 @@ Add a small blue 'replay' badge to the Match History list for games that have as
 
 ## Implementation Steps
 
-### 1. Backend Changes (`src/pages/api/match-replay.ts`)
+### 1. Backend Changes (`src/pages/api/match-replay.ts`) (Completed)
 Modify the endpoint to redirect to the viewer instead of returning the raw data.
 - **Action**: Update the handler to:
   1. Retrieve `replayData` using `MatchResultService.getMatchReplay(id)`.
@@ -20,7 +20,7 @@ Modify the endpoint to redirect to the viewer instead of returning the raw data.
   4. If not found, return a 404 response (or redirect to a generic Not Found page if preferred, but 404 is standard for APIs).
 - **Note**: This changes the API contract from returning data to returning a redirect. This is intended as the badge is a direct link for the user.
 
-### 2. Frontend Changes (`src/components/MatchResultCard.tsx`)
+### 2. Frontend Changes (`src/components/MatchResultCard.tsx`) (Completed)
 Add the visual badge to the match card.
 - **Action**:
   - In `MatchResultCardComponent`, check if `result.hasReplay` is true.
@@ -31,7 +31,7 @@ Add the visual badge to the match card.
     - Small text (`text-[10px]` or `text-xs`), rounded (`rounded`), padding (`px-1.5 py-0.5`).
     - Place it near the timestamp or scores.
 
-### 3. Test Updates (`src/tests/api.match-replay.test.ts`)
+### 3. Test Updates (`src/tests/api.match-replay.test.ts`) (Completed)
 Update the tests to reflect the new redirect behavior.
 - **Action**:
   - Modify "should return replay data on GET request" to "should redirect to viewer on GET request".

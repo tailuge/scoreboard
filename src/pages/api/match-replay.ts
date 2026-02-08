@@ -13,7 +13,7 @@ const matchResultService = new MatchResultService(kv)
  * @swagger
  * /api/match-replay:
  *   get:
- *     summary: Fetches match replay data
+ *     summary: Redirects to the replay viewer for a match
  *     parameters:
  *       - in: query
  *         name: id
@@ -22,8 +22,8 @@ const matchResultService = new MatchResultService(kv)
  *           type: string
  *         description: The match ID
  *     responses:
- *       200:
- *         description: Replay data (text/plain)
+ *       307:
+ *         description: Redirects to replay viewer
  *       400:
  *         description: ID is required
  *       404:
@@ -53,12 +53,8 @@ export default async function handler(request: NextRequest) {
       return new Response("Replay not found", { status: 404 })
     }
 
-    return new Response(replayData, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    })
+    const viewerUrl = `https://tailuge.github.io/billiards/dist/${replayData}`
+    return Response.redirect(viewerUrl, 307)
   } catch (error) {
     logger.log("Error fetching match replay:", error)
     return new Response("Internal Server Error", { status: 500 })

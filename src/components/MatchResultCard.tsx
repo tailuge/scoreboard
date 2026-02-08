@@ -14,6 +14,17 @@ function MatchResultCardComponent({
     hour: "2-digit",
     minute: "2-digit",
   })
+  const replayBadge = result.hasReplay ? (
+    <a
+      href={`/api/match-replay?id=${result.id}`}
+      target="_blank"
+      rel="noreferrer"
+      title="Watch replay"
+      className={`inline-flex items-center rounded-sm bg-blue-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-blue-500 ${compact ? "text-[8px] px-1 py-0.5" : "text-[9px] px-1.5 py-0.5"}`}
+    >
+      REPLAY
+    </a>
+  ) : null
 
   return (
     <div
@@ -63,13 +74,17 @@ function MatchResultCardComponent({
             )}
           </div>
           <div
-            className={`text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
+            className={`flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
-            {result.gameType} • {formattedTime}
+            <span>
+              {result.gameType} • {formattedTime}
+            </span>
+            {replayBadge}
           </div>
           {compact && (
-            <div className="text-[8px] text-gray-500/70 uppercase tracking-tight">
-              {formattedTime}
+            <div className="flex items-center gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
+              <span>{formattedTime}</span>
+              {replayBadge}
             </div>
           )}
         </div>
