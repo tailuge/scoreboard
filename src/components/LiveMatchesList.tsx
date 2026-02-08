@@ -49,18 +49,11 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
             }
 
             return (
-              <div
+              <button
+                type="button"
                 key={table.id}
-                className="flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 py-1 px-2 gap-4 cursor-pointer"
-                role="button"
-                tabIndex={0}
+                className="flex w-full items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 py-1 px-2 gap-4 cursor-pointer text-left"
                 onClick={handleSpectate}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault()
-                    handleSpectate()
-                  }
-                }}
               >
                 <div className="flex items-center gap-1 overflow-hidden">
                   <div className="flex-shrink-0">
@@ -82,22 +75,17 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
                     </div>
                     <div className="flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight">
                       <span>{formattedTime}</span>
-                      <button
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          handleSpectate()
-                        }}
+                      <span
                         className="inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-red-500 text-[9px] px-1.5 py-0.5"
                         title="Spectate game"
                       >
                         LIVE
-                      </button>
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-sm" />
-              </div>
+              </button>
             )
           })}
         </div>

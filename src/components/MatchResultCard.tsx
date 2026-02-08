@@ -23,21 +23,21 @@ export function getGameIcon(gameType: string): string {
 }
 
 export function countryCodeToFlagEmoji(countryCode?: string | null): string {
-  if (!countryCode || countryCode.length !== 2) return ""
+  if (!countryCode || countryCode?.length !== 2) return ""
 
   return countryCode
     .toUpperCase()
-    .replace(/./g, (char) =>
-      String.fromCodePoint(0x1f1e6 + char.charCodeAt(0) - 65)
+    .replaceAll(/./g, (char) =>
+      String.fromCodePoint(0x1f1e6 + (char.codePointAt(0) || 0) - 65)
     )
 }
 
 interface PlayerMatchDisplayProps {
-  winner: string
-  winnerScore: number
-  loser?: string | null
-  loserScore?: number | null
-  compact: boolean
+  readonly winner: string
+  readonly winnerScore: number
+  readonly loser?: string | null
+  readonly loserScore?: number | null
+  readonly compact: boolean
 }
 
 function PlayerMatchDisplay({
@@ -76,12 +76,12 @@ function PlayerMatchDisplay({
 }
 
 interface LocationTimeBadgeProps {
-  locationCity?: string | null
-  locationCountry?: string | null
-  formattedTime: string
-  hasReplay: boolean
-  matchId: string
-  compact: boolean
+  readonly locationCity?: string | null
+  readonly locationCountry?: string | null
+  readonly formattedTime: string
+  readonly hasReplay: boolean
+  readonly matchId: string
+  readonly compact: boolean
 }
 
 function LocationTimeBadge({
@@ -129,8 +129,8 @@ function LocationTimeBadge({
 }
 
 interface ReplayBadgeProps {
-  matchId: string
-  compact: boolean
+  readonly matchId: string
+  readonly compact: boolean
 }
 
 function ReplayBadge({ matchId, compact }: ReplayBadgeProps) {

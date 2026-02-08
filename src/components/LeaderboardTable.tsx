@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { logger } from "@/utils/logger"
 
@@ -67,16 +67,20 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     }
   }
 
-  const displayData = limit ? data.slice(0, limit) : data
-  const rows = limit
-    ? [
-        ...displayData,
-        ...Array.from(
-          { length: Math.max(0, limit - displayData.length) },
-          () => null
-        ),
-      ]
-    : displayData
+  const rows = useMemo(() => {
+    const displayData = limit ? data.slice(0, limit) : data
+    const placeholdersCount = limit ? Math.max(0, limit - displayData.length) : 0
+    return [
+      ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
+      ...Array.from({ length: placeholdersCount }, (_, i) => ({
+        id: `placeholder-${ruleType}-${i}`,
+        name: "",
+        score: 0,
+        likes: 0,
+        isPlaceholder: true,
+      })),
+    ]
+  }, [data, limit, ruleType])
 
   return (
     <div className="w-full overflow-x-auto">
@@ -100,11 +104,10 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         )}
         <tbody>
           {rows.map((item, index) => {
-            if (!item) {
+            if ("isPlaceholder" in item && item.isPlaceholder) {
               return (
-                // Using index as a key is acceptable here for non-interactive placeholder rows.
                 <tr
-                  key={`empty-${index}`}
+                  key={item.id}
                   className={compact ? "h-[22px]" : "h-[28px]"}
                 >
                   <td

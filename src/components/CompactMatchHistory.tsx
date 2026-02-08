@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { MatchResult } from "@/types/match"
 import { MatchResultCard } from "./MatchResultCard"
 import { logger } from "@/utils/logger"
@@ -38,12 +38,17 @@ export function CompactMatchHistory({
     return () => clearInterval(interval)
   }, [gameType, limit, pollingInterval])
 
+  const skeletonIds = useMemo(
+    () => [...new Array(limit)].map((_, i) => `skeleton-${gameType}-${i}`),
+    [limit, gameType]
+  )
+
   if (loading && results.length === 0) {
     return (
       <div className="flex flex-col">
-        {[...Array(limit)].map((_, i) => (
+        {skeletonIds.map((id) => (
           <div
-            key={i}
+            key={id}
             className="h-8 border-b border-gray-800/50 animate-pulse"
           />
         ))}
