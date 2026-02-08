@@ -22,7 +22,7 @@
 
 ## Coding Style & Naming Conventions
 - Language: TypeScript with Next.js pages router.
-- Formatting: Prettier (no semicolons, trailing commas in ES5). Run `yarn prettify` before PRs.
+- Formatting: Prettier (no semicolons, trailing commas in ES5). Always run `yarn prettify` when work complete.
 - Linting: ESLint plus TypeScript checks via `yarn lint`.
 - Naming: Prefer descriptive component and test names; API route tests use `api.*.test.ts` (see `src/tests`).
 - Portability: Use `globalThis` instead of `window`, `global`, or `self`.
@@ -31,11 +31,7 @@
 - Frameworks: Jest for unit/integration tests and Playwright for E2E.
 - Location: Add tests under `src/tests` and colocate fixtures there.
 - Naming: `*.test.ts` or `*.test.tsx` (for example `src/tests/TableService.test.ts`).
-- Recommended local run: `yarn test` after changes; add `yarn e2e` for UI flows.
-
-## Commit & Pull Request Guidelines
-- Commit style is mixed in history (conventional `feat:`/`docs:`, emoji prefixes, and short labels). Keep messages concise and imperative, and include a scope when helpful.
-- PRs should include a clear summary, test evidence (commands run), and screenshots for UI changes. Link related issues when applicable.
+- Always run: `yarn test` and `yarn lint` after changes.
 
 ## Configuration & Ops Notes
 - KV and Nchan are required for full functionality; local tests may use mocks.
