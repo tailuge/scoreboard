@@ -22,6 +22,16 @@ export function getGameIcon(gameType: string): string {
   }
 }
 
+export function countryCodeToFlagEmoji(countryCode?: string | null): string {
+  if (!countryCode || countryCode.length !== 2) return ""
+
+  return countryCode
+    .toUpperCase()
+    .replace(/./g, (char) =>
+      String.fromCodePoint(0x1f1e6 + char.charCodeAt(0) - 65)
+    )
+}
+
 function MatchResultCardComponent({
   result,
   compact = false,
@@ -30,9 +40,14 @@ function MatchResultCardComponent({
     hour: "numeric",
   })
 
-  const locationInfo = [result.locationCity, result.locationCountry]
-    .filter(Boolean)
-    .join(", ")
+  const locationParts = []
+  if (result.locationCity) {
+    locationParts.push(result.locationCity)
+  }
+
+  const countryFlag = result.locationCountry
+    ? countryCodeToFlagEmoji(result.locationCountry)
+    : null
 
   const replayBadge = result.hasReplay ? (
     <a
@@ -94,17 +109,33 @@ function MatchResultCardComponent({
           <div
             className={`flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight ${compact ? "hidden" : ""}`}
           >
-            <span className="truncate">
-              {locationInfo ? `${locationInfo} • ` : ""}
-              {formattedTime}
+            <span className="truncate flex items-center gap-1">
+              {locationParts.length > 0 && (
+                <span>{locationParts.join(", ")}</span>
+              )}
+              {countryFlag && (
+                <span title={result.locationCountry || undefined}>
+                  {countryFlag}
+                </span>
+              )}
+              {(locationParts.length > 0 || countryFlag) && <span>•</span>}
+              <span>{formattedTime}</span>
             </span>
             {replayBadge}
           </div>
           {compact && (
             <div className="flex items-center gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
-              <span className="truncate">
-                {locationInfo && `${locationInfo} • `}
-                {formattedTime}
+              <span className="truncate flex items-center gap-1">
+                {locationParts.length > 0 && (
+                  <span>{locationParts.join(", ")}</span>
+                )}
+                {countryFlag && (
+                  <span title={result.locationCountry || undefined}>
+                    {countryFlag}
+                  </span>
+                )}
+                {(locationParts.length > 0 || countryFlag) && <span>•</span>}
+                <span>{formattedTime}</span>
               </span>
               {replayBadge}
             </div>

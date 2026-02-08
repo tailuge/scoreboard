@@ -65,6 +65,20 @@ describe("MatchResultCard", () => {
     expect(screen.getByText("🎱")).toBeInTheDocument()
   })
 
+  it("renders country flag when location is provided", () => {
+    const resultWithCountry: MatchResult = {
+      ...mockResult,
+      id: "flag-test",
+      locationCountry: "DE", // Germany
+      locationCity: "Berlin", // City should be visible too
+    }
+    render(<MatchResultCard result={resultWithCountry} />)
+    // "DE" -> 🇩🇪
+    expect(screen.getByText("🇩🇪")).toBeInTheDocument()
+    expect(screen.getByText("Berlin")).toBeInTheDocument()
+    expect(screen.getByTitle("DE")).toBeInTheDocument()
+  })
+
   it("has the correct border classes", () => {
     const { container } = render(<MatchResultCard result={mockResult} />)
     const card = container.firstChild as HTMLElement
