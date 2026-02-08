@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import { NchanSub } from "@/nchan/nchansub"
 
 interface LobbyContextType {
@@ -7,7 +13,9 @@ interface LobbyContextType {
 
 const LobbyContext = createContext<LobbyContextType | undefined>(undefined)
 
-export function LobbyProvider({ children }: { children: React.ReactNode }) {
+export function LobbyProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [lastMessage, setLastMessage] = useState<any>(null)
 
   useEffect(() => {
@@ -22,10 +30,10 @@ export function LobbyProvider({ children }: { children: React.ReactNode }) {
     return () => sub.stop()
   }, [])
 
+  const value = useMemo(() => ({ lastMessage }), [lastMessage])
+
   return (
-    <LobbyContext.Provider value={{ lastMessage }}>
-      {children}
-    </LobbyContext.Provider>
+    <LobbyContext.Provider value={value}>{children}</LobbyContext.Provider>
   )
 }
 
