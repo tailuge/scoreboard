@@ -32,9 +32,7 @@ export function LobbyProvider({
 
   const value = useMemo(() => ({ lastMessage }), [lastMessage])
 
-  return (
-    <LobbyContext.Provider value={value}>{children}</LobbyContext.Provider>
-  )
+  return <LobbyContext.Provider value={value}>{children}</LobbyContext.Provider>
 }
 
 export function useLobbyContext() {

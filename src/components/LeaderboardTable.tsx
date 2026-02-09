@@ -69,7 +69,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const rows = useMemo(() => {
     const displayData = limit ? data.slice(0, limit) : data
-    const placeholdersCount = limit ? Math.max(0, limit - displayData.length) : 0
+    const placeholdersCount = limit
+      ? Math.max(0, limit - displayData.length)
+      : 0
     return [
       ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
       ...Array.from({ length: placeholdersCount }, (_, i) => ({
@@ -106,10 +108,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           {rows.map((item, index) => {
             if ("isPlaceholder" in item && item.isPlaceholder) {
               return (
-                <tr
-                  key={item.id}
-                  className={compact ? "h-[22px]" : "h-[28px]"}
-                >
+                <tr key={item.id} className={compact ? "h-[22px]" : "h-[28px]"}>
                   <td
                     className={`text-left border-b border-gray-800/50 ${compact ? "px-1 py-0" : "px-2 py-1"}`}
                   >

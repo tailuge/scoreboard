@@ -38,7 +38,10 @@ describe("MatchResultCard", () => {
       gameType: "nineball",
     }
     const { rerender } = render(<MatchResultCard result={nineballResult} />)
-    expect(screen.getByText("⑨")).toBeInTheDocument()
+    expect(screen.getByRole("presentation")).toHaveAttribute(
+      "src",
+      "/assets/nineball.png"
+    )
 
     const snookerResult: MatchResult = {
       ...mockResult,
@@ -46,7 +49,10 @@ describe("MatchResultCard", () => {
       gameType: "snooker",
     }
     rerender(<MatchResultCard result={snookerResult} />)
-    expect(screen.getByText("🔴")).toBeInTheDocument()
+    expect(screen.getByRole("presentation")).toHaveAttribute(
+      "src",
+      "/assets/snooker.png"
+    )
 
     const threeCushionResult: MatchResult = {
       ...mockResult,
@@ -54,7 +60,10 @@ describe("MatchResultCard", () => {
       gameType: "threecushion",
     }
     rerender(<MatchResultCard result={threeCushionResult} />)
-    expect(screen.getByText("⚪")).toBeInTheDocument()
+    expect(screen.getByRole("presentation")).toHaveAttribute(
+      "src",
+      "/assets/threecushion.png"
+    )
 
     const eightballResult: MatchResult = {
       ...mockResult,
@@ -62,7 +71,10 @@ describe("MatchResultCard", () => {
       gameType: "eightball",
     }
     rerender(<MatchResultCard result={eightballResult} />)
-    expect(screen.getByText("🎱")).toBeInTheDocument()
+    expect(screen.getByRole("presentation")).toHaveAttribute(
+      "src",
+      "/assets/eightball.png"
+    )
   })
 
   it("renders country flag when location is provided", () => {

@@ -4,21 +4,23 @@ import { MatchResult } from "@/types/match"
 interface MatchResultCardProps {
   readonly result: MatchResult
   readonly compact?: boolean
+  readonly isLive?: boolean
+  readonly onClick?: () => void
 }
 
 export function getGameIcon(gameType: string): string {
-  if (!gameType) return "🎱"
+  if (!gameType) return "/assets/eightball.png"
   switch (gameType.toLowerCase()) {
     case "eightball":
-      return "🎱"
+      return "/assets/eightball.png"
     case "nineball":
-      return "⑨"
+      return "/assets/nineball.png"
     case "snooker":
-      return "🔴"
+      return "/assets/snooker.png"
     case "threecushion":
-      return "⚪"
+      return "/assets/threecushion.png"
     default:
-      return "🎱"
+      return "/assets/eightball.png"
   }
 }
 
@@ -82,6 +84,7 @@ interface LocationTimeBadgeProps {
   readonly hasReplay: boolean
   readonly matchId: string
   readonly compact: boolean
+  readonly isLive?: boolean
 }
 
 function LocationTimeBadge({
@@ -91,6 +94,7 @@ function LocationTimeBadge({
   hasReplay,
   matchId,
   compact,
+  isLive,
 }: LocationTimeBadgeProps) {
   const countryFlag = locationCountry
     ? countryCodeToFlagEmoji(locationCountry)
@@ -99,7 +103,7 @@ function LocationTimeBadge({
 
   if (compact) {
     return (
-      <div className="flex items-center gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
+      <div className="flex items-center justify-end gap-1.5 text-[8px] text-gray-500/70 uppercase tracking-tight">
         <span className="truncate flex items-center gap-1">
           {locationCity && <span>{locationCity}</span>}
           {countryFlag && (
@@ -108,13 +112,14 @@ function LocationTimeBadge({
           {hasLocation && <span>•</span>}
           <span>{formattedTime}</span>
         </span>
-        {hasReplay && <ReplayBadge matchId={matchId} compact />}
+        {isLive && <LiveBadge compact />}
+        {!isLive && hasReplay && <ReplayBadge matchId={matchId} compact />}
       </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight">
+    <div className="flex items-center justify-end gap-1.5 text-[9px] text-gray-500 uppercase tracking-tight">
       <span className="truncate flex items-center gap-1">
         {locationCity && <span>{locationCity}</span>}
         {countryFlag && (
@@ -123,7 +128,8 @@ function LocationTimeBadge({
         {hasLocation && <span>•</span>}
         <span>{formattedTime}</span>
       </span>
-      {hasReplay && <ReplayBadge matchId={matchId} compact />}
+      {isLive && <LiveBadge compact />}
+      {!isLive && hasReplay && <ReplayBadge matchId={matchId} compact />}
     </div>
   )
 }
@@ -147,27 +153,39 @@ function ReplayBadge({ matchId, compact }: ReplayBadgeProps) {
   )
 }
 
+interface LiveBadgeProps {
+  readonly compact: boolean
+}
+
+function LiveBadge({ compact }: LiveBadgeProps) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none ${compact ? "text-[8px] px-1 py-0.5" : "text-[9px] px-1.5 py-0.5"}`}
+    >
+      LIVE
+    </span>
+  )
+}
+
 function MatchResultCardComponent({
   result,
   compact = false,
+  isLive = false,
+  onClick,
 }: MatchResultCardProps) {
   const formattedTime = new Date(result.timestamp).toLocaleTimeString([], {
     hour: "numeric",
   })
 
-  return (
-    <div
-      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "py-1 px-2"} gap-4`}
-    >
+  const content = (
+    <>
       <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
-          <span
-            className={
-              compact ? "scale-75 origin-left inline-block" : "text-lg"
-            }
-          >
-            {getGameIcon(result.gameType)}
-          </span>
+          <img
+            src={getGameIcon(result.gameType)}
+            alt=""
+            className={compact ? "w-4 h-4" : "w-5 h-5"}
+          />
         </div>
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5 min-w-0">
@@ -179,27 +197,48 @@ function MatchResultCardComponent({
               compact={compact}
             />
           </div>
-          <LocationTimeBadge
-            locationCity={result.locationCity}
-            locationCountry={result.locationCountry}
-            formattedTime={formattedTime}
-            hasReplay={result.hasReplay}
-            matchId={result.id}
-            compact={compact}
-          />
         </div>
       </div>
-      <div
-        className={`flex items-center gap-1.5 font-mono ${compact ? "text-[11px]" : "text-sm"}`}
+      <LocationTimeBadge
+        locationCity={result.locationCity}
+        locationCountry={result.locationCountry}
+        formattedTime={formattedTime}
+        hasReplay={result.hasReplay}
+        matchId={result.id}
+        compact={compact}
+        isLive={isLive}
       />
+    </>
+  )
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={`flex w-full items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 cursor-pointer text-left ${compact ? "px-1 py-0.5" : "py-1 px-2"} gap-4`}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  return (
+    <div
+      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${compact ? "px-1 py-0.5" : "py-1 px-2"} gap-4`}
+    >
+      {content}
     </div>
   )
 }
 
-// Optimization: memoize match result cards as they are rendered in potentially long lists
-// and often fetched via polling even if they haven't changed.
 export const MatchResultCard = memo(MatchResultCardComponent, (prev, next) => {
-  return prev.result.id === next.result.id && prev.compact === next.compact
+  return (
+    prev.result.id === next.result.id &&
+    prev.compact === next.compact &&
+    prev.isLive === next.isLive &&
+    prev.onClick === next.onClick
+  )
 })
 
 export default MatchResultCard
