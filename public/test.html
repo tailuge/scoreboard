@@ -248,7 +248,7 @@
       const spectatorToggle = document.getElementById("spectator-toggle");
       const buttonNineball = document.getElementById("button-nineball");
       const buttonSnooker = document.getElementById("button-snooker");
-      const buttonThreeCushion = document.getElementById("button-threecushion");
+      const buttonThreecushion = document.getElementById("button-threecushion");
 
       const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join&gameType=ruleType
@@ -285,10 +285,19 @@
       };
 
       const enableStartButtons = () => {
-        if (buttonNineball) buttonNineball.disabled = false
-        if (buttonSnooker) buttonSnooker.disabled = false
-        if (buttonThreeCushion) buttonThreeCushion.disabled = false
-      }
+        if (buttonNineball) buttonNineball.disabled = false;
+        if (buttonSnooker) buttonSnooker.disabled = false;
+        if (buttonThreecushion) buttonThreecushion.disabled = false;
+      };
+
+      const warmNchanStats = async () => {
+        const url = "https://billiards-network.onrender.com/basic_status";
+        try {
+          const response = await fetch(url, { mode: "cors" });
+          if (response.ok || response.type === "opaque") {
+            enableStartButtons();
+            stats?.classList.add("hidden");
+          }
         } catch (error) {
           // Ignore fetch failures; iframe load can still unlock buttons.
           console.warn("Failed to warm nchan stats:", error);
@@ -309,15 +318,6 @@
       document
         .getElementById("button-threecushion")
         ?.addEventListener("click", () => startGame("threecushion"));
-
-      const existingRuleType = new URLSearchParams(
-        globalThis.location.search,
-      ).get("ruletype");
-
-      if (existingRuleType === "nineball" || existingRuleType === "snooker" || existingRuleType === "threecushion") {
-        hidePreGameUi();
-        createPanels(existingRuleType, spectatorToggle?.checked);
-      }
 
       warmNchanStats();
     </script>
