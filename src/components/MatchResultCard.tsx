@@ -1,14 +1,15 @@
-import React, { memo } from "react"
-import { MatchResult } from "@/types/match"
-import { getGameIcon } from "@/utils/game"
-import { PlayerMatchDisplay } from "./PlayerMatchDisplay"
-import { LocationTimeBadge } from "./LocationTimeBadge"
+import React, { memo } from "react";
+import Image from "next/image";
+import { MatchResult } from "@/types/match";
+import { getGameIcon } from "@/utils/game";
+import { PlayerMatchDisplay } from "./PlayerMatchDisplay";
+import { LocationTimeBadge } from "./LocationTimeBadge";
 
 interface MatchResultCardProps {
-  readonly result: MatchResult
-  readonly compact?: boolean
-  readonly isLive?: boolean
-  readonly onClick?: () => void
+  readonly result: MatchResult;
+  readonly compact?: boolean;
+  readonly isLive?: boolean;
+  readonly onClick?: () => void;
 }
 
 function MatchResultCardComponent({
@@ -19,16 +20,18 @@ function MatchResultCardComponent({
 }: MatchResultCardProps) {
   const formattedTime = new Date(result.timestamp).toLocaleTimeString([], {
     hour: "numeric",
-  })
-  const padding = compact ? "px-1 py-0.5" : "py-1 px-2"
+  });
+  const padding = compact ? "px-1 py-0.5" : "py-1 px-2";
 
   const content = (
     <>
       <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
-          <img
+          <Image
             src={getGameIcon(result.gameType)}
             alt=""
+            width={compact ? 16 : 20}
+            height={compact ? 16 : 20}
             className={compact ? "w-4 h-4" : "w-5 h-5"}
           />
         </div>
@@ -54,7 +57,7 @@ function MatchResultCardComponent({
         isLive={isLive}
       />
     </>
-  )
+  );
 
   if (onClick) {
     return (
@@ -65,7 +68,7 @@ function MatchResultCardComponent({
       >
         {content}
       </button>
-    )
+    );
   }
 
   return (
@@ -74,7 +77,7 @@ function MatchResultCardComponent({
     >
       {content}
     </div>
-  )
+  );
 }
 
 export const MatchResultCard = memo(MatchResultCardComponent, (prev, next) => {
@@ -83,7 +86,7 @@ export const MatchResultCard = memo(MatchResultCardComponent, (prev, next) => {
     prev.compact === next.compact &&
     prev.isLive === next.isLive &&
     prev.onClick === next.onClick
-  )
-})
+  );
+});
 
-export default MatchResultCard
+export default MatchResultCard;
