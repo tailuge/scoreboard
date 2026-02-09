@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
 import { LobbyProvider } from "@/contexts/LobbyContext"
+import { useUser } from "@/contexts/UserContext"
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
@@ -15,9 +16,19 @@ jest.mock("../nchan/nchanpub", () => ({
   })),
 }))
 
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+const mockedUseUser = useUser as jest.Mock
+
 describe("Game Page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockedUseUser.mockReturnValue({
+      userId: "test-user-id",
+      userName: "TestUser",
+      setUserName: jest.fn(),
+    })
     globalThis.fetch = jest.fn().mockImplementation((url) => {
       if (url.includes("/api/rank")) {
         return Promise.resolve({

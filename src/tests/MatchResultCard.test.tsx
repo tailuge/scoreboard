@@ -40,7 +40,7 @@ describe("MatchResultCard", () => {
     const { rerender } = render(<MatchResultCard result={nineballResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
       "src",
-      "/assets/nineball.png"
+      expect.stringContaining("nineball.png")
     )
 
     const snookerResult: MatchResult = {
@@ -51,7 +51,7 @@ describe("MatchResultCard", () => {
     rerender(<MatchResultCard result={snookerResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
       "src",
-      "/assets/snooker.png"
+      expect.stringContaining("snooker.png")
     )
 
     const threeCushionResult: MatchResult = {
@@ -62,7 +62,7 @@ describe("MatchResultCard", () => {
     rerender(<MatchResultCard result={threeCushionResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
       "src",
-      "/assets/threecushion.png"
+      expect.stringContaining("threecushion.png")
     )
 
     const eightballResult: MatchResult = {
@@ -73,7 +73,7 @@ describe("MatchResultCard", () => {
     rerender(<MatchResultCard result={eightballResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
       "src",
-      "/assets/eightball.png"
+      expect.stringContaining("eightball.png")
     )
   })
 

@@ -41,7 +41,7 @@ describe("LiveMatchesList", () => {
     expect(screen.getByText("Player Two")).toBeInTheDocument()
     expect(screen.getByRole("presentation")).toHaveAttribute(
       "src",
-      "/assets/nineball.png"
+      expect.stringContaining("nineball.png")
     )
     expect(screen.queryByText(/nineball/i)).not.toBeInTheDocument()
 

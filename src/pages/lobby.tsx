@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
-import { LiveMatchesList } from "@/components/LiveMatchesList"
-import { MatchHistoryList } from "@/components/MatchHistoryList"
+import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
@@ -18,8 +17,10 @@ import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 export default function Lobby() {
   const { userId, userName } = useUser()
   const router = useRouter()
-  const { tables, isLoading, tableAction, findOrCreateTable, deleteTable } =
-    useLobbyTables(userId, userName)
+  const { tables, isLoading, findOrCreateTable, deleteTable } = useLobbyTables(
+    userId,
+    userName
+  )
   const [modalTable, setModalTable] = useState<{
     id: string
     ruleType: string
@@ -49,32 +50,6 @@ export default function Lobby() {
     if (!router.isReady) return
     markUsage("lobby")
   }, [router.isReady])
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, sonarjs/no-unused-vars, sonarjs/no-dead-store
-  const handleJoin = useCallback(
-    async (tableId: string) => {
-      const updatedTable = await tableAction(tableId, "join")
-      if (updatedTable) {
-        if (!updatedTable.completed) {
-          setModalTable({
-            id: updatedTable.id,
-            ruleType: updatedTable.ruleType,
-          })
-          shownModals.current.add(updatedTable.id)
-        }
-        return true
-      }
-      return false
-    },
-    [tableAction]
-  )
-
-  const handleSpectate = useCallback(
-    async (tableId: string) => {
-      await tableAction(tableId, "spectate")
-    },
-    [tableAction]
-  )
 
   const handleFindOrCreate = useCallback(
     async (gameType: string) => {
@@ -233,8 +208,7 @@ export default function Lobby() {
             </GroupBox>
           </div>
           <div className="lg:col-span-1">
-            <LiveMatchesList tables={tables} onSpectate={handleSpectate} />
-            <MatchHistoryList />
+            <LiveMatchesPanel />
           </div>
         </div>
         <PlayModal

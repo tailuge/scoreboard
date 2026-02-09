@@ -6,7 +6,7 @@ import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import LeaderboardTable from "@/components/LeaderboardTable"
-import CompactMatchHistory from "@/components/CompactMatchHistory"
+import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
@@ -122,17 +122,15 @@ function GameGrid({
               isHighscore ? `Play ${game.name}` : `Play ${game.name} Online`
             }
           />
-          <div className="mt-2 w-full h-[124px] text-gray-500 text-sm overflow-hidden">
-            {isHighscore ? (
+          {isHighscore && (
+            <div className="mt-2 w-full h-[124px] text-gray-500 text-sm overflow-hidden">
               <LeaderboardTable
                 ruleType={game.ruleType}
                 limit={3}
                 compact={true}
               />
-            ) : (
-              <CompactMatchHistory gameType={game.ruleType} limit={3} />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -186,21 +184,26 @@ export default function Game() {
         />
       </Head>
 
-      <div className="flex flex-col gap-6 w-full max-w-lg items-center h-full justify-center">
-        <GroupBox title="Highscore Challenge">
-          <GameGrid
-            hoverBorderColor="hover:border-blue-500"
-            isHighscore={true}
-          />
-        </GroupBox>
-        <GroupBox
-          title="2-Player Online"
-          rightBadge={
-            activeUsers === null ? null : <OnlineCount count={activeUsers} />
-          }
-        >
-          <GameGrid hoverBorderColor="hover:border-green-500" />
-        </GroupBox>
+      <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 flex flex-col gap-4">
+          <GroupBox title="Highscore Challenge">
+            <GameGrid
+              hoverBorderColor="hover:border-blue-500"
+              isHighscore={true}
+            />
+          </GroupBox>
+          <GroupBox
+            title="2-Player Online"
+            rightBadge={
+              activeUsers === null ? null : <OnlineCount count={activeUsers} />
+            }
+          >
+            <GameGrid hoverBorderColor="hover:border-green-500" />
+          </GroupBox>
+        </div>
+        <div className="lg:col-span-1">
+          <LiveMatchesPanel />
+        </div>
       </div>
     </div>
   )
