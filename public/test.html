@@ -215,115 +215,111 @@
       }
     </style>
     <script type="module">
-      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm"
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
 
       // Function to create an iframe
       function createIframe(options = {}) {
-        const username = options.username || faker.person.firstName()
-        const iframe = document.createElement("iframe")
-        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`
+        const username = options.username || faker.person.firstName();
+        const iframe = document.createElement("iframe");
+        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`;
 
         if (options.action) {
-          src += `&action=${options.action}`
+          src += `&action=${options.action}`;
         }
         if (options.gameType) {
-          src += `&gameType=${options.gameType}`
+          src += `&gameType=${options.gameType}`;
         }
         if (options.ruleType) {
-          src += `&ruletype=${options.ruleType}`
+          src += `&ruletype=${options.ruleType}`;
         }
 
-        iframe.src = src
-        iframe.width = "99.5%"
-        iframe.height = "99.5%"
-        iframe.frameBorder = "0"
-        return iframe
+        iframe.src = src;
+        iframe.width = "99.5%";
+        iframe.height = "99.5%";
+        iframe.frameBorder = "0";
+        return iframe;
       }
 
-      const panel1 = document.getElementById("panel1")
-      const panel2 = document.getElementById("panel2")
-      const panel3 = document.getElementById("panel3")
-      const controls = document.getElementById("controls")
-      const stats = document.getElementById("stats")
-      const spectatorToggle = document.getElementById("spectator-toggle")
-      const buttonNineball = document.getElementById("button-nineball")
-      const buttonSnooker = document.getElementById("button-snooker")
+      const panel1 = document.getElementById("panel1");
+      const panel2 = document.getElementById("panel2");
+      const panel3 = document.getElementById("panel3");
+      const controls = document.getElementById("controls");
+      const stats = document.getElementById("stats");
+      const spectatorToggle = document.getElementById("spectator-toggle");
+      const buttonNineball = document.getElementById("button-nineball");
+      const buttonSnooker = document.getElementById("button-snooker");
+      const buttonThreeCushion = document.getElementById("button-threecushion");
 
       const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join&gameType=ruleType
         panel1.appendChild(
-          createIframe({ action: "join", gameType: ruleType, ruleType })
-        )
+          createIframe({ action: "join", gameType: ruleType, ruleType }),
+        );
 
         // Panel 2: action=join&gameType=ruleType
         panel2.appendChild(
-          createIframe({ action: "join", gameType: ruleType, ruleType })
-        )
+          createIframe({ action: "join", gameType: ruleType, ruleType }),
+        );
 
         // Panel 3: just a random name
         if (panel3 && includeSpectator) {
-          panel3.appendChild(createIframe())
-          const closeButton = document.createElement("button")
-          closeButton.type = "button"
-          closeButton.className = "panel-close"
-          closeButton.setAttribute("aria-label", "Close panel")
-          closeButton.textContent = "x"
+          panel3.appendChild(createIframe());
+          const closeButton = document.createElement("button");
+          closeButton.type = "button";
+          closeButton.className = "panel-close";
+          closeButton.setAttribute("aria-label", "Close panel");
+          closeButton.textContent = "x";
           closeButton.addEventListener("click", () => {
-            panel3.remove()
-          })
-          panel3.appendChild(closeButton)
-          panel3.classList.remove("hidden")
+            panel3.remove();
+          });
+          panel3.appendChild(closeButton);
+          panel3.classList.remove("hidden");
         } else if (panel3) {
-          panel3.classList.add("hidden")
+          panel3.classList.add("hidden");
         }
-      }
+      };
 
       const hidePreGameUi = () => {
-        controls?.classList.add("hidden")
-        stats?.classList.add("hidden")
-      }
+        controls?.classList.add("hidden");
+        stats?.classList.add("hidden");
+      };
 
       const enableStartButtons = () => {
         if (buttonNineball) buttonNineball.disabled = false
         if (buttonSnooker) buttonSnooker.disabled = false
+        if (buttonThreeCushion) buttonThreeCushion.disabled = false
       }
-
-      const warmNchanStats = async () => {
-        const url = "https://billiards-network.onrender.com/basic_status"
-        try {
-          const response = await fetch(url, { mode: "cors" })
-          if (response.ok || response.type === "opaque") {
-            enableStartButtons()
-            stats?.classList.add("hidden")
-          }
         } catch (error) {
           // Ignore fetch failures; iframe load can still unlock buttons.
-          console.warn("Failed to warm nchan stats:", error)
+          console.warn("Failed to warm nchan stats:", error);
         }
-      }
+      };
 
       const startGame = (ruleType) => {
-        hidePreGameUi()
-        createPanels(ruleType, spectatorToggle?.checked)
-      }
+        hidePreGameUi();
+        createPanels(ruleType, spectatorToggle?.checked);
+      };
 
       document
         .getElementById("button-nineball")
-        ?.addEventListener("click", () => startGame("nineball"))
+        ?.addEventListener("click", () => startGame("nineball"));
       document
         .getElementById("button-snooker")
-        ?.addEventListener("click", () => startGame("snooker"))
+        ?.addEventListener("click", () => startGame("snooker"));
+      document
+        .getElementById("button-threecushion")
+        ?.addEventListener("click", () => startGame("threecushion"));
 
       const existingRuleType = new URLSearchParams(
-        globalThis.location.search
-      ).get("ruletype")
+        globalThis.location.search,
+      ).get("ruletype");
 
-      if (existingRuleType === "nineball" || existingRuleType === "snooker") {
-        hidePreGameUi()
-        createPanels(existingRuleType, spectatorToggle?.checked)
+      if (existingRuleType === "nineball" || existingRuleType === "snooker" || existingRuleType === "threecushion") {
+        hidePreGameUi();
+        createPanels(existingRuleType, spectatorToggle?.checked);
       }
 
-      warmNchanStats()
+      warmNchanStats();
     </script>
   </head>
 
@@ -331,6 +327,9 @@
     <div class="controls" id="controls">
       <button type="button" id="button-nineball" disabled>Nineball</button>
       <button type="button" id="button-snooker" disabled>Snooker</button>
+      <button type="button" id="button-threecushion" disabled>
+        Three Cushion
+      </button>
       <label for="spectator-toggle">
         <input type="checkbox" id="spectator-toggle" />
         Spectator
