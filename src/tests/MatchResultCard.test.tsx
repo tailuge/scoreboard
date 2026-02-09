@@ -139,6 +139,18 @@ describe("MatchResultCard", () => {
     expect(screen.queryByRole("link", { name: /replay/i })).toBeNull()
   })
 
+  it("renders relative time after mount", async () => {
+    const recentResult: MatchResult = {
+      ...mockResult,
+      timestamp: Date.now() - 3600000, // 1 hour ago
+    }
+    render(<MatchResultCard result={recentResult} />)
+
+    // Initially it might show the fallback (hour) or nothing
+    // Wait for the useEffect to kick in
+    expect(await screen.findByText(/1h ago/i)).toBeInTheDocument()
+  })
+
   it("handles re-renders with same or different props for memoization", () => {
     const { rerender } = render(<MatchResultCard result={mockResult} />)
     expect(screen.getByText("Alice")).toBeInTheDocument()
