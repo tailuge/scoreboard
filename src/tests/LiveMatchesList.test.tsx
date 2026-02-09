@@ -45,7 +45,7 @@ describe("LiveMatchesList", () => {
     )
     expect(screen.queryByText(/nineball/i)).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByText("LIVE"))
+    fireEvent.click(screen.getByText("Live"))
     expect(onSpectate).toHaveBeenCalledWith("table-1")
     expect(globalThis.open).toHaveBeenCalled()
   })

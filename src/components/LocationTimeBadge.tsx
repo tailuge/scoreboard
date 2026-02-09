@@ -28,15 +28,15 @@ export function LocationTimeBadge({
 
   return (
     <div
-      className={`flex items-center justify-end gap-1.5 ${textSize} ${textColor} uppercase tracking-tight`}
+      className={`flex items-center justify-end gap-1.5 ${textSize} ${textColor} tracking-tight`}
     >
       <span className="truncate flex items-center gap-1">
+        <span>{formattedTime}</span>
+        {hasLocation && <span>•</span>}
         {locationCity && <span>{locationCity}</span>}
         {countryFlag && (
           <span title={locationCountry || undefined}>{countryFlag}</span>
         )}
-        {hasLocation && <span>•</span>}
-        <span>{formattedTime}</span>
       </span>
       {isLive && <MatchBadge variant="live" compact={compact} />}
       {!isLive && hasReplay && (
@@ -62,9 +62,9 @@ function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
   if (variant === "live") {
     return (
       <span
-        className={`inline-flex items-center rounded-sm bg-red-600 text-white uppercase font-semibold tracking-wide leading-none ${sizeClasses}`}
+        className={`inline-flex items-center rounded-sm bg-red-600 text-white font-semibold leading-none ${sizeClasses}`}
       >
-        LIVE
+        Live
       </span>
     )
   }
@@ -75,9 +75,9 @@ function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
       target="_blank"
       rel="noreferrer"
       title="Watch replay"
-      className={`inline-flex items-center rounded-sm bg-blue-600 text-white uppercase font-semibold tracking-wide leading-none transition-colors hover:bg-blue-500 ${sizeClasses}`}
+      className={`inline-flex items-center rounded-sm bg-blue-600 text-white font-semibold leading-none transition-colors hover:bg-blue-500 ${sizeClasses}`}
     >
-      REPLAY
+      Replay
     </a>
   )
 }
