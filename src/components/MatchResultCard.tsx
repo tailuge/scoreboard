@@ -1,9 +1,10 @@
-import React, { memo } from "react"
+import React, { memo, useState, useEffect } from "react"
 import Image from "next/image"
 import { MatchResult } from "@/types/match"
 import { getGameIcon } from "@/utils/game"
 import { PlayerMatchDisplay } from "./PlayerMatchDisplay"
 import { LocationTimeBadge } from "./LocationTimeBadge"
+import { formatTimeAgo } from "@/utils/timeago"
 
 interface MatchResultCardProps {
   readonly result: MatchResult
@@ -18,9 +19,18 @@ function MatchResultCardComponent({
   isLive = false,
   onClick,
 }: MatchResultCardProps) {
-  const formattedTime = new Date(result.timestamp).toLocaleTimeString([], {
-    hour: "numeric",
-  })
+  const [formattedTime, setFormattedTime] = useState<string>("")
+
+  useEffect(() => {
+    setFormattedTime(formatTimeAgo(result.timestamp))
+  }, [result.timestamp])
+
+  const displayTime =
+    formattedTime ||
+    new Date(result.timestamp).toLocaleTimeString([], {
+      hour: "numeric",
+    })
+
   const padding = compact ? "px-1 py-0.5" : "py-1 px-2"
 
   const content = (
@@ -50,7 +60,7 @@ function MatchResultCardComponent({
       <LocationTimeBadge
         locationCity={result.locationCity}
         locationCountry={result.locationCountry}
-        formattedTime={formattedTime}
+        formattedTime={displayTime}
         hasReplay={result.hasReplay}
         matchId={result.id}
         compact={compact}
