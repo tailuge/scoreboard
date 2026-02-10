@@ -1,14 +1,14 @@
-import { useEffect, useRef } from "react"
-import { NextRouter } from "next/router"
+import { useEffect, useRef } from "react";
+import { NextRouter } from "next/router";
 
 export function useAutoJoin(
   router: NextRouter,
   isLoading: boolean,
   userId: string | null,
   userName: string | null,
-  handleAutoJoin: (ruleType: string) => Promise<void>
+  handleAutoJoin: (ruleType: string) => Promise<void>,
 ) {
-  const hasHandledAutoJoin = useRef(false)
+  const hasHandledAutoJoin = useRef(false);
 
   useEffect(() => {
     if (
@@ -18,14 +18,14 @@ export function useAutoJoin(
       !userId ||
       !userName
     )
-      return
+      return;
 
-    const action = router.query.action
-    const ruleType = router.query.ruleType as string
+    const action = router.query.action;
+    const ruleType = router.query.ruletype as string;
 
     if (action === "join" && ruleType) {
-      hasHandledAutoJoin.current = true
-      handleAutoJoin(ruleType)
+      hasHandledAutoJoin.current = true;
+      handleAutoJoin(ruleType);
     }
   }, [
     isLoading,
@@ -34,5 +34,5 @@ export function useAutoJoin(
     userId,
     userName,
     handleAutoJoin,
-  ])
+  ]);
 }
