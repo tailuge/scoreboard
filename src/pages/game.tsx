@@ -11,6 +11,7 @@ import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
 import { User } from "@/components/User"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
+import { useUser } from "@/contexts/UserContext"
 import LeaderboardTable from "@/components/LeaderboardTable"
 import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { STATUS_PAGE_URL } from "@/utils/constants"
@@ -104,15 +105,17 @@ function GameButton({
 function GameGrid({
   hoverBorderColor,
   isHighscore = false,
+  userName,
 }: {
   readonly hoverBorderColor: string
   readonly isHighscore?: boolean
+  readonly userName: string
 }) {
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => {
         const href = isHighscore
-          ? game.highscoreUrl
+          ? `${game.highscoreUrl}&playername=${encodeURIComponent(userName)}`
           : `/lobby?action=join&ruletype=${game.ruleType}`
         const isInternal = !isHighscore
 
@@ -155,6 +158,7 @@ function GameGrid({
 
 export default function Game() {
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
+  const { userName } = useUser()
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -209,12 +213,16 @@ export default function Game() {
               activeUsers === null ? null : <OnlineCount count={activeUsers} />
             }
           >
-            <GameGrid hoverBorderColor="hover:border-green-500" />
+            <GameGrid
+              hoverBorderColor="hover:border-green-500"
+              userName={userName}
+            />
           </GroupBox>
           <GroupBox title="Highscore Challenge">
             <GameGrid
               hoverBorderColor="hover:border-blue-500"
               isHighscore={true}
+              userName={userName}
             />
           </GroupBox>
         </div>
