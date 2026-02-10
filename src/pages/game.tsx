@@ -1,18 +1,18 @@
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
+import React from "react"
 import {
   ButtonOptionsPlaceholder,
   RaceToButtons,
   RedBallButtons,
-} from "../components/GameButtonOptions";
-import { GroupBox } from "../components/GroupBox";
-import { OnlineCount } from "../components/OnlineCount";
-import { useServerStatus } from "@/components/hooks/useServerStatus";
-import LeaderboardTable from "@/components/LeaderboardTable";
-import { LiveMatchesPanel } from "@/components/LiveMatchesPanel";
-import { STATUS_PAGE_URL } from "@/utils/constants";
+} from "../components/GameButtonOptions"
+import { GroupBox } from "../components/GroupBox"
+import { OnlineCount } from "../components/OnlineCount"
+import { useServerStatus } from "@/components/hooks/useServerStatus"
+import LeaderboardTable from "@/components/LeaderboardTable"
+import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
+import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
   {
@@ -37,16 +37,16 @@ const GAMES = [
       "https://tailuge.github.io/billiards/dist/?ruletype=threecushion",
     ruleType: "threecushion",
   },
-];
+]
 
 type GameButtonProps = {
-  readonly icon: string;
-  readonly alt: string;
-  readonly href?: string;
-  readonly onClick?: () => void;
-  readonly hoverBorderColor: string;
-  readonly ariaLabel: string;
-};
+  readonly icon: string
+  readonly alt: string
+  readonly href?: string
+  readonly onClick?: () => void
+  readonly hoverBorderColor: string
+  readonly ariaLabel: string
+}
 
 function GameButton({
   icon,
@@ -66,18 +66,18 @@ function GameButton({
         sizes="(max-width: 768px) 33vw, 20vw"
       />
     </div>
-  );
+  )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`;
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
-    const isInternal = href.startsWith("/");
+    const isInternal = href.startsWith("/")
     if (isInternal) {
       return (
         <Link href={href} className={commonClasses} aria-label={ariaLabel}>
           {content}
         </Link>
-      );
+      )
     }
 
     return (
@@ -90,30 +90,30 @@ function GameButton({
       >
         {content}
       </a>
-    );
+    )
   }
 
   return (
     <button onClick={onClick} className={commonClasses} aria-label={ariaLabel}>
       {content}
     </button>
-  );
+  )
 }
 
 function GameGrid({
   hoverBorderColor,
   isHighscore = false,
 }: {
-  readonly hoverBorderColor: string;
-  readonly isHighscore?: boolean;
+  readonly hoverBorderColor: string
+  readonly isHighscore?: boolean
 }) {
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => {
         const href = isHighscore
           ? game.highscoreUrl
-          : `/lobby?action=join&gameType=${game.ruleType}`;
-        const isInternal = !isHighscore;
+          : `/lobby?action=join&gameType=${game.ruleType}`
+        const isInternal = !isHighscore
 
         return (
           <div
@@ -146,14 +146,14 @@ function GameGrid({
               </div>
             )}
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 export default function Game() {
-  const { activeUsers } = useServerStatus(STATUS_PAGE_URL);
+  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -221,5 +221,5 @@ export default function Game() {
         </div>
       </div>
     </div>
-  );
+  )
 }
