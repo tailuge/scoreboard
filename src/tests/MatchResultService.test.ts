@@ -154,7 +154,7 @@ describe("MatchResultService", () => {
     expect(history[0].loser).toBeUndefined()
   })
 
-  it("should filter results by gameType", async () => {
+  it("should filter results by gameType (legacy)", async () => {
     const match1: MatchResult = {
       id: "match1",
       winner: "P1",
@@ -179,6 +179,68 @@ describe("MatchResultService", () => {
 
     const all = await service.getMatchResults()
     expect(all).toHaveLength(2)
+  })
+
+  it("should filter results by ruleType", async () => {
+    const match1: MatchResult = {
+      id: "match1",
+      winner: "P1",
+      winnerScore: 10,
+      ruleType: "snooker",
+      timestamp: Date.now(),
+    }
+    const match2: MatchResult = {
+      id: "match2",
+      winner: "P2",
+      winnerScore: 20,
+      ruleType: "nineball",
+      timestamp: Date.now() + 1,
+    }
+
+    await service.addMatchResult(match1)
+    await service.addMatchResult(match2)
+
+    const snookerOnly = await service.getMatchResults(50, "snooker")
+    expect(snookerOnly).toHaveLength(1)
+    expect(snookerOnly[0].id).toBe("match1")
+
+    const all = await service.getMatchResults()
+    expect(all).toHaveLength(2)
+  })
+
+  it("should filter mixed ruleType and gameType results", async () => {
+    const match1: MatchResult = {
+      id: "match1",
+      winner: "P1",
+      winnerScore: 10,
+      gameType: "snooker",
+      timestamp: Date.now(),
+    }
+    const match2: MatchResult = {
+      id: "match2",
+      winner: "P2",
+      winnerScore: 20,
+      ruleType: "snooker",
+      timestamp: Date.now() + 1,
+    }
+    const match3: MatchResult = {
+      id: "match3",
+      winner: "P3",
+      winnerScore: 30,
+      ruleType: "nineball",
+      timestamp: Date.now() + 2,
+    }
+
+    await service.addMatchResult(match1)
+    await service.addMatchResult(match2)
+    await service.addMatchResult(match3)
+
+    const snookerOnly = await service.getMatchResults(50, "snooker")
+    expect(snookerOnly).toHaveLength(2)
+    expect(snookerOnly.map((r) => r.id)).toEqual(["match2", "match1"])
+
+    const all = await service.getMatchResults()
+    expect(all).toHaveLength(3)
   })
 
   it("should respect limit when no gameType is provided", async () => {

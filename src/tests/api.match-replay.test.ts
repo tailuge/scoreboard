@@ -29,7 +29,7 @@ describe("/api/match-replay handler", () => {
     globalThis.Response = mockResponseConstructor
   })
 
-  it("should redirect to viewer on GET request", async () => {
+  it("should redirect to viewer on GET request with gameType", async () => {
     const mockReplay = "replay-blob-data"
     const getSpy = jest
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
@@ -57,6 +57,38 @@ describe("/api/match-replay handler", () => {
     expect(response.status).toBe(307)
     expect(location).toBe(
       `https://tailuge.github.io/billiards/dist/?ruletype=nineball&state=${encodeURIComponent(mockReplay)}`
+    )
+    expect(getSpy).toHaveBeenCalledWith("match123")
+  })
+
+  it("should redirect to viewer on GET request with ruleType", async () => {
+    const mockReplay = "replay-blob-data"
+    const getSpy = jest
+      .spyOn(MockMatchResultService.prototype, "getMatchReplay")
+      .mockResolvedValue(mockReplay)
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([
+        {
+          id: "match123",
+          winner: "A",
+          winnerScore: 10,
+          ruleType: "snooker",
+          timestamp: Date.now(),
+        },
+      ])
+
+    req = {
+      method: "GET",
+      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    const location = response.headers.get("Location")
+
+    expect(response.status).toBe(307)
+    expect(location).toBe(
+      `https://tailuge.github.io/billiards/dist/?ruletype=snooker&state=${encodeURIComponent(mockReplay)}`
     )
     expect(getSpy).toHaveBeenCalledWith("match123")
   })

@@ -57,23 +57,24 @@ GameUrl.create() → ?ruletype=ninebill ← TRANSLATED BACK!
 
 ## Implementation Steps
 
-### Phase 1: Backwards Compatibility Layer (safe to deploy first)
+### Phase 1: Backwards Compatibility Layer ✅ COMPLETE
 
 This phase adds support for reading `ruleType` while still accepting existing `gameType` data. Can be deployed independently.
 
-1. **Update `src/types/match.ts`**
+1. **Update `src/types/match.ts`** ✅
    - Add `ruleType?: string` alongside existing `gameType?: string`
    - Both fields optional for backwards compatibility
+   - Added `getRuleType()` helper function
    - See "Backwards Compatibility for KV Data" section for full type definition
 
-2. **Update `src/services/MatchResultService.ts`**
+2. **Update `src/services/MatchResultService.ts`** ✅
    - Add `ruleType?: string` parameter alongside `gameType`
-   - Use dual-read for filtering: `(r.ruleType ?? r.gameType) === (ruleType ?? gameType)`
+   - Use dual-read for filtering via `getRuleType()` helper
 
-3. **Update `src/pages/api/match-replay.ts`**
-   - Dual-read: `matchResult.ruleType ?? matchResult.gameType`
+3. **Update `src/pages/api/match-replay.ts`** ✅
+   - Use `getRuleType()` for dual-read
 
-4. **Update test files for Phase 1:**
+4. **Update test files for Phase 1:** ✅
    - `src/tests/match.schema.test.ts`
    - `src/tests/MatchResultService.test.ts`
    - `src/tests/api.match-replay.test.ts`
