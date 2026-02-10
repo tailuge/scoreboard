@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
+import { getRuleType } from "@/types/match"
 import { logger } from "@/utils/logger"
 
 export const config = {
@@ -61,7 +62,7 @@ export default async function handler(request: NextRequest) {
     }
 
     const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
-    viewerUrl.searchParams.set("ruletype", matchResult.ruleType || "nineball")
+    viewerUrl.searchParams.set("ruletype", getRuleType(matchResult))
     viewerUrl.searchParams.set("state", replayData)
     return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {

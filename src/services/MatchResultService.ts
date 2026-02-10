@@ -1,5 +1,5 @@
 import { kv, VercelKV } from "@vercel/kv"
-import { MatchResult } from "../types/match"
+import { MatchResult, getRuleType } from "../types/match"
 
 const KEY = "match_results"
 const HISTORY_LIMIT = 50
@@ -62,7 +62,7 @@ export class MatchResultService {
     })
 
     const filtered = ruleType
-      ? results.filter((r) => r.ruleType === ruleType)
+      ? results.filter((r) => getRuleType(r) === ruleType)
       : results
 
     return filtered.slice(0, limit)

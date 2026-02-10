@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react"
 import Image from "next/image"
-import { MatchResult } from "@/types/match"
+import { MatchResult, getRuleType } from "@/types/match"
 import { getGameIcon } from "@/utils/game"
 import { PlayerMatchDisplay } from "./PlayerMatchDisplay"
 import { LocationTimeBadge } from "./LocationTimeBadge"
@@ -38,7 +38,7 @@ function MatchResultCardComponent({
       <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
           <Image
-            src={getGameIcon(result.ruleType)}
+            src={getGameIcon(getRuleType(result))}
             alt=""
             width={compact ? 16 : 20}
             height={compact ? 16 : 20}

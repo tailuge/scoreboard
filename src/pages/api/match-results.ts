@@ -104,7 +104,11 @@ async function handlePost(request: NextRequest) {
       request.headers?.get("x-vercel-ip-country") || undefined
     const locationRegion =
       request.headers?.get("x-vercel-ip-region") || undefined
-    const locationCity = request.headers?.get("x-vercel-ip-city") || undefined
+    const locationCityRaw =
+      request.headers?.get("x-vercel-ip-city") || undefined
+    const locationCity = locationCityRaw
+      ? decodeURIComponent(locationCityRaw)
+      : undefined
 
     // Basic validation
     // winner and winnerScore are required.
