@@ -4,13 +4,13 @@ import { MatchResultCard } from "./MatchResultCard"
 import { logger } from "@/utils/logger"
 
 interface CompactMatchHistoryProps {
-  readonly gameType: string
+  readonly ruleType: string
   readonly limit?: number
   readonly pollingInterval?: number
 }
 
 export function CompactMatchHistory({
-  gameType,
+  ruleType,
   limit = 3,
   pollingInterval = 30000,
 }: CompactMatchHistoryProps) {
@@ -20,13 +20,13 @@ export function CompactMatchHistory({
   const fetchResults = async () => {
     try {
       const response = await fetch(
-        `/api/match-results?gameType=${gameType}&limit=${limit}`
+        `/api/match-results?ruleType=${ruleType}&limit=${limit}`
       )
       if (!response.ok) throw new Error("Failed to fetch match history")
       const data = await response.json()
       setResults(data)
     } catch (error) {
-      logger.log(`Error fetching match history for ${gameType}:`, error)
+      logger.log(`Error fetching match history for ${ruleType}:`, error)
     } finally {
       setLoading(false)
     }
@@ -36,11 +36,11 @@ export function CompactMatchHistory({
     fetchResults()
     const interval = setInterval(fetchResults, pollingInterval)
     return () => clearInterval(interval)
-  }, [gameType, limit, pollingInterval])
+  }, [ruleType, limit, pollingInterval])
 
   const skeletonIds = useMemo(
-    () => Array.from({ length: limit }, (_, i) => `skeleton-${gameType}-${i}`),
-    [limit, gameType]
+    () => Array.from({ length: limit }, (_, i) => `skeleton-${ruleType}-${i}`),
+    [limit, ruleType]
   )
 
   if (loading && results.length === 0) {

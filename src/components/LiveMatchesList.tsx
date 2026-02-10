@@ -46,7 +46,7 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
               loser: table.players[1]?.name || "Player 2",
               winnerScore: 0,
               loserScore: 0,
-              gameType: table.ruleType,
+              ruleType: table.ruleType,
               timestamp: table.createdAt,
             }
 

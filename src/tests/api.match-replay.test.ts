@@ -41,7 +41,7 @@ describe("/api/match-replay handler", () => {
           id: "match123",
           winner: "A",
           winnerScore: 10,
-          gameType: "nineball",
+          ruleType: "nineball",
           timestamp: Date.now(),
         },
       ])

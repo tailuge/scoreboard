@@ -56,12 +56,12 @@ export default async function handler(request: NextRequest) {
     const matchResults = await matchResultService.getMatchResults()
     const matchResult = matchResults.find((result) => result.id === id)
 
-    if (!matchResult?.gameType) {
+    if (!matchResult?.ruleType) {
       return new Response("Match result not found", { status: 404 })
     }
 
     const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
-    viewerUrl.searchParams.set("ruletype", matchResult.gameType)
+    viewerUrl.searchParams.set("ruletype", matchResult.ruleType)
     viewerUrl.searchParams.set("state", replayData)
     return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {

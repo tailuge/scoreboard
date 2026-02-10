@@ -64,13 +64,13 @@ export function useLobbyTables(
   )
 
   const findOrCreateTable = useCallback(
-    async (gameType: string): Promise<Table | null> => {
+    async (ruleType: string): Promise<Table | null> => {
       if (!userId || !userName) return null
       try {
         const response = await fetch("/api/tables/find-or-create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, userName, gameType }),
+          body: JSON.stringify({ userId, userName, ruleType }),
         })
         if (!response.ok) throw new Error("Failed to find or create table")
         const table = await response.json()

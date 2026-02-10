@@ -1,6 +1,6 @@
-export function getGameIcon(gameType: string): string {
-  if (!gameType) return "/assets/eightball.png"
-  switch (gameType.toLowerCase()) {
+export function getGameIcon(ruleType: string): string {
+  if (!ruleType) return "/assets/eightball.png"
+  switch (ruleType.toLowerCase()) {
     case "eightball":
       return "/assets/eightball.png"
     case "nineball":

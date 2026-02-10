@@ -7,7 +7,7 @@ test("match history display in lobby", async ({ page, request }) => {
     loser: "PlaywrightLoser",
     winnerScore: 100,
     loserScore: 50,
-    gameType: "snooker",
+    ruleType: "snooker",
     timestamp: Date.now(),
   }
 

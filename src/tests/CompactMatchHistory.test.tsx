@@ -14,7 +14,7 @@ describe("CompactMatchHistory", () => {
       loser: "Bob",
       winnerScore: 100,
       loserScore: 85,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     },
   ]
@@ -29,7 +29,7 @@ describe("CompactMatchHistory", () => {
       json: () => Promise.resolve(mockResults),
     })
 
-    render(<CompactMatchHistory gameType="snooker" />)
+    render(<CompactMatchHistory ruleType="snooker" />)
 
     await waitFor(() => {
       expect(screen.getByText("Alice")).toBeInTheDocument()
@@ -37,7 +37,7 @@ describe("CompactMatchHistory", () => {
     })
 
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining("/api/match-results?gameType=snooker&limit=3")
+      expect.stringContaining("/api/match-results?ruleType=snooker&limit=3")
     )
   })
 
@@ -47,7 +47,7 @@ describe("CompactMatchHistory", () => {
       json: () => Promise.resolve([]),
     })
 
-    render(<CompactMatchHistory gameType="snooker" />)
+    render(<CompactMatchHistory ruleType="snooker" />)
 
     await waitFor(() => {
       expect(screen.getByText(/no matches/i)).toBeInTheDocument()

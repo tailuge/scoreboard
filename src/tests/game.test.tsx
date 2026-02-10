@@ -47,7 +47,7 @@ describe("Game Page", () => {
                 id: "1",
                 winner: "Alice",
                 winnerScore: 10,
-                gameType: "nineball",
+                ruleType: "nineball",
                 timestamp: Date.now(),
               },
             ]),

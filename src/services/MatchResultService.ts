@@ -54,16 +54,16 @@ export class MatchResultService {
    */
   async getMatchResults(
     limit: number = HISTORY_LIMIT,
-    gameType?: string
+    ruleType?: string
   ): Promise<MatchResult[]> {
-    // Optimization: if no gameType filter, only fetch the requested limit from Redis
-    const fetchLimit = gameType ? -1 : limit - 1
+    // Optimization: if no ruleType filter, only fetch the requested limit from Redis
+    const fetchLimit = ruleType ? -1 : limit - 1
     const results = await this.store.zrange<MatchResult[]>(KEY, 0, fetchLimit, {
       rev: true,
     })
 
-    const filtered = gameType
-      ? results.filter((r) => r.gameType === gameType)
+    const filtered = ruleType
+      ? results.filter((r) => r.ruleType === ruleType)
       : results
 
     // Even if we fetched with limit, we slice here for consistency

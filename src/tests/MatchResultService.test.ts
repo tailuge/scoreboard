@@ -20,7 +20,7 @@ describe("MatchResultService", () => {
       loser: "Loser",
       winnerScore: 100,
       loserScore: 50,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -38,7 +38,7 @@ describe("MatchResultService", () => {
       loser: "Loser",
       winnerScore: 100,
       loserScore: 50,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -60,7 +60,7 @@ describe("MatchResultService", () => {
       id: matchId,
       winner: "Winner",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -80,7 +80,7 @@ describe("MatchResultService", () => {
       id: firstMatchId,
       winner: "Winner",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -96,7 +96,7 @@ describe("MatchResultService", () => {
         id: `m${i}`,
         winner: "P",
         winnerScore: 10,
-        gameType: "snooker",
+        ruleType: "snooker",
         timestamp: Date.now() + 1000 + i,
       })
     }
@@ -125,7 +125,7 @@ describe("MatchResultService", () => {
         loser: `Loser${i}`,
         winnerScore: 100,
         loserScore: 50,
-        gameType: "snooker",
+        ruleType: "snooker",
         timestamp: Date.now() + i, // Ensure distinct timestamps
       }
       await service.addMatchResult(result)
@@ -142,7 +142,7 @@ describe("MatchResultService", () => {
       id: "solo-match",
       winner: "SoloPlayer",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -154,19 +154,19 @@ describe("MatchResultService", () => {
     expect(history[0].loser).toBeUndefined()
   })
 
-  it("should filter results by gameType", async () => {
+  it("should filter results by ruleType", async () => {
     const match1: MatchResult = {
       id: "match1",
       winner: "P1",
       winnerScore: 10,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
     const match2: MatchResult = {
       id: "match2",
       winner: "P2",
       winnerScore: 20,
-      gameType: "nineball",
+      ruleType: "nineball",
       timestamp: Date.now() + 1,
     }
 
@@ -181,13 +181,13 @@ describe("MatchResultService", () => {
     expect(all).toHaveLength(2)
   })
 
-  it("should respect limit when no gameType is provided", async () => {
+  it("should respect limit when no ruleType is provided", async () => {
     for (let i = 0; i < 10; i++) {
       await service.addMatchResult({
         id: `m${i}`,
         winner: "P",
         winnerScore: 10,
-        gameType: "nineball",
+        ruleType: "nineball",
         timestamp: Date.now() + i,
       })
     }

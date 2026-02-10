@@ -1,12 +1,12 @@
 // src/components/GroupBox.tsx
-import React from "react";
+import React from "react"
 
 type GroupBoxProps = {
-  readonly title: string;
-  readonly children: React.ReactNode;
-  readonly rightBadge?: React.ReactNode;
-  readonly leftBadge?: React.ReactNode;
-};
+  readonly title: string
+  readonly children: React.ReactNode
+  readonly rightBadge?: React.ReactNode
+  readonly leftBadge?: React.ReactNode
+}
 
 export function GroupBox({
   title,
@@ -34,5 +34,5 @@ export function GroupBox({
 
       <div className="relative z-10">{children}</div>
     </div>
-  );
+  )
 }

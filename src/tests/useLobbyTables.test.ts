@@ -114,7 +114,7 @@ describe("useLobbyTables", () => {
       "/api/tables/find-or-create",
       expect.objectContaining({
         method: "POST",
-        body: JSON.stringify({ userId, userName, gameType: "nineball" }),
+        body: JSON.stringify({ userId, userName, ruleType: "nineball" }),
       })
     )
   })

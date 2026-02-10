@@ -37,7 +37,7 @@ describe("MatchHistoryList", () => {
         loser: "Bob",
         winnerScore: 100,
         loserScore: 85,
-        gameType: "snooker",
+        ruleType: "snooker",
         timestamp: Date.now(),
       },
     ]

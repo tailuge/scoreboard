@@ -8,7 +8,7 @@ describe("MatchResult Schema", () => {
       loser: "Player2",
       winnerScore: 100,
       loserScore: 50,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
     expect(result.winner).toBe("Player1")
@@ -19,7 +19,7 @@ describe("MatchResult Schema", () => {
       id: "solo-match-id",
       winner: "SoloPlayer",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
     expect(result.winner).toBe("SoloPlayer")
