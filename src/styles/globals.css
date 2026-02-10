@@ -254,7 +254,6 @@ body {
   padding: 4px 12px;
   font-size: 11px;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: rgba(180, 190, 210, 0.7);
   background: linear-gradient(
     180deg,
@@ -283,7 +282,7 @@ body {
 .user-pill-icon {
   width: 14px;
   height: 14px;
-  color: rgba(180, 190, 210, 0.7);
+  color: #4ade80;
 }
 
 .user-pill-input {

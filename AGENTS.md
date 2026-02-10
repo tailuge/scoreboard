@@ -17,12 +17,11 @@
 - `yarn lint:smells`: Run oxlint and duplication checks.
 - `yarn prettify`: Format `src` and `public` files.
 - `yarn test`: Jest suite (`src/tests/jest.config.js`).
-- `yarn coverage`: Jest with coverage.
-- `yarn e2e`: Playwright E2E tests.
 
 ## Coding Style & Naming Conventions
 - Language: TypeScript with Next.js pages router.
-- Formatting: Prettier (no semicolons, trailing commas in ES5). Always run `yarn prettify` when work complete.
+- Formatting: no semicolons, trailing commas in ES5. 
+- Always run `yarn prettify` when work complete.
 - Linting: ESLint plus TypeScript checks via `yarn lint`.
 - Naming: Prefer descriptive component and test names; API route tests use `api.*.test.ts` (see `src/tests`).
 - Portability: Use `globalThis` instead of `window`, `global`, or `self`.
