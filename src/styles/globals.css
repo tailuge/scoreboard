@@ -251,15 +251,46 @@ body {
 
 /* User Pill Styles */
 .user-pill {
-  @apply hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded-sm bg-green-200 dark:bg-green-900/10 cursor-pointer transition-colors text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2;
+  padding: 4px 12px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(180, 190, 210, 0.7);
+  background: linear-gradient(
+    180deg,
+    rgba(20, 22, 28, 0.95),
+    rgba(13, 14, 18, 1)
+  );
+  border-radius: 4px;
+  box-shadow:
+    0 0 20px rgba(13, 14, 18, 0.9),
+    0 0 40px rgba(13, 14, 18, 0.6);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-pill:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(30, 32, 38, 0.95),
+    rgba(23, 24, 28, 1)
+  );
 }
 
 .user-pill-icon {
-  @apply h-4 w-4 text-gray-500 dark:text-gray-400;
+  width: 14px;
+  height: 14px;
+  color: rgba(180, 190, 210, 0.7);
 }
 
 .user-pill-input {
-  @apply bg-transparent text-gray-700 dark:text-gray-300 outline-hidden w-full;
+  background: transparent;
+  color: rgba(180, 190, 210, 0.7);
+  outline: none;
+  width: 100%;
 }
 
 /* Play Modal Styles */

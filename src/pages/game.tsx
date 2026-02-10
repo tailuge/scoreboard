@@ -9,6 +9,7 @@ import {
 } from "../components/GameButtonOptions"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineCount } from "../components/OnlineCount"
+import { User } from "@/components/User"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import LeaderboardTable from "@/components/LeaderboardTable"
 import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
@@ -201,19 +202,20 @@ export default function Game() {
 
       <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 flex flex-col gap-4">
-          <GroupBox title="Highscore Challenge">
-            <GameGrid
-              hoverBorderColor="hover:border-blue-500"
-              isHighscore={true}
-            />
-          </GroupBox>
           <GroupBox
             title="2-Player Online"
+            leftBadge={<User />}
             rightBadge={
               activeUsers === null ? null : <OnlineCount count={activeUsers} />
             }
           >
             <GameGrid hoverBorderColor="hover:border-green-500" />
+          </GroupBox>
+          <GroupBox title="Highscore Challenge">
+            <GameGrid
+              hoverBorderColor="hover:border-blue-500"
+              isHighscore={true}
+            />
           </GroupBox>
         </div>
         <div className="lg:col-span-1">
