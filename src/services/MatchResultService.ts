@@ -1,5 +1,5 @@
 import { kv, VercelKV } from "@vercel/kv"
-import { MatchResult, getRuleType } from "../types/match"
+import { MatchResult } from "../types/match"
 
 const KEY = "match_results"
 const HISTORY_LIMIT = 50
@@ -54,17 +54,15 @@ export class MatchResultService {
    */
   async getMatchResults(
     limit: number = HISTORY_LIMIT,
-    ruleType?: string,
-    gameType?: string
+    ruleType?: string
   ): Promise<MatchResult[]> {
-    const filterType = ruleType ?? gameType
-    const fetchLimit = filterType ? -1 : limit - 1
+    const fetchLimit = ruleType ? -1 : limit - 1
     const results = await this.store.zrange<MatchResult[]>(KEY, 0, fetchLimit, {
       rev: true,
     })
 
-    const filtered = filterType
-      ? results.filter((r) => getRuleType(r) === filterType)
+    const filtered = ruleType
+      ? results.filter((r) => r.ruleType === ruleType)
       : results
 
     return filtered.slice(0, limit)

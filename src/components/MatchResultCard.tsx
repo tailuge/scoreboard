@@ -38,7 +38,7 @@ function MatchResultCardComponent({
       <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
           <Image
-            src={getGameIcon(result.gameType)}
+            src={getGameIcon(result.ruleType)}
             alt=""
             width={compact ? 16 : 20}
             height={compact ? 16 : 20}

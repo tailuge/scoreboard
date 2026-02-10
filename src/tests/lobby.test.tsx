@@ -106,9 +106,8 @@ describe("Lobby Component Functional Tests", () => {
   })
 
   it("should show seeking UI when action=join is triggered and no pending table found", async () => {
-    // Override useRouter for this test
     ;(useRouter as jest.Mock).mockReturnValue({
-      query: { action: "join", gameType: "nineball" },
+      query: { action: "join", ruleType: "nineball" },
       isReady: true,
       push: jest.fn(),
     })
@@ -167,12 +166,11 @@ describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Default search params mock (can be overridden in tests)
     ;(useRouter as jest.Mock).mockReturnValue({
       query: {
         username: "TestUser",
         action: "join",
-        gameType: "nineball",
+        ruleType: "nineball",
       },
       isReady: true,
       push: jest.fn(),
@@ -220,13 +218,12 @@ describe("Lobby Redirection Tests", () => {
       </LobbyProvider>
     )
 
-    // Check if fetch was called with POST to find-or-create endpoint automatically
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith(
         expect.stringMatching(/\/api\/tables\/find-or-create/),
         expect.objectContaining({
           method: "POST",
-          body: expect.stringContaining('"gameType":"nineball"'),
+          body: expect.stringContaining('"ruleType":"nineball"'),
         })
       )
     })

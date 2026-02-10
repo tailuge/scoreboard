@@ -112,7 +112,7 @@ function GameGrid({
       {GAMES.map((game) => {
         const href = isHighscore
           ? game.highscoreUrl
-          : `/lobby?action=join&gameType=${game.ruleType}`
+          : `/lobby?action=join&ruleType=${game.ruleType}`
         const isInternal = !isHighscore
 
         return (

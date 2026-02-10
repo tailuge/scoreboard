@@ -42,7 +42,7 @@ describe("/api/tables/find-or-create handler", () => {
 
   it("should return 400 if required fields are missing", async () => {
     req.method = "POST"
-    req.body = { userId: "u1" } // Missing userName and gameType
+    req.body = { userId: "u1" }
     await handler(req, res)
     expect(res.status).toHaveBeenCalledWith(400)
     expect(res.json).toHaveBeenCalledWith({ error: "Missing required fields" })
@@ -55,7 +55,7 @@ describe("/api/tables/find-or-create handler", () => {
       .mockResolvedValue(mockTable as any)
 
     req.method = "POST"
-    req.body = { userId: "u1", userName: "user1", gameType: "nineball" }
+    req.body = { userId: "u1", userName: "user1", ruleType: "nineball" }
 
     await handler(req, res)
 
@@ -72,7 +72,7 @@ describe("/api/tables/find-or-create handler", () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation()
 
     req.method = "POST"
-    req.body = { userId: "u1", userName: "user1", gameType: "nineball" }
+    req.body = { userId: "u1", userName: "user1", ruleType: "nineball" }
 
     await handler(req, res)
 

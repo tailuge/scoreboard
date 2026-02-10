@@ -13,7 +13,6 @@ describe("/api/match-results handler", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Mock global Response
     const mockResponseConstructor = jest.fn((body, init) => ({
       status: init?.status || 200,
       json: () => Promise.resolve(JSON.parse(body)),
@@ -36,7 +35,7 @@ describe("/api/match-results handler", () => {
         loser: "B",
         winnerScore: 10,
         loserScore: 5,
-        gameType: "snooker",
+        ruleType: "snooker",
         timestamp: 123,
       },
     ]
@@ -57,14 +56,14 @@ describe("/api/match-results handler", () => {
     expect(getSpy).toHaveBeenCalled()
   })
 
-  it("should support gameType filtering on GET request", async () => {
+  it("should support ruleType filtering on GET request", async () => {
     const getSpy = jest
       .spyOn(MockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue([])
 
     req = {
       method: "GET",
-      nextUrl: new URL("https://localhost/api/match-results?gameType=snooker"),
+      nextUrl: new URL("https://localhost/api/match-results?ruleType=snooker"),
     } as unknown as NextRequest
 
     await handler(req)
@@ -77,7 +76,7 @@ describe("/api/match-results handler", () => {
       loser: "B",
       winnerScore: 10,
       loserScore: 5,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: 123,
     }
 
@@ -100,7 +99,7 @@ describe("/api/match-results handler", () => {
         loser: "B",
         winnerScore: 10,
         loserScore: 5,
-        gameType: "snooker",
+        ruleType: "snooker",
         id: expect.any(String),
         timestamp: expect.any(Number),
       }),
@@ -138,7 +137,7 @@ describe("/api/match-results handler", () => {
     const soloResult = {
       winner: "A",
       winnerScore: 10,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: 123,
     }
 
@@ -159,7 +158,7 @@ describe("/api/match-results handler", () => {
       expect.objectContaining({
         winner: "A",
         winnerScore: 10,
-        gameType: "snooker",
+        ruleType: "snooker",
         id: expect.any(String),
         timestamp: expect.any(Number),
       }),
@@ -167,8 +166,8 @@ describe("/api/match-results handler", () => {
     )
   })
 
-  it("should default gameType to nineball on POST request if missing", async () => {
-    const resultNoGameType = {
+  it("should default ruleType to nineball on POST request if missing", async () => {
+    const resultNoRuleType = {
       winner: "A",
       winnerScore: 10,
     }
@@ -180,7 +179,7 @@ describe("/api/match-results handler", () => {
     req = {
       method: "POST",
       nextUrl: new URL("https://localhost/api/match-results"),
-      json: jest.fn().mockResolvedValue(resultNoGameType),
+      json: jest.fn().mockResolvedValue(resultNoRuleType),
     } as unknown as NextRequest
 
     const response = await handler(req)
@@ -190,7 +189,7 @@ describe("/api/match-results handler", () => {
       expect.objectContaining({
         winner: "A",
         winnerScore: 10,
-        gameType: "nineball",
+        ruleType: "nineball",
         id: expect.any(String),
         timestamp: expect.any(Number),
       }),
@@ -240,7 +239,7 @@ describe("/api/match-results handler", () => {
     req = {
       method: "POST",
       nextUrl: new URL("https://localhost/api/match-results"),
-      json: jest.fn().mockResolvedValue({ winner: "A" }), // missing fields
+      json: jest.fn().mockResolvedValue({ winner: "A" }),
     } as unknown as NextRequest
 
     const response = await handler(req)

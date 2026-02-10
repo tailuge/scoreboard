@@ -79,55 +79,61 @@ This phase adds support for reading `ruleType` while still accepting existing `g
    - `src/tests/MatchResultService.test.ts`
    - `src/tests/api.match-replay.test.ts`
 
-### Phase 2: Rename Everything (deploy after Phase 1)
+### Phase 2: Rename Everything (deploy after Phase 1) ✅ COMPLETE
 
 This phase renames all `gameType` references to `ruleType` across the codebase. Requires Phase 1 to be deployed first.
 
-5. **Update `src/types/match.ts`**
+5. **Update `src/types/match.ts`** ✅
    - Remove `gameType` field (keep only `ruleType`)
 
-6. **Update `src/utils/game.ts`**
+6. **Update `src/utils/game.ts`** ✅
    - Rename parameter `gameType` to `ruleType` in `getGameIcon()`
 
-7. **Update `src/services/TableService.ts`**
+7. **Update `src/services/TableService.ts`** ✅
    - Rename `findPendingTable(gameType)` parameter to `ruleType`
 
-8. **Update `src/services/MatchResultService.ts`**
+8. **Update `src/services/MatchResultService.ts`** ✅
    - Remove `gameType` parameter, keep only `ruleType`
    - Simplify filter to `r.ruleType === ruleType`
 
-9. **Update `/api/tables/find-or-create.ts`**
+9. **Update `/api/tables/find-or-create.ts`** ✅
    - Rename request body field `gameType` → `ruleType`
    - Update Swagger documentation
 
-10. **Update `/api/match-results.ts`**
+10. **Update `/api/match-results.ts`** ✅
     - Rename query param `gameType` → `ruleType`
     - Update Swagger docs
 
-11. **Update `/api/match-replay.ts`**
+11. **Update `/api/match-replay.ts`** ✅
     - Simplify to `matchResult.ruleType`
 
-12. **Update `src/components/hooks/useAutoJoin.ts`**
+12. **Update `src/components/hooks/useAutoJoin.ts`** ✅
     - `router.query.gameType` → `router.query.ruleType`
 
-13. **Update `src/components/hooks/useLobbyTables.ts`**
+13. **Update `src/components/hooks/useLobbyTables.ts`** ✅
     - Rename `gameType` → `ruleType` in `findOrCreateTable()` function
     - Update API call body
 
-14. **Update `src/pages/lobby.tsx`**
+14. **Update `src/pages/lobby.tsx`** ✅
     - Rename `seekingGameType` → `seekingRuleType`
     - Update all references to the state variable
 
-15. **Update `src/pages/game.tsx`**
+15. **Update `src/pages/game.tsx`** ✅
     - Change URL generation from `gameType=${game.ruleType}` to `ruleType=${game.ruleType}`
 
-16. **Update test files for Phase 2:**
+16. **Update test files for Phase 2:** ✅
     - `src/tests/api.tables.find-or-create.test.ts`
     - `src/tests/api.match-results.test.ts`
     - `src/tests/useLobbyTables.test.ts`
     - `src/tests/TableService.test.ts`
     - `src/tests/lobby.test.tsx`
     - `src/playwrite/match-results.test.ts`
+    - `src/tests/match.schema.test.ts`
+    - `src/tests/MatchResultService.test.ts`
+    - `src/tests/api.match-replay.test.ts`
+    - `src/tests/MatchResultCard.test.tsx`
+    - `src/components/LiveMatchesList.tsx`
+    - `src/components/MatchResultCard.tsx`
 
 ## Backwards Compatibility for KV Data
 
@@ -140,7 +146,7 @@ The code will read both fields, preferring `ruleType` if present:
 ```typescript
 // Helper function for backwards compatibility
 function getRuleType(result: MatchResult): string {
-  return result.ruleType ?? result.gameType ?? "unknown"
+  return result.ruleType ?? result.gameType ?? "unknown";
 }
 ```
 
@@ -150,18 +156,18 @@ Update `src/types/match.ts` to support both fields during transition:
 
 ```typescript
 export interface MatchResult {
-  id: string
-  winner: string
-  loser?: string
-  winnerScore: number
-  loserScore?: number
-  ruleType?: string // New field (preferred)
-  gameType?: string // Legacy field (backwards compat)
-  timestamp: number
-  hasReplay?: boolean
-  locationCountry?: string
-  locationRegion?: string
-  locationCity?: string
+  id: string;
+  winner: string;
+  loser?: string;
+  winnerScore: number;
+  loserScore?: number;
+  ruleType?: string; // New field (preferred)
+  gameType?: string; // Legacy field (backwards compat)
+  timestamp: number;
+  hasReplay?: boolean;
+  locationCountry?: string;
+  locationRegion?: string;
+  locationCity?: string;
 }
 ```
 

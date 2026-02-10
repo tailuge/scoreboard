@@ -20,7 +20,7 @@ describe("MatchResultService", () => {
       loser: "Loser",
       winnerScore: 100,
       loserScore: 50,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -38,7 +38,7 @@ describe("MatchResultService", () => {
       loser: "Loser",
       winnerScore: 100,
       loserScore: 50,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -48,7 +48,6 @@ describe("MatchResultService", () => {
     expect(history).toHaveLength(1)
     expect(history[0].hasReplay).toBe(true)
 
-    // Verify replay data is stored in a separate key
     const replayKey = getMatchReplayKey("match-replay")
     const storedReplay = await (mockKv as any).get(replayKey)
     expect(storedReplay).toBe("replay-data")
@@ -60,7 +59,7 @@ describe("MatchResultService", () => {
       id: matchId,
       winner: "Winner",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -80,23 +79,21 @@ describe("MatchResultService", () => {
       id: firstMatchId,
       winner: "Winner",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
-    // Add the match with replay data
     await service.addMatchResult(firstResult, "evict-me-replay")
     expect(await (mockKv as any).get(getMatchReplayKey(firstMatchId))).toBe(
       "evict-me-replay"
     )
 
-    // Add 50 more matches to evict the first one (limit is 50)
     for (let i = 0; i < 50; i++) {
       await service.addMatchResult({
         id: `m${i}`,
         winner: "P",
         winnerScore: 10,
-        gameType: "snooker",
+        ruleType: "snooker",
         timestamp: Date.now() + 1000 + i,
       })
     }
@@ -105,7 +102,6 @@ describe("MatchResultService", () => {
     expect(history).toHaveLength(50)
     expect(history.find((r) => r.id === firstMatchId)).toBeUndefined()
 
-    // Replay data should be gone
     const storedReplay = await (mockKv as any).get(
       getMatchReplayKey(firstMatchId)
     )
@@ -117,7 +113,6 @@ describe("MatchResultService", () => {
   })
 
   it("should maintain a rolling history limit", async () => {
-    // Add 60 matches when limit is 50
     for (let i = 0; i < 60; i++) {
       const result: MatchResult = {
         id: `match${i}`,
@@ -125,15 +120,14 @@ describe("MatchResultService", () => {
         loser: `Loser${i}`,
         winnerScore: 100,
         loserScore: 50,
-        gameType: "snooker",
-        timestamp: Date.now() + i, // Ensure distinct timestamps
+        ruleType: "snooker",
+        timestamp: Date.now() + i,
       }
       await service.addMatchResult(result)
     }
 
     const history = await service.getMatchResults()
     expect(history).toHaveLength(50)
-    // Should be latest matches (59 down to 10)
     expect(history[0].id).toBe("match59")
   })
 
@@ -142,7 +136,7 @@ describe("MatchResultService", () => {
       id: "solo-match",
       winner: "SoloPlayer",
       winnerScore: 100,
-      gameType: "snooker",
+      ruleType: "snooker",
       timestamp: Date.now(),
     }
 
@@ -152,33 +146,6 @@ describe("MatchResultService", () => {
     expect(history).toHaveLength(1)
     expect(history[0]).toEqual(result)
     expect(history[0].loser).toBeUndefined()
-  })
-
-  it("should filter results by gameType (legacy)", async () => {
-    const match1: MatchResult = {
-      id: "match1",
-      winner: "P1",
-      winnerScore: 10,
-      gameType: "snooker",
-      timestamp: Date.now(),
-    }
-    const match2: MatchResult = {
-      id: "match2",
-      winner: "P2",
-      winnerScore: 20,
-      gameType: "nineball",
-      timestamp: Date.now() + 1,
-    }
-
-    await service.addMatchResult(match1)
-    await service.addMatchResult(match2)
-
-    const snookerOnly = await service.getMatchResults(50, "snooker")
-    expect(snookerOnly).toHaveLength(1)
-    expect(snookerOnly[0].id).toBe("match1")
-
-    const all = await service.getMatchResults()
-    expect(all).toHaveLength(2)
   })
 
   it("should filter results by ruleType", async () => {
@@ -208,48 +175,13 @@ describe("MatchResultService", () => {
     expect(all).toHaveLength(2)
   })
 
-  it("should filter mixed ruleType and gameType results", async () => {
-    const match1: MatchResult = {
-      id: "match1",
-      winner: "P1",
-      winnerScore: 10,
-      gameType: "snooker",
-      timestamp: Date.now(),
-    }
-    const match2: MatchResult = {
-      id: "match2",
-      winner: "P2",
-      winnerScore: 20,
-      ruleType: "snooker",
-      timestamp: Date.now() + 1,
-    }
-    const match3: MatchResult = {
-      id: "match3",
-      winner: "P3",
-      winnerScore: 30,
-      ruleType: "nineball",
-      timestamp: Date.now() + 2,
-    }
-
-    await service.addMatchResult(match1)
-    await service.addMatchResult(match2)
-    await service.addMatchResult(match3)
-
-    const snookerOnly = await service.getMatchResults(50, "snooker")
-    expect(snookerOnly).toHaveLength(2)
-    expect(snookerOnly.map((r) => r.id)).toEqual(["match2", "match1"])
-
-    const all = await service.getMatchResults()
-    expect(all).toHaveLength(3)
-  })
-
-  it("should respect limit when no gameType is provided", async () => {
+  it("should respect limit when no ruleType is provided", async () => {
     for (let i = 0; i < 10; i++) {
       await service.addMatchResult({
         id: `m${i}`,
         winner: "P",
         winnerScore: 10,
-        gameType: "nineball",
+        ruleType: "nineball",
         timestamp: Date.now() + i,
       })
     }

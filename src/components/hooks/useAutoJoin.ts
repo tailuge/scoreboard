@@ -6,7 +6,7 @@ export function useAutoJoin(
   isLoading: boolean,
   userId: string | null,
   userName: string | null,
-  handleAutoJoin: (gameType: string) => Promise<void>
+  handleAutoJoin: (ruleType: string) => Promise<void>
 ) {
   const hasHandledAutoJoin = useRef(false)
 
@@ -21,11 +21,11 @@ export function useAutoJoin(
       return
 
     const action = router.query.action
-    const gameType = router.query.gameType as string
+    const ruleType = router.query.ruleType as string
 
-    if (action === "join" && gameType) {
+    if (action === "join" && ruleType) {
       hasHandledAutoJoin.current = true
-      handleAutoJoin(gameType)
+      handleAutoJoin(ruleType)
     }
   }, [
     isLoading,

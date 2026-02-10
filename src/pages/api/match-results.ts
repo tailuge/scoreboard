@@ -17,10 +17,10 @@ const matchResultService = new MatchResultService(kv)
  *     summary: Returns a list of match results
  *     parameters:
  *       - in: query
- *         name: gameType
+ *         name: ruleType
  *         schema:
  *           type: string
- *         description: Filter by game type
+ *         description: Filter by rule type
  *       - in: query
  *         name: limit
  *         schema:
@@ -52,7 +52,7 @@ const matchResultService = new MatchResultService(kv)
  *                 type: string
  *               loserScore:
  *                 type: number
- *               gameType:
+ *               ruleType:
  *                 type: string
  *               replayData:
  *                 type: string
@@ -85,10 +85,10 @@ export default async function handler(request: NextRequest) {
 async function handleGet(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
-    const gameType = searchParams.get("gameType") || undefined
+    const ruleType = searchParams.get("ruleType") || undefined
     const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
 
-    const results = await matchResultService.getMatchResults(limit, gameType)
+    const results = await matchResultService.getMatchResults(limit, ruleType)
     return Response.json(results)
   } catch (error) {
     logger.log("Error fetching match results:", error)
@@ -114,7 +114,7 @@ async function handlePost(request: NextRequest) {
     }
 
     const newResult = {
-      gameType: "nineball",
+      ruleType: "nineball",
       ...data,
       id: getUID(),
       timestamp: Date.now(),

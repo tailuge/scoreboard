@@ -146,13 +146,13 @@ export class TableService {
     return false
   }
 
-  async findPendingTable(gameType: string): Promise<Table | null> {
+  async findPendingTable(ruleType: string): Promise<Table | null> {
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
     if (!tables) return null
 
     const pending = Object.values(tables).find(
       (table) =>
-        table.ruleType === gameType &&
+        table.ruleType === ruleType &&
         table.players.length === 1 &&
         !table.completed
     )
@@ -163,13 +163,13 @@ export class TableService {
   async findOrCreate(
     userId: string,
     userName: string,
-    gameType: string
+    ruleType: string
   ): Promise<Table> {
-    const pending = await this.findPendingTable(gameType)
+    const pending = await this.findPendingTable(ruleType)
     if (pending) {
       return this.joinTable(pending.id, userId, userName)
     } else {
-      return this.createTable(userId, userName, gameType)
+      return this.createTable(userId, userName, ruleType)
     }
   }
 

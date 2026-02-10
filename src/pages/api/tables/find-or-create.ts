@@ -19,13 +19,13 @@ const tableService = new TableService()
  *             required:
  *               - userId
  *               - userName
- *               - gameType
+ *               - ruleType
  *             properties:
  *               userId:
  *                 type: string
  *               userName:
  *                 type: string
- *               gameType:
+ *               ruleType:
  *                 type: string
  *     responses:
  *       200:
@@ -41,14 +41,14 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     logger.log("Find or create table request")
-    const { userId, userName, gameType } = req.body
+    const { userId, userName, ruleType } = req.body
 
-    if (!userId || !userName || !gameType) {
+    if (!userId || !userName || !ruleType) {
       return res.status(400).json({ error: "Missing required fields" })
     }
 
     try {
-      const table = await tableService.findOrCreate(userId, userName, gameType)
+      const table = await tableService.findOrCreate(userId, userName, ruleType)
       markUsageFromServer("findOrCreateTable")
       res.status(200).json(table)
     } catch (error) {

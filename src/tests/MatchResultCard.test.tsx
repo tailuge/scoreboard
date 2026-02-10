@@ -10,7 +10,7 @@ describe("MatchResultCard", () => {
     loser: "Bob",
     winnerScore: 100,
     loserScore: 85,
-    gameType: "snooker",
+    ruleType: "snooker",
     timestamp: new Date("2026-01-26T12:00:00Z").getTime(),
   }
 
@@ -35,7 +35,7 @@ describe("MatchResultCard", () => {
     const nineballResult: MatchResult = {
       ...mockResult,
       id: "nineball-1",
-      gameType: "nineball",
+      ruleType: "nineball",
     }
     const { rerender } = render(<MatchResultCard result={nineballResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
@@ -46,7 +46,7 @@ describe("MatchResultCard", () => {
     const snookerResult: MatchResult = {
       ...mockResult,
       id: "snooker-1",
-      gameType: "snooker",
+      ruleType: "snooker",
     }
     rerender(<MatchResultCard result={snookerResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
@@ -57,7 +57,7 @@ describe("MatchResultCard", () => {
     const threeCushionResult: MatchResult = {
       ...mockResult,
       id: "3c-1",
-      gameType: "threecushion",
+      ruleType: "threecushion",
     }
     rerender(<MatchResultCard result={threeCushionResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
@@ -68,7 +68,7 @@ describe("MatchResultCard", () => {
     const eightballResult: MatchResult = {
       ...mockResult,
       id: "8ball-1",
-      gameType: "eightball",
+      ruleType: "eightball",
     }
     rerender(<MatchResultCard result={eightballResult} />)
     expect(screen.getByRole("presentation")).toHaveAttribute(
@@ -103,7 +103,7 @@ describe("MatchResultCard", () => {
       id: "2",
       winner: "Charlie",
       winnerScore: 50,
-      gameType: "nineball",
+      ruleType: "nineball",
       timestamp: Date.now(),
     }
     render(<MatchResultCard result={soloResult} />)

@@ -13,7 +13,6 @@ describe("/api/match-replay handler", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Mock global Response
     const mockResponseConstructor = jest.fn((body, init) => ({
       status: init?.status || 200,
       text: () => Promise.resolve(body),
@@ -27,38 +26,6 @@ describe("/api/match-replay handler", () => {
     })
 
     globalThis.Response = mockResponseConstructor
-  })
-
-  it("should redirect to viewer on GET request with gameType", async () => {
-    const mockReplay = "replay-blob-data"
-    const getSpy = jest
-      .spyOn(MockMatchResultService.prototype, "getMatchReplay")
-      .mockResolvedValue(mockReplay)
-    jest
-      .spyOn(MockMatchResultService.prototype, "getMatchResults")
-      .mockResolvedValue([
-        {
-          id: "match123",
-          winner: "A",
-          winnerScore: 10,
-          gameType: "nineball",
-          timestamp: Date.now(),
-        },
-      ])
-
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    const location = response.headers.get("Location")
-
-    expect(response.status).toBe(307)
-    expect(location).toBe(
-      `https://tailuge.github.io/billiards/dist/?ruletype=nineball&state=${encodeURIComponent(mockReplay)}`
-    )
-    expect(getSpy).toHaveBeenCalledWith("match123")
   })
 
   it("should redirect to viewer on GET request with ruleType", async () => {
@@ -91,6 +58,34 @@ describe("/api/match-replay handler", () => {
       `https://tailuge.github.io/billiards/dist/?ruletype=snooker&state=${encodeURIComponent(mockReplay)}`
     )
     expect(getSpy).toHaveBeenCalledWith("match123")
+  })
+
+  it("should default to nineball when ruleType is missing", async () => {
+    const mockReplay = "replay-blob-data"
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchReplay")
+      .mockResolvedValue(mockReplay)
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([
+        {
+          id: "match123",
+          winner: "A",
+          winnerScore: 10,
+          timestamp: Date.now(),
+        },
+      ])
+
+    req = {
+      method: "GET",
+      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    const location = response.headers.get("Location")
+
+    expect(response.status).toBe(307)
+    expect(location).toContain("ruletype=nineball")
   })
 
   it("should return 400 if id is missing", async () => {

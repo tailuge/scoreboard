@@ -1,13 +1,12 @@
 import { test, expect } from "@playwright/test"
 
 test("match history display in lobby", async ({ page, request }) => {
-  // 1. Add a match result via API
   const newMatch = {
     winner: "PlaywrightWinner",
     loser: "PlaywrightLoser",
     winnerScore: 100,
     loserScore: 50,
-    gameType: "snooker",
+    ruleType: "snooker",
     timestamp: Date.now(),
   }
 
