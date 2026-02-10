@@ -14,6 +14,7 @@ import { useServerStatus } from "@/components/hooks/useServerStatus"
 import { useUser } from "@/contexts/UserContext"
 import LeaderboardTable from "@/components/LeaderboardTable"
 import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
+import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
@@ -226,8 +227,9 @@ export default function Game() {
             />
           </GroupBox>
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 flex flex-col gap-4">
           <LiveMatchesPanel />
+          <MatchHistoryList />
         </div>
       </div>
     </div>
