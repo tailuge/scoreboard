@@ -165,7 +165,6 @@ describe("Lobby Component Functional Tests", () => {
 describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
     ;(useRouter as jest.Mock).mockReturnValue({
       query: {
         username: "TestUser",

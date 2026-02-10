@@ -226,9 +226,6 @@
         if (options.action) {
           src += `&action=${options.action}`
         }
-        if (options.gameType) {
-          src += `&gameType=${options.gameType}`
-        }
         if (options.ruleType) {
           src += `&ruletype=${options.ruleType}`
         }
@@ -251,15 +248,11 @@
       const buttonThreecushion = document.getElementById("button-threecushion")
 
       const createPanels = (ruleType, includeSpectator) => {
-        // Panel 1: action=join&gameType=ruleType
-        panel1.appendChild(
-          createIframe({ action: "join", gameType: ruleType, ruleType })
-        )
+        // Panel 1: action=join
+        panel1.appendChild(createIframe({ action: "join", ruleType }))
 
-        // Panel 2: action=join&gameType=ruleType
-        panel2.appendChild(
-          createIframe({ action: "join", gameType: ruleType, ruleType })
-        )
+        // Panel 2: action=join
+        panel2.appendChild(createIframe({ action: "join", ruleType }))
 
         // Panel 3: just a random name
         if (panel3 && includeSpectator) {
