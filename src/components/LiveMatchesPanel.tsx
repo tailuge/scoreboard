@@ -1,6 +1,5 @@
 import React from "react"
 import { LiveMatchesList } from "./LiveMatchesList"
-import { MatchHistoryList } from "./MatchHistoryList"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "./hooks/useLobbyTables"
 
@@ -12,10 +11,5 @@ export function LiveMatchesPanel() {
     await tableAction(tableId, "spectate")
   }
 
-  return (
-    <>
-      <LiveMatchesList tables={tables} onSpectate={handleSpectate} />
-      <MatchHistoryList />
-    </>
-  )
+  return <LiveMatchesList tables={tables} onSpectate={handleSpectate} />
 }

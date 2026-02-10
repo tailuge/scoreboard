@@ -7,7 +7,6 @@ import { GroupBox } from "@/components/GroupBox"
 import { OnlineCount } from "@/components/OnlineCount"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
 import Head from "next/head"
-import { Star } from "@/components/Star"
 import { markUsage } from "@/utils/usage"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 import { useUser } from "@/contexts/UserContext"
@@ -176,7 +175,6 @@ export default function Lobby() {
               leftBadge={<User />}
               rightBadge={
                 <div className="flex items-center gap-4">
-                  <Star />
                   {activeUsers !== null && <OnlineCount count={activeUsers} />}
                 </div>
               }
