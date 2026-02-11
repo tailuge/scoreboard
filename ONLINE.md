@@ -89,11 +89,12 @@ Presence endpoints in `src/nchan/nchan.conf` for buffered message delivery:
 Add `src/components/hooks/usePresenceList.ts`:
 
 - Use `usePresenceMessages()` from LobbyContext
-- Publish `join` on mount, `leave` on unmount via `publishPresence()`
-- Publish `heartbeat` every 60s
-- Maintain `Map<userId, { userName, lastSeen }>` from received presence messages
-- Prune entries older than 90s (interval every 10s)
-- Expose `users: Array<{ userId, userName }>` sorted by `lastSeen` desc (limit 50)
+- Create a typed presence type in /types (this should have user id and user name and timestamp)
+- Publish presence on mount via `publishPresence()`
+- Publish heartbeat of the same type every 60s
+- Maintain a map of id -> presence and update on new messages being sure to update the timestamp
+- Prune entries older than 90s (onlyl so this if the list of users is requested)
+- provide a method to get the list of users sorted by timestamp desc (limit 50)
 
 ### Phase 3: UI Integration
 
