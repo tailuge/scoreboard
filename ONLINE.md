@@ -84,17 +84,30 @@ Presence endpoints in `src/nchan/nchan.conf` for buffered message delivery:
   - Publishing to presence channel
   - Subscribing and receiving buffered messages
 
-### Phase 2: Presence Hook Implementation
+### Phase 2: Standalone Presence Hook
 
-Add `src/components/hooks/usePresenceList.ts`:
+Implement a self-contained `usePresenceList` hook that manages its own nchan connection, heartbeat, and presence state without modifying existing code.
 
-- Use `usePresenceMessages()` from LobbyContext
-- Create a typed presence type in /types (this should have user id and user name and timestamp)
-- Publish presence on mount via `publishPresence()`
-- Publish heartbeat of the same type every 60s
-- Maintain a map of id -> presence and update on new messages being sure to update the timestamp
-- Prune entries older than 90s (onlyl so this if the list of users is requested)
-- provide a method to get the list of users sorted by timestamp desc (limit 50)
+**Implementation Details (`src/components/hooks/usePresenceList.ts` [NEW]):**
+
+- **Self-Contained Publisher**: Creates its own `NchanPub` instance via `useRef`.
+- **Message Listener**: Uses `usePresenceMessages()` to update a local `presenceMap` (ref-based).
+- **Heartbeat Loop**: 
+  - Publishes `join` on mount.
+  - Starts 60s heartbeat interval.
+  - Clears interval on unmount (skips `leave` message).
+- **State Trigger**: Uses a small state counter or `useReducer` to trigger re-renders when the map is updated or pruned.
+- **List Logic**: Returns a memoized list of top 50 users, pruned for 90s TTL and sorted by recency.
+
+**Testing (`src/tests/usePresenceList.test.ts` [NEW]):**
+
+- Mocks `NchanPub` and `usePresenceMessages`.
+- Verifies heartbeat interval and message aggregation logic.
+
+**Benefits**:
+- **Zero Impact**: No changes required to `LobbyContext.tsx`, `nchanpub.ts`, or any existing components.
+- **Ease of Deployment**: Can be incrementally added and tested in isolation.
+- **Independence**: The presence list is fully independent of the core lobby message routing logic.
 
 ### Phase 3: UI Integration
 
