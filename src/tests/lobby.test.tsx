@@ -32,7 +32,18 @@ jest.mock("@/nchan/nchansub", () => ({
 jest.mock("@/nchan/nchanpub", () => ({
   NchanPub: jest.fn().mockImplementation(() => ({
     get: jest.fn().mockResolvedValue(5),
+    post: jest.fn().mockResolvedValue(undefined),
+    publishLobby: jest.fn().mockResolvedValue(undefined),
+    publishPresence: jest.fn().mockResolvedValue(undefined),
   })),
+}))
+
+// Mock usePresenceMessages
+jest.mock("@/contexts/LobbyContext", () => ({
+  LobbyProvider: ({ children }: { children: React.ReactNode }) => children,
+  useLobbyContext: jest.fn(),
+  useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
+  usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
 }))
 
 const mockFetchActiveUsers = jest.fn()
@@ -46,6 +57,13 @@ jest.mock("@/components/hooks/useServerStatus", () => ({
     activeUsers: 5,
     fetchActiveUsers: mockFetchActiveUsers,
   }),
+}))
+
+// Mock usePresenceList hook
+jest.mock("@/components/hooks/usePresenceList", () => ({
+  usePresenceList: jest.fn(() => ({
+    users: [],
+  })),
 }))
 
 const TABLES_API_ENDPOINT = "/api/tables"

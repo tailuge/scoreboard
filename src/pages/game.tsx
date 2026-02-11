@@ -8,9 +8,10 @@ import {
   RedBallButtons,
 } from "../components/GameButtonOptions"
 import { GroupBox } from "../components/GroupBox"
-import { OnlineCount } from "../components/OnlineCount"
+import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
+import { usePresenceList } from "@/components/hooks/usePresenceList"
 import { useUser } from "@/contexts/UserContext"
 import LeaderboardTable from "@/components/LeaderboardTable"
 import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
@@ -159,7 +160,8 @@ function GameGrid({
 
 export default function Game() {
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
-  const { userName } = useUser()
+  const { userId, userName } = useUser()
+  const { users: presenceUsers } = usePresenceList(userId, userName)
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -211,7 +213,13 @@ export default function Game() {
             title="2-Player Online"
             leftBadge={<User />}
             rightBadge={
-              activeUsers === null ? null : <OnlineCount count={activeUsers} />
+              activeUsers === null ? null : (
+                <OnlineUsersPopover
+                  count={activeUsers}
+                  users={presenceUsers}
+                  totalCount={activeUsers}
+                />
+              )
             }
           >
             <GameGrid

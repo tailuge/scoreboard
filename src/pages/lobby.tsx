@@ -4,8 +4,9 @@ import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
-import { OnlineCount } from "@/components/OnlineCount"
+import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
 import { useServerStatus } from "@/components/hooks/useServerStatus"
+import { usePresenceList } from "@/components/hooks/usePresenceList"
 import Head from "next/head"
 import { markUsage } from "@/utils/usage"
 import { STATUS_PAGE_URL } from "@/utils/constants"
@@ -26,6 +27,7 @@ export default function Lobby() {
   } | null>(null)
   const shownModals = useRef<Set<string>>(new Set())
   const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
+  const { users: presenceUsers } = usePresenceList(userId, userName)
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
   const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
@@ -174,9 +176,13 @@ export default function Lobby() {
               title="Lobby"
               leftBadge={<User />}
               rightBadge={
-                <div className="flex items-center gap-4">
-                  {activeUsers !== null && <OnlineCount count={activeUsers} />}
-                </div>
+                activeUsers !== null ? (
+                  <OnlineUsersPopover
+                    count={activeUsers}
+                    users={presenceUsers}
+                    totalCount={activeUsers}
+                  />
+                ) : null
               }
             >
               <div className="flex flex-col gap-6">

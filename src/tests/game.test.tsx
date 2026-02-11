@@ -13,13 +13,42 @@ jest.mock("../nchan/nchansub", () => ({
 jest.mock("../nchan/nchanpub", () => ({
   NchanPub: jest.fn().mockImplementation(() => ({
     get: jest.fn().mockResolvedValue(0),
+    post: jest.fn().mockResolvedValue(undefined),
+    publishLobby: jest.fn().mockResolvedValue(undefined),
+    publishPresence: jest.fn().mockResolvedValue(undefined),
   })),
+}))
+
+// Mock usePresenceMessages
+jest.mock("@/contexts/LobbyContext", () => ({
+  LobbyProvider: ({ children }: { children: React.ReactNode }) => children,
+  useLobbyContext: jest.fn(),
+  useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
+  usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
 }))
 
 jest.mock("@/contexts/UserContext", () => ({
   useUser: jest.fn(),
 }))
 const mockedUseUser = useUser as jest.Mock
+
+// Mock usePresenceList hook
+jest.mock("@/components/hooks/usePresenceList", () => ({
+  usePresenceList: jest.fn(() => ({
+    users: [],
+  })),
+}))
+
+// Mock useServerStatus hook
+jest.mock("@/components/hooks/useServerStatus", () => ({
+  useServerStatus: () => ({
+    isOnline: true,
+    serverStatus: "Server OK",
+    isConnecting: false,
+    activeUsers: 5,
+    fetchActiveUsers: jest.fn(),
+  }),
+}))
 
 describe("Game Page", () => {
   beforeEach(() => {
