@@ -36,7 +36,7 @@ Update `src/nchan/nchan.conf` to add presence endpoints with buffering and timeo
 
 ## Implementation Phases
 
-### Phase 1: Nchan Config and Tests
+### Phase 1: Nchan Config and Tests [Completed]
 
 - Update `src/nchan/nchan.conf` with presence endpoints
 - Add tests to existing nchan test script for:
