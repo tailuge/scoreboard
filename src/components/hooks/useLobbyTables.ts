@@ -1,13 +1,13 @@
 import { useState, useCallback, useEffect } from "react"
 import { Table } from "@/types/table"
-import { useLobbyContext } from "@/contexts/LobbyContext"
+import { useLobbyMessages } from "@/contexts/LobbyContext"
 
 export function useLobbyTables(
   userId: string | null,
   userName: string | null,
   enableSubscription: boolean = true
 ) {
-  const { lastMessage } = useLobbyContext()
+  const { lastMessage } = useLobbyMessages()
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
 

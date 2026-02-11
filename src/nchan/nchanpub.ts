@@ -69,4 +69,3 @@ export class NchanPub {
     return activeConnections
   }
 }
-

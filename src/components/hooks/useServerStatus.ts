@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { NchanPub } from "../../nchan/nchanpub"
 import { logger } from "../../utils/logger"
-import { useLobbyContext } from "@/contexts/LobbyContext"
+import { useLobbyMessages } from "@/contexts/LobbyContext"
 
 export interface ServerStatusState {
   serverStatus: string | null
@@ -14,7 +14,7 @@ export function useServerStatus(
   statusPage: string,
   enableSubscription: boolean = true
 ) {
-  const { lastMessage } = useLobbyContext()
+  const { lastMessage } = useLobbyMessages()
   const [state, setState] = useState<ServerStatusState>({
     serverStatus: null,
     isOnline: false,

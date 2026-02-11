@@ -1,9 +1,9 @@
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { useLobbyTables } from "../components/hooks/useLobbyTables"
-import { useLobbyContext } from "@/contexts/LobbyContext"
+import { useLobbyMessages } from "@/contexts/LobbyContext"
 
 jest.mock("@/contexts/LobbyContext", () => ({
-  useLobbyContext: jest.fn(),
+  useLobbyMessages: jest.fn(),
 }))
 
 describe("useLobbyTables", () => {
@@ -13,7 +13,7 @@ describe("useLobbyTables", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     globalThis.fetch = jest.fn()
-    ;(useLobbyContext as jest.Mock).mockReturnValue({ lastMessage: null })
+    ;(useLobbyMessages as jest.Mock).mockReturnValue({ lastMessage: null })
   })
 
   it("should fetch tables on mount", async () => {
@@ -256,7 +256,7 @@ describe("useLobbyTables", () => {
     const { rerender } = renderHook(() => useLobbyTables(userId, userName))
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-    ;(useLobbyContext as jest.Mock).mockReturnValue({
+    ;(useLobbyMessages as jest.Mock).mockReturnValue({
       lastMessage: { action: "create" },
     })
 
@@ -274,7 +274,7 @@ describe("useLobbyTables", () => {
     const { rerender } = renderHook(() => useLobbyTables(userId, userName))
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-    ;(useLobbyContext as jest.Mock).mockReturnValue({
+    ;(useLobbyMessages as jest.Mock).mockReturnValue({
       lastMessage: { action: "connected" },
     })
 
