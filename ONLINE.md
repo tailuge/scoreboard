@@ -36,6 +36,46 @@ Update `src/nchan/nchan.conf` to add presence endpoints with buffering and timeo
 
 ## Implementation Phases
 
+### Phase 0: Refactor Lobby Connection for Message Multiplexing [NEW - Required First]
+
+**Problem Identified:** The current `LobbyProvider` creates a single WebSocket connection to the lobby channel. Adding a separate presence channel subscription (as originally planned in Phase 2) would create a second WebSocket connection per client, which is inefficient.
+
+**Solution:** Refactor to use a single WebSocket connection that handles multiple message types.
+
+#### Option A: Multiplex via Lobby Channel (Recommended - Simpler)
+- Update lobby channel messages to include a `messageType` field (`"lobby" | "presence"`)
+- Presence messages published to `/publish/lobby/lobby` with `messageType: "presence"`
+- Refactor `LobbyContext.tsx`:
+  - Add message routing based on `messageType`
+  - Expose separate observables/hooks for lobby vs presence messages
+  - Create `usePresenceMessages()` hook that filters for presence messages
+  - Keep existing `useLobbyContext()` for lobby messages
+- **Pros:** Single connection, no nchan config changes needed
+- **Cons:** Mixes concerns in one channel (acceptable tradeoff)
+
+#### Option B: WebSocket Multiplexing with Message Router (More Complex)
+- Create `src/nchan/NchanMultiplexer.ts`:
+  - Single WebSocket connection
+  - Message router that dispatches to multiple subscribers based on message type
+  - Registry pattern for subscribing to specific message types
+- Refactor `LobbyContext` to use multiplexer
+- **Pros:** Cleaner separation of concerns
+- **Cons:** More complex refactoring, harder to test
+
+**Decision Required:** Recommend **Option A** for simplicity unless you prefer architectural purity.
+
+#### Refactoring Steps (Option A):
+1. Create `src/nchan/types.ts`:
+   - Define message type discriminators
+   - `LobbyMessage` and `PresenceMessage` interfaces
+2. Update `LobbyContext.tsx`:
+   - Add message type routing
+   - Create `usePresenceMessages()` hook
+   - Maintain backward compatibility for existing lobby message consumers
+3. Update `nchanpub.ts`:
+   - Add helper to publish typed messages with `messageType` field
+4. Add tests for message routing
+
 ### Phase 1: Nchan Config and Tests [Completed]
 
 - Update `src/nchan/nchan.conf` with presence endpoints
@@ -44,15 +84,16 @@ Update `src/nchan/nchan.conf` to add presence endpoints with buffering and timeo
   - Subscribing and receiving buffered messages
   - Message expiry after 90s
 
-### Phase 2: Publishing and Subscribe
+### Phase 2: Presence Hook Implementation (Updated)
 
-- Update `src/nchan/nchanpub.ts` to support `channelType: "presence"`
-- Ensure `NchanSub` supports presence channel type
+- Update `src/nchan/nchanpub.ts`:
+  - Add `publishPresence(event)` helper that publishes to lobby with `messageType: "presence"`
+  - Reuse existing lobby channel endpoint
 - Add `src/components/hooks/usePresenceList.ts`:
-  - Subscribe to presence channel
-  - Publish `join` on mount, `leave` on unmount
+  - Use `usePresenceMessages()` from refactored LobbyContext
+  - Publish `join` on mount, `leave` on unmount via `publishPresence()`
   - Publish `heartbeat` every 60s
-  - Maintain `Map<userId, { userName, lastSeen }>` from received messages
+  - Maintain `Map<userId, { userName, lastSeen }>` from received presence messages
   - Prune entries older than 90s (interval every 10s)
   - Expose `users: Array<{ userId, userName }>` sorted by `lastSeen` desc (limit 50)
 
