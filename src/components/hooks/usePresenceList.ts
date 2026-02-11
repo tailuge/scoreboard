@@ -67,6 +67,8 @@ export function usePresenceList(
   const effectiveUserName = userName ?? "Anonymous"
 
   useEffect(() => {
+    if (!userId) return
+
     const publishHeartbeat = () => {
       pubRef.current?.publishPresence({
         type: "heartbeat",
