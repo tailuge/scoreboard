@@ -136,6 +136,36 @@ describe("Lobby Component Functional Tests", () => {
     })
   })
 
+  it("should show countdown and accessibility attributes in seeking UI", async () => {
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: { action: "join", ruletype: "nineball" },
+      isReady: true,
+      push: jest.fn(),
+    })
+
+    render(
+      <LobbyProvider>
+        <Lobby />
+      </LobbyProvider>
+    )
+
+    // Verify seeking message appears
+    await screen.findByText(/Finding a nineball opponent/i)
+
+    // Verify status role for accessibility
+    // Note: OnlineCount also has role="status" (via <output>), so we find the one containing the text
+    const statusContainer = screen.getByText(/Finding a nineball opponent/i).closest('[role="status"]')
+    expect(statusContainer).toBeInTheDocument()
+    expect(statusContainer).toHaveAttribute("aria-live", "polite")
+
+    // Verify spinner aria-label
+    const spinner = screen.getByLabelText(/Searching for opponent/i)
+    expect(spinner).toBeInTheDocument()
+
+    // Verify countdown timer
+    expect(screen.getByText(/Timeout in 60s/i)).toBeInTheDocument()
+  })
+
   it("should hide table actions when rendering the lobby", async () => {
     render(
       <LobbyProvider>

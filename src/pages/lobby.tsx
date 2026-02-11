@@ -29,6 +29,7 @@ export default function Lobby() {
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
   const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
+  const [secondsRemaining, setSecondsRemaining] = useState(60)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const seekingTableIdRef = useRef<string | null>(null)
 
@@ -95,7 +96,13 @@ export default function Lobby() {
 
   // Timeout logic
   useEffect(() => {
+    let interval: NodeJS.Timeout
     if (seekingRuleType) {
+      setSecondsRemaining(60)
+      interval = setInterval(() => {
+        setSecondsRemaining((prev) => Math.max(0, prev - 1))
+      }, 1000)
+
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
       timeoutRef.current = setTimeout(async () => {
         if (seekingTableIdRef.current) {
@@ -108,6 +115,7 @@ export default function Lobby() {
     }
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (interval) clearInterval(interval)
     }
   }, [seekingRuleType, deleteTable, router])
 
@@ -181,16 +189,27 @@ export default function Lobby() {
             >
               <div className="flex flex-col gap-6">
                 {seekingRuleType && (
-                  <div className="mx-auto w-full max-w-md rounded-xl border border-blue-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
-                    <div className="relative mx-auto mb-5 h-14 w-14">
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className="mx-auto w-full max-w-md rounded-xl border border-blue-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none"
+                  >
+                    <div
+                      className="relative mx-auto mb-5 h-14 w-14"
+                      aria-label="Searching for opponent"
+                    >
                       <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
                       <div className="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin-slow motion-reduce:animate-none"></div>
+                      <span className="sr-only">Loading...</span>
                     </div>
                     <h3 className="text-xl font-bold text-white text-balance">
                       Finding a {seekingRuleType} opponent…
                     </h3>
                     <p className="mt-2 text-sm text-gray-300">
                       Game will start when opponent is found.
+                    </p>
+                    <p className="mt-4 text-xs font-medium tracking-widest text-blue-400/80 uppercase">
+                      Timeout in {secondsRemaining}s
                     </p>
                     <div className="mt-5 flex flex-wrap justify-center gap-3">
                       <button
