@@ -219,6 +219,7 @@ export default function Game() {
                   count={activeUsers}
                   users={presenceUsers}
                   totalCount={activeUsers}
+                  currentUserId={userId}
                 />
               )
             }

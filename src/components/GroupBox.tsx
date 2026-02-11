@@ -27,7 +27,7 @@ export function GroupBox({
       )}
 
       {rightBadge && (
-        <div className="absolute top-0 right-6 -translate-y-1/2 z-10">
+        <div className="absolute top-0 right-6 -translate-y-1/2 z-20">
           {rightBadge}
         </div>
       )}

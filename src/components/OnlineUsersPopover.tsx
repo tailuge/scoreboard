@@ -7,12 +7,14 @@ type OnlineUsersPopoverProps = {
   readonly count: number
   readonly users: PresenceUser[]
   readonly totalCount?: number
+  readonly currentUserId?: string
 }
 
 export function OnlineUsersPopover({
   count,
   users,
   totalCount,
+  currentUserId,
 }: OnlineUsersPopoverProps) {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -42,7 +44,10 @@ export function OnlineUsersPopover({
   return (
     <div ref={containerRef} className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          console.log("Online users:", JSON.stringify(users, null, 2))
+          setIsOpen(!isOpen)
+        }}
         className="flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
         aria-label={`${count} users online`}
         aria-expanded={isOpen}
@@ -77,6 +82,7 @@ export function OnlineUsersPopover({
                   />
                   <span className="text-[11px] font-light text-gray-300 truncate">
                     {user.userName}
+                    {user.userId === currentUserId && " (you)"}
                   </span>
                 </li>
               ))}
