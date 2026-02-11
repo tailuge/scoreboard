@@ -1,4 +1,5 @@
 import { logger } from "@/utils/logger"
+import type { LobbyMessage, PresenceMessage } from "./types"
 
 export class NchanPub {
   private readonly publishUrl: string
@@ -11,6 +12,9 @@ export class NchanPub {
     this.publishUrl = `https://${this.base}/publish/lobby/${this.channel}`
   }
 
+  /**
+   * Publish a raw event (legacy method)
+   */
   async post(event: any) {
     const response = await fetch(this.publishUrl, {
       method: "POST",
@@ -21,6 +25,28 @@ export class NchanPub {
       body: JSON.stringify(event),
     })
     return await response.json()
+  }
+
+  /**
+   * Publish a typed lobby message
+   */
+  async publishLobby(event: Omit<LobbyMessage, "messageType">) {
+    const message: LobbyMessage = {
+      ...event,
+      messageType: "lobby",
+    }
+    return this.post(message)
+  }
+
+  /**
+   * Publish a typed presence message
+   */
+  async publishPresence(event: Omit<PresenceMessage, "messageType">) {
+    const message: PresenceMessage = {
+      ...event,
+      messageType: "presence",
+    }
+    return this.post(message)
   }
 
   async get() {
@@ -43,3 +69,4 @@ export class NchanPub {
     return activeConnections
   }
 }
+

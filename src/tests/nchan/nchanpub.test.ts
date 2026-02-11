@@ -22,9 +22,9 @@ describe("NchanPub", () => {
 
   it("post should send data to the correct URL", async () => {
     const event = { type: "test" }
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ success: true }),
-    })
+      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
+        json: jest.fn().mockResolvedValue({ success: true }),
+      })
 
     const result = await pub.post(event)
 
@@ -44,11 +44,49 @@ describe("NchanPub", () => {
     expect(result).toEqual({ success: true })
   })
 
+  it("publishLobby should add messageType field", async () => {
+    const event = { type: "match_created", matchId: "123" }
+      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
+        json: jest.fn().mockResolvedValue({ success: true }),
+      })
+
+    await pub.publishLobby(event)
+
+    const callArgs = (globalThis.fetch as jest.Mock).mock.calls[0]
+    const sentBody = JSON.parse(callArgs[1].body)
+
+    expect(sentBody).toEqual({
+      ...event,
+      messageType: "lobby",
+    })
+  })
+
+  it("publishPresence should add messageType field", async () => {
+    const event = {
+      type: "join" as const,
+      userId: "user123",
+      userName: "TestUser",
+    }
+      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
+        json: jest.fn().mockResolvedValue({ success: true }),
+      })
+
+    await pub.publishPresence(event)
+
+    const callArgs = (globalThis.fetch as jest.Mock).mock.calls[0]
+    const sentBody = JSON.parse(callArgs[1].body)
+
+    expect(sentBody).toEqual({
+      ...event,
+      messageType: "presence",
+    })
+  })
+
   it("get should fetch active connections", async () => {
     const mockText = "Active connections: 42"
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue(mockText),
-    })
+      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
+        text: jest.fn().mockResolvedValue(mockText),
+      })
 
     const connections = await pub.get()
 
@@ -64,7 +102,7 @@ describe("NchanPub", () => {
   })
 
   it("get should return 0 if regex does not match", async () => {
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+    ; (globalThis.fetch as jest.Mock).mockResolvedValue({
       text: jest.fn().mockResolvedValue("No connections info here"),
     })
 
