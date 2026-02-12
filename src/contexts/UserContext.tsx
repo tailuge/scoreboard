@@ -22,24 +22,31 @@ export function UserProvider({
 }: {
   readonly children: React.ReactNode
 }) {
-  const [userId] = useState(() => getUID())
-  const [userName, setUserName] = useState(() => {
-    if (typeof window === "undefined") return "Anonymous"
-    return localStorage.getItem("userName") || "Anonymous"
-  })
+  const [userId, setUserId] = useState("")
+  const [userName, setUserName] = useState("Anonymous")
   const router = useRouter()
 
   useEffect(() => {
+    const savedId = localStorage.getItem("userId") || getUID()
+    const savedName = localStorage.getItem("userName") || "Anonymous"
+
+    setUserId(savedId)
+    setUserName(savedName)
+
+    if (!localStorage.getItem("userId")) {
+      localStorage.setItem("userId", savedId)
+    }
+
     if (!router.isReady) return
 
     const urlUserName = router.query.username as string
     if (urlUserName) {
       setUserName(urlUserName)
+      localStorage.setItem("userName", urlUserName)
+    } else if (savedName !== "Anonymous") {
+      setUserName(savedName)
     }
-
-    localStorage.setItem("userId", userId)
-    localStorage.setItem("userName", userName)
-  }, [router.isReady, router.query.username, userId, userName])
+  }, [router.isReady, router.query.username])
 
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
