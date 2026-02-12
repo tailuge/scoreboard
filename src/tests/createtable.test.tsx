@@ -9,9 +9,9 @@ jest.mock("@/contexts/UserContext", () => ({
 }))
 const mockedUseUser = useUser as jest.Mock
 
-// Mock the useServerStatus hook
-jest.mock("@/components/hooks/useServerStatus", () => ({
-  useServerStatus: jest.fn(() => ({ isOnline: true })),
+// Mock the usePresence hook
+jest.mock("@/components/hooks/usePresence", () => ({
+  usePresence: jest.fn(() => ({ isOnline: true })),
 }))
 
 describe("CreateTable component", () => {

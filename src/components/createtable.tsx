@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { useServerStatus } from "./hooks/useServerStatus"
+import { usePresence } from "./hooks/usePresence"
 import { STATUS_PAGE_URL } from "@/utils/constants"
 import { useUser } from "@/contexts/UserContext"
 
@@ -9,7 +9,7 @@ export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
   const [ruleType, setRuleType] = useState("nineball")
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const { isOnline } = useServerStatus(STATUS_PAGE_URL)
+  const { isOnline } = usePresence(userId, userName, STATUS_PAGE_URL)
 
   const handleCreate = async () => {
     setIsLoading(true)
@@ -53,11 +53,10 @@ export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
           key={isOnline ? "online" : "offline"} // Add key to force re-render
           onClick={handleCreate}
           disabled={isLoading || !isOnline}
-          className={`game-button-main ${
-            isOnline && !isLoading
+          className={`game-button-main ${isOnline && !isLoading
               ? "game-button-enabled"
               : "game-button-disabled"
-          }`}
+            }`}
           title={isOnline ? "" : "Server offline"}
         >
           Play {ruleType.charAt(0).toUpperCase() + ruleType.slice(1)}
@@ -65,9 +64,8 @@ export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
           disabled={!isOnline}
-          className={`game-button-dropdown ${
-            isOnline ? "game-button-enabled" : "game-button-disabled"
-          }`}
+          className={`game-button-dropdown ${isOnline ? "game-button-enabled" : "game-button-disabled"
+            }`}
           aria-label="Select game type"
           aria-expanded={dropdownOpen}
         >
@@ -80,9 +78,8 @@ export function CreateTable({ onCreate }: { readonly onCreate: () => void }) {
             {["nineball", "snooker", "threecushion"].map((type) => (
               <li
                 key={type}
-                className={`game-dropdown-item ${
-                  ruleType === type ? "game-dropdown-item-selected" : ""
-                }`}
+                className={`game-dropdown-item ${ruleType === type ? "game-dropdown-item-selected" : ""
+                  }`}
               >
                 <button
                   className="w-full text-left bg-transparent border-none cursor-pointer"

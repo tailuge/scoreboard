@@ -5,8 +5,7 @@ import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
-import { useServerStatus } from "@/components/hooks/useServerStatus"
-import { usePresenceList } from "@/components/hooks/usePresenceList"
+import { usePresence } from "@/components/hooks/usePresence"
 import Head from "next/head"
 import { markUsage } from "@/utils/usage"
 import { STATUS_PAGE_URL } from "@/utils/constants"
@@ -26,8 +25,11 @@ export default function Lobby() {
     ruleType: string
   } | null>(null)
   const shownModals = useRef<Set<string>>(new Set())
-  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
-  const { users: presenceUsers } = usePresenceList(userId, userName)
+  const {
+    totalUsers,
+    users: presenceUsers,
+  } = usePresence(userId, userName, STATUS_PAGE_URL)
+  const activeUsers = totalUsers // alias for backward compatibility in this component if needed
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
   const [seekingTableId, setSeekingTableId] = useState<string | null>(null)

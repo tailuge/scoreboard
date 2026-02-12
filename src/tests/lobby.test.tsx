@@ -46,24 +46,17 @@ jest.mock("@/contexts/LobbyContext", () => ({
   usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
 }))
 
-const mockFetchActiveUsers = jest.fn()
-
-// Mock useServerStatus hook to avoid network issues in tests
-jest.mock("@/components/hooks/useServerStatus", () => ({
-  useServerStatus: () => ({
+// Mock usePresence hook to avoid network issues in tests
+jest.mock("@/components/hooks/usePresence", () => ({
+  usePresence: () => ({
     isOnline: true,
     serverStatus: "Server OK",
     isConnecting: false,
-    activeUsers: 5,
-    fetchActiveUsers: mockFetchActiveUsers,
-  }),
-}))
-
-// Mock usePresenceList hook
-jest.mock("@/components/hooks/usePresenceList", () => ({
-  usePresenceList: jest.fn(() => ({
     users: [],
-  })),
+    activeUsers: 5,
+    totalUsers: 5,
+    refreshStatus: jest.fn(),
+  }),
 }))
 
 const TABLES_API_ENDPOINT = "/api/tables"
@@ -85,11 +78,11 @@ const mockTables = [
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: { username: "TestUser" },
-      isReady: true,
-      push: jest.fn(),
-    })
+      ; (useRouter as jest.Mock).mockReturnValue({
+        query: { username: "TestUser" },
+        isReady: true,
+        push: jest.fn(),
+      })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
@@ -124,7 +117,7 @@ describe("Lobby Component Functional Tests", () => {
   })
 
   it("should show seeking UI when action=join is triggered and no pending table found", async () => {
-    ;(useRouter as jest.Mock).mockReturnValue({
+    ; (useRouter as jest.Mock).mockReturnValue({
       query: { action: "join", ruletype: "nineball" },
       isReady: true,
       push: jest.fn(),
@@ -183,15 +176,15 @@ describe("Lobby Component Functional Tests", () => {
 describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: {
-        username: "TestUser",
-        action: "join",
-        ruletype: "nineball",
-      },
-      isReady: true,
-      push: jest.fn(),
-    })
+      ; (useRouter as jest.Mock).mockReturnValue({
+        query: {
+          username: "TestUser",
+          action: "join",
+          ruletype: "nineball",
+        },
+        isReady: true,
+        push: jest.fn(),
+      })
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",

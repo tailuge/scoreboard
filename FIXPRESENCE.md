@@ -1,69 +1,50 @@
-# Fix Presence Channel Implementation
+# Fix Presence Channel Implementation (Consolidated)
 
 ## Problem
 
-The user presence list only becomes fully populated when heartbeat messages arrive. New users miss prior presence messages because presence data is published to the lobby channel (no buffering) instead of the dedicated presence channel (with buffering).
+The user presence list only becomes fully populated when heartbeat messages arrive. New users miss prior presence messages. Additionally, `usePresenceList.ts` and `useServerStatus.ts` should be rationalized together to provide a simpler presence system.
 
-## Current State
+## Proposed Changes
 
-- **Publishing**: All messages (lobby + presence) go to `/publish/lobby/lobby`
-- **Subscribing**: Client subscribes to `/subscribe/lobby/lobby` (no buffering)
-- **Result**: New users miss all prior presence messages
+### 1. Nchan Utilities (`src/nchan/nchanpub.ts`)
 
-## Implementation Plan
+- Add support for `/publish/presence/` endpoint.
+- Add `getSubscriberCount(channelType: "lobby" | "presence")` to fetch active connections for a specific channel type.
+- Update `get()` to use `getSubscriberCount("lobby")` for backward compatibility or general health.
 
-### 1. `NchanPub` (`src/nchan/nchanpub.ts`)
-
-- Add `presencePublishUrl` → `/publish/presence/{channel}`
-- Route `publishPresence()` to `presencePublishUrl`
-- Replace `get()` with `getSubscriberCount()`:
-  - POST to `presencePublishUrl` with `Accept: application/json`
-  - Return `response.subscribers`
-
-### 2. `LobbyContext` (`src/contexts/LobbyContext.tsx`)
+### 2. Lobby Context (`src/contexts/LobbyContext.tsx`)
 
 - Create two `NchanSub` instances:
-  - `lobbySub` → channel type `"lobby"` (no buffering, live events only)
-  - `presenceSub` → channel type `"presence"` (with buffering, gets history)
-- Route messages to appropriate state handlers
+  - `lobbySub` → channel type `"lobby"` (no buffering, for table/game events).
+  - `presenceSub` → channel type `"presence"` (with buffering, for user listing).
+- Update hooks `useLobbyMessages()` and `usePresenceMessages()` to use these separate streams.
 
-### 3. `useServerStatus` (`src/components/hooks/useServerStatus.ts`)
+### 3. Consolidated Hook (`src/components/hooks/usePresence.ts`) [NEW]
 
-- Change `NchanPub("lobby").get()` → `NchanPub("lobby").getSubscriberCount()`
+- Merges logic from `usePresenceList.ts` and `useServerStatus.ts`.
+- Handles server health check (`fetch(STATUS_PAGE_URL)`).
+- Sends heartbeats to the `presence` channel.
+- Manages an internal `Map` of users with TTL-based expiration.
+- Returns:
+  - `users`: `PresenceUser[]`
+  - `totalUsers`: `number` (list length)
+  - `isOnline`: `boolean`
+  - `isConnecting`: `boolean`
+  - `serverStatus`: `string | null`
 
-### 4. `usePresenceList` - No changes needed
+### 4. Cleanup
 
-- Already consumes from `usePresenceMessages()`
+- Delete `src/components/hooks/usePresenceList.ts`.
+- Delete `src/components/hooks/useServerStatus.ts`.
 
-### 5. Tests
+### 5. UI Updates
 
-- Update `nchanpub.test.ts` for new URL and method
-- Update mocks in `useServerStatus.test.ts`, `usePresenceList.test.ts`
-
-### 6. Config (`src/nchan/nchan.conf`) - Already correct
-
-- `/publish/presence/` has buffering (1000 messages, 90s timeout)
-- `/subscribe/presence/` has `nchan_subscriber_first_message oldest`
+- Update `src/pages/lobby.tsx` and `src/pages/game.tsx` to use `usePresence`.
+- Update `src/components/OnlineUsersPopover.tsx` to handle the new hook data if necessary.
 
 ## Verification
 
-After implementation, test with:
-
-```bash
-# Should return subscriber count for presence channel
-curl -X POST -H "Accept: application/json" \
-  https://billiards-network.onrender.com/publish/presence/lobby
-```
-
-Expected response:
-
-```json
-{"messages": N, "subscribers": N, ...}
-```
-
-## Open Question
-
-Should we add explicit "leave" message on page unload/visibility hidden, or keep TTL-based cleanup (90s)?
-
-Current: TTL-based (users expire after 90s without heartbeat)
-Alternative: Send "leave" on `beforeunload` or `visibilitychange` events
+- Verify server health check still works.
+- Verify presence list correctly populates with history upon join.
+- Verify total user count is accurate (based on list length).
+- Verify table/lobby messages still work on the unbuffered channel.
