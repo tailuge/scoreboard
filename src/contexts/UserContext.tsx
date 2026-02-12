@@ -24,7 +24,7 @@ export function UserProvider({
 }) {
   const [userId] = useState(() => getUID())
   const [userName, setUserName] = useState(() => {
-    if (typeof window === "undefined") return "Anonymous"
+    if (typeof globalThis.window === "undefined") return "Anonymous"
     return localStorage.getItem("userName") || "Anonymous"
   })
   const router = useRouter()

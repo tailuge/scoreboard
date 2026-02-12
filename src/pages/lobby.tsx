@@ -176,13 +176,13 @@ export default function Lobby() {
               title="Lobby"
               leftBadge={<User />}
               rightBadge={
-                activeUsers !== null ? (
+                activeUsers === null ? null : (
                   <OnlineUsersPopover
                     count={activeUsers}
                     users={presenceUsers}
                     totalCount={activeUsers}
                   />
-                ) : null
+                )
               }
             >
               <div className="flex flex-col gap-6">
