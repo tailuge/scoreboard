@@ -46,6 +46,7 @@ export function User() {
     <button
       type="button"
       className="user-pill"
+      suppressHydrationWarning
       title={`${userName}\n${userId}`}
       onClick={() => setIsEditing(true)}
       aria-label={`Edit username: ${userName}`}

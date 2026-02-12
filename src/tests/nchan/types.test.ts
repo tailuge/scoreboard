@@ -8,6 +8,23 @@ import {
 
 describe("Nchan Message Types", () => {
   describe("parseNchanMessage", () => {
+    const consoleWarnSpy = jest
+      .spyOn(console, "warn")
+      .mockImplementation(() => {})
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {})
+
+    beforeEach(() => {
+      consoleWarnSpy.mockClear()
+      consoleErrorSpy.mockClear()
+    })
+
+    afterAll(() => {
+      consoleWarnSpy.mockRestore()
+      consoleErrorSpy.mockRestore()
+    })
+
     it("should parse a valid lobby message", () => {
       const data = JSON.stringify({
         messageType: "lobby",
@@ -56,6 +73,7 @@ describe("Nchan Message Types", () => {
       const result = parseNchanMessage(data)
 
       expect(result).toBeNull()
+      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it("should return null for unknown message types", () => {
@@ -67,6 +85,7 @@ describe("Nchan Message Types", () => {
       const result = parseNchanMessage(data)
 
       expect(result).toBeNull()
+      expect(consoleWarnSpy).toHaveBeenCalled()
     })
   })
 
