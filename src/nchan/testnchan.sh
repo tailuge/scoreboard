@@ -113,16 +113,16 @@ run_curl_tests() {
 	fi
 
 	printf "\n--- Test: Publish to Presence ---"
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/presence"
+	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/lobby"
 	echo ""
 
 	printf "\n--- Test: Presence Pub/Sub (buffered messages) ---"
 	echo "Publishing 3 presence messages..."
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/presence"
-	curl -s --max-time 5 -X POST -d '{"userId":"user2","userName":"Bob","type":"join"}' "$BASE_URL/publish/presence/presence"
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"heartbeat"}' "$BASE_URL/publish/presence/presence"
+	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/lobby"
+	curl -s --max-time 5 -X POST -d '{"userId":"user2","userName":"Bob","type":"join"}' "$BASE_URL/publish/presence/lobby"
+	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"heartbeat"}' "$BASE_URL/publish/presence/lobby"
 	echo "Starting subscriber (should receive buffered messages)..."
-	curl -s --max-time 5 "$BASE_URL/subscribe/presence/presence"
+	curl -s --max-time 5 "$BASE_URL/subscribe/presence/lobby"
 	printf "\nPresence subscriber received buffered messages.\n"
 
 	echo "--- Test Completed successfully ---"

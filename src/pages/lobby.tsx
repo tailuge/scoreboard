@@ -5,11 +5,9 @@ import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
-import { useServerStatus } from "@/components/hooks/useServerStatus"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
 import Head from "next/head"
 import { markUsage } from "@/utils/usage"
-import { STATUS_PAGE_URL } from "@/utils/constants"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useAutoJoin } from "@/components/hooks/useAutoJoin"
@@ -26,8 +24,10 @@ export default function Lobby() {
     ruleType: string
   } | null>(null)
   const shownModals = useRef<Set<string>>(new Set())
-  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
-  const { users: presenceUsers } = usePresenceList(userId, userName)
+  const { users: presenceUsers, count: presenceCount } = usePresenceList(
+    userId,
+    userName
+  )
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
   const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
@@ -176,13 +176,11 @@ export default function Lobby() {
               title="Lobby"
               leftBadge={<User />}
               rightBadge={
-                activeUsers !== null ? (
-                  <OnlineUsersPopover
-                    count={activeUsers}
-                    users={presenceUsers}
-                    totalCount={activeUsers}
-                  />
-                ) : null
+                <OnlineUsersPopover
+                  count={presenceCount}
+                  users={presenceUsers}
+                  totalCount={presenceCount}
+                />
               }
             >
               <div className="flex flex-col gap-6">

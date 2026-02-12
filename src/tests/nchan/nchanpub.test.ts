@@ -74,6 +74,9 @@ describe("NchanPub", () => {
     await pub.publishPresence(event)
 
     const callArgs = (globalThis.fetch as jest.Mock).mock.calls[0]
+    expect(callArgs[0]).toContain(
+      `billiards-network.onrender.com/publish/presence/${channel}`
+    )
     const sentBody = JSON.parse(callArgs[1].body)
 
     expect(sentBody).toEqual({

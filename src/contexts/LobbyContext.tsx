@@ -33,29 +33,56 @@ export function LobbyProvider({
     useState<PresenceMessage | null>(null)
 
   useEffect(() => {
-    const sub = new NchanSub("lobby", (msg) => {
-      try {
-        // Parse and route the message
-        const parsed = parseNchanMessage(msg)
+    const lobbySub = new NchanSub(
+      "lobby",
+      (msg) => {
+        try {
+          // Parse and route the message
+          const parsed = parseNchanMessage(msg)
 
-        if (!parsed) {
-          return // Invalid message
-        }
+          if (!parsed) {
+            return // Invalid message
+          }
 
-        // Route based on message type
-        if (isLobbyMessage(parsed)) {
-          setLastLobbyMessage(parsed)
-          // Also update legacy state for backward compatibility
-          setLastMessage(parsed)
-        } else if (isPresenceMessage(parsed)) {
-          setLastPresenceMessage(parsed)
+          // Route based on message type
+          if (isLobbyMessage(parsed)) {
+            setLastLobbyMessage(parsed)
+            // Also update legacy state for backward compatibility
+            setLastMessage(parsed)
+          }
+        } catch {
+          // Ignore non-JSON messages or handle them if necessary
         }
-      } catch {
-        // Ignore non-JSON messages or handle them if necessary
-      }
-    })
-    sub.start()
-    return () => sub.stop()
+      },
+      "lobby"
+    )
+
+    const presenceSub = new NchanSub(
+      "lobby",
+      (msg) => {
+        try {
+          const parsed = parseNchanMessage(msg)
+
+          if (!parsed) {
+            return
+          }
+
+          if (isPresenceMessage(parsed)) {
+            setLastPresenceMessage(parsed)
+          }
+        } catch {
+          // Ignore non-JSON messages or handle them if necessary
+        }
+      },
+      "presence"
+    )
+
+    lobbySub.start()
+    presenceSub.start()
+    return () => {
+      lobbySub.stop()
+      presenceSub.stop()
+    }
   }, [])
 
   const value = useMemo(

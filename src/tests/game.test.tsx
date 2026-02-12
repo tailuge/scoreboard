@@ -36,18 +36,8 @@ const mockedUseUser = useUser as jest.Mock
 jest.mock("@/components/hooks/usePresenceList", () => ({
   usePresenceList: jest.fn(() => ({
     users: [],
+    count: 0,
   })),
-}))
-
-// Mock useServerStatus hook
-jest.mock("@/components/hooks/useServerStatus", () => ({
-  useServerStatus: () => ({
-    isOnline: true,
-    serverStatus: "Server OK",
-    isConnecting: false,
-    activeUsers: 5,
-    fetchActiveUsers: jest.fn(),
-  }),
 }))
 
 describe("Game Page", () => {

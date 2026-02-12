@@ -46,23 +46,11 @@ jest.mock("@/contexts/LobbyContext", () => ({
   usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
 }))
 
-const mockFetchActiveUsers = jest.fn()
-
-// Mock useServerStatus hook to avoid network issues in tests
-jest.mock("@/components/hooks/useServerStatus", () => ({
-  useServerStatus: () => ({
-    isOnline: true,
-    serverStatus: "Server OK",
-    isConnecting: false,
-    activeUsers: 5,
-    fetchActiveUsers: mockFetchActiveUsers,
-  }),
-}))
-
 // Mock usePresenceList hook
 jest.mock("@/components/hooks/usePresenceList", () => ({
   usePresenceList: jest.fn(() => ({
     users: [],
+    count: 0,
   })),
 }))
 

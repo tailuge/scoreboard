@@ -36,9 +36,11 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
   const users: PresenceUser[] = []
 
   for (const [userId, entry] of map) {
-    if (now - entry.lastSeen <= TTL_MS) {
-      users.push({ userId, userName: entry.userName })
+    if (now - entry.lastSeen > TTL_MS) {
+      map.delete(userId)
+      continue
     }
+    users.push({ userId, userName: entry.userName })
   }
 
   users.sort((a, b) => {
@@ -47,13 +49,13 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
     return bLastSeen - aLastSeen
   })
 
-  return users.slice(0, MAX_USERS)
+  return users
 }
 
 export function usePresenceList(
   userId: string,
   userName?: string
-): { users: PresenceUser[] } {
+): { users: PresenceUser[]; count: number } {
   const { lastMessage } = usePresenceMessages()
   const mapRef = useRef<Map<string, PresenceEntry>>(new Map())
   const pubRef = useRef<NchanPub | null>(null)
@@ -102,9 +104,13 @@ export function usePresenceList(
     forceUpdate()
   }, [lastMessage])
 
-  const users = useMemo(() => {
-    return getOnlineUsers(mapRef.current)
+  const { users, count } = useMemo(() => {
+    const onlineUsers = getOnlineUsers(mapRef.current)
+    return {
+      users: onlineUsers.slice(0, MAX_USERS),
+      count: onlineUsers.length,
+    }
   }, [updateCount])
 
-  return { users }
+  return { users, count }
 }

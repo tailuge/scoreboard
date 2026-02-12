@@ -3,6 +3,7 @@ import type { LobbyMessage, PresenceMessage } from "./types"
 
 export class NchanPub {
   private readonly publishUrl: string
+  private readonly presencePublishUrl: string
   private readonly base = "billiards-network.onrender.com"
   private readonly channel: string
   private readonly statusUrl = `https://${this.base}/basic_status`
@@ -10,13 +11,14 @@ export class NchanPub {
   constructor(channel: string) {
     this.channel = channel
     this.publishUrl = `https://${this.base}/publish/lobby/${this.channel}`
+    this.presencePublishUrl = `https://${this.base}/publish/presence/${this.channel}`
   }
 
   /**
    * Publish a raw event (legacy method)
    */
-  async post(event: any) {
-    const response = await fetch(this.publishUrl, {
+  private async postTo(url: string, event: any) {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,6 +30,13 @@ export class NchanPub {
   }
 
   /**
+   * Publish a raw event (legacy method)
+   */
+  async post(event: any) {
+    return this.postTo(this.publishUrl, event)
+  }
+
+  /**
    * Publish a typed lobby message
    */
   async publishLobby(event: Omit<LobbyMessage, "messageType">) {
@@ -35,7 +44,7 @@ export class NchanPub {
       ...event,
       messageType: "lobby",
     }
-    return this.post(message)
+    return this.postTo(this.publishUrl, message)
   }
 
   /**
@@ -46,7 +55,7 @@ export class NchanPub {
       ...event,
       messageType: "presence",
     }
-    return this.post(message)
+    return this.postTo(this.presencePublishUrl, message)
   }
 
   async get() {

@@ -37,6 +37,7 @@ describe("usePresenceList", () => {
       const { result } = renderHook(() => usePresenceList(userId, userName))
 
       expect(result.current.users).toEqual([])
+      expect(result.current.count).toBe(0)
     })
 
     it("should publish join message on mount", () => {
@@ -128,6 +129,7 @@ describe("usePresenceList", () => {
       expect(result.current.users).toEqual([
         { userId: "user-2", userName: "User Two" },
       ])
+      expect(result.current.count).toBe(1)
     })
 
     it("should update user on heartbeat message", () => {
@@ -168,6 +170,7 @@ describe("usePresenceList", () => {
       expect(result.current.users).toEqual([
         { userId: "user-2", userName: "Updated Name" },
       ])
+      expect(result.current.count).toBe(1)
     })
 
     it("should remove user on leave message", () => {
@@ -207,6 +210,7 @@ describe("usePresenceList", () => {
       })
 
       expect(result.current.users).toHaveLength(0)
+      expect(result.current.count).toBe(0)
     })
 
     it("should sort users by lastSeen descending", () => {
@@ -266,6 +270,7 @@ describe("usePresenceList", () => {
         { userId: "user-3", userName: "User Three" },
         { userId: "user-1", userName: "User One" },
       ])
+      expect(result.current.count).toBe(3)
     })
 
     it("should limit users to 50", () => {
@@ -293,6 +298,7 @@ describe("usePresenceList", () => {
       }
 
       expect(result.current.users).toHaveLength(50)
+      expect(result.current.count).toBe(60)
       // Most recent user should be first
       expect(result.current.users[0].userId).toBe("user-59")
     })
@@ -340,6 +346,7 @@ describe("usePresenceList", () => {
       expect(result.current.users).toEqual([
         { userId: "new-user", userName: "New User" },
       ])
+      expect(result.current.count).toBe(1)
     })
   })
 })

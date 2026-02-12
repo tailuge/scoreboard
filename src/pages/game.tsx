@@ -10,13 +10,11 @@ import {
 import { GroupBox } from "../components/GroupBox"
 import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
-import { useServerStatus } from "@/components/hooks/useServerStatus"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
 import { useUser } from "@/contexts/UserContext"
 import LeaderboardTable from "@/components/LeaderboardTable"
 import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
-import { STATUS_PAGE_URL } from "@/utils/constants"
 
 const GAMES = [
   {
@@ -160,9 +158,11 @@ function GameGrid({
 }
 
 export default function Game() {
-  const { activeUsers } = useServerStatus(STATUS_PAGE_URL)
   const { userId, userName } = useUser()
-  const { users: presenceUsers } = usePresenceList(userId, userName)
+  const { users: presenceUsers, count: presenceCount } = usePresenceList(
+    userId,
+    userName
+  )
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
@@ -214,14 +214,12 @@ export default function Game() {
             title="2-Player Online"
             leftBadge={<User />}
             rightBadge={
-              activeUsers === null ? null : (
-                <OnlineUsersPopover
-                  count={activeUsers}
-                  users={presenceUsers}
-                  totalCount={activeUsers}
-                  currentUserId={userId}
-                />
-              )
+              <OnlineUsersPopover
+                count={presenceCount}
+                users={presenceUsers}
+                totalCount={presenceCount}
+                currentUserId={userId}
+              />
             }
           >
             <GameGrid
