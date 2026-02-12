@@ -1,69 +1,87 @@
-# Fix Presence Channel Implementation
+# Presence-Only Online Count + Dual Nchan Subscriptions
 
-## Problem
+  ## Summary
 
-The user presence list only becomes fully populated when heartbeat messages arrive. New users miss prior presence messages because presence data is published to the lobby channel (no buffering) instead of the dedicated presence channel (with buffering).
+  Move presence publishing/subscribing to the dedicated Nchan presence channel (with replay), and derive online counts directly from presence
+  messages. Keep lobby channel subscription intact for table-join/live events. This adds a second WebSocket subscription in LobbyContext and
+  removes the separate ServerStatus-based active user count.
 
-## Current State
+  ## Changes (Decision-Complete)
 
-- **Publishing**: All messages (lobby + presence) go to `/publish/lobby/lobby`
-- **Subscribing**: Client subscribes to `/subscribe/lobby/lobby` (no buffering)
-- **Result**: New users miss all prior presence messages
+  ### 1) Nchan publishing: split lobby vs presence endpoints
 
-## Implementation Plan
+  - Update NchanPub in src/nchan/nchanpub.ts:
+      - Keep lobby publishes on /publish/lobby/{channel}.
+      - Add a presence publish URL /publish/presence/{channel}.
+      - publishPresence() posts to the presence URL (not lobby).
+      - Keep get() method for now but it’s no longer used by UI; optionally mark deprecated in a comment.
+  - Channel id for presence remains "lobby" (per your choice), so all presence traffic goes through /publish/presence/lobby and /subscribe/
+    presence/lobby.
 
-### 1. `NchanPub` (`src/nchan/nchanpub.ts`)
+  ### 2) Dual subscriptions in LobbyContext
 
-- Add `presencePublishUrl` → `/publish/presence/{channel}`
-- Route `publishPresence()` to `presencePublishUrl`
-- Replace `get()` with `getSubscriberCount()`:
-  - POST to `presencePublishUrl` with `Accept: application/json`
-  - Return `response.subscribers`
+  - In src/contexts/LobbyContext.tsx:
+      - Create two NchanSub instances:
+          - lobbySub = new NchanSub("lobby", ..., "lobby") (existing behavior).
+          - presenceSub = new NchanSub("lobby", ..., "presence") (new).
+      - Lobby sub routes to lastLobbyMessage + legacy lastMessage.
+      - Presence sub routes to lastPresenceMessage.
+      - Keep existing hooks useLobbyMessages() and usePresenceMessages() unchanged.
+      - Ensure both subs are started and stopped in the same useEffect.
 
-### 2. `LobbyContext` (`src/contexts/LobbyContext.tsx`)
+  ### 3) Presence list owns the online count
 
-- Create two `NchanSub` instances:
-  - `lobbySub` → channel type `"lobby"` (no buffering, live events only)
-  - `presenceSub` → channel type `"presence"` (with buffering, gets history)
-- Route messages to appropriate state handlers
+  - In src/components/hooks/usePresenceList.ts:
+      - Continue to publish join/heartbeat via NchanPub("lobby"), now hitting /publish/presence/lobby.
+      - Extend hook return shape to { users, count }.
+      - Compute count as the number of active (TTL-valid) unique users before slicing to MAX_USERS.
+      - Keep users limited to 50 for the popover list.
+      - (Optional cleanup) Prune expired entries from the map as part of the computation to avoid long-lived stale keys.
 
-### 3. `useServerStatus` (`src/components/hooks/useServerStatus.ts`)
+### 4) UI reads count from presence list
 
-- Change `NchanPub("lobby").get()` → `NchanPub("lobby").getSubscriberCount()`
+  - Update src/pages/lobby.tsx and src/pages/game.tsx:
+      - Remove useServerStatus usage for activeUsers.
+      - Use const { users: presenceUsers, count: presenceCount } = usePresenceList(...).
+      - Pass count={presenceCount} and totalCount={presenceCount} to OnlineUsersPopover.
+  - Keep useServerStatus only where it’s still needed (e.g. CreateTable for isOnline).
 
-### 4. `usePresenceList` - No changes needed
+  ### 5) Simplify useServerStatus
 
-- Already consumes from `usePresenceMessages()`
+  - In src/components/hooks/useServerStatus.ts:
+      - Remove activeUsers from state and return shape.
+      - Remove fetchActiveUsers and the /api/connected broadcast (no longer needed for count).
+      - Keep health check semantics (isOnline, isConnecting, serverStatus) intact.
 
-### 5. Tests
+  ### 6) Docs + scripts
 
-- Update `nchanpub.test.ts` for new URL and method
-- Update mocks in `useServerStatus.test.ts`, `usePresenceList.test.ts`
+  - Update src/nchan/NCHANUSAGE.md to describe presence-based count:
+      - Replace basic_status + connected flow with presence WebSocket.
+      - Example should show subscribing to wss://.../subscribe/presence/lobby and counting unique users.
+  - Update src/nchan/testnchan.sh to publish/subscribe on /presence/lobby.
 
-### 6. Config (`src/nchan/nchan.conf`) - Already correct
+  ## Public API/Interface Changes
 
-- `/publish/presence/` has buffering (1000 messages, 90s timeout)
-- `/subscribe/presence/` has `nchan_subscriber_first_message oldest`
+  - usePresenceList() will now return { users, count } (new count field).
+  - useServerStatus() will no longer return activeUsers or fetchActiveUsers.
 
-## Verification
+  ## Test Plan
 
-After implementation, test with:
+  - Update tests to reflect new behavior:
+      - src/tests/usePresenceList.test.ts: assert count is correct; ensure count > 50 still reports total even if list is capped.
+      - src/tests/useServerStatus.test.ts: remove activeUsers assertions and NchanPub mocks.
+      - src/tests/nchan/nchanpub.test.ts: verify publishPresence posts to /publish/presence/{channel}.
+      - src/tests/lobby.test.tsx and src/tests/game.test.tsx: remove useServerStatus mocks; update usePresenceList mocks to include count.
+  - No changes to table-join logic tests (useLobbyTables.test.ts) expected.
 
-```bash
-# Should return subscriber count for presence channel
-curl -X POST -H "Accept: application/json" \
-  https://billiards-network.onrender.com/publish/presence/lobby
-```
+  ## Edge Cases & Behavioral Notes
 
-Expected response:
+  - Online count will now reflect unique users by userId within TTL, not raw socket connections.
+  - If user opens multiple tabs with the same userId, count remains 1 (latest heartbeat wins).
+  - UI will show 0 when no presence messages have arrived yet.
 
-```json
-{"messages": N, "subscribers": N, ...}
-```
+  ## Assumptions
 
-## Open Question
-
-Should we add explicit "leave" message on page unload/visibility hidden, or keep TTL-based cleanup (90s)?
-
-Current: TTL-based (users expire after 90s without heartbeat)
-Alternative: Send "leave" on `beforeunload` or `visibilitychange` events
+  - Presence channel id is "lobby" across all presence pub/sub.
+  - Online count should be TTL-based unique users from presence messages (not Nchan subscriber count).
+  - It’s acceptable to remove activeUsers from useServerStatus and update internal callers accordingly.
