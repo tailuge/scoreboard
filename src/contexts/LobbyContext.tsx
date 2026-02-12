@@ -33,38 +33,29 @@ export function LobbyProvider({
     useState<PresenceMessage | null>(null)
 
   useEffect(() => {
-    // Unbuffered channel for tables/games
-    const lobbySub = new NchanSub("lobby", (msg) => {
+    const sub = new NchanSub("lobby", (msg) => {
       try {
+        // Parse and route the message
         const parsed = parseNchanMessage(msg)
-        if (parsed && isLobbyMessage(parsed)) {
-          setLastLobbyMessage(parsed)
-          setLastMessage(parsed)
-        }
-      } catch {
-        // Ignore
-      }
-    }, "lobby")
 
-    // Buffered channel for presence history
-    const presenceSub = new NchanSub("lobby", (msg) => {
-      try {
-        const parsed = parseNchanMessage(msg)
-        if (parsed && isPresenceMessage(parsed)) {
+        if (!parsed) {
+          return // Invalid message
+        }
+
+        // Route based on message type
+        if (isLobbyMessage(parsed)) {
+          setLastLobbyMessage(parsed)
+          // Also update legacy state for backward compatibility
+          setLastMessage(parsed)
+        } else if (isPresenceMessage(parsed)) {
           setLastPresenceMessage(parsed)
         }
       } catch {
-        // Ignore
+        // Ignore non-JSON messages or handle them if necessary
       }
-    }, "presence")
-
-    lobbySub.start()
-    presenceSub.start()
-
-    return () => {
-      lobbySub.stop()
-      presenceSub.stop()
-    }
+    })
+    sub.start()
+    return () => sub.stop()
   }, [])
 
   const value = useMemo(

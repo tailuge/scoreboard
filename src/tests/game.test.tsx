@@ -32,16 +32,21 @@ jest.mock("@/contexts/UserContext", () => ({
 }))
 const mockedUseUser = useUser as jest.Mock
 
-// Mock usePresence hook to avoid network issues in tests
-jest.mock("@/components/hooks/usePresence", () => ({
-  usePresence: () => ({
+// Mock usePresenceList hook
+jest.mock("@/components/hooks/usePresenceList", () => ({
+  usePresenceList: jest.fn(() => ({
+    users: [],
+  })),
+}))
+
+// Mock useServerStatus hook
+jest.mock("@/components/hooks/useServerStatus", () => ({
+  useServerStatus: () => ({
     isOnline: true,
     serverStatus: "Server OK",
     isConnecting: false,
-    users: [],
     activeUsers: 5,
-    totalUsers: 5,
-    refreshStatus: jest.fn(),
+    fetchActiveUsers: jest.fn(),
   }),
 }))
 

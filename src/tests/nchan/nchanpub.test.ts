@@ -14,20 +14,17 @@ describe("NchanPub", () => {
     jest.resetAllMocks()
   })
 
-  it("should construct with correct publish URLs", () => {
-    expect(pub["lobbyPublishUrl"]).toContain(
+  it("should construct with correct publishUrl", () => {
+    expect(pub["publishUrl"]).toContain(
       `billiards-network.onrender.com/publish/lobby/${channel}`
-    )
-    expect(pub["presencePublishUrl"]).toContain(
-      `billiards-network.onrender.com/publish/presence/${channel}`
     )
   })
 
-  it("post should send data to the correct URL (lobby)", async () => {
+  it("post should send data to the correct URL", async () => {
     const event = { type: "test" }
-      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-        json: jest.fn().mockResolvedValue({ success: true }),
-      })
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ success: true }),
+    })
 
     const result = await pub.post(event)
 
@@ -38,34 +35,20 @@ describe("NchanPub", () => {
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify(event),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
       })
     )
     expect(result).toEqual({ success: true })
   })
 
-  it("post should send data to the correct URL (presence)", async () => {
-    const event = { type: "test" }
-      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-        json: jest.fn().mockResolvedValue({ success: true }),
-      })
-
-    await pub.post(event, "presence")
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        `billiards-network.onrender.com/publish/presence/${channel}`
-      ),
-      expect.objectContaining({
-        method: "POST",
-      })
-    )
-  })
-
   it("publishLobby should add messageType field", async () => {
     const event = { type: "match_created", matchId: "123" }
-      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-        json: jest.fn().mockResolvedValue({ success: true }),
-      })
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ success: true }),
+    })
 
     await pub.publishLobby(event)
 
@@ -84,9 +67,9 @@ describe("NchanPub", () => {
       userId: "user123",
       userName: "TestUser",
     }
-      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-        json: jest.fn().mockResolvedValue({ success: true }),
-      })
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue({ success: true }),
+    })
 
     await pub.publishPresence(event)
 
@@ -101,9 +84,9 @@ describe("NchanPub", () => {
 
   it("get should fetch active connections", async () => {
     const mockText = "Active connections: 42"
-      ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-        text: jest.fn().mockResolvedValue(mockText),
-      })
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      text: jest.fn().mockResolvedValue(mockText),
+    })
 
     const connections = await pub.get()
 
@@ -119,30 +102,12 @@ describe("NchanPub", () => {
   })
 
   it("get should return 0 if regex does not match", async () => {
-    ; (globalThis.fetch as jest.Mock).mockResolvedValue({
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
       text: jest.fn().mockResolvedValue("No connections info here"),
     })
 
     const connections = await pub.get()
 
     expect(connections).toBe(0)
-  })
-
-  it("getSubscriberCount should return subscribers from nchan info", async () => {
-    ; (globalThis.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({ subscribers: 10 }),
-    })
-
-    const count = await pub.getSubscriberCount("presence")
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/publish/presence/"),
-      expect.objectContaining({
-        method: "POST",
-        headers: { Accept: "application/json" },
-      })
-    )
-    expect(count).toBe(10)
   })
 })

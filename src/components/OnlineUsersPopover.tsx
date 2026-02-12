@@ -1,7 +1,7 @@
 // src/components/OnlineUsersPopover.tsx
 import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
-import type { PresenceUser } from "./hooks/usePresence"
+import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
   readonly count: number
