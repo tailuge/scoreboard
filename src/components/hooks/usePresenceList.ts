@@ -16,6 +16,7 @@ interface PresenceEntry {
 const HEARTBEAT_INTERVAL_MS = 60000
 const TTL_MS = 90000
 const MAX_USERS = 50
+const JOIN_DELAY_MS = 100
 
 function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
@@ -80,16 +81,19 @@ export function usePresenceList(
       })
     }
 
-    pubRef.current?.publishPresence({
-      type: "join",
-      userId,
-      userName: effectiveUserName,
-      timestamp: Date.now(),
-    })
+    const joinTimeoutId = setTimeout(() => {
+      pubRef.current?.publishPresence({
+        type: "join",
+        userId,
+        userName: effectiveUserName,
+        timestamp: Date.now(),
+      })
+    }, JOIN_DELAY_MS)
 
     intervalRef.current = setInterval(publishHeartbeat, HEARTBEAT_INTERVAL_MS)
 
     return () => {
+      clearTimeout(joinTimeoutId)
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null

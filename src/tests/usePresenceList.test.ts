@@ -40,8 +40,15 @@ describe("usePresenceList", () => {
       expect(result.current.count).toBe(0)
     })
 
-    it("should publish join message on mount", () => {
+    it("should publish join message after delay on mount", () => {
       renderHook(() => usePresenceList(userId, userName))
+
+      // Join is delayed by 100ms
+      expect(mockPublishPresence).not.toHaveBeenCalled()
+
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
 
       expect(mockPublishPresence).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -54,6 +61,10 @@ describe("usePresenceList", () => {
 
     it("should default userName to 'Anonymous' when not provided", () => {
       renderHook(() => usePresenceList(userId))
+
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
 
       expect(mockPublishPresence).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -68,6 +79,11 @@ describe("usePresenceList", () => {
   describe("heartbeat", () => {
     it("should publish heartbeat every 60 seconds", () => {
       renderHook(() => usePresenceList(userId, userName))
+
+      // Advance past join delay
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
 
       expect(mockPublishPresence).toHaveBeenCalledTimes(1) // join
 
@@ -93,6 +109,11 @@ describe("usePresenceList", () => {
 
     it("should stop heartbeat on unmount", () => {
       const { unmount } = renderHook(() => usePresenceList(userId, userName))
+
+      // Advance past join delay
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
 
       unmount()
 
