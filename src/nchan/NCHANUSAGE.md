@@ -1,22 +1,59 @@
-# Nchan Usage: Live Online User Count (Presence-Based)
+# Nchan Usage: Channels and Presence
 
-This document describes how to integrate a real-time online user count using the Nchan presence channel.
+This document describes how to integrate with the Nchan pub/sub system for real-time updates.
 
-## Overview
+## Channels Overview
 
-The online count is derived from presence messages (join/heartbeat/leave). The presence channel is buffered and replays recent messages so new subscribers can build a full list.
+The system uses two separate Nchan channels:
+
+| Channel      | Purpose                     | Messages                                           |
+| ------------ | --------------------------- | -------------------------------------------------- |
+| **Lobby**    | Match events, table updates | `create`, `join`, `spectate`, `complete`, `delete` |
+| **Presence** | User presence tracking      | `join`, `heartbeat`, `leave`                       |
 
 ## Endpoints
 
-- **Presence WebSocket URL:** `wss://billiards-network.onrender.com/subscribe/presence/lobby`
+### Lobby Channel
 
-## Implementation Guide
+- **Subscribe:** `wss://billiards-network.onrender.com/subscribe/lobby/lobby`
+- **Publish:** `https://billiards-network.onrender.com/publish/lobby/lobby`
 
-The following TypeScript code can be used in a plain HTML/TS environment. It updates an element with the current number of online users based on presence.
+### Presence Channel
 
-### 1. Live Updates
+- **Subscribe:** `wss://billiards-network.onrender.com/subscribe/presence/lobby`
+- **Publish:** `https://billiards-network.onrender.com/publish/presence/lobby`
 
-Subscribe to the presence channel and track unique users by `userId`. Consider a user online if a `heartbeat` or `join` was seen in the last 90 seconds.
+## Message Types
+
+All messages include a `messageType` field for multiplexing:
+
+```typescript
+type MessageType = "lobby" | "presence";
+
+// Lobby messages
+interface LobbyMessage {
+  messageType: "lobby";
+  type?: "create" | "join" | "spectate" | "complete" | "delete";
+  // ...additional fields
+}
+
+// Presence messages
+interface PresenceMessage {
+  messageType: "presence";
+  type: "join" | "heartbeat" | "leave";
+  userId: string;
+  userName: string;
+  timestamp?: number;
+}
+```
+
+## External App Integration: Online User Count
+
+To display the online user count in an external application, subscribe to the presence channel and track unique users.
+
+### Implementation Guide
+
+The following TypeScript code tracks online users by `userId`. A user is considered online if a `heartbeat` or `join` was seen in the last 90 seconds.
 
 ```typescript
 type PresenceMessage = {
@@ -78,9 +115,7 @@ function connectLobbyCount(elementId: string) {
 }
 ```
 
-### 3. Usage in HTML
-
-Ensure your element exists in the DOM:
+### Usage in HTML
 
 ```html
 <a href="https://scoreboard-tailuge.vercel.app/lobby" id="lobbycount">0</a>
@@ -91,7 +126,40 @@ Ensure your element exists in the DOM:
 </script>
 ```
 
+## Lobby Events Integration
+
+For applications that need to react to match events, subscribe to the lobby channel:
+
+```typescript
+type LobbyMessage = {
+  messageType: "lobby";
+  type?: "create" | "join" | "spectate" | "complete" | "delete";
+  matchId?: string;
+  tableId?: string;
+  [key: string]: any;
+};
+
+function connectLobbyEvents(onEvent: (msg: LobbyMessage) => void) {
+  const wsUrl = "wss://billiards-network.onrender.com/subscribe/lobby/lobby";
+  const socket = new WebSocket(wsUrl);
+
+  socket.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.messageType === "lobby") {
+        onEvent(data);
+      }
+    } catch {
+      // Ignore parse errors
+    }
+  };
+
+  return socket;
+}
+```
+
 ## Considerations
 
 - **Quiet Failures:** The implementation handles connection errors silently and attempts to reconnect every 30 seconds.
 - **CORS:** The Nchan server is configured to allow CORS requests from all origins.
+- **Buffer Replay:** The presence channel is buffered and replays recent messages so new subscribers can build a full user list.

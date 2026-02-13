@@ -1,4 +1,3 @@
-import { logger } from "@/utils/logger"
 import type { LobbyMessage, PresenceMessage } from "./types"
 
 export class NchanPub {
@@ -6,7 +5,6 @@ export class NchanPub {
   private readonly presencePublishUrl: string
   private readonly base = "billiards-network.onrender.com"
   private readonly channel: string
-  private readonly statusUrl = `https://${this.base}/basic_status`
 
   constructor(channel: string) {
     this.channel = channel
@@ -15,7 +13,7 @@ export class NchanPub {
   }
 
   /**
-   * Publish a raw event (legacy method)
+   * Publish a message to a URL endpoint
    */
   private async postTo(url: string, event: any) {
     const response = await fetch(url, {
@@ -30,14 +28,7 @@ export class NchanPub {
   }
 
   /**
-   * Publish a raw event (legacy method)
-   */
-  async post(event: any) {
-    return this.postTo(this.publishUrl, event)
-  }
-
-  /**
-   * Publish a typed lobby message
+   * Publish a typed lobby message (match events, table updates)
    */
   async publishLobby(event: Omit<LobbyMessage, "messageType">) {
     const message: LobbyMessage = {
@@ -48,7 +39,7 @@ export class NchanPub {
   }
 
   /**
-   * Publish a typed presence message
+   * Publish a typed presence message (user join/leave/heartbeat)
    */
   async publishPresence(event: Omit<PresenceMessage, "messageType">) {
     const message: PresenceMessage = {
@@ -56,25 +47,5 @@ export class NchanPub {
       messageType: "presence",
     }
     return this.postTo(this.presencePublishUrl, message)
-  }
-
-  async get() {
-    const response = await fetch(this.statusUrl, {
-      method: "GET",
-      mode: "cors",
-    })
-
-    const textData = await response.text()
-    logger.log(textData)
-
-    // Parse the active connections from the response
-    const activeConnectionsRegex = /Active connections:\s+(\d+)/
-    const activeConnectionsMatch = activeConnectionsRegex.exec(textData)
-    const activeConnections = activeConnectionsMatch
-      ? Number.parseInt(activeConnectionsMatch[1], 10) - 1
-      : 0
-
-    logger.log("Active Connections:", activeConnections)
-    return activeConnections
   }
 }

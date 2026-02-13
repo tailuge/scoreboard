@@ -2,6 +2,7 @@ import { kv, VercelKV } from "@vercel/kv"
 import { Table } from "@/types/table"
 
 import { NchanPub } from "@/nchan/nchanpub"
+import type { LobbyMessage } from "@/nchan/types"
 import { Player } from "@/types/player"
 import { getUID } from "@/utils/uid"
 import { logger } from "@/utils/logger"
@@ -173,7 +174,7 @@ export class TableService {
     }
   }
 
-  async defaultNotify(event: any) {
-    await new NchanPub("lobby").post(event)
+  async defaultNotify(event: Omit<LobbyMessage, "messageType">) {
+    await new NchanPub("lobby").publishLobby(event)
   }
 }

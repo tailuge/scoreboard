@@ -67,14 +67,14 @@ describe("TableService", () => {
 
   it("should use defaultNotify if no notify function provided", async () => {
     const serviceWithDefaultNotify = new TableService(mockKv as any)
-    const postSpy = jest
-      .spyOn(NchanPub.prototype, "post")
+    const publishLobbySpy = jest
+      .spyOn(NchanPub.prototype, "publishLobby")
       .mockResolvedValue(undefined)
 
     await serviceWithDefaultNotify.createTable("u1", "user1", "rule")
 
-    expect(postSpy).toHaveBeenCalledWith({ action: "create" })
-    postSpy.mockRestore()
+    expect(publishLobbySpy).toHaveBeenCalledWith({ action: "create" })
+    publishLobbySpy.mockRestore()
   })
 
   it("should handle error in background cleanup", async () => {

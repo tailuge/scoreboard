@@ -20,30 +20,6 @@ describe("NchanPub", () => {
     )
   })
 
-  it("post should send data to the correct URL", async () => {
-    const event = { type: "test" }
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ success: true }),
-    })
-
-    const result = await pub.post(event)
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        `billiards-network.onrender.com/publish/lobby/${channel}`
-      ),
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify(event),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-    )
-    expect(result).toEqual({ success: true })
-  })
-
   it("publishLobby should add messageType field", async () => {
     const event = { type: "match_created", matchId: "123" }
     ;(globalThis.fetch as jest.Mock).mockResolvedValue({
@@ -83,34 +59,5 @@ describe("NchanPub", () => {
       ...event,
       messageType: "presence",
     })
-  })
-
-  it("get should fetch active connections", async () => {
-    const mockText = "Active connections: 42"
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue(mockText),
-    })
-
-    const connections = await pub.get()
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("billiards-network.onrender.com/basic_status"),
-      expect.objectContaining({
-        method: "GET",
-        mode: "cors",
-      })
-    )
-    // The code does lines - 1
-    expect(connections).toBe(41)
-  })
-
-  it("get should return 0 if regex does not match", async () => {
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      text: jest.fn().mockResolvedValue("No connections info here"),
-    })
-
-    const connections = await pub.get()
-
-    expect(connections).toBe(0)
   })
 })
