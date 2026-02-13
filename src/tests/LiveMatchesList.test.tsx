@@ -50,7 +50,7 @@ describe("LiveMatchesList", () => {
     expect(globalThis.open).toHaveBeenCalled()
   })
 
-  it("renders nothing when there are no active games", () => {
+  it("renders empty state when there are no active games", () => {
     const onSpectate = jest.fn()
     mockedUseUser.mockReturnValue({
       userId: "user-1",
@@ -64,6 +64,7 @@ describe("LiveMatchesList", () => {
       />
     )
 
-    expect(screen.queryByText("Live Games")).not.toBeInTheDocument()
+    expect(screen.getByText("Live Games")).toBeInTheDocument()
+    expect(screen.getByText("No live games at the moment.")).toBeInTheDocument()
   })
 })

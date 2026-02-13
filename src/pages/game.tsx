@@ -66,7 +66,7 @@ function GameButton({
         fill
         className="object-contain p-2"
         sizes="(max-width: 768px) 33vw, 20vw"
-        loading="eager"
+        priority
       />
     </div>
   )
