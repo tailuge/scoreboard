@@ -13,7 +13,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://tailuge.github.io"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https: wss://*.onrender.com; frame-ancestors 'self' https://tailuge.github.io; object-src 'none'; upgrade-insecure-requests;"
           },
           {
             key: "X-XSS-Protection",
