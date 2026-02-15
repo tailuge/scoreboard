@@ -1,82 +1,82 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { useRouter } from "next/router";
-import { LiveMatchesPanel } from "@/components/LiveMatchesPanel";
-import { PlayModal } from "@/components/PlayModal";
-import { User } from "@/components/User";
-import { GroupBox } from "@/components/GroupBox";
-import { OnlineUsersPopover } from "@/components/OnlineUsersPopover";
-import { usePresenceList } from "@/components/hooks/usePresenceList";
-import Head from "next/head";
-import { markUsage } from "@/utils/usage";
-import { useUser } from "@/contexts/UserContext";
-import { useLobbyTables } from "@/components/hooks/useLobbyTables";
-import { useAutoJoin } from "@/components/hooks/useAutoJoin";
+import { useEffect, useState, useRef, useCallback } from "react"
+import { useRouter } from "next/router"
+import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
+import { PlayModal } from "@/components/PlayModal"
+import { User } from "@/components/User"
+import { GroupBox } from "@/components/GroupBox"
+import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
+import { usePresenceList } from "@/components/hooks/usePresenceList"
+import Head from "next/head"
+import { markUsage } from "@/utils/usage"
+import { useUser } from "@/contexts/UserContext"
+import { useLobbyTables } from "@/components/hooks/useLobbyTables"
+import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 
 export default function Lobby() {
-  const { userId, userName } = useUser();
-  const router = useRouter();
+  const { userId, userName } = useUser()
+  const router = useRouter()
   const { tables, isLoading, findOrCreateTable, deleteTable } = useLobbyTables(
     userId,
-    userName,
-  );
+    userName
+  )
   const [modalTable, setModalTable] = useState<{
-    id: string;
-    ruleType: string;
-  } | null>(null);
-  const shownModals = useRef<Set<string>>(new Set());
+    id: string
+    ruleType: string
+  } | null>(null)
+  const shownModals = useRef<Set<string>>(new Set())
   const { users: presenceUsers, count: presenceCount } = usePresenceList(
     userId,
-    userName,
-  );
+    userName
+  )
 
-  const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null);
-  const [seekingTableId, setSeekingTableId] = useState<string | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const seekingTableIdRef = useRef<string | null>(null);
+  const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
+  const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const seekingTableIdRef = useRef<string | null>(null)
 
   useEffect(() => {
-    seekingTableIdRef.current = seekingTableId;
-  }, [seekingTableId]);
+    seekingTableIdRef.current = seekingTableId
+  }, [seekingTableId])
 
   const handleCancelSeeking = useCallback(async () => {
     if (seekingTableId) {
-      await deleteTable(seekingTableId);
+      await deleteTable(seekingTableId)
     }
-    setSeekingRuleType(null);
-    setSeekingTableId(null);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  }, [seekingTableId, deleteTable]);
+    setSeekingRuleType(null)
+    setSeekingTableId(null)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+  }, [seekingTableId, deleteTable])
 
   useEffect(() => {
-    if (!router.isReady) return;
-    markUsage("lobby");
-  }, [router.isReady]);
+    if (!router.isReady) return
+    markUsage("lobby")
+  }, [router.isReady])
 
   const handleFindOrCreate = useCallback(
     async (ruleType: string) => {
-      setSeekingRuleType(ruleType);
-      const updatedTable = await findOrCreateTable(ruleType);
+      setSeekingRuleType(ruleType)
+      const updatedTable = await findOrCreateTable(ruleType)
       if (updatedTable) {
         if (updatedTable.players.length === 2) {
-          setSeekingRuleType(null);
+          setSeekingRuleType(null)
           if (!updatedTable.completed) {
             setModalTable({
               id: updatedTable.id,
               ruleType: updatedTable.ruleType,
-            });
-            shownModals.current.add(updatedTable.id);
+            })
+            shownModals.current.add(updatedTable.id)
           }
         } else {
-          setSeekingTableId(updatedTable.id);
+          setSeekingTableId(updatedTable.id)
         }
       } else {
-        setSeekingRuleType(null);
+        setSeekingRuleType(null)
       }
     },
-    [findOrCreateTable],
-  );
+    [findOrCreateTable]
+  )
 
-  useAutoJoin(router, isLoading, userId, userName, handleFindOrCreate);
+  useAutoJoin(router, isLoading, userId, userName, handleFindOrCreate)
 
   useEffect(() => {
     tables.forEach((table) => {
@@ -86,32 +86,32 @@ export default function Lobby() {
         !table.completed &&
         !shownModals.current.has(table.id)
       ) {
-        setSeekingRuleType(null);
-        setSeekingTableId(null);
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setModalTable({ id: table.id, ruleType: table.ruleType });
-        shownModals.current.add(table.id);
+        setSeekingRuleType(null)
+        setSeekingTableId(null)
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        setModalTable({ id: table.id, ruleType: table.ruleType })
+        shownModals.current.add(table.id)
       }
-    });
-  }, [tables, userId]);
+    })
+  }, [tables, userId])
 
   // Timeout logic
   useEffect(() => {
     if (seekingRuleType) {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
       timeoutRef.current = setTimeout(async () => {
         if (seekingTableIdRef.current) {
-          await deleteTable(seekingTableIdRef.current);
+          await deleteTable(seekingTableIdRef.current)
         }
-        setSeekingRuleType(null);
-        setSeekingTableId(null);
-        router.push("/game");
-      }, 60000);
+        setSeekingRuleType(null)
+        setSeekingTableId(null)
+        router.push("/game")
+      }, 60000)
     }
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [seekingRuleType, deleteTable, router]);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [seekingRuleType, deleteTable, router])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -121,10 +121,10 @@ export default function Lobby() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId }),
-        });
+        })
       }
-    };
-  }, [userId]);
+    }
+  }, [userId])
 
   return (
     <>
@@ -222,5 +222,5 @@ export default function Lobby() {
         />
       </div>
     </>
-  );
+  )
 }

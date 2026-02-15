@@ -250,8 +250,9 @@ body {
 }
 
 /* User Pill Styles */
-.user-pill {
-  padding: 4px 12px;
+.pill-base,
+.user-pill,
+.groupbox-title {
   font-size: 11px;
   letter-spacing: 0.18em;
   color: rgba(180, 190, 210, 0.7);
@@ -264,6 +265,10 @@ body {
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
     0 0 40px rgba(13, 14, 18, 0.6);
+}
+
+.user-pill {
+  padding: 4px 12px;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -421,19 +426,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 4px 20px;
-  font-size: 11px;
-  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(180, 190, 210, 0.7);
-  background: linear-gradient(
-    180deg,
-    rgba(20, 22, 28, 0.95),
-    rgba(13, 14, 18, 1)
-  );
-  border-radius: 4px;
-  box-shadow:
-    0 0 20px rgba(13, 14, 18, 0.9),
-    0 0 40px rgba(13, 14, 18, 0.6);
   pointer-events: none;
   z-index: 2;
 }

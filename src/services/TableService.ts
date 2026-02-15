@@ -9,6 +9,7 @@ import { logger } from "@/utils/logger"
 
 const KEY = "tables"
 const TABLE_TIMEOUT = 60 * 1000 // 1 minute
+const MULTIPLAYER_TIMEOUT_FACTOR = 10
 const TABLE_NOT_FOUND_ERROR = "Table not found"
 
 export class TableService {
@@ -16,6 +17,24 @@ export class TableService {
     private readonly store: VercelKV | Partial<VercelKV> = kv,
     private readonly notify: (event: any) => Promise<void> = this.defaultNotify
   ) {}
+
+  private isTableExpired(table: Table, now: number): boolean {
+    const timeout =
+      table.players.length > 1
+        ? TABLE_TIMEOUT * MULTIPLAYER_TIMEOUT_FACTOR
+        : TABLE_TIMEOUT
+    return now - table.lastUsedAt > timeout
+  }
+
+  private cleanupExpiredTables(expiredKeys: string[]): void {
+    if (expiredKeys.length > 0) {
+      // Background cleanup of expired tables
+      this.store.hdel(KEY, ...expiredKeys).catch((err) => {
+        logger.error("Failed to delete expired tables:", err)
+      })
+      logger.log(`Found ${expiredKeys.length} expired tables.`)
+    }
+  }
 
   async getTables() {
     const allTables =
@@ -25,22 +44,14 @@ export class TableService {
     const activeTables: Table[] = []
 
     for (const [id, table] of Object.entries(allTables)) {
-      const timeout =
-        table.players.length > 1 ? TABLE_TIMEOUT * 10 : TABLE_TIMEOUT
-      if (now - table.lastUsedAt > timeout) {
+      if (this.isTableExpired(table, now)) {
         expiredKeys.push(id)
       } else {
         activeTables.push(table)
       }
     }
 
-    if (expiredKeys.length > 0) {
-      // Background cleanup of expired tables
-      this.store.hdel(KEY, ...expiredKeys).catch((err) => {
-        logger.error("Failed to delete expired tables:", err)
-      })
-      logger.log(`Found ${expiredKeys.length} expired tables.`)
-    }
+    this.cleanupExpiredTables(expiredKeys)
 
     return activeTables.sort((a, b) => b.createdAt - a.createdAt)
   }
@@ -48,17 +59,16 @@ export class TableService {
   async expireTables() {
     // This method is now used mostly for side-effect cleanup
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
-    const expiredEntries = Object.entries(tables || {}).filter(
-      ([, table]) =>
-        Date.now() - table.lastUsedAt >
-        (table.players.length > 1 ? TABLE_TIMEOUT * 10 : TABLE_TIMEOUT)
-    )
-    if (expiredEntries.length > 0) {
-      const keysToDelete = expiredEntries.map(([key]) => key)
-      await this.store.hdel(KEY, ...keysToDelete)
-      logger.log(`Expired ${expiredEntries.length} tables.`)
+    const now = Date.now()
+    const expiredKeys = Object.entries(tables || {})
+      .filter(([, table]) => this.isTableExpired(table, now))
+      .map(([key]) => key)
+
+    if (expiredKeys.length > 0) {
+      await this.store.hdel(KEY, ...expiredKeys)
+      logger.log(`Expired ${expiredKeys.length} tables.`)
     }
-    return expiredEntries.length
+    return expiredKeys.length
   }
 
   async createTable(userId: string, userName: string, ruleType: string) {

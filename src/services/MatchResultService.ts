@@ -15,21 +15,10 @@ export class MatchResultService {
    * Adds a match result to the rolling history.
    * Uses a sorted set where the score is the timestamp.
    */
-  async addMatchResult(
-    result: MatchResult,
-    replayData?: string
-  ): Promise<void> {
-    if (replayData) {
-      await this.store.set(getMatchReplayKey(result.id), replayData)
-      result.hasReplay = true
-    }
-
-    // Add to sorted set
-    await this.store.zadd(KEY, {
-      score: result.timestamp,
-      member: result,
-    })
-
+  /**
+   * Identifies and removes match results and their replay data beyond the HISTORY_LIMIT.
+   */
+  private async evictOldResults(): Promise<void> {
     // Identify matches that are about to be evicted from the sorted set (beyond the 50 limit).
     // zrange(0, -(HISTORY_LIMIT + 1)) returns members that will be removed by zremrangebyrank(0, -(HISTORY_LIMIT + 1))
     const toEvict = await this.store.zrange<MatchResult[]>(
@@ -47,6 +36,24 @@ export class MatchResultService {
 
     // Trim to HISTORY_LIMIT (remove older entries)
     await this.store.zremrangebyrank(KEY, 0, -(HISTORY_LIMIT + 1))
+  }
+
+  async addMatchResult(
+    result: MatchResult,
+    replayData?: string
+  ): Promise<void> {
+    if (replayData) {
+      await this.store.set(getMatchReplayKey(result.id), replayData)
+      result.hasReplay = true
+    }
+
+    // Add to sorted set
+    await this.store.zadd(KEY, {
+      score: result.timestamp,
+      member: result,
+    })
+
+    await this.evictOldResults()
   }
 
   /**
