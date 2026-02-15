@@ -144,64 +144,6 @@ describe("useLobbyTables", () => {
     consoleSpy.mockRestore()
   })
 
-  it("should perform createTable action", async () => {
-    ;(globalThis.fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve([]),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve([]),
-      })
-
-    const { result } = renderHook(() => useLobbyTables(userId, userName))
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-
-    let success
-    await act(async () => {
-      success = await result.current.createTable("snooker")
-    })
-
-    expect(success).toBe(true)
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      "/api/tables",
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ userId, userName, ruleType: "snooker" }),
-      })
-    )
-  })
-
-  it("should return false if createTable fails", async () => {
-    ;(globalThis.fetch as jest.Mock)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve([]),
-      })
-      .mockResolvedValueOnce({
-        ok: false,
-      })
-    const consoleSpy = jest.spyOn(console, "error").mockImplementation()
-
-    const { result } = renderHook(() => useLobbyTables(userId, userName))
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-
-    let success
-    await act(async () => {
-      success = await result.current.createTable("snooker")
-    })
-
-    expect(success).toBe(false)
-    expect(consoleSpy).toHaveBeenCalled()
-    consoleSpy.mockRestore()
-  })
-
   it("should return null if tableAction fails", async () => {
     ;(globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({

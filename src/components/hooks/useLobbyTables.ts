@@ -84,26 +84,6 @@ export function useLobbyTables(
     [userId, userName, fetchTables]
   )
 
-  const createTable = useCallback(
-    async (ruleType: string) => {
-      if (!userId || !userName) return false
-      try {
-        const response = await fetch("/api/tables", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, userName, ruleType }),
-        })
-        if (!response.ok) throw new Error("Failed to create table")
-        fetchTables()
-        return true
-      } catch (error) {
-        console.error("Error creating table:", error)
-        return false
-      }
-    },
-    [userId, userName, fetchTables]
-  )
-
   const deleteTable = useCallback(
     async (tableId: string) => {
       if (!userId) return false
@@ -131,7 +111,6 @@ export function useLobbyTables(
     isLoading,
     fetchTables,
     tableAction,
-    createTable,
     findOrCreateTable,
     deleteTable,
   }
