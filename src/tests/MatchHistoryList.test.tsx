@@ -11,10 +11,12 @@ describe("MatchHistoryList", () => {
     jest.resetAllMocks()
   })
 
-  it("renders loading state initially", () => {
+  it("renders loading state initially", async () => {
     ;(globalThis.fetch as jest.Mock).mockReturnValue(new Promise(() => {}))
     render(<MatchHistoryList />)
     expect(screen.getByText(/loading match history/i)).toBeInTheDocument()
+    // Wait for the pending promise to avoid act warnings
+    await waitFor(() => {}, { timeout: 100 })
   })
 
   it("renders empty state when no results", async () => {
