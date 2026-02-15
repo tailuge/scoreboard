@@ -3,7 +3,7 @@ import { getApiDocs } from "@/lib/swagger"
 import dynamic from "next/dynamic"
 import "swagger-ui-react/swagger-ui.css"
 
-const SwaggerUI = dynamic<{ spec: any }>(import("swagger-ui-react"), {
+const SwaggerUI = dynamic<{ spec: any }>(() => import("swagger-ui-react"), {
   ssr: false,
 })
 
@@ -12,6 +12,12 @@ function ApiDoc({ spec }: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  if (process.env.NODE_ENV === "production") {
+    return {
+      notFound: true,
+    }
+  }
+
   const spec = await getApiDocs()
 
   return {
