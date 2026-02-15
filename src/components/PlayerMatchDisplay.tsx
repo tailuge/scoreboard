@@ -29,13 +29,16 @@ export function PlayerMatchDisplay({
         className={`font-medium text-gray-100 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
         {winner}{" "}
-        <span className="text-gray-400 font-normal">({winnerScore})</span>
+        <span className="text-gray-400 font-normal font-mono-data">
+          ({winnerScore})
+        </span>
       </span>
       <span className="text-gray-500 text-[9px] flex-shrink-0">vs</span>
       <span
         className={`text-gray-400 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
-        {loser} <span className="text-gray-500">({loserScore})</span>
+        {loser}{" "}
+        <span className="text-gray-500 font-mono-data">({loserScore})</span>
       </span>
     </>
   )

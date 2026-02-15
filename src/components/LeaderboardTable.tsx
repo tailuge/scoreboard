@@ -136,7 +136,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
             return (
               <tr
                 key={item.id}
-                className="group hover:bg-gray-800/30 transition-colors cursor-pointer"
+                className="group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item"
                 onClick={() => handleRowClick(item.id)}
               >
                 <td
@@ -147,7 +147,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                   </div>
                 </td>
                 <td
-                  className={`text-left border-b border-gray-800 ${compact ? "px-1 py-0 text-gray-500/70" : "px-2 py-1 text-gray-400"}`}
+                  className={`text-left border-b border-gray-800 font-mono-data ${compact ? "px-1 py-0 text-gray-500/70" : "px-2 py-1 text-gray-400"}`}
                 >
                   {item.score}
                 </td>

@@ -74,7 +74,7 @@ function MatchResultCardComponent({
       <button
         type="button"
         onClick={onClick}
-        className={`flex w-full items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 cursor-pointer text-left ${padding} gap-4`}
+        className={`stagger-item flex w-full items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 cursor-pointer text-left ${padding} gap-4`}
       >
         {content}
       </button>
@@ -83,7 +83,7 @@ function MatchResultCardComponent({
 
   return (
     <div
-      className={`flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${padding} gap-4`}
+      className={`stagger-item flex items-center justify-between transition-colors border-b border-gray-800 hover:bg-gray-800/30 ${padding} gap-4`}
     >
       {content}
     </div>

@@ -1,14 +1,14 @@
 // src/components/OnlineUsersPopover.tsx
-import { UsersIcon } from "@heroicons/react/24/solid";
-import React, { useState, useRef, useEffect } from "react";
-import type { PresenceUser } from "./hooks/usePresenceList";
+import { UsersIcon } from "@heroicons/react/24/solid"
+import React, { useState, useRef, useEffect } from "react"
+import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
-  readonly count: number;
-  readonly users: PresenceUser[];
-  readonly totalCount?: number;
-  readonly currentUserId?: string;
-};
+  readonly count: number
+  readonly users: PresenceUser[]
+  readonly totalCount?: number
+  readonly currentUserId?: string
+}
 
 export function OnlineUsersPopover({
   count,
@@ -16,37 +16,37 @@ export function OnlineUsersPopover({
   totalCount,
   currentUserId,
 }: OnlineUsersPopoverProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    const options: AddEventListenerOptions = { passive: true };
-    document.addEventListener("mousedown", handleClickOutside, options);
+    const options: AddEventListenerOptions = { passive: true }
+    document.addEventListener("mousedown", handleClickOutside, options)
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, options);
-    };
-  }, [isOpen]);
+      document.removeEventListener("mousedown", handleClickOutside, options)
+    }
+  }, [isOpen])
 
-  const overflow = totalCount ? totalCount - users.length : 0;
+  const overflow = totalCount ? totalCount - users.length : 0
 
   return (
     <div ref={containerRef} className="relative">
       <button
         onClick={() => {
-          console.log("Online users:", JSON.stringify(users, null, 2));
-          setIsOpen(!isOpen);
+          console.log("Online users:", JSON.stringify(users, null, 2))
+          setIsOpen(!isOpen)
         }}
         className="flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
         aria-label={`${count} users online`}
@@ -91,5 +91,5 @@ export function OnlineUsersPopover({
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -186,10 +186,12 @@ export default function Lobby() {
             >
               <div className="flex flex-col gap-6">
                 {seekingRuleType && (
-                  <div className="mx-auto w-full max-w-md rounded-xl border border-blue-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
+                  <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
                     <div className="relative mx-auto mb-5 h-14 w-14">
-                      <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
-                      <div className="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin-slow motion-reduce:animate-none"></div>
+                      <div className="absolute inset-0 rounded-full border-2 border-cyan-500/20"></div>
+                      <div className="absolute inset-0 rounded-full border-2 border-cyan-400/40 animate-glow-pulse motion-reduce:animate-none"></div>
+                      <div className="absolute inset-2 rounded-full border border-cyan-500/30 animate-pulse motion-reduce:animate-none"></div>
+                      <div className="absolute inset-4 rounded-full bg-cyan-400/20 animate-ping motion-reduce:animate-none"></div>
                     </div>
                     <h3 className="text-xl font-bold text-white text-balance">
                       Finding a {seekingRuleType} opponent…
