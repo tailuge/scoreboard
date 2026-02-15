@@ -1,21 +1,24 @@
 import handler from "../pages/api/doc"
 
 jest.mock("next-swagger-doc", () => ({
-  withSwagger: jest.fn(() => jest.fn(() => (req: any, res: any) => {
-    res.status(200).json({ openapi: "3.0.0" })
-  })),
+  withSwagger: jest.fn(() =>
+    jest.fn(() => (req: any, res: any) => {
+      res.status(200).json({ openapi: "3.0.0" })
+    })
+  ),
 }))
 
 describe("/api/doc handler", () => {
   const oldEnv = process.env.NODE_ENV
 
   afterEach(() => {
+    // @ts-expect-error NODE_ENV is read-only
     process.env.NODE_ENV = oldEnv
     jest.clearAllMocks()
   })
 
   it("should return 404 in production", async () => {
-    // @ts-ignore
+    // @ts-expect-error NODE_ENV is read-only
     process.env.NODE_ENV = "production"
     const req = { method: "GET" }
     const res = {
@@ -31,7 +34,7 @@ describe("/api/doc handler", () => {
   })
 
   it("should return 200 in development", async () => {
-    // @ts-ignore
+    // @ts-expect-error NODE_ENV is read-only
     process.env.NODE_ENV = "development"
     const req = { method: "GET" }
     const res = {

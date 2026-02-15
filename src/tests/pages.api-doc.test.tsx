@@ -6,7 +6,11 @@ jest.mock("next/dynamic", () => ({
   __esModule: true,
   default: () => {
     return function MockSwaggerUI({ spec }: { spec: any }) {
-      return <div data-testid="swagger-ui">Mock Swagger UI for {spec?.info?.title}</div>
+      return (
+        <div data-testid="swagger-ui">
+          Mock Swagger UI for {spec?.info?.title}
+        </div>
+      )
     }
   },
 }))
