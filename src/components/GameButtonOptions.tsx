@@ -21,7 +21,7 @@ export function RedBallButtons({
             <Link
               key={reds}
               href={href}
-              className="w-6 h-6 flex items-center justify-center bg-gray-800 border border-gray-700 rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
+              className="w-6 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
               aria-label={`Snooker with ${reds} red balls`}
             >
               {reds}
@@ -34,7 +34,7 @@ export function RedBallButtons({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-6 h-6 flex items-center justify-center bg-gray-800 border border-gray-700 rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
+            className="w-6 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
             aria-label={`Snooker with ${reds} red balls`}
           >
             {reds}
@@ -55,7 +55,7 @@ export function RaceToButtons({ baseUrl, isInternal }: GameButtonOptionsProps) {
             <Link
               key={raceTo}
               href={href}
-              className="px-1.5 h-6 flex items-center justify-center bg-gray-800 border border-gray-700 rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
+              className="px-1.5 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
               aria-label={`Race to ${raceTo}`}
             >
               To:{raceTo}
@@ -68,7 +68,7 @@ export function RaceToButtons({ baseUrl, isInternal }: GameButtonOptionsProps) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-1.5 h-6 flex items-center justify-center bg-gray-800 border border-gray-700 rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
+            className="px-1.5 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
             aria-label={`Race to ${raceTo}`}
           >
             To:{raceTo}

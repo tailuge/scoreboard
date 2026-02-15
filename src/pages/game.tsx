@@ -71,7 +71,7 @@ function GameButton({
     </div>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gray-800 rounded-xl border border-gray-700 ${hoverBorderColor} hover:bg-gray-750 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal ${hoverBorderColor} hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
     const isInternal = href.startsWith("/")
@@ -165,7 +165,7 @@ export default function Game() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <Head>
         <title>Play Billiards Online | Free Snooker, Pool & Carom Games</title>
         <meta
