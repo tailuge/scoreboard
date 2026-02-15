@@ -1,4 +1,5 @@
 import { Player } from "./player"
+import { RuleType } from "@/utils/gameTypes"
 
 export interface Table {
   id: string
@@ -8,6 +9,6 @@ export interface Table {
   createdAt: number
   lastUsedAt: number
   isActive: boolean
-  ruleType: string
+  ruleType: RuleType | string
   completed: boolean
 }
