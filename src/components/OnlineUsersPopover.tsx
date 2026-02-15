@@ -19,6 +19,7 @@ export function OnlineUsersPopover({
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Close on click outside
   useEffect(() => {
     if (!isOpen) return
 
@@ -31,12 +32,8 @@ export function OnlineUsersPopover({
       }
     }
 
-    const options: AddEventListenerOptions = { passive: true }
-    document.addEventListener("mousedown", handleClickOutside, options)
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside, options)
-    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [isOpen])
 
   const overflow = totalCount ? totalCount - users.length : 0
@@ -44,51 +41,82 @@ export function OnlineUsersPopover({
   return (
     <div ref={containerRef} className="relative">
       <button
-        onClick={() => {
-          console.log("Online users:", JSON.stringify(users, null, 2))
-          setIsOpen(!isOpen)
-        }}
-        className="flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1.5 text-cyan-accent hover:text-cyan-400 transition-all cursor-pointer group px-2 py-1 rounded-md hover:bg-cyan-accent/10"
         aria-label={`${count} users online`}
         aria-expanded={isOpen}
-        aria-haspopup="dialog"
       >
-        <UsersIcon className="h-3 w-3" aria-hidden="true" />
-        <span className="text-xs font-light tracking-wide uppercase">
+        <UsersIcon
+          className="h-3.5 w-3.5 group-hover:scale-110 transition-transform"
+          aria-hidden="true"
+        />
+        <span className="text-[11px] font-mono-data tracking-widest font-bold">
           {count}
         </span>
       </button>
 
       {isOpen && (
-        <div
-          className="absolute top-full right-0 mt-2 z-50 min-w-[120px] max-w-[160px] rounded-xl bg-[rgba(13,14,18,0.95)] shadow-lg"
-          role="dialog"
+        <dialog
+          open
+          className="absolute top-full right-0 mt-2 z-50 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
           aria-label="Online users"
-          style={{ zIndex: 9999 }}
         >
-          <div className="online-users-border" />
-          <div className="relative py-2 px-3">
-            <ul className="space-y-0.5">
-              {users.map((user) => (
-                <li key={user.userId} className="flex items-center gap-1.5">
-                  <span
-                    className="h-1.5 w-1.5 rounded-full bg-green-500 flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="text-[11px] font-light text-gray-300 truncate">
-                    {user.userName}
-                    {user.userId === currentUserId && " (you)"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            {overflow > 0 && (
-              <p className="text-[10px] font-light text-gray-500 mt-1.5 pt-1 border-t border-gray-700/50">
-                +{overflow} more
-              </p>
-            )}
+          <div className="min-w-[180px] max-w-[220px] rounded-xl bg-obsidian-glass backdrop-blur-xl border border-gunmetal shadow-2xl relative overflow-hidden">
+            <div className="online-users-border" />
+
+            <div className="relative p-3">
+              <div className="flex items-center justify-between mb-3 border-b border-gunmetal/50 pb-2">
+                <span className="text-[9px] font-mono-data uppercase tracking-[0.2em] text-cyan-accent/70">
+                  Telemetry: Live Feed
+                </span>
+                <span className="h-1 w-1 rounded-full bg-cyan-accent animate-pulse" />
+              </div>
+
+              <ul className="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-1">
+                {users.map((user) => (
+                  <li
+                    key={user.userId}
+                    className="flex items-center justify-between group stagger-item"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-1 w-1 rounded-full bg-cyan-accent shadow-[0_0_5px_var(--color-cyan-glow)]"
+                        aria-hidden="true"
+                      />
+                      <span className="text-[11px] font-mono-data text-gray-300 truncate max-w-[100px]">
+                        {user.userName}
+                      </span>
+                    </div>
+                    {user.userId === currentUserId ? (
+                      <span className="text-[8px] font-mono-data text-cyan-accent/50 uppercase">
+                        Identified
+                      </span>
+                    ) : (
+                      <span className="text-[8px] font-mono-data text-gray-500 uppercase">
+                        Online
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+
+              {overflow > 0 && (
+                <p className="text-[10px] font-mono-data text-gray-500 mt-2 text-center">
+                  +{overflow} more active
+                </p>
+              )}
+
+              <div className="mt-3 pt-2 border-t border-gunmetal/50 flex justify-between items-center">
+                <span className="text-[9px] font-mono-data uppercase tracking-wider text-gray-500">
+                  Total Active:
+                </span>
+                <span className="text-[11px] font-mono-data text-cyan-accent font-bold">
+                  {totalCount || count}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   )
