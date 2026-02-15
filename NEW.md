@@ -8,13 +8,16 @@ Redesign of the game selection page with a "1-click to play, more clicks to tune
 
 ## Layout Structure
 
-### Desktop (lg: 1024px+)
+Uses implicit responsive design via Tailwind utility classes (same as game.tsx). The layout adapts automatically based on viewport width - no explicit breakpoints or separate mobile/desktop code paths.
+
+### Visual Result at Desktop Width (lg: 1024px+)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
+│ [User]                                        [👥 12]      │
 │                                                             │
 │  ┌───────────────────────────────────────────────────────┐ │
-│  │ SNOKER                                                │ │
+│  │ SNOOKER                                               │ │
 │  │                                                       │ │
 │  │  ┌────────┐   ┌────────────────────────────────────┐  │ │
 │  │  │        │   │  ○ 3 reds   ● 6 reds   ○ 15 reds   │  │ │
@@ -58,11 +61,13 @@ Redesign of the game selection page with a "1-click to play, more clicks to tune
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Mobile (< 768px)
+### Visual Result at Mobile Width (< 768px)
 
 ```
 ┌──────────────────────┐
-│ SNOKER               │
+│ [User]        [👥12] │
+├──────────────────────┤
+│ SNOOKER               │
 │ ┌────┐               │
 │ │    │  ○3 ●6 ○15    │
 │ │icon│               │
@@ -92,6 +97,42 @@ Redesign of the game selection page with a "1-click to play, more clicks to tune
 │ └──────────────────┘ │
 └──────────────────────┘
 ```
+
+---
+
+## Header Bar
+
+A fixed header displaying user info and online presence:
+
+### Components (from game.tsx)
+
+- **Left**: `<User />` - Shows current logged-in user's name/avatar
+- **Right**: `<OnlineUsersPopover />` - Shows online user count with popover for details
+
+### Data Requirements
+
+```typescript
+// From UserContext
+const { userId, userName } = useUser();
+
+// From usePresenceList hook
+const { users: presenceUsers, count: presenceCount } = usePresenceList(
+  userId,
+  userName,
+);
+```
+
+### Layout
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ [User]                                [👥 count]        │
+└─────────────────────────────────────────────────────────┘
+```
+
+- Uses `justify-between` flexbox for positioning
+- Sticky or fixed at top of viewport
+- Background matches page theme with blur backdrop
 
 ---
 
@@ -125,6 +166,11 @@ https://tailuge.github.io/billiards/dist/?ruletype=${ruleType}&playername=${user
 
 ```
 src/pages/new.tsx
+│
+├── Header bar (fixed top)
+│   ├── Left: <User /> component (from @/components/User)
+│   └── Right: <OnlineUsersPopover /> (from @/components/OnlineUsersPopover)
+│       └── Props: count, users, totalCount, currentUserId
 │
 ├── GAMES array (config)
 │   └── { name, icon, alt, ruleType, options }
@@ -169,6 +215,12 @@ src/pages/new.tsx
 - **Option Selection**: Smooth transition between selected states
 - **Button Hover**: Glow pulse effect
 
+### Responsive Approach
+
+- **Implicit Responsive**: Uses Tailwind utility classes (e.g., `flex-col lg:flex-row`, `grid-cols-1 lg:grid-cols-3`) - same as game.tsx
+- **No Explicit Breakpoints**: Single component code adapts automatically to viewport width
+- **Mobile-First**: Base styles target mobile, `lg:` variants enhance for desktop
+
 ### Mobile Considerations
 
 - **Touch Targets**: Minimum 44px height for buttons
@@ -187,10 +239,10 @@ Each `GameCard` maintains its own option selection state:
 
 ```typescript
 // Snooker
-const [reds, setReds] = useState(6)
+const [reds, setReds] = useState(6);
 
 // Three Cushion
-const [raceTo, setRaceTo] = useState(3)
+const [raceTo, setRaceTo] = useState(3);
 
 // Nine Ball - no state needed
 ```
