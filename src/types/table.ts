@@ -9,6 +9,6 @@ export interface Table {
   createdAt: number
   lastUsedAt: number
   isActive: boolean
-  ruleType: RuleType | string
+  ruleType: RuleType
   completed: boolean
 }

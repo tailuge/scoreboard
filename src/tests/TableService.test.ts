@@ -71,7 +71,7 @@ describe("TableService", () => {
       .spyOn(NchanPub.prototype, "publishLobby")
       .mockResolvedValue(undefined)
 
-    await serviceWithDefaultNotify.createTable("u1", "user1", "rule")
+    await serviceWithDefaultNotify.createTable("u1", "user1", "nineball")
 
     expect(publishLobbySpy).toHaveBeenCalledWith({ action: "create" })
     publishLobbySpy.mockRestore()
@@ -103,14 +103,14 @@ describe("TableService", () => {
 
   describe("joinTable", () => {
     it("should allow a second player to join", async () => {
-      const table = await tableService.createTable("u1", "user1", "rule")
+      const table = await tableService.createTable("u1", "user1", "nineball")
       const updated = await tableService.joinTable(table.id, "u2", "user2")
       expect(updated.players).toHaveLength(2)
       expect(updated.players[1].id).toBe("u2")
     })
 
     it("should fail if table is full (already has 2 players)", async () => {
-      const table = await tableService.createTable("u1", "user1", "rule")
+      const table = await tableService.createTable("u1", "user1", "nineball")
       await tableService.joinTable(table.id, "u2", "user2")
       await expect(
         tableService.joinTable(table.id, "u3", "user3")
@@ -126,7 +126,7 @@ describe("TableService", () => {
 
   describe("spectateTable", () => {
     it("should allow spectators to join", async () => {
-      const table = await tableService.createTable("u1", "user1", "rule")
+      const table = await tableService.createTable("u1", "user1", "nineball")
       const updated = await tableService.spectateTable(table.id, "u3", "spec1")
       expect(updated.spectators).toHaveLength(1)
       expect(updated.spectators[0].id).toBe("u3")
@@ -141,7 +141,7 @@ describe("TableService", () => {
 
   describe("completeTable", () => {
     it("should mark table as completed", async () => {
-      const table = await tableService.createTable("u1", "user1", "rule")
+      const table = await tableService.createTable("u1", "user1", "nineball")
       const updated = await tableService.completeTable(table.id)
       expect(updated.completed).toBe(true)
     })

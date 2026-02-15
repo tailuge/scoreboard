@@ -6,8 +6,7 @@ export interface MatchResult {
   loser?: string
   winnerScore: number
   loserScore?: number
-  ruleType?: RuleType | string
-  gameType?: string
+  ruleType?: RuleType
   timestamp: number
   hasReplay?: boolean
   locationCountry?: string
@@ -15,6 +14,6 @@ export interface MatchResult {
   locationCity?: string
 }
 
-export function getRuleType(result: MatchResult): RuleType | string {
-  return result.ruleType ?? result.gameType ?? "nineball"
+export function getRuleType(result: MatchResult): RuleType {
+  return result.ruleType ?? "nineball"
 }

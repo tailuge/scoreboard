@@ -1,5 +1,6 @@
 import { kv, VercelKV } from "@vercel/kv"
 import { Table } from "@/types/table"
+import { RuleType } from "@/utils/gameTypes"
 
 import { NchanPub } from "@/nchan/nchanpub"
 import type { LobbyMessage } from "@/nchan/types"
@@ -71,7 +72,7 @@ export class TableService {
     return expiredKeys.length
   }
 
-  async createTable(userId: string, userName: string, ruleType: string) {
+  async createTable(userId: string, userName: string, ruleType: RuleType) {
     const tableId = getUID()
     const creator: Player = { id: userId, name: userName || "Anonymous" }
 
@@ -157,7 +158,7 @@ export class TableService {
     return false
   }
 
-  async findPendingTable(ruleType: string): Promise<Table | null> {
+  async findPendingTable(ruleType: RuleType): Promise<Table | null> {
     const tables = await this.store.hgetall<Record<string, Table>>(KEY)
     if (!tables) return null
 
@@ -174,7 +175,7 @@ export class TableService {
   async findOrCreate(
     userId: string,
     userName: string,
-    ruleType: string
+    ruleType: RuleType
   ): Promise<Table> {
     const pending = await this.findPendingTable(ruleType)
     if (pending) {

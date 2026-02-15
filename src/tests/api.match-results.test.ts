@@ -1,6 +1,7 @@
 import handler from "../pages/api/match-results"
 import { NextRequest } from "next/server"
 import { MatchResultService } from "../services/MatchResultService"
+import type { MatchResult } from "../types/match"
 
 jest.mock("../services/MatchResultService")
 const MockMatchResultService = MatchResultService as jest.MockedClass<
@@ -28,7 +29,7 @@ describe("/api/match-results handler", () => {
   })
 
   it("should return match results on GET request", async () => {
-    const mockResults = [
+    const mockResults: MatchResult[] = [
       {
         id: "1",
         winner: "A",
