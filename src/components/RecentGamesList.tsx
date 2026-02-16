@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { MatchResult } from "@/types/match";
-import { MatchResultCard } from "./MatchResultCard";
-import { GroupBox } from "./GroupBox";
-import { useUser } from "@/contexts/UserContext";
-import { useLobbyTables } from "./hooks/useLobbyTables";
-import { GameUrl } from "@/utils/GameUrl";
-import { logger } from "@/utils/logger";
+import React, { useEffect, useState } from "react"
+import { MatchResult } from "@/types/match"
+import { MatchResultCard } from "./MatchResultCard"
+import { GroupBox } from "./GroupBox"
+import { useUser } from "@/contexts/UserContext"
+import { useLobbyTables } from "./hooks/useLobbyTables"
+import { GameUrl } from "@/utils/GameUrl"
+import { logger } from "@/utils/logger"
 
 export function RecentGamesList() {
-  const { userId, userName } = useUser();
-  const { tables, tableAction } = useLobbyTables(userId, userName);
-  const [historyResults, setHistoryResults] = useState<MatchResult[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(true);
+  const { userId, userName } = useUser()
+  const { tables, tableAction } = useLobbyTables(userId, userName)
+  const [historyResults, setHistoryResults] = useState<MatchResult[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(true)
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch("/api/match-results");
-      if (!response.ok) throw new Error("Failed to fetch match history");
-      const data = await response.json();
-      setHistoryResults(data);
+      const response = await fetch("/api/match-results")
+      if (!response.ok) throw new Error("Failed to fetch match history")
+      const data = await response.json()
+      setHistoryResults(data)
     } catch (error) {
-      logger.log("Error fetching match history:", error);
+      logger.log("Error fetching match history:", error)
     } finally {
-      setLoadingHistory(false);
+      setLoadingHistory(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchHistory();
-    const interval = setInterval(fetchHistory, 30000); // Poll every 30 seconds
-    return () => clearInterval(interval);
-  }, []);
+    fetchHistory()
+    const interval = setInterval(fetchHistory, 30000) // Poll every 30 seconds
+    return () => clearInterval(interval)
+  }, [])
 
   const handleSpectate = async (tableId: string) => {
-    await tableAction(tableId, "spectate");
-  };
+    await tableAction(tableId, "spectate")
+  }
 
   const liveMatches = tables
     .filter((t) => t.players.length === 2 && !t.completed) // Active games only
@@ -47,22 +47,22 @@ export function RecentGamesList() {
         loserScore: 0,
         ruleType: table.ruleType as any,
         timestamp: table.createdAt,
-      };
+      }
       return {
         ...virtualResult,
         isLive: true,
         originalTable: table,
-      };
-    });
+      }
+    })
 
   // Combine and sort
   // Live matches first, then history
   const combinedList = [
     ...liveMatches,
     ...historyResults.map((r) => ({ ...r, isLive: false })),
-  ];
+  ]
 
-  const displayList = combinedList;
+  const displayList = combinedList
 
   const renderContent = () => {
     if (loadingHistory && displayList.length === 0) {
@@ -70,21 +70,21 @@ export function RecentGamesList() {
         <div className="text-center py-8 text-gray-500 text-sm animate-pulse font-mono-data">
           Loading games...
         </div>
-      );
+      )
     }
     if (displayList.length === 0) {
       return (
         <div className="text-center py-8 text-gray-500 text-sm italic font-mono-data">
           No active or recent games.
         </div>
-      );
+      )
     }
     return displayList.map((item) => {
       if (item.isLive) {
-        const table = (item as any).originalTable;
+        const table = (item as any).originalTable
         const onSpectateClick = () => {
-          handleSpectate(table.id);
-          if (!userId || !userName) return;
+          handleSpectate(table.id)
+          if (!userId || !userName) return
           const spectatorUrl = GameUrl.create({
             tableId: table.id,
             userName,
@@ -92,9 +92,9 @@ export function RecentGamesList() {
             ruleType: table.ruleType,
             isSpectator: true,
             isCreator: false,
-          });
-          globalThis.open(spectatorUrl.toString(), "_blank");
-        };
+          })
+          globalThis.open(spectatorUrl.toString(), "_blank")
+        }
         return (
           <MatchResultCard
             key={`live-${item.id}`}
@@ -102,11 +102,11 @@ export function RecentGamesList() {
             isLive={true}
             onClick={onSpectateClick}
           />
-        );
+        )
       }
-      return <MatchResultCard key={`hist-${item.id}`} result={item} />;
-    });
-  };
+      return <MatchResultCard key={`hist-${item.id}`} result={item} />
+    })
+  }
 
   return (
     <GroupBox title="Recent Games">
@@ -114,5 +114,5 @@ export function RecentGamesList() {
         {renderContent()}
       </div>
     </GroupBox>
-  );
+  )
 }

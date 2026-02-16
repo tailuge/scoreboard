@@ -1,78 +1,73 @@
-import Link from "next/link"
+import { useId } from "react"
 
 const RED_BALL_OPTIONS = [3, 6, 15] as const
 const RACE_TO_OPTIONS = [3, 5] as const
 
-type GameButtonOptionsProps = {
-  readonly baseUrl: string
-  readonly isInternal: boolean
+type RadioButtonsProps = {
+  readonly selectedValue: number
+  readonly onChange: (value: number) => void
 }
 
-export function RedBallButtons({
-  baseUrl,
-  isInternal,
-}: GameButtonOptionsProps) {
+export function RedBallButtons({ selectedValue, onChange }: RadioButtonsProps) {
+  const name = useId()
+
   return (
     <div className="flex gap-1 justify-center h-6">
       {RED_BALL_OPTIONS.map((reds) => {
-        const href = `${baseUrl}&reds=${reds}`
-        if (isInternal) {
-          return (
-            <Link
-              key={reds}
-              href={href}
-              className="w-6 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
-              aria-label={`Snooker with ${reds} red balls`}
-            >
-              {reds}
-            </Link>
-          )
-        }
+        const isSelected = selectedValue === reds
         return (
-          <a
+          <label
             key={reds}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-6 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-red-500 hover:text-red-400 transition-colors"
-            aria-label={`Snooker with ${reds} red balls`}
+            className={`w-6 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border rounded text-xs transition-colors cursor-pointer ${
+              isSelected
+                ? "border-red-500 text-red-400"
+                : "border-gunmetal text-gray-300 hover:border-red-500 hover:text-red-400"
+            }`}
           >
+            <input
+              type="radio"
+              name={name}
+              value={reds}
+              checked={isSelected}
+              onChange={() => onChange(reds)}
+              className="sr-only"
+              aria-label={`Snooker with ${reds} red balls`}
+            />
             {reds}
-          </a>
+          </label>
         )
       })}
     </div>
   )
 }
 
-export function RaceToButtons({ baseUrl, isInternal }: GameButtonOptionsProps) {
+export function RaceToButtons({ selectedValue, onChange }: RadioButtonsProps) {
+  const name = useId()
+
   return (
     <div className="flex gap-1 justify-center h-6">
       {RACE_TO_OPTIONS.map((raceTo) => {
-        const href = `${baseUrl}&raceTo=${raceTo}`
-        if (isInternal) {
-          return (
-            <Link
-              key={raceTo}
-              href={href}
-              className="px-1.5 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
-              aria-label={`Race to ${raceTo}`}
-            >
-              To:{raceTo}
-            </Link>
-          )
-        }
+        const isSelected = selectedValue === raceTo
         return (
-          <a
+          <label
             key={raceTo}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-1.5 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border border-gunmetal rounded text-xs text-gray-300 hover:border-yellow-500 hover:text-yellow-400 transition-colors"
-            aria-label={`Race to ${raceTo}`}
+            className={`px-1.5 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm border rounded text-xs transition-colors cursor-pointer ${
+              isSelected
+                ? "border-yellow-500 text-yellow-400"
+                : "border-gunmetal text-gray-300 hover:border-yellow-500 hover:text-yellow-400"
+            }`}
           >
+            <input
+              type="radio"
+              name={name}
+              value={raceTo}
+              checked={isSelected}
+              onChange={() => onChange(raceTo)}
+              className="sr-only"
+              aria-label={`Race to ${raceTo}`}
+            />
             To:{raceTo}
-          </a>
+          </label>
         )
       })}
     </div>
