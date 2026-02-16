@@ -13,8 +13,8 @@ import { User } from "@/components/User"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
 import { useUser } from "@/contexts/UserContext"
 import LeaderboardTable from "@/components/LeaderboardTable"
-import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
+import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 
 const GAMES = [
   {
@@ -163,6 +163,11 @@ export default function Game() {
     userId,
     userName
   )
+  const { tables, tableAction } = useLobbyTables(userId, userName)
+
+  const handleSpectate = async (tableId: string) => {
+    await tableAction(tableId, "spectate")
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -236,8 +241,7 @@ export default function Game() {
           </GroupBox>
         </div>
         <div className="lg:col-span-1 flex flex-col gap-4">
-          <LiveMatchesPanel />
-          <MatchHistoryList />
+          <MatchHistoryList liveTables={tables} onSpectate={handleSpectate} />
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
-import { render, screen, waitFor } from "@testing-library/react"
-import Game from "../pages/game"
-import { LobbyProvider } from "@/contexts/LobbyContext"
-import { useUser } from "@/contexts/UserContext"
+import { render, screen, waitFor } from "@testing-library/react";
+import Game from "../pages/game";
+import { LobbyProvider } from "@/contexts/LobbyContext";
+import { useUser } from "@/contexts/UserContext";
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
     start: jest.fn(),
     stop: jest.fn(),
   })),
-}))
+}));
 
 jest.mock("../nchan/nchanpub", () => ({
   NchanPub: jest.fn().mockImplementation(() => ({
@@ -17,7 +17,7 @@ jest.mock("../nchan/nchanpub", () => ({
     publishLobby: jest.fn().mockResolvedValue(undefined),
     publishPresence: jest.fn().mockResolvedValue(undefined),
   })),
-}))
+}));
 
 // Mock usePresenceMessages
 jest.mock("@/contexts/LobbyContext", () => ({
@@ -25,12 +25,12 @@ jest.mock("@/contexts/LobbyContext", () => ({
   useLobbyContext: jest.fn(),
   useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
   usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
-}))
+}));
 
 jest.mock("@/contexts/UserContext", () => ({
   useUser: jest.fn(),
-}))
-const mockedUseUser = useUser as jest.Mock
+}));
+const mockedUseUser = useUser as jest.Mock;
 
 // Mock usePresenceList hook
 jest.mock("@/components/hooks/usePresenceList", () => ({
@@ -38,16 +38,24 @@ jest.mock("@/components/hooks/usePresenceList", () => ({
     users: [],
     count: 0,
   })),
-}))
+}));
+
+// Mock useLobbyTables hook
+jest.mock("@/components/hooks/useLobbyTables", () => ({
+  useLobbyTables: jest.fn(() => ({
+    tables: [],
+    tableAction: jest.fn(),
+  })),
+}));
 
 describe("Game Page", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.clearAllMocks();
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
       setUserName: jest.fn(),
-    })
+    });
     globalThis.fetch = jest.fn().mockImplementation((url) => {
       if (url.includes("/api/rank")) {
         return Promise.resolve({
@@ -56,7 +64,7 @@ describe("Game Page", () => {
               { id: "1", name: "TopPlayer", score: 999, likes: 0 },
             ]),
           ok: true,
-        })
+        });
       }
       if (url.includes("/api/match-results")) {
         return Promise.resolve({
@@ -71,69 +79,69 @@ describe("Game Page", () => {
               },
             ]),
           ok: true,
-        })
+        });
       }
       return Promise.resolve({
         json: () => Promise.resolve([]),
         ok: true,
-      })
-    })
-  })
+      });
+    });
+  });
 
   it("renders the game selection page with 3 buttons", async () => {
     render(
       <LobbyProvider>
         <Game />
-      </LobbyProvider>
-    )
+      </LobbyProvider>,
+    );
 
     // Check main heading (Removed)
     // expect(screen.getByText("Choose Your Game")).toBeInTheDocument()
-    expect(screen.getByText("Highscore Challenge")).toBeInTheDocument()
-    expect(screen.getByText("2-Player Online")).toBeInTheDocument()
+    expect(screen.getByText("Highscore Challenge")).toBeInTheDocument();
+    expect(screen.getByText("2-Player Online")).toBeInTheDocument();
 
     // Check for the Highscore Challenge links (strict match to avoid matching "Online" buttons)
     expect(
-      screen.getByRole("link", { name: /^Play Snooker$/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /^Play Snooker$/i }),
+    ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /^Play Nine Ball$/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /^Play Nine Ball$/i }),
+    ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /^Play Three Cushion$/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /^Play Three Cushion$/i }),
+    ).toBeInTheDocument();
 
     // Check for the Online buttons (now links)
     expect(
-      screen.getByRole("link", { name: /Play Snooker Online/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /Play Snooker Online/i }),
+    ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /Play Nine Ball Online/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /Play Nine Ball Online/i }),
+    ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /Play Three Cushion Online/i })
-    ).toBeInTheDocument()
+      screen.getByRole("link", { name: /Play Three Cushion Online/i }),
+    ).toBeInTheDocument();
 
     // Check if images are present (using alt text) - now duplicated
     expect(
       screen.getAllByAltText(
-        "Play classic Snooker billiards online with 22 balls on a full-size table"
-      )
-    ).toHaveLength(2)
+        "Play classic Snooker billiards online with 22 balls on a full-size table",
+      ),
+    ).toHaveLength(2);
     expect(
       screen.getAllByAltText(
-        "Play 9-Ball pool online - fast-paced pocket billiards game"
-      )
-    ).toHaveLength(2)
+        "Play 9-Ball pool online - fast-paced pocket billiards game",
+      ),
+    ).toHaveLength(2);
     expect(
       screen.getAllByAltText(
-        "Play Three Cushion carom billiards online - no pockets, hit three rails"
-      )
-    ).toHaveLength(2)
+        "Play Three Cushion carom billiards online - no pockets, hit three rails",
+      ),
+    ).toHaveLength(2);
 
     // Verify LeaderboardTable renders data
     await waitFor(() => {
-      expect(screen.getAllByText("TopPlayer")).toHaveLength(3)
-    })
-  })
-})
+      expect(screen.getAllByText("TopPlayer")).toHaveLength(3);
+    });
+  });
+});

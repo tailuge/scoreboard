@@ -1,35 +1,44 @@
-import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
-import { MatchHistoryList } from "../components/MatchHistoryList"
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { MatchHistoryList } from "../components/MatchHistoryList";
+import { useUser } from "@/contexts/UserContext";
+
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}));
+const mockedUseUser = useUser as jest.Mock;
 
 describe("MatchHistoryList", () => {
   beforeEach(() => {
-    globalThis.fetch = jest.fn()
-  })
+    mockedUseUser.mockReturnValue({
+      userId: "test-user-id",
+      userName: "TestUser",
+    });
+    globalThis.fetch = jest.fn();
+  });
 
   afterEach(() => {
-    jest.resetAllMocks()
-  })
+    jest.resetAllMocks();
+  });
 
   it("renders loading state initially", async () => {
-    ;(globalThis.fetch as jest.Mock).mockReturnValue(new Promise(() => {}))
-    render(<MatchHistoryList />)
-    expect(screen.getByText(/loading match history/i)).toBeInTheDocument()
-    // Wait for the pending promise to avoid act warnings
-    await waitFor(() => {}, { timeout: 100 })
-  })
+    (globalThis.fetch as jest.Mock).mockReturnValue(new Promise(() => {}));
+    render(<MatchHistoryList />);
+    expect(screen.getByText(/loading match history/i)).toBeInTheDocument();
+    await waitFor(() => {}, { timeout: 100 });
+  });
 
   it("renders empty state when no results", async () => {
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => [],
-    })
+    });
 
-    render(<MatchHistoryList />)
+    render(<MatchHistoryList />);
     await waitFor(() => {
-      expect(screen.getByText(/no matches recorded yet/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(/no matches recorded yet/i)).toBeInTheDocument();
+    });
+  });
 
   it("renders list of match results", async () => {
     const mockResults = [
@@ -42,30 +51,28 @@ describe("MatchHistoryList", () => {
         ruleType: "snooker",
         timestamp: Date.now(),
       },
-    ]
+    ];
 
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+    (globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResults,
-    })
+    });
 
-    render(<MatchHistoryList />)
+    render(<MatchHistoryList />);
     await waitFor(() => {
-      expect(screen.getByText("Alice")).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText("Alice")).toBeInTheDocument();
+    });
+  });
 
   it("handles fetch error gracefully", async () => {
-    ;(globalThis.fetch as jest.Mock).mockRejectedValue(
-      new Error("Fetch failed")
-    )
-    render(<MatchHistoryList />)
-    // Should still show loading or just not crash.
-    // In our implementation it just logs and stays in loading/empty state.
+    (globalThis.fetch as jest.Mock).mockRejectedValue(
+      new Error("Fetch failed"),
+    );
+    render(<MatchHistoryList />);
     await waitFor(() => {
       expect(
-        screen.queryByText(/loading match history/i)
-      ).not.toBeInTheDocument()
-    })
-  })
-})
+        screen.queryByText(/loading match history/i),
+      ).not.toBeInTheDocument();
+    });
+  });
+});
