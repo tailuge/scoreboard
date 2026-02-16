@@ -1,95 +1,74 @@
 # Design Specification: New Game Screen
 
-## Vision & Aesthetic: "Free and Easy"
-Targeting a relaxed, open feel that is effortless to use on both mobile and desktop.
-- **Core Vibe**: Light, airy, unencumbered. "Free and easy".
-- **Typography**:
-    - **Primary**: `Turret Road` (ExtraLight weight) for all elements. This gives a distinct, modern but light character.
-- **Palette**:
-    - **Background**: Keep the existing dark theme but ensure it feels spacious, not oppressive.
-    - **Accents**: Maintain existing functional colors but styled to feel lightweight (thin borders, soft glows).
-- **Mobile First**:
-    - **Portrait Mode**: All 3 game cards and the "Recent Games" list must be easily visible.
-    - **Scaling**: Cards should stack naturally.
-
-## Layout Strategy
-- **Flow**: Vertical stack on mobile, potential grid on desktop but prioritizing vertical rhythm.
-- **Components**:
-    - **Game Cards**: Compact, distinct.
-    - **Recent Games List**: A single, consolidated list replacing separate "Live" and "History" panels.
-        - **differentiation**: Use existing "Live" vs "Replay" pills to distinguish active vs finished games.
+## Vision & Aesthetic: "Compact & Wireframe-True"
+Targeting a relaxed but highly efficient UI that adheres strictly to the original wireframe logic even on mobile.
+-   **Core Vibe**: "Free and Easy", but structured.
+-   **Typography**: `Turret Road` (ExtraLight) for everything.
+-   **Palette**:
+    -   **Background**: **Dark Gradient** (e.g., Midnight Emerald to Black radial/linear) to replace flat green.
+    -   **Accents**: Cyan/Violet for functional elements, but kept fine/thin.
+-   **Mobile Layout (CRITICAL)**:
+    -   **NO WRAPPING**: Icons must stay Left/Right of the content even on narrow screens.
+    -   **Compactness**: Reduce padding/margins significantly.
+    -   **Width Definition**: The "Play/Practice" buttons at the bottom should define the natural width of the card.
 
 ## Component Specifications
 
-### Game Cards
-Three distinct card layouts, kept compact for mobile visibility.
-**Crucial Detail**: Icons MUST overhang the edge of the card (negative margin) to break the boxiness.
+### Game Cards (Mobile & Desktop)
+Must follow the wireframe ASCII art EXACTLY.
+-   **Height**: Minimized.
+-   **Icon**:
+    -   **Nine Ball**: Left, overhanging.
+    -   **Snooker**: Right, overhanging.
+    -   **Three Cushion**: Left, overhanging.
+    -   **Behavior**: NEVER move above/below text. Always stay to the side.
+-   **Radio Buttons**:
+    -   **Style**: "Distinctly Radio Communcated" (e.g., circular selection indicators or very clear active states, not just subtle text color changes).
+-   **Background**: Dark gradient container, glassmorphic edge.
 
-#### 1. Nine Ball (Top)
-- **Layout**: Icon Left (Overhanging).
-- **Options**: `Standard`, `Any`.
-- **Actions**: Play / Practice.
+### Detailed Card Layout (Wireframe Strictness)
+On a narrow phone (portrait), the layout must preserve this structure:
 
-#### 2. Snooker (Middle)
-- **Layout**: Icon Right (Overhanging).
-- **Options**: `3`, `6`, `15` reds.
+```
+[Icon] [Title: Nine Ball]
+       (o) Standard  ( ) Any
+       [P L A Y] [PRACTICE]
+```
 
-#### 3. Three Cushion (Bottom)
-- **Layout**: Icon Left (Overhanging).
-- **Options**: `Race to 3`, `5`, `7`.
+OR (Snooker):
+
+```
+[Title: Snooker]     [Icon]
+( ) 3 (o) 6 ( ) 15
+[P L A Y] [PRACTICE]
+```
+
+**Key Constraints**:
+-   Title and Options share the vertical space next to the icon.
+-   Buttons span the full available width below the options/title.
+-   Margins are negative/overhanging for the icon.
 
 ### Recent Games List
-- **Concept**: A single unification of live and technical results.
-- **Items**:
-    - **Live Games**: Show "LIVE" pill.
-    - **Past Games**: Show "REPLAY" pill (or just result).
-- **Appearance**: Minimalist list, `Turret Road ExtraLight` font. efficient use of vertical space.
-
-## ASCII Reference Layout (Overhanging Icons)
-```
-  (Desktop / Wide Mobile)
-
-     /--\
-    |ICON|   Nine Ball
-     \--/│   [O] Standard  [ ] Any
-      │  │
-      │  │   [ PLAY ]  [ PRACTICE ]
-      └──┘
-
-                  Snooker             /--\
-             [ ] 3  [O] 6  [ ] 15    |ICON|
-                                      \--/
-             [ PLAY ]  [ PRACTICE ]    │
-                                       │
-                                   ────┘
-
-     /--\
-    |ICON|   Three Cushion
-     \--/│   [O] Race to 3
-      │  │   [ ] Race to 5
-      │  │   [ ] Race to 7
-      └──┘   [ PLAY ]  [ PRACTICE ]
-```
+-   Single consolidated list.
+-   Compact rows.
 
 ## Implementation Requirements for `new.tsx`
 
-1.  **Structure Refactor**:
-    -   Implement the logic to fetch **both** live and past games and merge them into a single chronological list (Live on top, then most recent history).
-    -   Replace `LiveMatchesPanel` and `MatchHistoryList` with `RecentGamesList`.
+1.  **Card Component**:
+    -   Use `flex-row` (or `flex-row-reverse`) for the top section (Icon + Content).
+    -   **PREVENT WRAP**: Ensure icon shrinking or text truncating if absolutely necessary, but do not drop icon to a new line.
+    -   **Compact Spacing**: Use `gap-2` or `gap-1`, small paddings (`p-3` or `p-4`).
+    -   **Background**: Update `bg-gunmetal/20` to a custom gradient class.
+    
+2.  **Radio Inputs**:
+    -   Reimplement `OptionSelector` to look like actual radio choices (or highly distinct pills).
+    -   "Standard", "Any" must be clearly selectable.
 
-2.  **Styling**:
-    -   Import `Turret Road` (ExtraLight) from Google Fonts.
-    -   Apply `font-family: 'Turret Road', sans-serif; font-weight: 200;` globally or to the container.
-    -   Ensure the layout is responsive:
-        -   **Mobile**: Single column (Cards -> Recent List).
-        -   **Desktop**: Two columns (Cards | Recent List) or a centered stack depending on "free and easy" interpretation (likely centered stack to keep focus).
-    -   **Icon Overhang**: Use negative positioning (e.g., `-ml-4` or `absolute left-[-20px]`) to ensure icons break the card boundary.
+3.  **Responsiveness**:
+    -   Maximize width usage on mobile.
+    -   Ensure the buttons at the bottom stretch to fill the card width.
 
-3.  **Typography Override**:
-    -   Remove references to `Outfit` / `Space Mono` if they conflict with the "all elements Turret Road" directive.
-
-
-original layout:
+## Original Wireframe Reference
 
 ```
 ┌────────┐                                                                                          
@@ -120,6 +99,7 @@ original layout:
 │        ┼───────────────────────────┐                                                              
 │  icon  │                           │                                                              
 │        │     @ radio option1       │                                                              
+│        │     X radio option2       │     Three cushion billiards has 3 options, race to 3,5,7     
 └─┬──────┘     X radio option2       │     Three cushion billiards has 3 options, race to 3,5,7     
   │            X radio option3       │                                                              
   │                                  │                                                              

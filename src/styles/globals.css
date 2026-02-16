@@ -16,8 +16,8 @@
   --animate-in: enter 0.2s ease-out;
   --animate-out: exit 0.15s ease-in;
 
-  --font-display: "Outfit", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-display: "Turret Road", sans-serif;
+  --font-mono: "Turret Road", monospace;
 }
 
 @keyframes enter {

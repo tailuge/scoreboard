@@ -7,15 +7,27 @@ import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
 import { User } from "@/components/User"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
 import { useUser } from "@/contexts/UserContext"
-import { LiveMatchesPanel } from "@/components/LiveMatchesPanel"
-import { MatchHistoryList } from "@/components/MatchHistoryList"
+import { RecentGamesList } from "@/components/RecentGamesList"
 
 const GAMES = [
   {
+    name: "Nine Ball",
+    icon: "/nineball_icon.png",
+    alt: "Play 9-Ball pool online",
+    ruleType: "nineball",
+    layout: "left" as const,
+    options: {
+      type: "variant" as const,
+      values: ["Standard", "Any"],
+      defaultValue: "Standard",
+    },
+  },
+  {
     name: "Snooker",
     icon: "/snooker_icon.png",
-    alt: "Play classic Snooker billiards online with 22 balls on a full-size table",
+    alt: "Play classic Snooker billiards",
     ruleType: "snooker",
+    layout: "right" as const,
     options: {
       type: "reds" as const,
       values: [3, 6, 15],
@@ -23,20 +35,14 @@ const GAMES = [
     },
   },
   {
-    name: "Nine Ball",
-    icon: "/nineball_icon.png",
-    alt: "Play 9-Ball pool online - fast-paced pocket billiards game",
-    ruleType: "nineball",
-    options: null,
-  },
-  {
     name: "Three Cushion",
     icon: "/threecushion_icon.png",
-    alt: "Play Three Cushion carom billiards online - no pockets, hit three rails",
+    alt: "Play Three Cushion billiards",
     ruleType: "threecushion",
+    layout: "left" as const,
     options: {
       type: "raceTo" as const,
-      values: [3, 5],
+      values: [3, 5, 7],
       defaultValue: 3,
     },
   },
@@ -55,14 +61,14 @@ function OptionSelector({
   onChange,
 }: {
   readonly options: NonNullable<Game["options"]>
-  readonly selectedValue: number
-  readonly onChange: (value: number) => void
+  readonly selectedValue: string | number
+  readonly onChange: (value: string | number) => void
 }) {
   return (
     <div
-      className="flex gap-2"
+      className="flex gap-4 flex-wrap"
       role="radiogroup"
-      aria-label={options.type === "reds" ? "Number of red balls" : "Race to"}
+      aria-label="Game Options"
     >
       {options.values.map((value) => (
         <button
@@ -71,13 +77,23 @@ function OptionSelector({
           role="radio"
           aria-checked={selectedValue === value}
           onClick={() => onChange(value)}
-          className={`px-3 py-1.5 rounded-lg text-sm font-mono-data transition-all duration-200 ${
-            selectedValue === value
-              ? "bg-cyan-accent/20 border border-cyan-accent text-cyan-accent"
-              : "bg-gunmetal/30 border border-gunmetal text-gray-400 hover:border-gray-500 hover:text-gray-300"
-          }`}
+          className="group flex items-center gap-2 cursor-pointer"
         >
-          {options.type === "reds" ? `${value} reds` : `Race to ${value}`}
+          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${selectedValue === value
+              ? "border-cyan-accent bg-cyan-accent/20"
+              : "border-gray-500 group-hover:border-gray-400"
+            }`}>
+            {selectedValue === value && <div className="w-2 h-2 rounded-full bg-cyan-accent" />}
+          </div>
+          <span className={`text-sm font-mono-data ${selectedValue === value ? "text-cyan-accent" : "text-gray-400 group-hover:text-gray-300"
+            }`}>
+            {options.type === "reds"
+              ? `${value}` // Just number for compactness in Snooker
+              : options.type === "raceTo"
+                ? `Race to ${value}`
+                : value}
+          </span>
+
         </button>
       ))}
     </div>
@@ -86,24 +102,25 @@ function OptionSelector({
 
 function ActionButtons({
   game,
-  reds,
-  raceTo,
+  optionsState,
   userName,
 }: {
   readonly game: Game
-  readonly reds: number
-  readonly raceTo: number
+  readonly optionsState: string | number
   readonly userName: string
 }) {
+  // ... (URL generation logic remains the same)
   const onlineParams = new URLSearchParams({
     action: "join",
     ruletype: game.ruleType,
   })
-  if (game.options?.type === "reds") {
-    onlineParams.set("reds", String(reds))
-  }
-  if (game.options?.type === "raceTo") {
-    onlineParams.set("raceTo", String(raceTo))
+
+  if (game.options.type === "reds") {
+    onlineParams.set("reds", String(optionsState))
+  } else if (game.options.type === "raceTo") {
+    onlineParams.set("raceTo", String(optionsState))
+  } else if (game.options.type === "variant") {
+    onlineParams.set("variant", String(optionsState).toLowerCase())
   }
   const onlineHref = `/lobby?${onlineParams.toString()}`
 
@@ -111,28 +128,27 @@ function ActionButtons({
     ruletype: game.ruleType,
     playername: userName,
   })
-  if (game.options?.type === "reds") {
-    practiceParams.set("reds", String(reds))
-  }
-  if (game.options?.type === "raceTo") {
-    practiceParams.set("raceTo", String(raceTo))
+  if (game.options.type === "reds") {
+    practiceParams.set("reds", String(optionsState))
+  } else if (game.options.type === "raceTo") {
+    practiceParams.set("raceTo", String(optionsState))
   }
   const practiceHref = `https://tailuge.github.io/billiards/dist/?${practiceParams.toString()}`
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 mt-4">
+    <div className="flex gap-3 mt-auto w-full">
       <Link
         href={onlineHref}
-        className="flex-1 py-3 px-4 rounded-xl bg-gunmetal/50 border border-gunmetal hover:border-cyan-accent/50 text-gray-300 hover:text-cyan-accent font-semibold text-center transition-all duration-200 hover:bg-gunmetal/70"
+        className="flex-1 py-3 px-2 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-cyan-accent/50 text-gray-300 hover:text-cyan-accent font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
         aria-label={`Play ${game.name} Online`}
       >
-        Play Online
+        Play
       </Link>
       <a
         href={practiceHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 py-3 px-4 rounded-xl bg-gunmetal/50 border border-gunmetal hover:border-gray-500 text-gray-300 hover:text-white font-semibold text-center transition-all duration-200 hover:bg-gunmetal/70"
+        className="flex-1 py-3 px-2 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-gray-500 text-gray-300 hover:text-white font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
         aria-label={`Practice ${game.name}`}
       >
         Practice
@@ -142,49 +158,56 @@ function ActionButtons({
 }
 
 function GameCard({ game, userName }: GameCardProps) {
-  const [selectedValue, setSelectedValue] = useState(
-    game.options?.defaultValue ?? 0
+  const [selectedValue, setSelectedValue] = useState<string | number>(
+    game.options.defaultValue
   )
 
-  const reds = game.options?.type === "reds" ? selectedValue : 6
-  const raceTo = game.options?.type === "raceTo" ? selectedValue : 3
+  const isLeft = game.layout === "left"
 
   return (
-    <GroupBox title={game.name}>
-      <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
-        {/* Game Icon */}
-        <div className="relative w-24 h-24 flex-shrink-0">
-          <Image
-            src={game.icon}
-            alt={game.alt}
-            fill
-            className="object-contain p-2 transition-transform duration-300 hover:scale-110"
-            sizes="96px"
-            priority
-          />
+    <div className="relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl p-4 my-2 overflow-visible shadow-lg">
+      {/* Use flex-row ALWAYS, never flex-col */}
+      <div className={`flex flex-row items-stretch ${isLeft ? '' : 'flex-row-reverse'} gap-3`}>
+
+        {/* Overhanging Icon - Fixed width, never wraps */}
+        <div className={`relative w-24 flex-shrink-0 flex flex-col justify-start z-10 ${isLeft ? '-ml-8' : '-mr-8'}`}>
+          <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-xl flex items-center justify-center">
+            <div className="relative w-full h-full">
+              <Image
+                src={game.icon}
+                alt={game.alt}
+                fill
+                className="object-contain p-1"
+                sizes="80px"
+                priority
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Options and Actions */}
-        <div className="flex-1 flex flex-col gap-4 w-full">
-          {/* Options */}
-          {game.options && (
+        {/* Content - Takes remaining width */}
+        <div className={`flex-1 flex flex-col gap-2 min-w-0 ${isLeft ? 'items-start' : 'items-end text-right'}`}>
+          <h2 className="text-xl font-bold text-gray-100 leading-none mt-1">{game.name}</h2>
+
+          <div className={`flex ${isLeft ? 'justify-start' : 'justify-end'} w-full mb-2`}>
             <OptionSelector
               options={game.options}
               selectedValue={selectedValue}
               onChange={setSelectedValue}
             />
-          )}
+          </div>
 
-          {/* Action Buttons */}
-          <ActionButtons
-            game={game}
-            reds={reds}
-            raceTo={raceTo}
-            userName={userName}
-          />
+          <div className="w-full mt-auto pt-2">
+            <ActionButtons
+              game={game}
+              optionsState={selectedValue}
+              userName={userName}
+            />
+          </div>
         </div>
+
       </div>
-    </GroupBox>
+    </div>
   )
 }
 
@@ -196,17 +219,17 @@ export default function New() {
   )
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4">
+    <div className="min-h-screen flex flex-col items-center p-3 font-display bg-midnight-emerald">
       <Head>
         <title>New Game | Play Billiards Online</title>
         <meta
           name="description"
-          content="Choose your game and start playing billiards online. Snooker, 9-Ball, and Three Cushion available."
+          content="Choose your game and start playing. Snooker, 9-Ball, and Three Cushion."
         />
       </Head>
 
-      {/* Header Bar */}
-      <div className="w-full max-w-6xl mb-4 flex justify-between items-center sticky top-0 z-50 bg-midnight-emerald/80 backdrop-blur-md py-1 px-4 -mx-4 rounded-xl">
+      {/* Compact Header */}
+      <div className="w-full max-w-lg mb-4 flex justify-between items-center sticky top-2 z-50 bg-[#05100e]/90 backdrop-blur-md py-2 px-4 rounded-full border border-white/10 shadow-lg">
         <User />
         <OnlineUsersPopover
           count={presenceCount}
@@ -216,16 +239,19 @@ export default function New() {
         />
       </div>
 
-      {/* Main Content */}
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 flex flex-col gap-4">
+      {/* Main Content - Single Column on Mobile */}
+      <div className="w-full max-w-lg flex flex-col gap-6 pb-8">
+
+        {/* Game Cards */}
+        <div className="flex flex-col gap-4 pl-2 pr-2">
           {GAMES.map((game) => (
             <GameCard key={game.ruleType} game={game} userName={userName} />
           ))}
         </div>
-        <div className="lg:col-span-1 flex flex-col gap-4">
-          <LiveMatchesPanel />
-          <MatchHistoryList />
+
+        {/* Recent Games */}
+        <div className="flex flex-col">
+          <RecentGamesList />
         </div>
       </div>
     </div>

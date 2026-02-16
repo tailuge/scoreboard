@@ -1,33 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react"
-import New from "@/pages/new"
+import { render, screen, waitFor, fireEvent } from "@testing-library/react"
+import New from "@/pages/new" // Adjust path if needed
 import { useUser } from "@/contexts/UserContext"
 
-jest.mock("../nchan/nchansub", () => ({
-  NchanSub: jest.fn().mockImplementation(() => ({
-    start: jest.fn(),
-    stop: jest.fn(),
-  })),
-}))
-
-jest.mock("../nchan/nchanpub", () => ({
-  NchanPub: jest.fn().mockImplementation(() => ({
-    get: jest.fn().mockResolvedValue(0),
-    post: jest.fn().mockResolvedValue(undefined),
-    publishLobby: jest.fn().mockResolvedValue(undefined),
-    publishPresence: jest.fn().mockResolvedValue(undefined),
-  })),
-}))
-
-jest.mock("@/contexts/LobbyContext", () => ({
-  useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
-  usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
-}))
-
-jest.mock("@/contexts/UserContext", () => ({
-  useUser: jest.fn(),
-}))
-const mockedUseUser = useUser as jest.Mock
-
+// Mock dependencies
 jest.mock("@/components/hooks/usePresenceList", () => ({
   usePresenceList: jest.fn(() => ({
     users: [],
@@ -35,98 +10,91 @@ jest.mock("@/components/hooks/usePresenceList", () => ({
   })),
 }))
 
+jest.mock("@/contexts/UserContext", () => ({
+  useUser: jest.fn(),
+}))
+
+jest.mock("@/components/hooks/useLobbyTables", () => ({
+  useLobbyTables: jest.fn(() => ({
+    tables: [],
+    tableAction: jest.fn(),
+  })),
+}))
+
+// Mock fetch for RecentGamesList
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve([]),
+  })
+) as jest.Mock
+
+const mockedUseUser = useUser as jest.Mock
+
 describe("New page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockedUseUser.mockReturnValue({
       userId: "test-user-id",
       userName: "TestUser",
-      setUserName: jest.fn(),
-    })
-    globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url.includes("/api/rank")) {
-        return Promise.resolve({
-          json: () =>
-            Promise.resolve([
-              { id: "1", name: "TopPlayer", score: 999, likes: 0 },
-            ]),
-          ok: true,
-        })
-      }
-      if (url.includes("/api/match-results")) {
-        return Promise.resolve({
-          json: () =>
-            Promise.resolve([
-              {
-                id: "1",
-                winner: "Alice",
-                winnerScore: 10,
-                ruleType: "nineball",
-                timestamp: Date.now(),
-              },
-            ]),
-          ok: true,
-        })
-      }
-      return Promise.resolve({
-        json: () => Promise.resolve([]),
-        ok: true,
-      })
     })
   })
 
-  it("renders without crashing", async () => {
+  it("renders without crashing", () => {
     render(<New />)
-    await waitFor(() => {
-      // Wait for async fetches in LiveMatchesPanel and MatchHistoryList to settle
-    })
-  })
 
-  it("renders all three game cards", async () => {
-    render(<New />)
-    await waitFor(() => {
-      // Wait for async fetches to settle
-    })
-    expect(screen.getByText("Snooker")).toBeInTheDocument()
     expect(screen.getByText("Nine Ball")).toBeInTheDocument()
+    expect(screen.getByText("Snooker")).toBeInTheDocument()
     expect(screen.getByText("Three Cushion")).toBeInTheDocument()
   })
 
-  it("renders Play Online and Practice buttons for each game", async () => {
+  it("renders all game cards with correct options", () => {
     render(<New />)
-    await waitFor(() => {
-      // Wait for async fetches to settle
-    })
-    expect(
-      screen.getByRole("link", { name: /Play Snooker Online/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Practice Snooker/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Play Nine Ball Online/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Practice Nine Ball/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Play Three Cushion Online/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Practice Three Cushion/i })
-    ).toBeInTheDocument()
+
+    // Nine Ball
+    expect(screen.getByText("Standard")).toBeInTheDocument()
+    expect(screen.getByText("Any")).toBeInTheDocument()
+
+    // Snooker
+    expect(screen.getByText("3")).toBeInTheDocument()
+    expect(screen.getByText("6")).toBeInTheDocument()
+    expect(screen.getByText("15")).toBeInTheDocument()
+
+    // Three Cushion
+    expect(screen.getByText("Race to 3")).toBeInTheDocument()
+    expect(screen.getByText("Race to 5")).toBeInTheDocument()
+    expect(screen.getByText("Race to 7")).toBeInTheDocument()
   })
 
-  it("renders option selectors for Snooker and Three Cushion", async () => {
+  it("links to play online and practice have correct params", () => {
     render(<New />)
+
+    const nineballPlay = screen.getByLabelText("Play Nine Ball Online")
+    expect(nineballPlay).toHaveAttribute("href", expect.stringContaining("ruletype=nineball"))
+
+    const snookerPlay = screen.getByLabelText("Play Snooker Online")
+    expect(snookerPlay).toHaveAttribute("href", expect.stringContaining("ruletype=snooker"))
+
+    const threecushionPlay = screen.getByLabelText("Play Three Cushion Online")
+    expect(threecushionPlay).toHaveAttribute("href", expect.stringContaining("ruletype=threecushion"))
+  })
+
+  it("updates param when option is selected", () => {
+    render(<New />)
+
+    // Snooker default is 6 reds. Click 3 reds.
+    const threeRedsBtn = screen.getByText("3")
+    fireEvent.click(threeRedsBtn)
+
+    const snookerPlay = screen.getByLabelText("Play Snooker Online")
+    expect(snookerPlay).toHaveAttribute("href", expect.stringContaining("reds=3"))
+  })
+
+  it("renders RecentGamesList", async () => {
+    render(<New />)
+    // We mocked fetch to return empty array, so we expect "No active or recent games."
     await waitFor(() => {
-      // Wait for async fetches to settle
+      expect(screen.getByText("No active or recent games.")).toBeInTheDocument()
     })
-    expect(
-      screen.getByRole("radiogroup", { name: /Number of red balls/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("radiogroup", { name: /Race to/i })
-    ).toBeInTheDocument()
   })
 })
