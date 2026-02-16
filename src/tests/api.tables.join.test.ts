@@ -2,7 +2,8 @@ import handler from "@/pages/api/tables/[tableId]/join"
 import { TableService } from "@/services/TableService"
 import { markUsageFromServer } from "@/utils/usage"
 import { NextApiRequest, NextApiResponse } from "next"
-import { mock, MockProxy } from "jest-mock-extended"
+import { MockProxy } from "jest-mock-extended"
+import { createMockRequestResponse } from "./apiTestUtils"
 
 // Mock the dependencies
 jest.mock("@/services/TableService")
@@ -20,11 +21,7 @@ describe("/api/tables/[tableId]/join handler", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-
-    req = mock<NextApiRequest>()
-    res = mock<NextApiResponse>()
-    res.status.mockReturnThis()
-    res.json.mockReturnThis()
+    ;({ req, res } = createMockRequestResponse())
 
     // Set a default query for the tableId
     req.query = { tableId }

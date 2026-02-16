@@ -1,6 +1,7 @@
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { useLobbyTables } from "../components/hooks/useLobbyTables"
 import { useLobbyMessages } from "@/contexts/LobbyContext"
+import { mockTable, mockTables } from "./mockData"
 
 jest.mock("@/contexts/LobbyContext", () => ({
   useLobbyMessages: jest.fn(),
@@ -17,7 +18,6 @@ describe("useLobbyTables", () => {
   })
 
   it("should fetch tables on mount", async () => {
-    const mockTables = [{ id: "t1", ruleType: "nineball" }]
     ;(globalThis.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockTables),
@@ -50,7 +50,6 @@ describe("useLobbyTables", () => {
   })
 
   it("should perform table join action", async () => {
-    const mockTable = { id: "t1", ruleType: "nineball" }
     ;(globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({
         ok: true,
@@ -85,7 +84,6 @@ describe("useLobbyTables", () => {
   })
 
   it("should perform findOrCreateTable action", async () => {
-    const mockTable = { id: "t1", ruleType: "nineball" }
     ;(globalThis.fetch as jest.Mock)
       .mockResolvedValueOnce({
         ok: true,
