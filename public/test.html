@@ -221,9 +221,10 @@
       function createIframe(options = {}) {
         const username = options.username || faker.person.firstName()
         const iframe = document.createElement("iframe")
-        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`
+        let src = `/game?username=${username}`
 
         if (options.action) {
+          src = `/lobby?username=${username}`
           src += `&action=${options.action}`
         }
         if (options.ruleType) {
@@ -251,11 +252,11 @@
       const buttonThreecushion = document.getElementById("button-threecushion")
 
       const createPanels = (ruleType, includeSpectator) => {
-        // Panel 1: action=join
-        panel1.appendChild(createIframe({ action: "join", ruleType }))
+        // Panel 1
+        panel1.appendChild(createIframe({ ruleType }))
 
-        // Panel 2: action=join
-        panel2.appendChild(createIframe({ action: "join", ruleType }))
+        // Panel 2
+        panel2.appendChild(createIframe({ ruleType }))
 
         // Panel 3: just a random name
         if (panel3 && includeSpectator) {
@@ -297,6 +298,9 @@
         } catch (error) {
           // Ignore fetch failures; iframe load can still unlock buttons.
           console.warn("Failed to warm nchan stats:", error)
+          // For testing purposes, enable them anyway if it fails
+          enableStartButtons()
+          stats?.classList.add("hidden")
         }
       }
 

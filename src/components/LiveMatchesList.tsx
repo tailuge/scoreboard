@@ -14,7 +14,7 @@ interface LiveMatchesListProps {
 export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
   const { userId, userName } = useUser()
   const activeGames = tables.filter(
-    (t) => t.players.length === 2 && t.completed
+    (t) => t.players.length === 2 && !t.completed
   )
 
   return (

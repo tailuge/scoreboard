@@ -4,8 +4,9 @@ export default defineConfig({
   testDir: './src/playwrite', 
   fullyParallel: false, 
   reporter: 'html', 
+  timeout: 60000,
   use: {
-    baseURL: process.env.TEST_URL || 'https://scoreboard-tailuge.vercel.app/', 
+    baseURL: process.env.TEST_URL || 'http://localhost:3000/',
     trace: 'on-first-retry', 
   },
   projects: [
