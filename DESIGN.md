@@ -3,7 +3,7 @@
 ## Vision & Aesthetic: "Compact & Wireframe-True"
 Targeting a relaxed but highly efficient UI that adheres strictly to the original wireframe logic even on mobile.
 -   **Core Vibe**: "Free and Easy", but structured.
--   **Typography**: `Turret Road` (ExtraLight) for everything.
+-   **Typography**: `Exo` (ExtraLight/Thin) for everything.
 -   **Mobile First**:
     - **Portrait Mode**: All 3 game cards and the "Recent Games" list must be easily visible.
     - **Scaling**: Cards should stack naturally.

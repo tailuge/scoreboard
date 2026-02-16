@@ -140,7 +140,7 @@ function ActionButtons({
         className="flex-1 py-3 px-4 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-cyan-accent/50 text-gray-300 hover:text-cyan-accent font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
         aria-label={`Play ${game.name} Online`}
       >
-        Play
+        Online
       </Link>
       <a
         href={practiceHref}
@@ -163,7 +163,7 @@ function GameCard({ game, userName }: GameCardProps) {
   const isLeft = game.layout === "left"
 
   return (
-    <div className={`relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl pt-10 pb-6 px-6 my-1 w-fit min-w-[300px] shadow-2xl ${isLeft ? 'self-start' : 'self-end'}`}>
+    <div className={`relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl pt-10 pb-6 px-6 my-1 w-fit min-w-[300px] shadow-xl ${isLeft ? 'self-start' : 'self-end'}`}>
 
       {/* GroupBox Style Title */}
       <h2 className="groupbox-title absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-1.5 uppercase tracking-widest text-[11px] font-bold">
@@ -172,7 +172,7 @@ function GameCard({ game, userName }: GameCardProps) {
 
       {/* Corner Icon Overhang */}
       <div className={`absolute -top-10 ${isLeft ? '-left-10' : '-right-10'} z-20`}>
-        <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-2xl flex items-center justify-center rotate-[-12deg]">
+        <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-xl flex items-center justify-center rotate-[-12deg]">
           <div className="relative w-full h-full">
             <Image
               src={game.icon}

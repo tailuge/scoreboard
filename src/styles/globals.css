@@ -16,8 +16,8 @@
   --animate-in: enter 0.2s ease-out;
   --animate-out: exit 0.15s ease-in;
 
-  --font-display: var(--font-turret), sans-serif;
-  --font-mono: var(--font-turret), monospace;
+  --font-display: var(--font-exo), sans-serif;
+  --font-mono: var(--font-exo), monospace;
 }
 
 @keyframes enter {
@@ -78,7 +78,7 @@ button,
 input,
 select,
 textarea {
-  font-family: var(--font-turret), sans-serif;
+  font-family: var(--font-exo), sans-serif;
   font-weight: 200;
 }
 

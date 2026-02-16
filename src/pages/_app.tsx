@@ -1,12 +1,12 @@
 import "@/styles/globals.css"
-import { Turret_Road } from "next/font/google"
+import { Exo } from "next/font/google"
 import type { AppProps } from "next/app"
 import Head from "next/head"
 
-const turretRoad = Turret_Road({
+const exo = Exo({
   subsets: ["latin"],
-  weight: ["200", "400", "500", "700", "800"],
-  variable: "--font-turret",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-exo",
 })
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <link rel="icon" type="image/png" href="/golden-cup.png" />
         </Head>
-        <main className={`${turretRoad.variable} ${turretRoad.className} font-sans`}>
+        <main className={`${exo.variable} ${exo.className} font-sans`}>
           <Component {...pageProps} />
         </main>
         <SpeedInsights />
