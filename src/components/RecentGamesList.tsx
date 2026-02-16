@@ -65,48 +65,53 @@ export function RecentGamesList() {
   // Limit to top 10 to keep it "glanceable"
   const displayList = combinedList.slice(0, 10)
 
+  const renderContent = () => {
+    if (loadingHistory && displayList.length === 0) {
+      return (
+        <div className="text-center py-8 text-gray-500 text-sm animate-pulse font-mono-data">
+          Loading games...
+        </div>
+      )
+    }
+    if (displayList.length === 0) {
+      return (
+        <div className="text-center py-8 text-gray-500 text-sm italic font-mono-data">
+          No active or recent games.
+        </div>
+      )
+    }
+    return displayList.map((item) => {
+      if (item.isLive) {
+        const table = (item as any).originalTable
+        const onSpectateClick = () => {
+          handleSpectate(table.id)
+          if (!userId || !userName) return
+          const spectatorUrl = GameUrl.create({
+            tableId: table.id,
+            userName,
+            userId,
+            ruleType: table.ruleType,
+            isSpectator: true,
+            isCreator: false,
+          })
+          globalThis.open(spectatorUrl.toString(), "_blank")
+        }
+        return (
+          <MatchResultCard
+            key={`live-${item.id}`}
+            result={item}
+            isLive={true}
+            onClick={onSpectateClick}
+          />
+        )
+      }
+      return <MatchResultCard key={`hist-${item.id}`} result={item} />
+    })
+  }
+
   return (
     <GroupBox title="Recent Games">
-      <div className="flex flex-col gap-2 min-h-[100px]">
-        {loadingHistory && displayList.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 text-sm animate-pulse font-mono-data">
-            Loading games...
-          </div>
-        ) : displayList.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 text-sm italic font-mono-data">
-            No active or recent games.
-          </div>
-        ) : (
-          displayList.map((item) => {
-            if (item.isLive) {
-              const table = (item as any).originalTable
-              const onSpectateClick = () => {
-                handleSpectate(table.id)
-                if (!userId || !userName) return
-                const spectatorUrl = GameUrl.create({
-                  tableId: table.id,
-                  userName,
-                  userId,
-                  ruleType: table.ruleType,
-                  isSpectator: true,
-                  isCreator: false,
-                })
-                globalThis.open(spectatorUrl.toString(), "_blank")
-              }
-              return (
-                <MatchResultCard
-                  key={`live-${item.id}`}
-                  result={item}
-                  isLive={true}
-                  onClick={onSpectateClick}
-                />
-              )
-            } else {
-              return <MatchResultCard key={`hist-${item.id}`} result={item} />
-            }
-          })
-        )}
-      </div>
+      <div className="flex flex-col gap-2 min-h-[100px]">{renderContent()}</div>
     </GroupBox>
   )
 }

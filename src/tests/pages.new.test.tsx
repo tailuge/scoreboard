@@ -81,7 +81,7 @@ describe("New page", () => {
 
     // Nine Ball
     expect(screen.getByText("Standard")).toBeInTheDocument()
-    expect(screen.getByText("Any")).toBeInTheDocument()
+    expect(screen.getByText("Any order")).toBeInTheDocument()
 
     // Snooker (just numbers now)
     const snookerCard = screen.getByText("Snooker").closest("div.relative")!

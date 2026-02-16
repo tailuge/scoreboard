@@ -2,7 +2,6 @@ import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
-import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
 import { User } from "@/components/User"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
@@ -18,7 +17,7 @@ const GAMES = [
     layout: "left" as const,
     options: {
       type: "variant" as const,
-      values: ["Standard", "Any"],
+      values: ["Standard", "Any order"],
       defaultValue: "Standard",
     },
   },
@@ -31,7 +30,7 @@ const GAMES = [
     options: {
       type: "reds" as const,
       values: [3, 6, 15],
-      defaultValue: 6,
+      defaultValue: 15,
     },
   },
   {
@@ -97,11 +96,7 @@ function OptionSelector({
                 : "text-gray-400 group-hover:text-gray-300"
             }`}
           >
-            {options.type === "reds"
-              ? `${value}`
-              : options.type === "raceTo"
-                ? `${value}`
-                : value}
+            {value}
           </span>
         </button>
       ))}
@@ -183,7 +178,7 @@ function GameCard({ game, userName }: GameCardProps) {
 
       {/* Corner Icon Overhang */}
       <div
-        className={`absolute -top-10 ${isLeft ? "-left-10" : "-right-10"} z-20`}
+        className={`absolute -top-5 ${isLeft ? "-left-5" : "-right-5"} z-20`}
       >
         <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-xl flex items-center justify-center rotate-[-12deg]">
           <div className="relative w-full h-full">
