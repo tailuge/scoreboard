@@ -2,7 +2,9 @@ import handler from "@/pages/api/tables"
 import { TableService } from "@/services/TableService"
 import { markUsageFromServer } from "@/utils/usage"
 import { NextApiRequest, NextApiResponse } from "next"
-import { mock, MockProxy } from "jest-mock-extended"
+import { MockProxy } from "jest-mock-extended"
+import { createMockRequestResponse } from "./apiTestUtils"
+import { mockTables } from "./mockData"
 
 // Mock the dependencies
 jest.mock("@/services/TableService")
@@ -18,23 +20,12 @@ describe("/api/tables handler", () => {
   let res: MockProxy<NextApiResponse>
 
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks()
-
-    // Create mock request and response objects
-    req = mock<NextApiRequest>()
-    res = mock<NextApiResponse>()
-    // Chainable mock for response methods
-    res.status.mockReturnThis()
-    res.json.mockReturnThis()
+    ;({ req, res } = createMockRequestResponse())
   })
 
   describe("GET method", () => {
     it("should return a list of tables with a 200 status code", async () => {
-      const mockTables = [
-        { id: "1", name: "Table 1" },
-        { id: "2", name: "Table 2" },
-      ]
       // Mock the service method
       const getTablesSpy = jest
         .spyOn(mockTableService.prototype, "getTables")
