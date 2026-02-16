@@ -51,7 +51,7 @@ describe("RecentGamesList Component", () => {
     })
     useMatchHistorySpy.mockReturnValue({
       results: config.results || [],
-      isLoading: config.loading !== undefined ? config.loading : false,
+      isLoading: config.loading === undefined ? false : config.loading,
     })
   }
 
