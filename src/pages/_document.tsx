@@ -10,7 +10,6 @@ export default function Document() {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-
       </Head>
       <body className="antialiased">
         <Main />

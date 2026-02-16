@@ -79,14 +79,24 @@ function OptionSelector({
           onClick={() => onChange(value)}
           className="group flex items-center gap-2 cursor-pointer"
         >
-          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${selectedValue === value
-            ? "border-cyan-accent bg-cyan-accent/20"
-            : "border-gray-500 group-hover:border-gray-400"
-            }`}>
-            {selectedValue === value && <div className="w-2 h-2 rounded-full bg-cyan-accent" />}
+          <div
+            className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+              selectedValue === value
+                ? "border-cyan-accent bg-cyan-accent/20"
+                : "border-gray-500 group-hover:border-gray-400"
+            }`}
+          >
+            {selectedValue === value && (
+              <div className="w-2 h-2 rounded-full bg-cyan-accent" />
+            )}
           </div>
-          <span className={`text-sm font-mono-data ${selectedValue === value ? "text-cyan-accent" : "text-gray-400 group-hover:text-gray-300"
-            }`}>
+          <span
+            className={`text-sm font-mono-data ${
+              selectedValue === value
+                ? "text-cyan-accent"
+                : "text-gray-400 group-hover:text-gray-300"
+            }`}
+          >
             {options.type === "reds"
               ? `${value}`
               : options.type === "raceTo"
@@ -163,15 +173,18 @@ function GameCard({ game, userName }: GameCardProps) {
   const isLeft = game.layout === "left"
 
   return (
-    <div className={`relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl pt-10 pb-6 px-6 my-1 w-fit min-w-[300px] shadow-xl ${isLeft ? 'self-start' : 'self-end'}`}>
-
+    <div
+      className={`relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl pt-10 pb-6 px-6 my-1 w-fit min-w-[300px] shadow-xl ${isLeft ? "self-start" : "self-end"}`}
+    >
       {/* GroupBox Style Title */}
       <h2 className="groupbox-title absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-1.5 uppercase tracking-widest text-[11px] font-bold">
         {game.name}
       </h2>
 
       {/* Corner Icon Overhang */}
-      <div className={`absolute -top-10 ${isLeft ? '-left-10' : '-right-10'} z-20`}>
+      <div
+        className={`absolute -top-10 ${isLeft ? "-left-10" : "-right-10"} z-20`}
+      >
         <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-xl flex items-center justify-center rotate-[-12deg]">
           <div className="relative w-full h-full">
             <Image
@@ -238,7 +251,6 @@ export default function New() {
 
       {/* Main Content */}
       <div className="w-full max-w-2xl flex flex-col gap-12 pb-20">
-
         {/* Zigzag Game Cards */}
         <div className="flex flex-col gap-1">
           {GAMES.map((game) => (

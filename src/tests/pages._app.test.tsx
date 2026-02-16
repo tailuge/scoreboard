@@ -1,6 +1,14 @@
 import { render } from "@testing-library/react"
 import App from "@/pages/_app"
 
+// Mock next/font/google
+jest.mock("next/font/google", () => ({
+  Exo: jest.fn(() => ({
+    variable: "--font-exo",
+    className: "font-exo",
+  })),
+}))
+
 // Mock next/router
 jest.mock("next/router", () => ({
   useRouter: () => ({
