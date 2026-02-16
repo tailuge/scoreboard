@@ -1,15 +1,96 @@
-I want a layout that fits easily on mobile and desktop. I want a degree of asymmetry to make it warmer.
-Keep the layout tight and compact. Subtle curves, rounded corners, drop shadow. Delightful.
-The objective is 1-click to play but user can change options. 
-Keep code clean and simple, split out layout and logic where best suited.
-These changes are intended for new.tsx, the current implementation is in new.tsx
-game.tsx and lobby.tsx may be impacted, eventually they will be removed, but not yet.
-I light fine lines, not heavy borders on all elements. Subtle asymmetrical gradients on lines is also nice
-The two main buttons are the focus but should not shout, I like the idea that they together define the width of the card
-I like natural responsive layout not forced mobile version.
-Other elements on the page in new.tsx can remain.
-I want the following design to be followed for card layout. Subtle animations as card appear is good.
-Choose light weight fonts that are a joy and not slop
+# Design Specification: New Game Screen
+
+## Vision & Aesthetic: "Free and Easy"
+Targeting a relaxed, open feel that is effortless to use on both mobile and desktop.
+- **Core Vibe**: Light, airy, unencumbered. "Free and easy".
+- **Typography**:
+    - **Primary**: `Turret Road` (ExtraLight weight) for all elements. This gives a distinct, modern but light character.
+- **Palette**:
+    - **Background**: Keep the existing dark theme but ensure it feels spacious, not oppressive.
+    - **Accents**: Maintain existing functional colors but styled to feel lightweight (thin borders, soft glows).
+- **Mobile First**:
+    - **Portrait Mode**: All 3 game cards and the "Recent Games" list must be easily visible.
+    - **Scaling**: Cards should stack naturally.
+
+## Layout Strategy
+- **Flow**: Vertical stack on mobile, potential grid on desktop but prioritizing vertical rhythm.
+- **Components**:
+    - **Game Cards**: Compact, distinct.
+    - **Recent Games List**: A single, consolidated list replacing separate "Live" and "History" panels.
+        - **differentiation**: Use existing "Live" vs "Replay" pills to distinguish active vs finished games.
+
+## Component Specifications
+
+### Game Cards
+Three distinct card layouts, kept compact for mobile visibility.
+**Crucial Detail**: Icons MUST overhang the edge of the card (negative margin) to break the boxiness.
+
+#### 1. Nine Ball (Top)
+- **Layout**: Icon Left (Overhanging).
+- **Options**: `Standard`, `Any`.
+- **Actions**: Play / Practice.
+
+#### 2. Snooker (Middle)
+- **Layout**: Icon Right (Overhanging).
+- **Options**: `3`, `6`, `15` reds.
+
+#### 3. Three Cushion (Bottom)
+- **Layout**: Icon Left (Overhanging).
+- **Options**: `Race to 3`, `5`, `7`.
+
+### Recent Games List
+- **Concept**: A single unification of live and technical results.
+- **Items**:
+    - **Live Games**: Show "LIVE" pill.
+    - **Past Games**: Show "REPLAY" pill (or just result).
+- **Appearance**: Minimalist list, `Turret Road ExtraLight` font. efficient use of vertical space.
+
+## ASCII Reference Layout (Overhanging Icons)
+```
+  (Desktop / Wide Mobile)
+
+     /--\
+    |ICON|   Nine Ball
+     \--/│   [O] Standard  [ ] Any
+      │  │
+      │  │   [ PLAY ]  [ PRACTICE ]
+      └──┘
+
+                  Snooker             /--\
+             [ ] 3  [O] 6  [ ] 15    |ICON|
+                                      \--/
+             [ PLAY ]  [ PRACTICE ]    │
+                                       │
+                                   ────┘
+
+     /--\
+    |ICON|   Three Cushion
+     \--/│   [O] Race to 3
+      │  │   [ ] Race to 5
+      │  │   [ ] Race to 7
+      └──┘   [ PLAY ]  [ PRACTICE ]
+```
+
+## Implementation Requirements for `new.tsx`
+
+1.  **Structure Refactor**:
+    -   Implement the logic to fetch **both** live and past games and merge them into a single chronological list (Live on top, then most recent history).
+    -   Replace `LiveMatchesPanel` and `MatchHistoryList` with `RecentGamesList`.
+
+2.  **Styling**:
+    -   Import `Turret Road` (ExtraLight) from Google Fonts.
+    -   Apply `font-family: 'Turret Road', sans-serif; font-weight: 200;` globally or to the container.
+    -   Ensure the layout is responsive:
+        -   **Mobile**: Single column (Cards -> Recent List).
+        -   **Desktop**: Two columns (Cards | Recent List) or a centered stack depending on "free and easy" interpretation (likely centered stack to keep focus).
+    -   **Icon Overhang**: Use negative positioning (e.g., `-ml-4` or `absolute left-[-20px]`) to ensure icons break the card boundary.
+
+3.  **Typography Override**:
+    -   Remove references to `Outfit` / `Space Mono` if they conflict with the "all elements Turret Road" directive.
+
+
+original layout:
+
 ```
 ┌────────┐                                                                                          
 │        ┼───────────────────────────┐                                                              
