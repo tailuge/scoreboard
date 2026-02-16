@@ -68,7 +68,7 @@
 }
 
 :root {
-  --background: #022c22;
+  --background: #2c2c2c;
   --foreground: #ededed;
 }
 
@@ -159,6 +159,10 @@ body::before {
     0 0 40px rgba(13, 14, 18, 0.6);
 }
 
+.groupbox-title {
+  z-index: 2;
+}
+
 .user-pill {
   padding: 4px 12px;
   cursor: pointer;
@@ -178,6 +182,27 @@ body::before {
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
     0 0 30px var(--color-violet-glow);
+}
+
+/* GroupBox Border */
+.groupbox-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  padding: 0.5px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(180, 190, 210, 0.25) 0%,
+    rgba(180, 190, 210, 0.08) 50%,
+    rgba(180, 190, 210, 0.03) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 /* Online Users Popover Border */
