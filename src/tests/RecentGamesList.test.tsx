@@ -4,30 +4,60 @@ import { RecentGamesList } from "../components/RecentGamesList"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useMatchHistory } from "@/components/hooks/useMatchHistory"
-import { mockTable, mockMatchResult } from "../tests/mockData"
 
 jest.mock("@/contexts/UserContext")
 jest.mock("@/components/hooks/useLobbyTables")
 jest.mock("@/components/hooks/useMatchHistory")
 
-const mockedUseUser = useUser as jest.Mock
-const mockedUseLobbyTables = useLobbyTables as jest.Mock
-const mockedUseMatchHistory = useMatchHistory as jest.Mock
+const useUserSpy = useUser as jest.Mock
+const useLobbyTablesSpy = useLobbyTables as jest.Mock
+const useMatchHistorySpy = useMatchHistory as jest.Mock
 
-describe("RecentGamesList", () => {
+describe("RecentGamesList Component", () => {
+  const dummyUser = {
+    userId: "u-999",
+    userName: "Unique Player",
+  }
+
+  const dummyLiveTable = {
+    id: "table-unique-123",
+    creator: { id: "u-999", name: "Unique Player" },
+    players: [
+      { id: "u-999", name: "Unique Player" },
+      { id: "u-888", name: "Other Player" },
+    ],
+    spectators: [],
+    createdAt: Date.now(),
+    lastUsedAt: Date.now(),
+    isActive: true,
+    ruleType: "snooker",
+    completed: false,
+  }
+
+  const dummyHistory = {
+    id: "match-unique-456",
+    winner: "Winner Name",
+    loser: "Loser Name",
+    winnerScore: 147,
+    loserScore: 0,
+    ruleType: "snooker",
+    timestamp: Date.now(),
+  }
+
+  const configureMocks = (config: any = {}) => {
+    useLobbyTablesSpy.mockReturnValue({
+      tables: config.tables || [],
+      tableAction: config.tableAction || jest.fn(),
+    })
+    useMatchHistorySpy.mockReturnValue({
+      results: config.results || [],
+      isLoading: config.loading !== undefined ? config.loading : false,
+    })
+  }
+
   beforeEach(() => {
-    mockedUseUser.mockReturnValue({
-      userId: "user-1",
-      userName: "User One",
-    })
-    mockedUseLobbyTables.mockReturnValue({
-      tables: [],
-      tableAction: jest.fn(),
-    })
-    mockedUseMatchHistory.mockReturnValue({
-      results: [],
-      isLoading: false,
-    })
+    useUserSpy.mockReturnValue(dummyUser)
+    configureMocks()
     globalThis.open = jest.fn()
   })
 
@@ -35,71 +65,38 @@ describe("RecentGamesList", () => {
     jest.resetAllMocks()
   })
 
-  it("renders loading state when history is loading and no games", () => {
-    mockedUseMatchHistory.mockReturnValue({
-      results: [],
-      isLoading: true,
-    })
-
+  it("displays loading text when fetching history", () => {
+    configureMocks({ loading: true })
     render(<RecentGamesList />)
-
     expect(screen.getByText("Loading games...")).toBeInTheDocument()
   })
 
-  it("renders empty state when no active or recent games", () => {
+  it("displays empty message when no matches exist", () => {
     render(<RecentGamesList />)
-
     expect(screen.getByText("No active or recent games.")).toBeInTheDocument()
   })
 
-  it("renders live matches and match results", () => {
-    const liveTable = {
-      ...mockTable,
-      players: [
-        mockTable.players[0],
-        { id: "user-2", name: "User Two" },
-      ],
-      completed: false,
-    }
-    mockedUseLobbyTables.mockReturnValue({
-      tables: [liveTable],
-      tableAction: jest.fn(),
+  it("renders both live and past match entries", () => {
+    configureMocks({
+      tables: [dummyLiveTable],
+      results: [dummyHistory],
     })
-    mockedUseMatchHistory.mockReturnValue({
-      results: [mockMatchResult],
-      isLoading: false,
-    })
-
     render(<RecentGamesList />)
-
     expect(screen.getByText("Recent Games")).toBeInTheDocument()
-    expect(screen.getByText("User One")).toBeInTheDocument()
-    expect(screen.getByText("User Two")).toBeInTheDocument()
-    expect(screen.getByText("Player One")).toBeInTheDocument() // From mockMatchResult
+    expect(screen.getByText("Unique Player")).toBeInTheDocument()
+    expect(screen.getByText("Other Player")).toBeInTheDocument()
+    expect(screen.getByText("Winner Name")).toBeInTheDocument()
   })
 
-  it("triggers spectate action when Live button is clicked", () => {
-    const tableAction = jest.fn()
-    const liveTable = {
-      ...mockTable,
-      id: "live-1",
-      players: [
-        mockTable.players[0],
-        { id: "user-2", name: "User Two" },
-      ],
-      completed: false,
-    }
-    mockedUseLobbyTables.mockReturnValue({
-      tables: [liveTable],
-      tableAction,
+  it("handles spectating interaction for active tables", () => {
+    const actionMock = jest.fn()
+    configureMocks({
+      tables: [dummyLiveTable],
+      tableAction: actionMock,
     })
-
     render(<RecentGamesList />)
-
-    const liveButton = screen.getByText("Live")
-    fireEvent.click(liveButton)
-
-    expect(tableAction).toHaveBeenCalledWith("live-1", "spectate")
+    fireEvent.click(screen.getByText("Live"))
+    expect(actionMock).toHaveBeenCalledWith("table-unique-123", "spectate")
     expect(globalThis.open).toHaveBeenCalled()
   })
 })

@@ -2,22 +2,31 @@ import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import Document from "../pages/_document"
 
-// Mock next/document components as they expect a specific context
+// Standard mocks for Next.js internal document components
 jest.mock("next/document", () => ({
-  Html: ({ children, lang }: { children: React.ReactNode, lang?: string }) => <html lang={lang}>{children}</html>,
+  Html: ({ children, lang }: { children: React.ReactNode; lang?: string }) => (
+    <html lang={lang}>{children}</html>
+  ),
   Head: ({ children }: { children: React.ReactNode }) => <head>{children}</head>,
-  Main: () => <div id="main" />,
-  NextScript: () => <div id="next-script" />,
+  Main: () => <div id="next-script-target" />,
+  NextScript: () => <div id="next-script-loader" />,
 }))
 
-describe("_document", () => {
-  it("renders correct static markup", () => {
-    const markup = renderToStaticMarkup(<Document />)
-    expect(markup).toContain('lang="en"')
-    expect(markup).toContain('<head>')
-    expect(markup).toContain('<body class="antialiased">')
-    expect(markup).toContain('<div id="main"></div>')
-    expect(markup).toContain('<div id="next-script"></div>')
-    expect(markup).toContain('rel="preconnect"')
+describe("Custom Document Structure", () => {
+  it("generates the expected static HTML foundation", () => {
+    const output = renderToStaticMarkup(<Document />)
+
+    // Check for essential attributes and tags
+    expect(output).toContain('lang="en"')
+    expect(output).toContain("<head>")
+    expect(output).toContain('class="antialiased"')
+
+    // Check for our custom script targets
+    expect(output).toContain('<div id="next-script-target"></div>')
+    expect(output).toContain('<div id="next-script-loader"></div>')
+
+    // Verify presence of Google Font preconnects
+    expect(output).toContain('rel="preconnect"')
+    expect(output).toContain("fonts.gstatic.com")
   })
 })
