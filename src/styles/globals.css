@@ -16,8 +16,8 @@
   --animate-in: enter 0.2s ease-out;
   --animate-out: exit 0.15s ease-in;
 
-  --font-display: "Turret Road", sans-serif;
-  --font-mono: "Turret Road", monospace;
+  --font-display: var(--font-turret), sans-serif;
+  --font-mono: var(--font-turret), monospace;
 }
 
 @keyframes enter {
@@ -25,6 +25,7 @@
     opacity: 0;
     transform: scale(0.95) translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -36,6 +37,7 @@
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+
   to {
     opacity: 0;
     transform: scale(0.95) translateY(-8px);
@@ -48,6 +50,7 @@
   looks the same as it did with Tailwind CSS v3.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -70,22 +73,31 @@
   --foreground: #ededed;
 }
 
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-turret), sans-serif;
+  font-weight: 200;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-display);
 }
 
 @keyframes glow-pulse {
+
   0%,
   100% {
     opacity: 0.4;
     filter: drop-shadow(0 0 8px var(--color-cyan-accent));
   }
+
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 20px var(--color-cyan-accent))
-      drop-shadow(0 0 40px var(--color-cyan-glow));
+    filter: drop-shadow(0 0 20px var(--color-cyan-accent)) drop-shadow(0 0 40px var(--color-cyan-glow));
   }
 }
 
@@ -94,6 +106,7 @@ body {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -115,13 +128,16 @@ body::before {
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: var(--color-gunmetal);
   border-radius: 10px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-cyan-accent);
 }
@@ -133,11 +149,9 @@ body::before {
   font-size: 11px;
   letter-spacing: 0.18em;
   color: rgba(180, 190, 210, 0.7);
-  background: linear-gradient(
-    135deg,
-    rgba(20, 22, 28, 0.95),
-    rgba(13, 14, 18, 1)
-  );
+  background: linear-gradient(135deg,
+      rgba(20, 22, 28, 0.95),
+      rgba(13, 14, 18, 1));
   border-radius: 4px;
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
@@ -154,11 +168,9 @@ body::before {
 }
 
 .user-pill:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(30, 32, 38, 0.95),
-    rgba(23, 24, 28, 1)
-  );
+  background: linear-gradient(135deg,
+      rgba(30, 32, 38, 0.95),
+      rgba(23, 24, 28, 1));
   transform: scale(1.02);
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
@@ -172,11 +184,9 @@ body::before {
   border-radius: 0.75rem;
   padding: 1px;
   pointer-events: none;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -197,15 +207,19 @@ body::before {
 .stagger-item:nth-child(1) {
   animation-delay: 0ms;
 }
+
 .stagger-item:nth-child(2) {
   animation-delay: 50ms;
 }
+
 .stagger-item:nth-child(3) {
   animation-delay: 100ms;
 }
+
 .stagger-item:nth-child(4) {
   animation-delay: 150ms;
 }
+
 .stagger-item:nth-child(5) {
   animation-delay: 200ms;
 }

@@ -4,8 +4,11 @@
 Targeting a relaxed but highly efficient UI that adheres strictly to the original wireframe logic even on mobile.
 -   **Core Vibe**: "Free and Easy", but structured.
 -   **Typography**: `Turret Road` (ExtraLight) for everything.
--   **Palette**:
-    -   **Background**: **Dark Gradient** (e.g., Midnight Emerald to Black radial/linear) to replace flat green.
+-   **Mobile First**:
+    - **Portrait Mode**: All 3 game cards and the "Recent Games" list must be easily visible.
+    - **Scaling**: Cards should stack naturally.
+    - **Width**: Cards must be tight, width defined by action buttons.
+    - **Alignment**: Cards should alternate left/right/left on wider screens to avoid a rigid column feel.
     -   **Accents**: Cyan/Violet for functional elements, but kept fine/thin.
 -   **Mobile Layout (CRITICAL)**:
     -   **NO WRAPPING**: Icons must stay Left/Right of the content even on narrow screens.
@@ -28,6 +31,17 @@ Must follow the wireframe ASCII art EXACTLY.
 
 ### Detailed Card Layout (Wireframe Strictness)
 On a narrow phone (portrait), the layout must preserve this structure:
+
+```
+[Icon Overhang Corner]
+     [Title Header]
+┌────────────────────────┐
+│                        │
+│   (o) Centered Radio   │
+│                        │
+│  [PLAY]    [PRACTICE]  │
+└────────────────────────┘
+```
 
 ```
 [Icon] [Title: Nine Ball]

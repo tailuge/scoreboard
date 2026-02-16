@@ -66,7 +66,7 @@ function OptionSelector({
 }) {
   return (
     <div
-      className="flex gap-4 flex-wrap"
+      className="flex gap-4 justify-center flex-wrap"
       role="radiogroup"
       aria-label="Game Options"
     >
@@ -80,20 +80,19 @@ function OptionSelector({
           className="group flex items-center gap-2 cursor-pointer"
         >
           <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${selectedValue === value
-              ? "border-cyan-accent bg-cyan-accent/20"
-              : "border-gray-500 group-hover:border-gray-400"
+            ? "border-cyan-accent bg-cyan-accent/20"
+            : "border-gray-500 group-hover:border-gray-400"
             }`}>
             {selectedValue === value && <div className="w-2 h-2 rounded-full bg-cyan-accent" />}
           </div>
           <span className={`text-sm font-mono-data ${selectedValue === value ? "text-cyan-accent" : "text-gray-400 group-hover:text-gray-300"
             }`}>
             {options.type === "reds"
-              ? `${value}` // Just number for compactness in Snooker
+              ? `${value}`
               : options.type === "raceTo"
-                ? `Race to ${value}`
+                ? `${value}`
                 : value}
           </span>
-
         </button>
       ))}
     </div>
@@ -109,7 +108,6 @@ function ActionButtons({
   readonly optionsState: string | number
   readonly userName: string
 }) {
-  // ... (URL generation logic remains the same)
   const onlineParams = new URLSearchParams({
     action: "join",
     ruletype: game.ruleType,
@@ -136,10 +134,10 @@ function ActionButtons({
   const practiceHref = `https://tailuge.github.io/billiards/dist/?${practiceParams.toString()}`
 
   return (
-    <div className="flex gap-3 mt-auto w-full">
+    <div className="flex gap-3 w-full">
       <Link
         href={onlineHref}
-        className="flex-1 py-3 px-2 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-cyan-accent/50 text-gray-300 hover:text-cyan-accent font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
+        className="flex-1 py-3 px-4 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-cyan-accent/50 text-gray-300 hover:text-cyan-accent font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
         aria-label={`Play ${game.name} Online`}
       >
         Play
@@ -148,7 +146,7 @@ function ActionButtons({
         href={practiceHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 py-3 px-2 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-gray-500 text-gray-300 hover:text-white font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
+        className="flex-1 py-3 px-4 rounded-lg bg-gunmetal/60 border border-gunmetal hover:border-gray-500 text-gray-300 hover:text-white font-semibold text-center transition-all duration-200 hover:bg-gunmetal/80 uppercase text-xs tracking-wider"
         aria-label={`Practice ${game.name}`}
       >
         Practice
@@ -165,47 +163,46 @@ function GameCard({ game, userName }: GameCardProps) {
   const isLeft = game.layout === "left"
 
   return (
-    <div className="relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl p-4 my-2 overflow-visible shadow-lg">
-      {/* Use flex-row ALWAYS, never flex-col */}
-      <div className={`flex flex-row items-stretch ${isLeft ? '' : 'flex-row-reverse'} gap-3`}>
+    <div className={`relative bg-gradient-to-br from-[#0a1f1c] to-[#050505] border border-white/5 rounded-xl pt-10 pb-6 px-6 my-1 w-fit min-w-[300px] shadow-2xl ${isLeft ? 'self-start' : 'self-end'}`}>
 
-        {/* Overhanging Icon - Fixed width, never wraps */}
-        <div className={`relative w-24 flex-shrink-0 flex flex-col justify-start z-10 ${isLeft ? '-ml-8' : '-mr-8'}`}>
-          <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-xl flex items-center justify-center">
-            <div className="relative w-full h-full">
-              <Image
-                src={game.icon}
-                alt={game.alt}
-                fill
-                className="object-contain p-1"
-                sizes="80px"
-                priority
-              />
-            </div>
-          </div>
-        </div>
+      {/* GroupBox Style Title */}
+      <h2 className="groupbox-title absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-1.5 uppercase tracking-widest text-[11px] font-bold">
+        {game.name}
+      </h2>
 
-        {/* Content - Takes remaining width */}
-        <div className={`flex-1 flex flex-col gap-2 min-w-0 ${isLeft ? 'items-start' : 'items-end text-right'}`}>
-          <h2 className="text-xl font-bold text-gray-100 leading-none mt-1">{game.name}</h2>
-
-          <div className={`flex ${isLeft ? 'justify-start' : 'justify-end'} w-full mb-2`}>
-            <OptionSelector
-              options={game.options}
-              selectedValue={selectedValue}
-              onChange={setSelectedValue}
-            />
-          </div>
-
-          <div className="w-full mt-auto pt-2">
-            <ActionButtons
-              game={game}
-              optionsState={selectedValue}
-              userName={userName}
+      {/* Corner Icon Overhang */}
+      <div className={`absolute -top-10 ${isLeft ? '-left-10' : '-right-10'} z-20`}>
+        <div className="w-20 h-20 bg-[#05100e] rounded-full border border-white/10 p-2 shadow-2xl flex items-center justify-center rotate-[-12deg]">
+          <div className="relative w-full h-full">
+            <Image
+              src={game.icon}
+              alt={game.alt}
+              fill
+              className="object-contain p-1"
+              sizes="80px"
+              priority
             />
           </div>
         </div>
+      </div>
 
+      {/* Content - Centered */}
+      <div className="flex flex-col gap-6 items-center w-full">
+        <div className="w-full">
+          <OptionSelector
+            options={game.options}
+            selectedValue={selectedValue}
+            onChange={setSelectedValue}
+          />
+        </div>
+
+        <div className="w-full max-w-[280px]">
+          <ActionButtons
+            game={game}
+            optionsState={selectedValue}
+            userName={userName}
+          />
+        </div>
       </div>
     </div>
   )
@@ -219,7 +216,7 @@ export default function New() {
   )
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-3 font-display bg-midnight-emerald">
+    <div className="min-h-screen flex flex-col items-center p-4 font-display bg-midnight-emerald">
       <Head>
         <title>New Game | Play Billiards Online</title>
         <meta
@@ -228,8 +225,8 @@ export default function New() {
         />
       </Head>
 
-      {/* Compact Header */}
-      <div className="w-full max-w-lg mb-4 flex justify-between items-center sticky top-2 z-50 bg-[#05100e]/90 backdrop-blur-md py-2 px-4 rounded-full border border-white/10 shadow-lg">
+      {/* Header Bar */}
+      <div className="w-full max-w-lg mb-12 flex justify-between items-center sticky top-4 z-50 bg-[#05100e]/95 backdrop-blur-md py-3 px-6 rounded-full border border-white/10 shadow-2xl mt-4">
         <User />
         <OnlineUsersPopover
           count={presenceCount}
@@ -239,18 +236,18 @@ export default function New() {
         />
       </div>
 
-      {/* Main Content - Single Column on Mobile */}
-      <div className="w-full max-w-lg flex flex-col gap-6 pb-8">
+      {/* Main Content */}
+      <div className="w-full max-w-2xl flex flex-col gap-12 pb-20">
 
-        {/* Game Cards */}
-        <div className="flex flex-col gap-4 pl-2 pr-2">
+        {/* Zigzag Game Cards */}
+        <div className="flex flex-col gap-1">
           {GAMES.map((game) => (
             <GameCard key={game.ruleType} game={game} userName={userName} />
           ))}
         </div>
 
         {/* Recent Games */}
-        <div className="flex flex-col">
+        <div className="w-full">
           <RecentGamesList />
         </div>
       </div>
