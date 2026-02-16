@@ -26,7 +26,10 @@ export function User() {
   if (isEditing) {
     return (
       <div className="user-pill">
-        <UserIcon className="user-pill-icon" aria-hidden="true" />
+        <UserIcon
+          className="h-3.5 w-3.5 text-green-accent"
+          aria-hidden="true"
+        />
         <input
           ref={inputRef}
           type="text"
@@ -50,7 +53,7 @@ export function User() {
       onClick={() => setIsEditing(true)}
       aria-label={`Edit username: ${userName}`}
     >
-      <UserIcon className="user-pill-icon" aria-hidden="true" />
+      <UserIcon className="h-3.5 w-3.5 text-green-accent" aria-hidden="true" />
       {userName}
     </button>
   )

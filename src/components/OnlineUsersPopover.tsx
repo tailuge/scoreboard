@@ -42,7 +42,7 @@ export function OnlineUsersPopover({
     <div ref={containerRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 text-cyan-accent hover:text-cyan-400 transition-all cursor-pointer group px-2 py-1 rounded-md hover:bg-cyan-accent/10"
+        className="flex items-center gap-1.5 text-green-accent hover:text-green-400 transition-all cursor-pointer group px-2 py-1 rounded-md hover:bg-green-accent/10"
         aria-label={`${count} users online`}
         aria-expanded={isOpen}
       >
@@ -50,9 +50,7 @@ export function OnlineUsersPopover({
           className="h-3.5 w-3.5 group-hover:scale-110 transition-transform"
           aria-hidden="true"
         />
-        <span className="text-[11px] font-mono-data tracking-widest font-bold">
-          {count}
-        </span>
+        <span className="text-[11px] tracking-widest font-bold">{count}</span>
       </button>
 
       {isOpen && (
@@ -66,10 +64,10 @@ export function OnlineUsersPopover({
 
             <div className="relative p-3">
               <div className="flex items-center justify-between mb-3 border-b border-gunmetal/50 pb-2">
-                <span className="text-[9px] font-mono-data uppercase tracking-[0.2em] text-cyan-accent/70">
+                <span className="text-[9px] uppercase tracking-[0.2em] text-green-accent/70">
                   Telemetry: Live Feed
                 </span>
-                <span className="h-1 w-1 rounded-full bg-cyan-accent animate-pulse" />
+                <span className="h-1 w-1 rounded-full bg-green-accent animate-pulse" />
               </div>
 
               <ul className="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-1">
@@ -80,19 +78,19 @@ export function OnlineUsersPopover({
                   >
                     <div className="flex items-center gap-2">
                       <span
-                        className="h-1 w-1 rounded-full bg-cyan-accent shadow-[0_0_5px_var(--color-cyan-glow)]"
+                        className="h-1 w-1 rounded-full bg-green-accent shadow-[0_0_5px_var(--color-green-glow)]"
                         aria-hidden="true"
                       />
-                      <span className="text-[11px] font-mono-data text-gray-300 truncate max-w-[100px]">
+                      <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
                         {user.userName}
                       </span>
                     </div>
                     {user.userId === currentUserId ? (
-                      <span className="text-[8px] font-mono-data text-cyan-accent/50 uppercase">
+                      <span className="text-[8px] text-green-accent/50 uppercase">
                         Identified
                       </span>
                     ) : (
-                      <span className="text-[8px] font-mono-data text-gray-500 uppercase">
+                      <span className="text-[8px] text-gray-500 uppercase">
                         Online
                       </span>
                     )}
@@ -101,16 +99,16 @@ export function OnlineUsersPopover({
               </ul>
 
               {overflow > 0 && (
-                <p className="text-[10px] font-mono-data text-gray-500 mt-2 text-center">
+                <p className="text-[10px] text-gray-500 mt-2 text-center">
                   +{overflow} more active
                 </p>
               )}
 
               <div className="mt-3 pt-2 border-t border-gunmetal/50 flex justify-between items-center">
-                <span className="text-[9px] font-mono-data uppercase tracking-wider text-gray-500">
+                <span className="text-[9px] uppercase tracking-wider text-gray-500">
                   Total Active:
                 </span>
-                <span className="text-[11px] font-mono-data text-cyan-accent font-bold">
+                <span className="text-[11px] text-green-accent font-bold">
                   {totalCount || count}
                 </span>
               </div>
