@@ -46,18 +46,10 @@ type GameButtonProps = {
   readonly alt: string
   readonly href?: string
   readonly onClick?: () => void
-  readonly hoverBorderColor: string
   readonly ariaLabel: string
 }
 
-function GameButton({
-  icon,
-  alt,
-  href,
-  onClick,
-  hoverBorderColor,
-  ariaLabel,
-}: GameButtonProps) {
+function GameButton({ icon, alt, href, onClick, ariaLabel }: GameButtonProps) {
   const content = (
     <div className="relative w-full h-full p-4 transition-transform duration-300 group-hover:scale-110">
       <Image
@@ -71,7 +63,7 @@ function GameButton({
     </div>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal ${hoverBorderColor} hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
     const isInternal = href.startsWith("/")
@@ -141,16 +133,12 @@ function ActionButton({
 }
 
 function GameGrid({
-  hoverBorderColor,
-  isHighscore = false,
   userName,
   snookerReds,
   onSnookerRedsChange,
   threecushionRaceTo,
   onThreecushionRaceToChange,
 }: {
-  readonly hoverBorderColor: string
-  readonly isHighscore?: boolean
   readonly userName: string
   readonly snookerReds: number
   readonly onSnookerRedsChange: (value: number) => void
@@ -175,27 +163,13 @@ function GameGrid({
         }
 
         return (
-          <div
-            key={`${game.name}-${isHighscore ? "highscore" : "online"}`}
-            className="flex flex-col gap-1 items-center"
-          >
-            {isHighscore ? (
-              <GameButton
-                icon={game.icon}
-                alt={game.alt}
-                hoverBorderColor="hover:border-blue-500"
-                href={highscoreUrl}
-                ariaLabel={`Play ${game.name}`}
-              />
-            ) : (
-              <GameButton
-                icon={game.icon}
-                alt={game.alt}
-                hoverBorderColor={hoverBorderColor}
-                href={onlineUrl}
-                ariaLabel={`Play ${game.name} Online`}
-              />
-            )}
+          <div key={game.name} className="flex flex-col gap-1 items-center">
+            <GameButton
+              icon={game.icon}
+              alt={game.alt}
+              href={highscoreUrl}
+              ariaLabel={`Play ${game.name}`}
+            />
             {game.ruleType === "snooker" && (
               <RedBallButtons
                 selectedValue={snookerReds}
@@ -209,31 +183,27 @@ function GameGrid({
                 onChange={onThreecushionRaceToChange}
               />
             )}
-            {isHighscore && (
-              <>
-                <ActionButton
-                  href={highscoreUrl}
-                  hoverBorderColor="hover:border-blue-500"
-                  hoverTextColor="hover:text-blue-400"
-                >
-                  Practice
-                </ActionButton>
-                <ActionButton
-                  href={onlineUrl}
-                  hoverBorderColor="hover:border-green-500"
-                  hoverTextColor="hover:text-green-400"
-                >
-                  Online
-                </ActionButton>
-                <div className="mt-2 w-full h-[88px] text-gray-500 text-sm overflow-hidden">
-                  <LeaderboardTable
-                    ruleType={game.ruleType}
-                    limit={3}
-                    compact={true}
-                  />
-                </div>
-              </>
-            )}
+            <ActionButton
+              href={highscoreUrl}
+              hoverBorderColor="hover:border-blue-500"
+              hoverTextColor="hover:text-blue-400"
+            >
+              Practice
+            </ActionButton>
+            <ActionButton
+              href={onlineUrl}
+              hoverBorderColor="hover:border-green-500"
+              hoverTextColor="hover:text-green-400"
+            >
+              Online
+            </ActionButton>
+            <div className="mt-2 w-full h-[88px] text-gray-500 text-sm overflow-hidden">
+              <LeaderboardTable
+                ruleType={game.ruleType}
+                limit={3}
+                compact={true}
+              />
+            </div>
           </div>
         )
       })}
@@ -302,7 +272,7 @@ export default function Game() {
       <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 flex flex-col gap-4">
           <GroupBox
-            title="2-Player Online"
+            title="Play"
             leftBadge={<User />}
             rightBadge={
               <OnlineUsersPopover
@@ -314,18 +284,6 @@ export default function Game() {
             }
           >
             <GameGrid
-              hoverBorderColor="hover:border-green-500"
-              userName={userName}
-              snookerReds={snookerReds}
-              onSnookerRedsChange={setSnookerReds}
-              threecushionRaceTo={threecushionRaceTo}
-              onThreecushionRaceToChange={setThreecushionRaceTo}
-            />
-          </GroupBox>
-          <GroupBox title="Highscore Challenge">
-            <GameGrid
-              hoverBorderColor="hover:border-blue-500"
-              isHighscore={true}
               userName={userName}
               snookerReds={snookerReds}
               onSnookerRedsChange={setSnookerReds}

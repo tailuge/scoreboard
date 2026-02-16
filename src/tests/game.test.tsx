@@ -95,12 +95,8 @@ describe("Game Page", () => {
       </LobbyProvider>
     )
 
-    // Check main heading (Removed)
-    // expect(screen.getByText("Choose Your Game")).toBeInTheDocument()
-    expect(screen.getByText("Highscore Challenge")).toBeInTheDocument()
-    expect(screen.getByText("2-Player Online")).toBeInTheDocument()
+    expect(screen.getByText("Play")).toBeInTheDocument()
 
-    // Check for the Highscore Challenge links (strict match to avoid matching "Online" buttons)
     expect(
       screen.getByRole("link", { name: /^Play Snooker$/i })
     ).toBeInTheDocument()
@@ -111,35 +107,25 @@ describe("Game Page", () => {
       screen.getByRole("link", { name: /^Play Three Cushion$/i })
     ).toBeInTheDocument()
 
-    // Check for the Online buttons (now links)
-    expect(
-      screen.getByRole("link", { name: /Play Snooker Online/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Play Nine Ball Online/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /Play Three Cushion Online/i })
-    ).toBeInTheDocument()
+    expect(screen.getAllByText("Practice")).toHaveLength(3)
+    expect(screen.getAllByText("Online")).toHaveLength(3)
 
-    // Check if images are present (using alt text) - now duplicated
     expect(
-      screen.getAllByAltText(
+      screen.getByAltText(
         "Play classic Snooker billiards online with 22 balls on a full-size table"
       )
-    ).toHaveLength(2)
+    ).toBeInTheDocument()
     expect(
-      screen.getAllByAltText(
+      screen.getByAltText(
         "Play 9-Ball pool online - fast-paced pocket billiards game"
       )
-    ).toHaveLength(2)
+    ).toBeInTheDocument()
     expect(
-      screen.getAllByAltText(
+      screen.getByAltText(
         "Play Three Cushion carom billiards online - no pockets, hit three rails"
       )
-    ).toHaveLength(2)
+    ).toBeInTheDocument()
 
-    // Verify LeaderboardTable renders data
     await waitFor(() => {
       expect(screen.getAllByText("TopPlayer")).toHaveLength(3)
     })
