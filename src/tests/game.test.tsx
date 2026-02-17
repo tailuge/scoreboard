@@ -1,7 +1,8 @@
+import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
 import { LobbyProvider } from "@/contexts/LobbyContext"
-import { setupUserMock, createFetchMock, mockFetchResponse } from "./testUtils"
+import { setupUserMock, setupLobbyMocks, createFetchMock, mockFetchResponse } from "./testUtils"
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
@@ -20,7 +21,12 @@ jest.mock("../nchan/nchanpub", () => ({
 }))
 
 // Mock usePresenceMessages
-jest.mock("@/contexts/LobbyContext", () => ({ ...require("./testUtils").lobbyContextMock }))
+jest.mock("@/contexts/LobbyContext", () => ({
+  LobbyProvider: jest.fn(({ children }) => <>{children}</>),
+  useLobbyContext: jest.fn(),
+  useLobbyMessages: jest.fn(),
+  usePresenceMessages: jest.fn(),
+}))
 
 jest.mock("@/contexts/UserContext", () => ({ useUser: jest.fn() }))
 
@@ -44,6 +50,7 @@ describe("Game Page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     setupUserMock()
+    setupLobbyMocks()
     globalThis.fetch = createFetchMock({
       "/api/rank": () => mockFetchResponse([{ id: "1", name: "TopPlayer", score: 999, likes: 0 }]),
       "/api/match-results": () => mockFetchResponse([{

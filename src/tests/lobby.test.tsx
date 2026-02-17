@@ -1,9 +1,9 @@
 import React from "react"
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import Lobby from "../pages/lobby"
-import { LobbyProvider } from "@/contexts/LobbyContext"
+import { LobbyProvider, useLobbyMessages } from "@/contexts/LobbyContext"
 import { mockTables } from "./mockData"
-import { setupRouterMock, setupUserMock, mockFetchResponse, createFetchMock } from "./testUtils"
+import { setupRouterMock, setupUserMock, setupLobbyMocks, mockFetchResponse, createFetchMock } from "./testUtils"
 
 // Mock dependencies
 jest.mock("next/router", () => ({ useRouter: jest.fn() }))
@@ -20,7 +20,12 @@ jest.mock("@/nchan/nchanpub", () => ({
     publishPresence: jest.fn().mockResolvedValue(undefined),
   })),
 }))
-jest.mock("@/contexts/LobbyContext", () => ({ ...require("./testUtils").lobbyContextMock }))
+jest.mock("@/contexts/LobbyContext", () => ({
+  LobbyProvider: jest.fn(({ children }) => <>{children}</>),
+  useLobbyContext: jest.fn(),
+  useLobbyMessages: jest.fn(),
+  usePresenceMessages: jest.fn(),
+}))
 jest.mock("@/components/hooks/usePresenceList", () => ({
   usePresenceList: jest.fn(() => ({ users: [], count: 0 })),
 }))
@@ -32,12 +37,13 @@ describe("Lobby Component Functional Tests", () => {
     jest.clearAllMocks()
     setupRouterMock({ username: "TestUser" })
     setupUserMock()
+    setupLobbyMocks()
 
     globalThis.fetch = createFetchMock({
+      "/api/tables/find-or-create": () => mockFetchResponse(mockTables[0]),
+      "/api/tables/join": () => mockFetchResponse(mockTables[0]),
+      "/api/tables/spectate": () => mockFetchResponse(mockTables[0]),
       [TABLES_API_ENDPOINT]: () => mockFetchResponse(mockTables),
-      "/join": () => mockFetchResponse(mockTables[0]),
-      "/spectate": () => mockFetchResponse(mockTables[0]),
-      "/find-or-create": () => mockFetchResponse(mockTables[0]),
     })
   })
 
@@ -100,6 +106,7 @@ describe("Lobby Timeout and Cleanup Tests", () => {
     jest.clearAllMocks()
     setupRouterMock()
     setupUserMock()
+    setupLobbyMocks()
   })
 
   afterEach(() => {
@@ -168,7 +175,6 @@ describe("Lobby Timeout and Cleanup Tests", () => {
     const { rerender } = render(<LobbyProvider><Lobby /></LobbyProvider>)
     tableData = [{ ...tableData[0], players: [{ id: "test-user-id", name: "TestUser" }, { id: "other-user", name: "Other" }] }]
 
-    const { useLobbyMessages } = require("@/contexts/LobbyContext")
     ;(useLobbyMessages as jest.Mock).mockReturnValue({ lastMessage: { action: "table_updated" } })
 
     rerender(<LobbyProvider><Lobby /></LobbyProvider>)
@@ -209,11 +215,20 @@ describe("Lobby Redirection Tests", () => {
     jest.clearAllMocks()
     setupRouterMock({ username: "TestUser", action: "join", ruletype: "nineball" })
     setupUserMock()
+    setupLobbyMocks()
+
+    const fullTable = {
+      ...mockTables[0],
+      players: [
+        { id: "creator-1", name: "Creator 1" },
+        { id: "test-user-id", name: "TestUser" },
+      ],
+    }
 
     globalThis.fetch = createFetchMock({
+      "/api/tables/find-or-create": () => mockFetchResponse(fullTable),
+      "/api/tables/join": () => mockFetchResponse(fullTable),
       [TABLES_API_ENDPOINT]: () => mockFetchResponse(mockTables),
-      "/join": () => mockFetchResponse({ ...mockTables[0], players: [{ id: "creator-1", name: "Creator 1" }, { id: "test-user-id", name: "TestUser" }] }),
-      "/find-or-create": () => mockFetchResponse({ ...mockTables[0], players: [{ id: "creator-1", name: "Creator 1" }, { id: "test-user-id", name: "TestUser" }] }),
     })
   })
 

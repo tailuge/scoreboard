@@ -3,6 +3,11 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import LeaderboardTable from "../components/LeaderboardTable"
 import { mockFetchResponse, createFetchMock } from "./testUtils"
 import { mockLeaderboardData } from "./mockData"
+import { navigateTo } from "@/utils/navigation"
+
+jest.mock("@/utils/navigation", () => ({
+  navigateTo: jest.fn(),
+}))
 
 describe("LeaderboardTable", () => {
   beforeEach(() => {
@@ -81,16 +86,9 @@ describe("LeaderboardTable", () => {
     const playerRow = screen.getByText("Player 1").closest("tr")
     expect(playerRow).not.toBeNull()
 
-    // JSDOM navigation is not implemented, so we just verify it doesn't crash
-    // and use a spy on console.error if JSDOM logs it there, or just catch.
-    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
-    try {
-      fireEvent.click(playerRow!)
-    } catch {
-      // Ignore navigation errors
-    }
-    consoleSpy.mockRestore()
-    // Code path for handleRowClick is hit.
+    fireEvent.click(playerRow!)
+
+    expect(navigateTo).toHaveBeenCalledWith("/api/rank/1?ruletype=snooker")
   })
 
   it("renders placeholders when limit is higher than data length", async () => {

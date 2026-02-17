@@ -1,5 +1,5 @@
 import React from "react"
-import { render, act, screen } from "@testing-library/react"
+import { render, act, screen, waitFor } from "@testing-library/react"
 import {
   LobbyProvider,
   useLobbyMessages,
@@ -79,7 +79,7 @@ describe("LobbyContext", () => {
     const presenceInstance = instances.find((i) => i._type === "presence")
     expect(presenceInstance).toBeDefined()
 
-    await act(async () => {
+    act(() => {
       presenceInstance._callback(
         JSON.stringify({
           messageType: "presence",
@@ -90,7 +90,9 @@ describe("LobbyContext", () => {
       )
     })
 
-    expect(screen.getByText("user-1")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText("user-1")).toBeInTheDocument()
+    })
   })
 
   const testInvalidMessage = async (type: "lobby" | "presence", msg: string) => {
@@ -172,21 +174,18 @@ describe("LobbyContext", () => {
       )
     }
 
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-
+    render(<LobbyProvider><TestComponent /></LobbyProvider>)
     const lobbyInstance = instances.find((i) => i._type === "lobby")
 
-    await act(async () => {
+    act(() => {
       lobbyInstance._callback(
         JSON.stringify({ type: "TABLE_UPDATED", tableId: "legacy-123" })
       )
     })
 
-    expect(screen.getByText("legacy-123")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText("legacy-123")).toBeInTheDocument()
+    })
   })
 })
 
