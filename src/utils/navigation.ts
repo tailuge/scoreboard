@@ -1,5 +1,5 @@
 export const navigateTo = (url: string) => {
-  if (globalThis.location) {
+  if (url && globalThis.location) {
     globalThis.location.href = url
   }
 }

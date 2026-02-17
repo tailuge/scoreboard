@@ -84,9 +84,9 @@ describe("LeaderboardTable", () => {
     await waitFor(() => screen.getByText("Player 1"))
 
     const playerRow = screen.getByText("Player 1").closest("tr")
-    expect(playerRow).not.toBeNull()
+    if (!playerRow) throw new Error("Player row not found")
 
-    fireEvent.click(playerRow!)
+    fireEvent.click(playerRow)
 
     expect(navigateTo).toHaveBeenCalledWith("/api/rank/1?ruletype=snooker")
   })
@@ -131,14 +131,13 @@ describe("LeaderboardTable", () => {
     await waitFor(() => screen.getByText("Player 1"))
 
     // Default index > 2 should not have trophy
-    expect(
-      screen.queryByText("Player 4")?.closest("tr")?.textContent
-    ).not.toContain("🏆")
-    expect(
-      screen.queryByText("Player 4")?.closest("tr")?.textContent
-    ).not.toContain("🥈")
-    expect(
-      screen.queryByText("Player 4")?.closest("tr")?.textContent
-    ).not.toContain("🥉")
+    const player4Text = screen.queryByText("Player 4")
+    if (!player4Text) throw new Error("Player 4 text not found")
+    const player4Row = player4Text.closest("tr")
+    if (!player4Row) throw new Error("Player 4 row not found")
+
+    expect(player4Row.textContent).not.toContain("🏆")
+    expect(player4Row.textContent).not.toContain("🥈")
+    expect(player4Row.textContent).not.toContain("🥉")
   })
 })

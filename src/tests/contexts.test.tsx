@@ -53,7 +53,7 @@ describe("LobbyContext", () => {
     )
 
     const lobbyInstance = instances.find((i) => i._type === "lobby")
-    expect(lobbyInstance).toBeDefined()
+    if (!lobbyInstance) throw new Error("lobbyInstance not found")
 
     await act(async () => {
       lobbyInstance._callback(
@@ -77,7 +77,7 @@ describe("LobbyContext", () => {
     )
 
     const presenceInstance = instances.find((i) => i._type === "presence")
-    expect(presenceInstance).toBeDefined()
+    if (!presenceInstance) throw new Error("presenceInstance not found")
 
     act(() => {
       presenceInstance._callback(
@@ -97,13 +97,23 @@ describe("LobbyContext", () => {
 
   const testInvalidMessage = async (type: "lobby" | "presence", msg: string) => {
     const TestComponent = () => {
-      const { lastMessage } = type === "lobby" ? useLobbyMessages() : usePresenceMessages()
+      const { lastMessage } =
+        type === "lobby" ? useLobbyMessages() : usePresenceMessages()
       return <div>{lastMessage ? "has message" : "no message"}</div>
     }
-    render(<LobbyProvider><TestComponent /></LobbyProvider>)
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
     const instance = instances.find((i) => i._type === type)
-    await act(async () => { instance._callback(msg) })
-    expect(screen.getByText("no message")).toBeInTheDocument()
+    if (!instance) throw new Error(`Instance for ${type} not found`)
+    act(() => {
+      instance._callback(msg)
+    })
+    await waitFor(() => {
+      expect(screen.getByText("no message")).toBeInTheDocument()
+    })
   }
 
   it("handles invalid JSON in lobby messages", async () => await testInvalidMessage("lobby", "invalid json"))
@@ -174,8 +184,13 @@ describe("LobbyContext", () => {
       )
     }
 
-    render(<LobbyProvider><TestComponent /></LobbyProvider>)
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
     const lobbyInstance = instances.find((i) => i._type === "lobby")
+    if (!lobbyInstance) throw new Error("lobbyInstance not found")
 
     act(() => {
       lobbyInstance._callback(

@@ -36,7 +36,15 @@ export const createFetchMock = (handlers: {
 }) => {
   const patterns = Object.keys(handlers).sort((a, b) => b.length - a.length)
   return jest.fn().mockImplementation((url, options) => {
-    const urlString = url.toString()
+    let urlString = ""
+    if (typeof url === "string") {
+      urlString = url
+    } else if (url instanceof URL) {
+      urlString = url.href
+    } else if (url && typeof url === "object" && "url" in url) {
+      urlString = (url as any).url
+    }
+
     for (const pattern of patterns) {
       if (urlString.includes(pattern)) {
         return handlers[pattern](urlString, options)

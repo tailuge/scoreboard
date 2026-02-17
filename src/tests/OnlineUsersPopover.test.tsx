@@ -70,7 +70,8 @@ describe("OnlineUsersPopover", () => {
     // Check total active count in footer
     const totalActiveLabel = screen.getByText("Total Active:")
     const footerCount = totalActiveLabel.nextElementSibling
-    expect(footerCount?.textContent).toBe("10")
+    if (!footerCount) throw new Error("footerCount not found")
+    expect(footerCount.textContent).toBe("10")
   })
 
   it("handles missing totalCount", () => {
@@ -81,6 +82,7 @@ describe("OnlineUsersPopover", () => {
 
     const totalActiveLabel = screen.getByText("Total Active:")
     const footerCount = totalActiveLabel.nextElementSibling
-    expect(footerCount?.textContent).toBe("2")
+    if (!footerCount) throw new Error("footerCount not found")
+    expect(footerCount.textContent).toBe("2")
   })
 })
