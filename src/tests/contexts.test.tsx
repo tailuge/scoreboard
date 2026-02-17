@@ -8,27 +8,18 @@ import {
 } from "../contexts/LobbyContext"
 import { UserProvider, useUser } from "../contexts/UserContext"
 import { NchanSub } from "../nchan/nchansub"
-import { useRouter } from "next/router"
+import { setupRouterMock } from "./testUtils"
 
-// Mock NchanSub
-jest.mock("../nchan/nchansub", () => {
-  return {
-    NchanSub: jest.fn().mockImplementation((channel, callback, type) => {
-      return {
-        start: jest.fn(),
-        stop: jest.fn(),
-        // We'll capture the callback in the test
-        _callback: callback,
-        _type: type,
-      }
-    }),
-  }
-})
-
-// Mock useRouter
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+jest.mock("../nchan/nchansub", () => ({
+  NchanSub: jest.fn().mockImplementation((channel, callback, type) => ({
+    start: jest.fn(),
+    stop: jest.fn(),
+    _callback: callback,
+    _type: type,
+  })),
 }))
+
+jest.mock("next/router", () => ({ useRouter: jest.fn() }))
 
 describe("LobbyContext", () => {
   let instances: any[] = []
@@ -102,69 +93,20 @@ describe("LobbyContext", () => {
     expect(screen.getByText("user-1")).toBeInTheDocument()
   })
 
-  it("handles invalid JSON in lobby messages", async () => {
+  const testInvalidMessage = async (type: "lobby" | "presence", msg: string) => {
     const TestComponent = () => {
-      const { lastMessage } = useLobbyMessages()
+      const { lastMessage } = type === "lobby" ? useLobbyMessages() : usePresenceMessages()
       return <div>{lastMessage ? "has message" : "no message"}</div>
     }
-
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-
-    const lobbyInstance = instances.find((i) => i._type === "lobby")
-
-    await act(async () => {
-      lobbyInstance._callback("invalid json")
-    })
-
+    render(<LobbyProvider><TestComponent /></LobbyProvider>)
+    const instance = instances.find((i) => i._type === type)
+    await act(async () => { instance._callback(msg) })
     expect(screen.getByText("no message")).toBeInTheDocument()
-  })
+  }
 
-  it("handles null parsed message in lobby", async () => {
-    const TestComponent = () => {
-      const { lastMessage } = useLobbyMessages()
-      return <div>{lastMessage ? "has message" : "no message"}</div>
-    }
-
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-
-    const lobbyInstance = instances.find((i) => i._type === "lobby")
-
-    await act(async () => {
-      // parseNchanMessage returns null if msg is empty or not JSON
-      lobbyInstance._callback("")
-    })
-
-    expect(screen.getByText("no message")).toBeInTheDocument()
-  })
-
-  it("handles invalid JSON in presence messages", async () => {
-    const TestComponent = () => {
-      const { lastMessage } = usePresenceMessages()
-      return <div>{lastMessage ? "has message" : "no message"}</div>
-    }
-
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-
-    const presenceInstance = instances.find((i) => i._type === "presence")
-
-    await act(async () => {
-      presenceInstance._callback("invalid json")
-    })
-
-    expect(screen.getByText("no message")).toBeInTheDocument()
-  })
+  it("handles invalid JSON in lobby messages", async () => await testInvalidMessage("lobby", "invalid json"))
+  it("handles null parsed message in lobby", async () => await testInvalidMessage("lobby", ""))
+  it("handles invalid JSON in presence messages", async () => await testInvalidMessage("presence", "invalid json"))
 
   it("stops subscriptions on unmount", () => {
     const { unmount } = render(
@@ -252,10 +194,7 @@ describe("UserContext", () => {
   beforeEach(() => {
     localStorage.clear()
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: {},
-      isReady: false,
-    })
+    setupRouterMock({}, false)
   })
 
   it("provides default user name", () => {
@@ -291,10 +230,7 @@ describe("UserContext", () => {
   })
 
   it("updates user name from router query when ready", () => {
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: { username: "RouterUser" },
-      isReady: true,
-    })
+    setupRouterMock({ username: "RouterUser" })
 
     const TestComponent = () => {
       const { userName } = useUser()

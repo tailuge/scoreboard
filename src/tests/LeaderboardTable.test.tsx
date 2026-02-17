@@ -1,34 +1,15 @@
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import LeaderboardTable from "../components/LeaderboardTable"
+import { mockFetchResponse, createFetchMock } from "./testUtils"
+import { mockLeaderboardData } from "./mockData"
 
 describe("LeaderboardTable", () => {
-  const mockData = [
-    { id: "1", name: "Player 1", score: 100, likes: 5 },
-    { id: "2", name: "Player 2", score: 90, likes: 3 },
-    { id: "3", name: "Player 3", score: 80, likes: 1 },
-    { id: "4", name: "Player 4", score: 70, likes: 0 },
-  ]
-
   beforeEach(() => {
     jest.clearAllMocks()
-    globalThis.fetch = jest.fn().mockImplementation((url, options) => {
-      if (options?.method === "PUT") {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({ success: true }),
-        })
-      }
-      if (url.toString().includes("/api/rank?")) {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockData),
-        })
-      }
-      return Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({}),
-      })
+    globalThis.fetch = createFetchMock({
+      "/api/rank/": () => mockFetchResponse({ success: true }),
+      "/api/rank?": () => mockFetchResponse(mockLeaderboardData),
     })
   })
 
@@ -68,14 +49,12 @@ describe("LeaderboardTable", () => {
 
   it("handles like button error", async () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
-    globalThis.fetch = jest.fn().mockImplementation((url, options) => {
-      if (options?.method === "PUT") {
-        return Promise.resolve({ ok: false })
-      }
-      return Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(mockData),
-      })
+    globalThis.fetch = createFetchMock({
+      "/api/rank/": (url, options) =>
+        options?.method === "PUT"
+          ? Promise.resolve({ ok: false })
+          : mockFetchResponse(mockLeaderboardData),
+      "/api/rank?": () => mockFetchResponse(mockLeaderboardData),
     })
 
     render(<LeaderboardTable ruleType="snooker" />)
@@ -107,7 +86,7 @@ describe("LeaderboardTable", () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
     try {
       fireEvent.click(playerRow!)
-    } catch (e) {
+    } catch {
       // Ignore navigation errors
     }
     consoleSpy.mockRestore()

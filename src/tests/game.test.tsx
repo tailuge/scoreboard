@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
 import { LobbyProvider } from "@/contexts/LobbyContext"
-import { useUser } from "@/contexts/UserContext"
+import { setupUserMock, createFetchMock, mockFetchResponse } from "./testUtils"
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
@@ -20,17 +20,9 @@ jest.mock("../nchan/nchanpub", () => ({
 }))
 
 // Mock usePresenceMessages
-jest.mock("@/contexts/LobbyContext", () => ({
-  LobbyProvider: ({ children }: { children: React.ReactNode }) => children,
-  useLobbyContext: jest.fn(),
-  useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
-  usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
-}))
+jest.mock("@/contexts/LobbyContext", () => ({ ...require("./testUtils").lobbyContextMock }))
 
-jest.mock("@/contexts/UserContext", () => ({
-  useUser: jest.fn(),
-}))
-const mockedUseUser = useUser as jest.Mock
+jest.mock("@/contexts/UserContext", () => ({ useUser: jest.fn() }))
 
 // Mock usePresenceList hook
 jest.mock("@/components/hooks/usePresenceList", () => ({
@@ -51,40 +43,16 @@ jest.mock("@/components/hooks/useLobbyTables", () => ({
 describe("Game Page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockedUseUser.mockReturnValue({
-      userId: "test-user-id",
-      userName: "TestUser",
-      setUserName: jest.fn(),
-    })
-    globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url.includes("/api/rank")) {
-        return Promise.resolve({
-          json: () =>
-            Promise.resolve([
-              { id: "1", name: "TopPlayer", score: 999, likes: 0 },
-            ]),
-          ok: true,
-        })
-      }
-      if (url.includes("/api/match-results")) {
-        return Promise.resolve({
-          json: () =>
-            Promise.resolve([
-              {
-                id: "1",
-                winner: "Alice",
-                winnerScore: 10,
-                ruleType: "nineball",
-                timestamp: Date.now(),
-              },
-            ]),
-          ok: true,
-        })
-      }
-      return Promise.resolve({
-        json: () => Promise.resolve([]),
-        ok: true,
-      })
+    setupUserMock()
+    globalThis.fetch = createFetchMock({
+      "/api/rank": () => mockFetchResponse([{ id: "1", name: "TopPlayer", score: 999, likes: 0 }]),
+      "/api/match-results": () => mockFetchResponse([{
+        id: "1",
+        winner: "Alice",
+        winnerScore: 10,
+        ruleType: "nineball",
+        timestamp: Date.now(),
+      }]),
     })
   })
 
