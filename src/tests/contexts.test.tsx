@@ -1,0 +1,351 @@
+import React from "react"
+import { render, act, screen } from "@testing-library/react"
+import {
+  LobbyProvider,
+  useLobbyMessages,
+  usePresenceMessages,
+  useLobbyContext,
+} from "../contexts/LobbyContext"
+import { UserProvider, useUser } from "../contexts/UserContext"
+import { NchanSub } from "../nchan/nchansub"
+import { useRouter } from "next/router"
+
+// Mock NchanSub
+jest.mock("../nchan/nchansub", () => {
+  return {
+    NchanSub: jest.fn().mockImplementation((channel, callback, type) => {
+      return {
+        start: jest.fn(),
+        stop: jest.fn(),
+        // We'll capture the callback in the test
+        _callback: callback,
+        _type: type,
+      }
+    }),
+  }
+})
+
+// Mock useRouter
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
+
+describe("LobbyContext", () => {
+  let instances: any[] = []
+
+  beforeEach(() => {
+    instances = []
+    ;(NchanSub as any).mockImplementation(
+      (channel: string, callback: any, type: string) => {
+        const instance = {
+          start: jest.fn(),
+          stop: jest.fn(),
+          _callback: callback,
+          _type: type,
+        }
+        instances.push(instance)
+        return instance
+      }
+    )
+  })
+
+  it("updates lobby messages when NchanSub triggers", async () => {
+    const TestComponent = () => {
+      const { lastMessage } = useLobbyMessages()
+      return <div>{lastMessage ? lastMessage.tableId : "no message"}</div>
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const lobbyInstance = instances.find((i) => i._type === "lobby")
+    expect(lobbyInstance).toBeDefined()
+
+    await act(async () => {
+      lobbyInstance._callback(
+        JSON.stringify({ type: "TABLE_UPDATED", tableId: "123" })
+      )
+    })
+
+    expect(screen.getByText("123")).toBeInTheDocument()
+  })
+
+  it("updates presence messages when NchanSub triggers", async () => {
+    const TestComponent = () => {
+      const { lastMessage } = usePresenceMessages()
+      return <div>{lastMessage ? lastMessage.userId : "no message"}</div>
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const presenceInstance = instances.find((i) => i._type === "presence")
+    expect(presenceInstance).toBeDefined()
+
+    await act(async () => {
+      presenceInstance._callback(
+        JSON.stringify({
+          messageType: "presence",
+          type: "join",
+          userId: "user-1",
+          userName: "User 1",
+        })
+      )
+    })
+
+    expect(screen.getByText("user-1")).toBeInTheDocument()
+  })
+
+  it("handles invalid JSON in lobby messages", async () => {
+    const TestComponent = () => {
+      const { lastMessage } = useLobbyMessages()
+      return <div>{lastMessage ? "has message" : "no message"}</div>
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const lobbyInstance = instances.find((i) => i._type === "lobby")
+
+    await act(async () => {
+      lobbyInstance._callback("invalid json")
+    })
+
+    expect(screen.getByText("no message")).toBeInTheDocument()
+  })
+
+  it("handles null parsed message in lobby", async () => {
+    const TestComponent = () => {
+      const { lastMessage } = useLobbyMessages()
+      return <div>{lastMessage ? "has message" : "no message"}</div>
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const lobbyInstance = instances.find((i) => i._type === "lobby")
+
+    await act(async () => {
+      // parseNchanMessage returns null if msg is empty or not JSON
+      lobbyInstance._callback("")
+    })
+
+    expect(screen.getByText("no message")).toBeInTheDocument()
+  })
+
+  it("handles invalid JSON in presence messages", async () => {
+    const TestComponent = () => {
+      const { lastMessage } = usePresenceMessages()
+      return <div>{lastMessage ? "has message" : "no message"}</div>
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const presenceInstance = instances.find((i) => i._type === "presence")
+
+    await act(async () => {
+      presenceInstance._callback("invalid json")
+    })
+
+    expect(screen.getByText("no message")).toBeInTheDocument()
+  })
+
+  it("stops subscriptions on unmount", () => {
+    const { unmount } = render(
+      <LobbyProvider>
+        <div />
+      </LobbyProvider>
+    )
+
+    unmount()
+
+    instances.forEach((instance) => {
+      expect(instance.stop).toHaveBeenCalled()
+    })
+  })
+
+  it("throws error when useLobbyMessages is used outside provider", () => {
+    const TestComponent = () => {
+      useLobbyMessages()
+      return null
+    }
+
+    // Suppress console.error for expected error
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+    expect(() => render(<TestComponent />)).toThrow(
+      "useLobbyMessages must be used within a LobbyProvider"
+    )
+    consoleSpy.mockRestore()
+  })
+
+  it("throws error when usePresenceMessages is used outside provider", () => {
+    const TestComponent = () => {
+      usePresenceMessages()
+      return null
+    }
+
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+    expect(() => render(<TestComponent />)).toThrow(
+      "usePresenceMessages must be used within a LobbyProvider"
+    )
+    consoleSpy.mockRestore()
+  })
+
+  it("throws error when useLobbyContext is used outside provider", () => {
+    const TestComponent = () => {
+      useLobbyContext()
+      return null
+    }
+
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+    expect(() => render(<TestComponent />)).toThrow(
+      "useLobbyContext must be used within a LobbyProvider"
+    )
+    consoleSpy.mockRestore()
+  })
+
+  it("updates legacy lastMessage state", async () => {
+    const TestComponent = () => {
+      const context = useLobbyContext()
+      return (
+        <div>
+          {context.lastMessage ? context.lastMessage.tableId : "no message"}
+        </div>
+      )
+    }
+
+    render(
+      <LobbyProvider>
+        <TestComponent />
+      </LobbyProvider>
+    )
+
+    const lobbyInstance = instances.find((i) => i._type === "lobby")
+
+    await act(async () => {
+      lobbyInstance._callback(
+        JSON.stringify({ type: "TABLE_UPDATED", tableId: "legacy-123" })
+      )
+    })
+
+    expect(screen.getByText("legacy-123")).toBeInTheDocument()
+  })
+})
+
+describe("UserContext", () => {
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: {},
+      isReady: false,
+    })
+  })
+
+  it("provides default user name", () => {
+    const TestComponent = () => {
+      const { userName } = useUser()
+      return <div>{userName}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    expect(screen.getByText("Anonymous")).toBeInTheDocument()
+  })
+
+  it("loads user name from localStorage", () => {
+    localStorage.setItem("userName", "StoredUser")
+
+    const TestComponent = () => {
+      const { userName } = useUser()
+      return <div>{userName}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    expect(screen.getByText("StoredUser")).toBeInTheDocument()
+  })
+
+  it("updates user name from router query when ready", () => {
+    ;(useRouter as jest.Mock).mockReturnValue({
+      query: { username: "RouterUser" },
+      isReady: true,
+    })
+
+    const TestComponent = () => {
+      const { userName } = useUser()
+      return <div>{userName}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    expect(screen.getByText("RouterUser")).toBeInTheDocument()
+    expect(localStorage.getItem("userName")).toBe("RouterUser")
+  })
+
+  it("manually sets user name", async () => {
+    const TestComponent = () => {
+      const { userName, setUserName } = useUser()
+      return (
+        <div>
+          <span>{userName}</span>
+          <button onClick={() => setUserName("NewName")}>Change</button>
+        </div>
+      )
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    await act(async () => {
+      screen.getByText("Change").click()
+    })
+
+    expect(screen.getByText("NewName")).toBeInTheDocument()
+    expect(localStorage.getItem("userName")).toBe("NewName")
+  })
+
+  it("throws error when useUser is used outside provider", () => {
+    const TestComponent = () => {
+      useUser()
+      return null
+    }
+
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+    expect(() => render(<TestComponent />)).toThrow(
+      "useUser must be used within a UserProvider"
+    )
+    consoleSpy.mockRestore()
+  })
+})

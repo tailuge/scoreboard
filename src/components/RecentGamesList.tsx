@@ -16,10 +16,16 @@ export function RecentGamesList() {
     await tableAction(tableId, "spectate")
   }
 
-  const liveMatches = tables.filter((t) => t.players.length === 2 && !t.completed)
+  const liveMatches = tables.filter(
+    (t) => t.players.length === 2 && !t.completed
+  )
 
   const renderContent = () => {
-    if (loadingHistory && liveMatches.length === 0 && historyResults.length === 0) {
+    if (
+      loadingHistory &&
+      liveMatches.length === 0 &&
+      historyResults.length === 0
+    ) {
       return (
         <div className="text-center py-8 text-gray-500 text-sm animate-pulse font-mono-data">
           Loading games...
