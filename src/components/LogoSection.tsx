@@ -23,7 +23,7 @@ export function LogoSection() {
                     alt=""
                     width={352}
                     height={75}
-                    className="h-auto w-1/3 opacity-40"
+                    className="h-auto w-[232px] opacity-40"
                     priority
                 />
                 <div
