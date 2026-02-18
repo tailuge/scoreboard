@@ -74,12 +74,12 @@ document.body.innerHTML += icon;</code></pre>
           7: "#8B4513",
           8: "#1a1a1a",
           9: "#F9D71C",
-        };
+        }
 
-        const color = colors[num] || "#ccc";
-        const isStriped = num === 9;
-        const gradId = `rimGrad-${num}`;
-        const maskId = `ballMask-${num}`;
+        const color = colors[num] || "#ccc"
+        const isStriped = num === 9
+        const gradId = `rimGrad-${num}`
+        const maskId = `ballMask-${num}`
 
         let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -92,46 +92,46 @@ document.body.innerHTML += icon;</code></pre>
                         <stop offset="55%" stop-color="black" stop-opacity="0" />
                         <stop offset="100%" stop-color="black" stop-opacity="0.35" />
                     </radialGradient>
-                </defs>`;
+                </defs>`
 
         // Base layer
         if (isStriped) {
           // White ball base
-          svg += `<circle cx="50" cy="50" r="48" fill="#ffffff" />`;
+          svg += `<circle cx="50" cy="50" r="48" fill="#ffffff" />`
           // Wide stripe clipped to the circle edges
           svg += `<g clip-path="url(#${maskId})">
                             <path d="M-5 35 Q50 20 105 35 L105 65 Q50 80 -5 65 Z" fill="${color}"/>
-                        </g>`;
+                        </g>`
         } else {
-          svg += `<circle cx="50" cy="50" r="48" fill="${color}"/>`;
+          svg += `<circle cx="50" cy="50" r="48" fill="${color}"/>`
         }
 
         // Apply the Rim Shading Gradient
-        svg += `<circle cx="50" cy="50" r="48" fill="url(#${gradId})"/>`;
+        svg += `<circle cx="50" cy="50" r="48" fill="url(#${gradId})"/>`
 
         // Specular Highlight (shifted slightly to avoid center)
-        svg += `<circle cx="30" cy="30" r="10" fill="white" fill-opacity="0.2"/>`;
+        svg += `<circle cx="30" cy="30" r="10" fill="white" fill-opacity="0.2"/>`
 
         // Center Number Plate
-        svg += `<circle cx="50" cy="50" r="19" fill="white" />`;
-        svg += `<text x="50" y="52" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="black" text-anchor="middle" dominant-baseline="middle">${num}</text>`;
+        svg += `<circle cx="50" cy="50" r="19" fill="white" />`
+        svg += `<text x="50" y="52" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="black" text-anchor="middle" dominant-baseline="middle">${num}</text>`
 
-        svg += `</svg>`;
-        return svg;
+        svg += `</svg>`
+        return svg
       }
 
       window.onload = () => {
-        const container = document.getElementById("ball-grid");
+        const container = document.getElementById("ball-grid")
         for (let i = 1; i <= 9; i++) {
-          const rotation = Math.random() * 360;
-          const card = document.createElement("div");
-          card.className = "icon-card";
+          const rotation = Math.random() * 360
+          const card = document.createElement("div")
+          card.className = "icon-card"
           card.innerHTML = `
                     <div class="ball-wrapper mb-3" style="--rotation: ${rotation}deg">${createBallSvg(i, 24)}</div>
-                `;
-          container.appendChild(card);
+                `
+          container.appendChild(card)
         }
-      };
+      }
     </script>
   </body>
 </html>
