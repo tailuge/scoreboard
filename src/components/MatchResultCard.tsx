@@ -20,9 +20,9 @@ interface IconConfig {
 function hashString(input: string): number {
   let hash = 0
   for (let i = 0; i < input.length; i++) {
-    hash = (hash * 31 + input.charCodeAt(i)) % 360
+    hash = (hash * 31 + input.charCodeAt(i)) % 180
   }
-  return hash
+  return hash - 90
 }
 
 function getIconConfig(result: MatchResult): IconConfig {

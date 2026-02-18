@@ -52,7 +52,6 @@
   looks the same as it did with Tailwind CSS v3.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -90,7 +89,6 @@ body {
 }
 
 @keyframes glow-pulse {
-
   0%,
   100% {
     opacity: 0.4;
@@ -99,7 +97,8 @@ body {
 
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 20px var(--color-cyan-accent)) drop-shadow(0 0 40px var(--color-cyan-glow));
+    filter: drop-shadow(0 0 20px var(--color-cyan-accent))
+      drop-shadow(0 0 40px var(--color-cyan-glow));
   }
 }
 
@@ -114,8 +113,6 @@ body {
     transform: translateY(0);
   }
 }
-
-
 
 /* Hide scrollbar but allow scrolling */
 * {
@@ -145,9 +142,11 @@ body {
 .groupbox-title {
   font-size: 11px;
   letter-spacing: 0.18em;
-  background: linear-gradient(135deg,
-      rgba(20, 22, 28, 0.95),
-      rgba(13, 14, 18, 1));
+  background: linear-gradient(
+    135deg,
+    rgba(20, 22, 28, 0.95),
+    rgba(13, 14, 18, 1)
+  );
   border-radius: 4px;
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
@@ -180,9 +179,11 @@ body {
 }
 
 .user-pill:hover {
-  background: linear-gradient(135deg,
-      rgba(30, 32, 38, 0.95),
-      rgba(23, 24, 28, 1));
+  background: linear-gradient(
+    135deg,
+    rgba(30, 32, 38, 0.95),
+    rgba(23, 24, 28, 1)
+  );
   transform: scale(1.02);
   box-shadow:
     0 0 20px rgba(13, 14, 18, 0.9),
@@ -197,10 +198,12 @@ body {
   padding: 0.5px;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(135deg,
-      rgba(180, 190, 210, 0.25) 0%,
-      rgba(180, 190, 210, 0.08) 50%,
-      rgba(180, 190, 210, 0.03) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(180, 190, 210, 0.25) 0%,
+    rgba(180, 190, 210, 0.08) 50%,
+    rgba(180, 190, 210, 0.03) 100%
+  );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -215,9 +218,11 @@ body {
   border-radius: 0.75rem;
   padding: 1px;
   pointer-events: none;
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
