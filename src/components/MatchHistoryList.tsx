@@ -43,11 +43,7 @@ export function MatchHistoryList({
     return (
       <>
         {activeGames.map((table) => (
-          <LiveTableItem
-            key={table.id}
-            table={table}
-            onSpectate={onSpectate}
-          />
+          <LiveTableItem key={table.id} table={table} onSpectate={onSpectate} />
         ))}
         {results.map((result) => (
           <MatchResultCard key={result.id} result={result} />
