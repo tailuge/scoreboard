@@ -226,7 +226,7 @@ export default function Game() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="relative min-h-screen flex flex-col items-center p-4 bg-black">
       <Head>
         <title>Play Billiards Online | Free Snooker, Pool & Carom Games</title>
         <meta
@@ -269,7 +269,48 @@ export default function Game() {
         />
       </Head>
 
-      <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 top-2 z-0 flex justify-center"
+      >
+        <div
+          className="relative flex justify-center items-center"
+          style={{ width: "80%" }}
+        >
+          <Image
+            src="/assets/logo_res.png"
+            alt=""
+            width={352}
+            height={75}
+            className="h-auto w-1/3 opacity-40"
+            priority
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 2px)",
+            }}
+          />
+          <span
+            className="absolute left-1/2 -translate-x-1/2"
+            style={{
+              top: "28px",
+              fontFamily: '"Bitcount Prop Double", monospace',
+              fontSize: "16px",
+              color: "#fceb7a",
+              textShadow: "1.5px 1.5px 0 #00000080",
+              letterSpacing: "1px",
+              transform: "translateX(0%) scale(3)",
+              transformOrigin: "center",
+            }}
+          >
+            Billiards
+          </span>
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 flex flex-col gap-4">
           <GroupBox
             leftBadge={<User />}

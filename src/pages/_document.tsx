@@ -10,6 +10,10 @@ export default function Document() {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Double&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <body className="antialiased">
         <Main />

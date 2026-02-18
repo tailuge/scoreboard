@@ -70,7 +70,7 @@ export function OnlineUsersPopover({
                 <span className="h-1 w-1 rounded-full bg-green-accent animate-pulse" />
               </div>
 
-              <ul className="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-1">
+              <ul className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
                 {users.map((user) => (
                   <li
                     key={user.userId}
