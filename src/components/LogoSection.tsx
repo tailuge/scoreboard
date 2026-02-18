@@ -36,7 +36,7 @@ export function LogoSection() {
                 <motion.span
                     className="absolute left-1/2 -translate-x-1/2"
                     style={{
-                        top: "28px",
+                        top: "44px",
                         fontFamily: '"Bitcount Prop Double", monospace',
                         fontSize: "16px",
                         color: "#fceb7a",
