@@ -5,7 +5,6 @@ import {
     RedBallButtons,
 } from "./GameButtonOptions"
 import { GameButton, ActionButton } from "./GameButtons"
-import LeaderboardTable from "./LeaderboardTable"
 
 const GAMES = [
     {
@@ -97,13 +96,6 @@ export function GameGrid({
                         >
                             Online
                         </ActionButton>
-                        <div className="mt-2 w-full h-[88px] text-gray-500 text-sm overflow-hidden">
-                            <LeaderboardTable
-                                ruleType={game.ruleType}
-                                limit={3}
-                                compact={true}
-                            />
-                        </div>
                     </div>
                 )
             })}

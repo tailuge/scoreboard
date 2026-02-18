@@ -9,6 +9,7 @@ import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { GameGrid } from "@/components/GameGrid"
 import { LogoSection } from "@/components/LogoSection"
+import { HighscoreGrid } from "@/components/HighscoreGrid"
 
 export default function Game() {
   const { userId, userName } = useUser()
@@ -93,6 +94,9 @@ export default function Game() {
           </GroupBox>
         </div>
         <div className="lg:col-span-1 flex flex-col gap-4">
+          <GroupBox title="Top Scores">
+            <HighscoreGrid />
+          </GroupBox>
           <MatchHistoryList liveTables={tables} onSpectate={handleSpectate} />
         </div>
       </div>
