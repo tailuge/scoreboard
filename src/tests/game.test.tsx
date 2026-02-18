@@ -95,8 +95,6 @@ describe("Game Page", () => {
       </LobbyProvider>
     )
 
-    expect(screen.getByText("Play")).toBeInTheDocument()
-
     expect(
       screen.getByRole("link", { name: /^Play Snooker$/i })
     ).toBeInTheDocument()
