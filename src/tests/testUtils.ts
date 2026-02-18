@@ -2,7 +2,11 @@ import { useRouter } from "next/router"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyMessages, usePresenceMessages } from "@/contexts/LobbyContext"
 
-export const setupRouterMock = (query = {}, isReady = true, push = jest.fn()) => {
+export const setupRouterMock = (
+  query = {},
+  isReady = true,
+  push = jest.fn()
+) => {
   ;(useRouter as jest.Mock).mockReturnValue({
     query,
     isReady,
@@ -10,7 +14,11 @@ export const setupRouterMock = (query = {}, isReady = true, push = jest.fn()) =>
   })
 }
 
-export const setupUserMock = (userId = "test-user-id", userName = "TestUser", setUserName = jest.fn()) => {
+export const setupUserMock = (
+  userId = "test-user-id",
+  userName = "TestUser",
+  setUserName = jest.fn()
+) => {
   ;(useUser as jest.Mock).mockReturnValue({
     userId,
     userName,

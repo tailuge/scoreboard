@@ -2,7 +2,12 @@ import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
 import { LobbyProvider } from "@/contexts/LobbyContext"
-import { setupUserMock, setupLobbyMocks, createFetchMock, mockFetchResponse } from "./testUtils"
+import {
+  setupUserMock,
+  setupLobbyMocks,
+  createFetchMock,
+  mockFetchResponse,
+} from "./testUtils"
 
 jest.mock("../nchan/nchansub", () => ({
   NchanSub: jest.fn().mockImplementation(() => ({
@@ -52,14 +57,20 @@ describe("Game Page", () => {
     setupUserMock()
     setupLobbyMocks()
     globalThis.fetch = createFetchMock({
-      "/api/rank": () => mockFetchResponse([{ id: "1", name: "TopPlayer", score: 999, likes: 0 }]),
-      "/api/match-results": () => mockFetchResponse([{
-        id: "1",
-        winner: "Alice",
-        winnerScore: 10,
-        ruleType: "nineball",
-        timestamp: Date.now(),
-      }]),
+      "/api/rank": () =>
+        mockFetchResponse([
+          { id: "1", name: "TopPlayer", score: 999, likes: 0 },
+        ]),
+      "/api/match-results": () =>
+        mockFetchResponse([
+          {
+            id: "1",
+            winner: "Alice",
+            winnerScore: 10,
+            ruleType: "nineball",
+            timestamp: Date.now(),
+          },
+        ]),
     })
   })
 

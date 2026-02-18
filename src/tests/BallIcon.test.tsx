@@ -25,4 +25,16 @@ describe("BallIcon component", () => {
       expect(container.querySelector("svg")).toBeInTheDocument()
     }
   })
+
+  it("renders snooker style solid ball without number", () => {
+    const { container } = render(<BallIcon solidColor="red" />)
+    expect(container.querySelector("svg")).toBeInTheDocument()
+    expect(container.querySelector("text")).not.toBeInTheDocument()
+  })
+
+  it("renders threecushion style solid ball without number", () => {
+    const { container } = render(<BallIcon solidColor="yellow" />)
+    expect(container.querySelector("svg")).toBeInTheDocument()
+    expect(container.querySelector("text")).not.toBeInTheDocument()
+  })
 })

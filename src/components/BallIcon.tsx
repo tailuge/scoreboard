@@ -1,6 +1,10 @@
+import { useId } from "react"
+
 interface BallIconProps {
-  readonly number: number
+  readonly number?: number
+  readonly solidColor?: "red" | "yellow"
   readonly size?: number
+  readonly className?: string
 }
 
 const BALL_COLORS: Record<number, string> = {
@@ -21,11 +25,30 @@ const BALL_COLORS: Record<number, string> = {
   15: "#8B4513",
 }
 
-export function BallIcon({ number, size = 48 }: BallIconProps) {
-  const color = BALL_COLORS[number] ?? "#ccc"
-  const isStriped = number >= 9
-  const gradId = `rimGrad-${number}`
-  const maskId = `ballMask-${number}`
+const SOLID_COLORS: Record<NonNullable<BallIconProps["solidColor"]>, string> = {
+  red: "#E31D2D",
+  yellow: "#F9D71C",
+}
+
+export function BallIcon({
+  number,
+  solidColor,
+  size = 48,
+  className,
+}: BallIconProps) {
+  const uniqueId = useId()
+  const normalizedNumber =
+    typeof number === "number" && number >= 1 && number <= 15 ? number : 8
+  const fillColor = solidColor
+    ? SOLID_COLORS[solidColor]
+    : (BALL_COLORS[normalizedNumber] ?? "#ccc")
+  const isStriped = !solidColor && normalizedNumber >= 9
+  const showNumber = !solidColor
+  const uniqueSeed = solidColor
+    ? `solid-${solidColor}`
+    : `num-${normalizedNumber}`
+  const gradId = `rimGrad-${uniqueSeed}-${uniqueId}`
+  const maskId = `ballMask-${uniqueSeed}-${uniqueId}`
 
   return (
     <svg
@@ -33,6 +56,9 @@ export function BallIcon({ number, size = 48 }: BallIconProps) {
       height={size}
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+      focusable="false"
     >
       <defs>
         <clipPath id={maskId}>
@@ -50,31 +76,34 @@ export function BallIcon({ number, size = 48 }: BallIconProps) {
           <g clipPath={`url(#${maskId})`}>
             <path
               d="M-5 35 Q50 20 105 35 L105 65 Q50 80 -5 65 Z"
-              fill={color}
+              fill={fillColor}
             />
           </g>
         </>
       ) : (
-        <circle cx="50" cy="50" r="48" fill={color} />
+        <circle cx="50" cy="50" r="48" fill={fillColor} />
       )}
 
       <circle cx="50" cy="50" r="48" fill={`url(#${gradId})`} />
-
       <circle cx="30" cy="30" r="10" fill="white" fillOpacity={0.2} />
 
-      <circle cx="50" cy="50" r="19" fill="white" />
-      <text
-        x="50"
-        y="52"
-        fontFamily="Arial, sans-serif"
-        fontSize="32"
-        fontWeight="900"
-        fill="black"
-        textAnchor="middle"
-        dominantBaseline="middle"
-      >
-        {number}
-      </text>
+      {showNumber && (
+        <>
+          <circle cx="50" cy="50" r="19" fill="white" />
+          <text
+            x="50"
+            y="52"
+            fontFamily="Arial, sans-serif"
+            fontSize="32"
+            fontWeight="900"
+            fill="black"
+            textAnchor="middle"
+            dominantBaseline="middle"
+          >
+            {normalizedNumber}
+          </text>
+        </>
+      )}
     </svg>
   )
 }

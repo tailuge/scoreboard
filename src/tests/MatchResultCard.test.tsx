@@ -36,12 +36,11 @@ describe("MatchResultCard", () => {
       ...mockResult,
       id: "nineball-1",
       ruleType: "nineball",
+      timestamp: new Date("2026-01-26T12:00:00Z").getTime(), // % 15 + 1 => 1
     }
     const { rerender } = render(<MatchResultCard result={nineballResult} />)
-    expect(screen.getByRole("presentation")).toHaveAttribute(
-      "src",
-      expect.stringContaining("nineball.png")
-    )
+    expect(screen.getByText("1")).toBeInTheDocument()
+    expect(document.querySelector("svg")).toBeInTheDocument()
 
     const snookerResult: MatchResult = {
       ...mockResult,
@@ -49,10 +48,8 @@ describe("MatchResultCard", () => {
       ruleType: "snooker",
     }
     rerender(<MatchResultCard result={snookerResult} />)
-    expect(screen.getByRole("presentation")).toHaveAttribute(
-      "src",
-      expect.stringContaining("snooker.png")
-    )
+    expect(document.querySelector("svg text")).not.toBeInTheDocument()
+    expect(document.querySelector("svg")).toBeInTheDocument()
 
     const threeCushionResult: MatchResult = {
       ...mockResult,
@@ -60,10 +57,8 @@ describe("MatchResultCard", () => {
       ruleType: "threecushion",
     }
     rerender(<MatchResultCard result={threeCushionResult} />)
-    expect(screen.getByRole("presentation")).toHaveAttribute(
-      "src",
-      expect.stringContaining("threecushion.png")
-    )
+    expect(document.querySelector("svg text")).not.toBeInTheDocument()
+    expect(document.querySelector("svg")).toBeInTheDocument()
 
     const eightballResult: MatchResult = {
       ...mockResult,
@@ -71,10 +66,8 @@ describe("MatchResultCard", () => {
       ruleType: "eightball",
     }
     rerender(<MatchResultCard result={eightballResult} />)
-    expect(screen.getByRole("presentation")).toHaveAttribute(
-      "src",
-      expect.stringContaining("eightball.png")
-    )
+    expect(screen.getByText("8")).toBeInTheDocument()
+    expect(document.querySelector("svg")).toBeInTheDocument()
   })
 
   it("renders country flag when location is provided", () => {

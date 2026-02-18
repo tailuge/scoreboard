@@ -39,10 +39,8 @@ describe("LiveMatchesList", () => {
     expect(screen.getByText("Live Games")).toBeInTheDocument()
     expect(screen.getByText("Player One")).toBeInTheDocument()
     expect(screen.getByText("Player Two")).toBeInTheDocument()
-    expect(screen.getByRole("presentation")).toHaveAttribute(
-      "src",
-      expect.stringContaining("nineball.png")
-    )
+    expect(document.querySelector("svg")).toBeInTheDocument()
+    expect(document.querySelector("svg text")).toBeInTheDocument()
     expect(screen.queryByText(/nineball/i)).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Live"))

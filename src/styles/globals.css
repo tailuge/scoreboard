@@ -154,10 +154,10 @@ body::before {
 
 /* User Pill Styles */
 .pill-base,
-.user-pill {
+.user-pill,
+.groupbox-title {
   font-size: 11px;
   letter-spacing: 0.18em;
-  color: var(--color-green-accent);
   background: linear-gradient(
     135deg,
     rgba(20, 22, 28, 0.95),
@@ -171,18 +171,12 @@ body::before {
 
 .groupbox-title {
   z-index: 2;
-  font-size: 11px;
-  letter-spacing: 0.18em;
   color: rgba(180, 190, 210, 0.8);
-  background: linear-gradient(
-    135deg,
-    rgba(20, 22, 28, 0.95),
-    rgba(13, 14, 18, 1)
-  );
-  border-radius: 4px;
-  box-shadow:
-    0 0 20px rgba(13, 14, 18, 0.9),
-    0 0 40px rgba(13, 14, 18, 0.6);
+}
+
+.pill-base,
+.user-pill {
+  color: var(--color-green-accent);
 }
 
 .user-pill {

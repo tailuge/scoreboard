@@ -95,30 +95,43 @@ describe("LobbyContext", () => {
     })
   })
 
-  const testInvalidMessage = async (type: "lobby" | "presence", msg: string) => {
-    const TestComponent = () => {
-      const { lastMessage } =
-        type === "lobby" ? useLobbyMessages() : usePresenceMessages()
-      return <div>{lastMessage ? "has message" : "no message"}</div>
+  const testInvalidMessage = async (
+    type: "lobby" | "presence",
+    msg: string
+  ) => {
+    const parseErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {})
+    try {
+      const TestComponent = () => {
+        const { lastMessage } =
+          type === "lobby" ? useLobbyMessages() : usePresenceMessages()
+        return <div>{lastMessage ? "has message" : "no message"}</div>
+      }
+      render(
+        <LobbyProvider>
+          <TestComponent />
+        </LobbyProvider>
+      )
+      const instance = instances.find((i) => i._type === type)
+      if (!instance) throw new Error(`Instance for ${type} not found`)
+      act(() => {
+        instance._callback(msg)
+      })
+      await waitFor(() => {
+        expect(screen.getByText("no message")).toBeInTheDocument()
+      })
+    } finally {
+      parseErrorSpy.mockRestore()
     }
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-    const instance = instances.find((i) => i._type === type)
-    if (!instance) throw new Error(`Instance for ${type} not found`)
-    act(() => {
-      instance._callback(msg)
-    })
-    await waitFor(() => {
-      expect(screen.getByText("no message")).toBeInTheDocument()
-    })
   }
 
-  it("handles invalid JSON in lobby messages", async () => await testInvalidMessage("lobby", "invalid json"))
-  it("handles null parsed message in lobby", async () => await testInvalidMessage("lobby", ""))
-  it("handles invalid JSON in presence messages", async () => await testInvalidMessage("presence", "invalid json"))
+  it("handles invalid JSON in lobby messages", async () =>
+    await testInvalidMessage("lobby", "invalid json"))
+  it("handles null parsed message in lobby", async () =>
+    await testInvalidMessage("lobby", ""))
+  it("handles invalid JSON in presence messages", async () =>
+    await testInvalidMessage("presence", "invalid json"))
 
   it("stops subscriptions on unmount", () => {
     const { unmount } = render(
