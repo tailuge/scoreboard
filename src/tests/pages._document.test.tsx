@@ -8,6 +8,7 @@ jest.mock("next/document", () => ({
     <html lang={lang}>{children}</html>
   ),
   Head: ({ children }: { children: React.ReactNode }) => (
+    // eslint-disable-next-line @next/next/no-head-element
     <head>{children}</head>
   ),
   Main: () => <div id="next-script-target" />,

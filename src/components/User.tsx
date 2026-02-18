@@ -54,7 +54,7 @@ export function User() {
       aria-label={`Edit username: ${userName}`}
     >
       <UserIcon className="h-3.5 w-3.5 text-green-accent" aria-hidden="true" />
-      {userName}
+      <span className="font-bold">{userName}</span>
     </button>
   )
 }
