@@ -1,34 +1,17 @@
 import React from "react"
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import Lobby from "../pages/lobby"
-import { useRouter } from "next/router"
-import { useUser } from "@/contexts/UserContext"
-import { LobbyProvider } from "@/contexts/LobbyContext"
+import { LobbyProvider, useLobbyMessages } from "@/contexts/LobbyContext"
+import { mockTables } from "./mockData"
+import { setupRouterMock, setupUserMock, setupLobbyMocks, mockFetchResponse, createFetchMock } from "./testUtils"
 
-// Mock next/router
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
-
-// Mock useUser
-jest.mock("@/contexts/UserContext", () => ({
-  useUser: jest.fn(),
-}))
-const mockedUseUser = useUser as jest.Mock
-
-// Mock markUsage
-jest.mock("@/utils/usage", () => ({
-  markUsage: jest.fn(),
-}))
-
-// Mock nchan
+// Mock dependencies
+jest.mock("next/router", () => ({ useRouter: jest.fn() }))
+jest.mock("@/contexts/UserContext", () => ({ useUser: jest.fn() }))
+jest.mock("@/utils/usage", () => ({ markUsage: jest.fn() }))
 jest.mock("@/nchan/nchansub", () => ({
-  NchanSub: jest.fn().mockImplementation(() => ({
-    start: jest.fn(),
-    stop: jest.fn(),
-  })),
+  NchanSub: jest.fn().mockImplementation(() => ({ start: jest.fn(), stop: jest.fn() })),
 }))
-
 jest.mock("@/nchan/nchanpub", () => ({
   NchanPub: jest.fn().mockImplementation(() => ({
     get: jest.fn().mockResolvedValue(5),
@@ -37,86 +20,35 @@ jest.mock("@/nchan/nchanpub", () => ({
     publishPresence: jest.fn().mockResolvedValue(undefined),
   })),
 }))
-
-// Mock usePresenceMessages
 jest.mock("@/contexts/LobbyContext", () => ({
-  LobbyProvider: ({ children }: { children: React.ReactNode }) => children,
+  LobbyProvider: jest.fn(({ children }) => <>{children}</>),
   useLobbyContext: jest.fn(),
-  useLobbyMessages: jest.fn(() => ({ lastMessage: null })),
-  usePresenceMessages: jest.fn(() => ({ lastMessage: null })),
+  useLobbyMessages: jest.fn(),
+  usePresenceMessages: jest.fn(),
 }))
-
-// Mock usePresenceList hook
 jest.mock("@/components/hooks/usePresenceList", () => ({
-  usePresenceList: jest.fn(() => ({
-    users: [],
-    count: 0,
-  })),
+  usePresenceList: jest.fn(() => ({ users: [], count: 0 })),
 }))
 
 const TABLES_API_ENDPOINT = "/api/tables"
 
-const mockTables = [
-  {
-    id: "table-1",
-    creator: { id: "creator-1", name: "Creator 1" },
-    players: [{ id: "creator-1", name: "Creator 1" }],
-    spectators: [],
-    createdAt: Date.now(),
-    lastUsedAt: Date.now(),
-    isActive: true,
-    ruleType: "nineball",
-    completed: false,
-  },
-]
-
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: { username: "TestUser" },
-      isReady: true,
-      push: jest.fn(),
-    })
-    mockedUseUser.mockReturnValue({
-      userId: "test-user-id",
-      userName: "TestUser",
-      setUserName: jest.fn(),
-    })
+    setupRouterMock({ username: "TestUser" })
+    setupUserMock()
+    setupLobbyMocks()
 
-    // Mock globalThis fetch
-    globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url === TABLES_API_ENDPOINT) {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockTables),
-          ok: true,
-        })
-      }
-      if (
-        url.includes("/join") ||
-        url.includes("/spectate") ||
-        url.includes("/find-or-create")
-      ) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve(mockTables[0]),
-        })
-      }
-      return Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve([]),
-      })
+    globalThis.fetch = createFetchMock({
+      "/api/tables/find-or-create": () => mockFetchResponse(mockTables[0]),
+      "/api/tables/join": () => mockFetchResponse(mockTables[0]),
+      "/api/tables/spectate": () => mockFetchResponse(mockTables[0]),
+      [TABLES_API_ENDPOINT]: () => mockFetchResponse(mockTables),
     })
   })
 
   it("should show seeking UI when action=join is triggered and no pending table found", async () => {
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: { action: "join", ruletype: "nineball" },
-      isReady: true,
-      push: jest.fn(),
-    })
+    setupRouterMock({ action: "join", ruletype: "nineball" })
 
     render(
       <LobbyProvider>
@@ -168,51 +100,135 @@ describe("Lobby Component Functional Tests", () => {
   })
 })
 
+describe("Lobby Timeout and Cleanup Tests", () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+    jest.clearAllMocks()
+    setupRouterMock()
+    setupUserMock()
+    setupLobbyMocks()
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  const setupSeekingMock = (id: string) => {
+    globalThis.fetch = createFetchMock({
+      "/find-or-create": () => mockFetchResponse({
+        id,
+        creator: { id: "test-user-id", name: "TestUser" },
+        players: [{ id: "test-user-id", name: "TestUser" }],
+        ruleType: "snooker",
+        completed: false,
+      }),
+    })
+  }
+
+  const verifyTableDeleted = (id: string) => {
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      expect.stringMatching(new RegExp(`/api/tables/${id}/delete`)),
+      expect.objectContaining({ method: "POST" })
+    )
+  }
+
+  it("should timeout after 60 seconds of seeking", async () => {
+    const routerPush = jest.fn()
+    setupRouterMock({ action: "join", ruletype: "snooker" }, true, routerPush)
+    setupSeekingMock("table-seeking-123")
+
+    render(<LobbyProvider><Lobby /></LobbyProvider>)
+    await screen.findByText(/Finding a snooker opponent/i)
+    act(() => { jest.advanceTimersByTime(60000) })
+
+    await waitFor(() => {
+      verifyTableDeleted("table-seeking-123")
+      expect(routerPush).toHaveBeenCalledWith("/game")
+    })
+  })
+
+  it("should call delete API on unmount if seeking", async () => {
+    setupRouterMock({ action: "join", ruletype: "snooker" })
+    setupSeekingMock("table-seeking-unmount")
+
+    const { unmount } = render(<LobbyProvider><Lobby /></LobbyProvider>)
+    await screen.findByText(/Finding a snooker opponent/i)
+    unmount()
+
+    verifyTableDeleted("table-seeking-unmount")
+  })
+
+  it("should show PlayModal when creator sees table is full in background", async () => {
+    let tableData = [{
+      id: "table-full-check",
+      creator: { id: "test-user-id", name: "TestUser" },
+      players: [{ id: "test-user-id", name: "TestUser" }],
+      ruleType: "nineball",
+      completed: false,
+    }]
+
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
+      if (url === TABLES_API_ENDPOINT) return mockFetchResponse(tableData)
+      return mockFetchResponse({})
+    })
+
+    const { rerender } = render(<LobbyProvider><Lobby /></LobbyProvider>)
+    tableData = [{ ...tableData[0], players: [{ id: "test-user-id", name: "TestUser" }, { id: "other-user", name: "Other" }] }]
+
+    ;(useLobbyMessages as jest.Mock).mockReturnValue({ lastMessage: { action: "table_updated" } })
+
+    rerender(<LobbyProvider><Lobby /></LobbyProvider>)
+    await waitFor(() => { expect(screen.getByText("Opponent Ready")).toBeInTheDocument() })
+  })
+
+  it("should handle error in findOrCreateTable", async () => {
+    setupRouterMock({ action: "join", ruletype: "nineball" })
+    globalThis.fetch = createFetchMock({ "/find-or-create": () => mockFetchResponse({}, false, 500) })
+
+    render(<LobbyProvider><Lobby /></LobbyProvider>)
+    await waitFor(() => { expect(screen.queryByText(/Finding a nineball opponent/i)).not.toBeInTheDocument() })
+  })
+
+  it("should close PlayModal when cancel is clicked", async () => {
+    const tableData = [{
+      id: "table-to-close",
+      creator: { id: "test-user-id", name: "TestUser" },
+      players: [{ id: "test-user-id", name: "TestUser" }, { id: "other-user", name: "Other" }],
+      ruleType: "nineball",
+      completed: false,
+    }]
+
+    globalThis.fetch = jest.fn().mockImplementation((url) => {
+      if (url === TABLES_API_ENDPOINT) return mockFetchResponse(tableData)
+      return mockFetchResponse({})
+    })
+
+    render(<LobbyProvider><Lobby /></LobbyProvider>)
+    await waitFor(() => { expect(screen.getByText("Opponent Ready")).toBeInTheDocument() })
+    fireEvent.click(screen.getByText("Cancel"))
+    await waitFor(() => { expect(screen.queryByText("Opponent Ready")).not.toBeInTheDocument() })
+  })
+})
+
 describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(useRouter as jest.Mock).mockReturnValue({
-      query: {
-        username: "TestUser",
-        action: "join",
-        ruletype: "nineball",
-      },
-      isReady: true,
-      push: jest.fn(),
-    })
-    mockedUseUser.mockReturnValue({
-      userId: "test-user-id",
-      userName: "TestUser",
-      setUserName: jest.fn(),
-    })
+    setupRouterMock({ username: "TestUser", action: "join", ruletype: "nineball" })
+    setupUserMock()
+    setupLobbyMocks()
 
-    // Mock globalThis fetch
-    globalThis.fetch = jest.fn().mockImplementation((url) => {
-      if (url === TABLES_API_ENDPOINT) {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockTables),
-          ok: true,
-        })
-      }
-      if (url.includes("/join") || url.includes("/find-or-create")) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () =>
-            Promise.resolve({
-              ...mockTables[0],
-              players: [
-                { id: "creator-1", name: "Creator 1" },
-                { id: "test-user-id", name: "TestUser" },
-              ],
-            }),
-        })
-      }
-      return Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve([]),
-      })
+    const fullTable = {
+      ...mockTables[0],
+      players: [
+        { id: "creator-1", name: "Creator 1" },
+        { id: "test-user-id", name: "TestUser" },
+      ],
+    }
+
+    globalThis.fetch = createFetchMock({
+      "/api/tables/find-or-create": () => mockFetchResponse(fullTable),
+      "/api/tables/join": () => mockFetchResponse(fullTable),
+      [TABLES_API_ENDPOINT]: () => mockFetchResponse(mockTables),
     })
   })
 

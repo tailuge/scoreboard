@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { logger } from "@/utils/logger"
+import { navigateTo } from "@/utils/navigation"
 
 interface LeaderboardTableProps {
   ruleType: string
@@ -51,7 +52,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const handleRowClick = (id: string) => {
     const replayUrl = `/api/rank/${id}?ruletype=${ruleType}`
-    globalThis.location.href = replayUrl
+    navigateTo(replayUrl)
   }
 
   const renderTrophy = (index: number) => {
