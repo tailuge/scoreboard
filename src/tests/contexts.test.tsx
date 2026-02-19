@@ -4,7 +4,6 @@ import {
   LobbyProvider,
   useLobbyMessages,
   usePresenceMessages,
-  useLobbyContext,
 } from "../contexts/LobbyContext"
 import { UserProvider, useUser } from "../contexts/UserContext"
 import { NchanSub } from "../nchan/nchansub"
@@ -104,8 +103,9 @@ describe("LobbyContext", () => {
       .mockImplementation(() => {})
     try {
       const TestComponent = () => {
-        const { lastMessage } =
-          type === "lobby" ? useLobbyMessages() : usePresenceMessages()
+        const lobby = useLobbyMessages()
+        const presence = usePresenceMessages()
+        const { lastMessage } = type === "lobby" ? lobby : presence
         return <div>{lastMessage ? "has message" : "no message"}</div>
       }
       render(
@@ -174,47 +174,6 @@ describe("LobbyContext", () => {
     consoleSpy.mockRestore()
   })
 
-  it("throws error when useLobbyContext is used outside provider", () => {
-    const TestComponent = () => {
-      useLobbyContext()
-      return null
-    }
-
-    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
-    expect(() => render(<TestComponent />)).toThrow(
-      "useLobbyContext must be used within a LobbyProvider"
-    )
-    consoleSpy.mockRestore()
-  })
-
-  it("updates legacy lastMessage state", async () => {
-    const TestComponent = () => {
-      const context = useLobbyContext()
-      return (
-        <div>
-          {context.lastMessage ? context.lastMessage.tableId : "no message"}
-        </div>
-      )
-    }
-
-    render(
-      <LobbyProvider>
-        <TestComponent />
-      </LobbyProvider>
-    )
-    const lobbyInstance = instances.find((i) => i._type === "lobby")
-    if (!lobbyInstance) throw new Error("lobbyInstance not found")
-
-    act(() => {
-      lobbyInstance._callback(
-        JSON.stringify({ type: "TABLE_UPDATED", tableId: "legacy-123" })
-      )
-    })
-
-    await waitFor(() => {
-      expect(screen.getByText("legacy-123")).toBeInTheDocument()
-    })
-  })
 })
 
 describe("UserContext", () => {

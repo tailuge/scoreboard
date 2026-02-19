@@ -19,8 +19,8 @@ interface IconConfig {
 
 function hashString(input: string): number {
   let hash = 0
-  for (let i = 0; i < input.length; i++) {
-    hash = (hash * 31 + input.charCodeAt(i)) % 180
+  for (const char of input) {
+    hash = (hash * 31 + (char.codePointAt(0) || 0)) % 180
   }
   return hash - 90
 }
@@ -76,14 +76,9 @@ function MatchResultCardComponent({
       <div className="flex items-center gap-1 overflow-hidden">
         <div className="flex-shrink-0">
           <div
-            className="transition-transform duration-700 ease-out hover:scale-110"
+            className="transition-transform duration-700 ease-out hover:scale-110 hover:[transform:rotate(0deg)_scale(1.1)!important]"
             style={{ transform: `rotate(${initialRotation}deg)` }}
-            onMouseEnter={(event) => {
-              event.currentTarget.style.transform = "rotate(0deg)"
-            }}
-            onMouseLeave={(event) => {
-              event.currentTarget.style.transform = `rotate(${initialRotation}deg)`
-            }}
+            aria-hidden="true"
           >
             <BallIcon
               number={iconConfig.number}

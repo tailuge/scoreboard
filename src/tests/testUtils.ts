@@ -50,7 +50,7 @@ export const createFetchMock = (handlers: {
     } else if (url instanceof URL) {
       urlString = url.href
     } else if (url && typeof url === "object" && "url" in url) {
-      urlString = (url as any).url
+      urlString = url.url
     }
 
     for (const pattern of patterns) {
