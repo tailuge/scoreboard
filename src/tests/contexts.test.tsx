@@ -198,6 +198,35 @@ describe("UserContext", () => {
     expect(screen.getByText("Anonymous")).toBeInTheDocument()
   })
 
+  it("uses localized name when no name in localStorage", async () => {
+    const originalLanguage = navigator.language
+    Object.defineProperty(navigator, "language", {
+      value: "fr-FR",
+      configurable: true,
+    })
+
+    const TestComponent = () => {
+      const { userName } = useUser()
+      return <div>{userName}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    // Initially it might be "Anonymous" (SSR state) then update in useEffect
+    await waitFor(() => {
+      expect(screen.getByText("Anonyme")).toBeInTheDocument()
+    })
+
+    Object.defineProperty(navigator, "language", {
+      value: originalLanguage,
+      configurable: true,
+    })
+  })
+
   it("loads user name from localStorage", () => {
     localStorage.setItem("userName", "StoredUser")
 

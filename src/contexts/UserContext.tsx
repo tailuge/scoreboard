@@ -8,6 +8,7 @@ import React, {
 } from "react"
 import { getUID } from "@/utils/uid"
 import { useRouter } from "next/router"
+import { getAnonymousName } from "@/utils/locale"
 
 interface UserContextType {
   userId: string
@@ -30,11 +31,18 @@ export function UserProvider({
     const storedUserName = localStorage.getItem("userName")
     if (storedUserName) {
       setUserName(storedUserName)
+    } else {
+      // For new users, use localized "Anonymous"
+      setUserName(getAnonymousName(navigator.language))
     }
     localStorage.setItem("userId", userId)
   }, [userId])
 
   useEffect(() => {
+    // Only persist if it's not the generic English "Anonymous" or if it was explicitly set
+    // But to keep it simple and match existing behavior, we'll just persist it.
+    // However, the user might want it to stay dynamic if they haven't set it.
+    // For now, let's just update the initial choice.
     localStorage.setItem("userName", userName)
   }, [userName])
 

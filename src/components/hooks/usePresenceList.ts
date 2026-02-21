@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useReducer } from "react"
 import { NchanPub } from "@/nchan/nchanpub"
 import { usePresenceMessages } from "@/contexts/LobbyContext"
 import type { PresenceMessage } from "@/nchan/types"
+import { getAnonymousName } from "@/utils/locale"
 
 export interface PresenceUser {
   userId: string
@@ -73,7 +74,11 @@ export function usePresenceList(
     pubRef.current = new NchanPub("lobby")
   }
 
-  const effectiveUserName = userName ?? "Anonymous"
+  const effectiveUserName =
+    userName ??
+    getAnonymousName(
+      typeof navigator !== "undefined" ? navigator.language : undefined
+    )
 
   useEffect(() => {
     if (!userId) return

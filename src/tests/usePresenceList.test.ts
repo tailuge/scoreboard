@@ -75,6 +75,33 @@ describe("usePresenceList", () => {
         })
       )
     })
+
+    it("should use localized 'Anonymous' when navigator.language is French", () => {
+      const originalLanguage = navigator.language
+      Object.defineProperty(navigator, "language", {
+        value: "fr-FR",
+        configurable: true,
+      })
+
+      renderHook(() => usePresenceList(userId))
+
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
+
+      expect(mockPublishPresence).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "join",
+          userId,
+          userName: "Anonyme",
+        })
+      )
+
+      Object.defineProperty(navigator, "language", {
+        value: originalLanguage,
+        configurable: true,
+      })
+    })
   })
 
   describe("heartbeat", () => {
