@@ -8,6 +8,7 @@ import React, {
 } from "react"
 import { getUID } from "@/utils/uid"
 import { useRouter } from "next/router"
+import { getAnonymousName, anonByLang } from "@/utils/locale"
 
 interface UserContextType {
   userId: string
@@ -28,15 +29,15 @@ export function UserProvider({
 
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName")
-    if (storedUserName) {
+    const anonymousNames = Object.values(anonByLang)
+    if (storedUserName && !anonymousNames.includes(storedUserName)) {
       setUserName(storedUserName)
+    } else {
+      // For new users or users with a generic anonymous name, use localized "Anonymous"
+      setUserName(getAnonymousName(typeof navigator !== "undefined" ? navigator.language : undefined))
     }
     localStorage.setItem("userId", userId)
   }, [userId])
-
-  useEffect(() => {
-    localStorage.setItem("userName", userName)
-  }, [userName])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -44,6 +45,7 @@ export function UserProvider({
     const urlUserName = router.query.username as string
     if (urlUserName) {
       setUserName(urlUserName)
+      localStorage.setItem("userName", urlUserName)
     }
   }, [router.isReady, router.query.username])
 
