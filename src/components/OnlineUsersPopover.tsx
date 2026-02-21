@@ -1,6 +1,7 @@
 // src/components/OnlineUsersPopover.tsx
 import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
+import { localeToFlag } from "@/utils/locale"
 import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
@@ -82,7 +83,7 @@ export function OnlineUsersPopover({
                         aria-hidden="true"
                       />
                       <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-                        {user.userName}
+                        {localeToFlag(user.locale)} {user.userName}
                       </span>
                     </div>
                     {user.userId === currentUserId ? (

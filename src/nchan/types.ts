@@ -35,6 +35,7 @@ export interface PresenceMessage extends BaseMessage {
   type: "join" | "heartbeat" | "leave"
   userId: string
   userName: string
+  locale?: string
   timestamp?: number
 }
 
