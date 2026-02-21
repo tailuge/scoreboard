@@ -6,10 +6,12 @@ import type { PresenceMessage } from "@/nchan/types"
 export interface PresenceUser {
   userId: string
   userName: string
+  locale?: string
 }
 
 interface PresenceEntry {
   userName: string
+  locale?: string
   lastSeen: number
 }
 
@@ -22,13 +24,13 @@ function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
   msg: PresenceMessage
 ): void {
-  const { type, userId, userName, timestamp } = msg
+  const { type, userId, userName, locale, timestamp } = msg
   const lastSeen = timestamp ?? Date.now()
 
   if (type === "leave") {
     map.delete(userId)
   } else {
-    map.set(userId, { userName, lastSeen })
+    map.set(userId, { userName, locale, lastSeen })
   }
 }
 
@@ -41,7 +43,11 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
       map.delete(userId)
       continue
     }
-    users.push({ userId, userName: entry.userName })
+    users.push({
+      userId,
+      userName: entry.userName,
+      locale: entry.locale,
+    })
   }
 
   users.sort((a, b) => {
@@ -77,6 +83,7 @@ export function usePresenceList(
         type: "heartbeat",
         userId,
         userName: effectiveUserName,
+        locale: navigator.language,
         timestamp: Date.now(),
       })
     }
@@ -86,6 +93,7 @@ export function usePresenceList(
         type: "join",
         userId,
         userName: effectiveUserName,
+        locale: navigator.language,
         timestamp: Date.now(),
       })
     }, JOIN_DELAY_MS)

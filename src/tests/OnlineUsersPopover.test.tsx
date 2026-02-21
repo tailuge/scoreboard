@@ -4,8 +4,8 @@ import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 
 describe("OnlineUsersPopover", () => {
   const mockUsers = [
-    { userId: "user-1", userName: "User 1" },
-    { userId: "user-2", userName: "User 2" },
+    { userId: "user-1", userName: "User 1", locale: "en-US" },
+    { userId: "user-2", userName: "User 2", locale: "en-GB" },
   ]
 
   it("renders correctly and toggles visibility", () => {
@@ -25,8 +25,8 @@ describe("OnlineUsersPopover", () => {
     // Open
     fireEvent.click(button)
     expect(screen.getByRole("dialog")).toBeInTheDocument()
-    expect(screen.getByText("User 1")).toBeInTheDocument()
-    expect(screen.getByText("User 2")).toBeInTheDocument()
+    expect(screen.getByText(/🇺🇸 User 1/)).toBeInTheDocument()
+    expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
     expect(screen.getByText("Identified")).toBeInTheDocument()
     expect(screen.getByText("Online")).toBeInTheDocument()
 

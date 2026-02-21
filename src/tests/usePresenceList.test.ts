@@ -55,6 +55,7 @@ describe("usePresenceList", () => {
           type: "join",
           userId,
           userName,
+          locale: expect.any(String),
         })
       )
     })
@@ -97,6 +98,7 @@ describe("usePresenceList", () => {
           type: "heartbeat",
           userId,
           userName,
+          locale: expect.any(String),
         })
       )
 
@@ -137,6 +139,7 @@ describe("usePresenceList", () => {
         type: "join",
         userId: "user-2",
         userName: "User Two",
+        locale: "en-US",
         timestamp: Date.now(),
       }
 
@@ -148,7 +151,7 @@ describe("usePresenceList", () => {
       })
 
       expect(result.current.users).toEqual([
-        { userId: "user-2", userName: "User Two" },
+        { userId: "user-2", userName: "User Two", locale: "en-US" },
       ])
       expect(result.current.count).toBe(1)
     })
