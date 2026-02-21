@@ -63,7 +63,7 @@ export const anonByLang: Record<string, string> = {
 export function getAnonymousName(locale?: string): string {
   if (!locale) return anonByLang.en
   const baseLocale = locale.split("-")[0].toLowerCase()
-  return anonByLang[baseLocale] || anonByLang.la || anonByLang.en
+  return anonByLang[baseLocale] || anonByLang.la
 }
 
 export function localeToFlag(locale?: string): string {
