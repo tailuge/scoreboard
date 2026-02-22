@@ -47,15 +47,23 @@ export type NchanMessage = LobbyMessage | PresenceMessage
 /**
  * Type guard to check if a message is a LobbyMessage
  */
-export function isLobbyMessage(msg: any): msg is LobbyMessage {
-  return msg?.messageType === "lobby"
+export function isLobbyMessage(msg: unknown): msg is LobbyMessage {
+  return (
+    typeof msg === "object" &&
+    msg !== null &&
+    (msg as Record<string, unknown>).messageType === "lobby"
+  )
 }
 
 /**
  * Type guard to check if a message is a PresenceMessage
  */
-export function isPresenceMessage(msg: any): msg is PresenceMessage {
-  return msg?.messageType === "presence"
+export function isPresenceMessage(msg: unknown): msg is PresenceMessage {
+  return (
+    typeof msg === "object" &&
+    msg !== null &&
+    (msg as Record<string, unknown>).messageType === "presence"
+  )
 }
 
 /**
@@ -67,22 +75,30 @@ export function parseNchanMessage(data: string): NchanMessage | null {
   }
   try {
     const parsed = JSON.parse(data)
+    if (parsed === null || typeof parsed !== "object") {
+      return null
+    }
+
+    const message = parsed as Record<string, unknown>
 
     // If no messageType, assume it's a legacy lobby message
-    if (!parsed.messageType) {
+    if (!message.messageType) {
       return {
-        ...parsed,
+        ...message,
         messageType: "lobby",
       } as LobbyMessage
     }
 
     // Validate messageType
-    if (parsed.messageType !== "lobby" && parsed.messageType !== "presence") {
-      console.warn("Unknown message type:", parsed.messageType)
+    if (
+      message.messageType !== "lobby" &&
+      message.messageType !== "presence"
+    ) {
+      console.warn("Unknown message type:", message.messageType)
       return null
     }
 
-    return parsed as NchanMessage
+    return message as unknown as NchanMessage
   } catch (error) {
     console.error(`Failed to parse nchan message: "${data}"`, error)
     return null

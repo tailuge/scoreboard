@@ -44,6 +44,11 @@ const scoretable = new ScoreTable(kv)
  *       400:
  *         description: Client version is outdated
  */
+interface HiscoreState {
+  v: number
+  score: number
+}
+
 export default async function handler(request: NextRequest) {
   const url = request.nextUrl
   const body = await request.text()
@@ -51,9 +56,18 @@ export default async function handler(request: NextRequest) {
   logger.log(`url.searchParams = ${url.searchParams}`)
   const raw = new URLSearchParams(body).get("state")
   logger.log(raw)
-  let json: any
+
+  if (raw === null) {
+    return new Response("Missing score state", { status: 400 })
+  }
+
+  let json: HiscoreState
   try {
-    json = JSON.parse(JSONCrush.uncrush(raw))
+    const uncrushed = JSONCrush.uncrush(raw)
+    if (uncrushed === null || uncrushed === "") {
+      throw new Error("Empty state after uncrush")
+    }
+    json = JSON.parse(uncrushed) as HiscoreState
     logger.log(json)
   } catch (error) {
     logger.error("Failed to parse hiscore state:", error)
@@ -61,8 +75,13 @@ export default async function handler(request: NextRequest) {
   }
 
   // require up to date client version
-  if (json?.v !== 1) {
-    logger.log("Client version is outdated")
+  if (
+    json === null ||
+    json === undefined ||
+    json.v !== 1 ||
+    typeof json.score !== "number"
+  ) {
+    logger.log("Client version is outdated or invalid score")
     return new Response(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
       { status: 400 }
@@ -71,7 +90,7 @@ export default async function handler(request: NextRequest) {
 
   const ruletype = url.searchParams.get("ruletype")
   const base = new Date("2024").valueOf()
-  const score = json?.score + (Date.now() - base) / base
+  const score = json.score + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
   logger.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
   const data = await scoretable.topTen(url.searchParams.get("ruletype"))
