@@ -25,8 +25,13 @@ const shortener = new Shortener(kv)
  *         description: Shortened data
  */
 export default async function handler(request: NextRequest) {
-  const json = await request.json()
-  logger.log(json)
-  const body = await shortener.shorten(json)
-  return new Response(JSON.stringify(body))
+  try {
+    const json = await request.json()
+    logger.log(json)
+    const body = await shortener.shorten(json)
+    return new Response(JSON.stringify(body))
+  } catch (error) {
+    logger.error("Failed to parse shorten request:", error)
+    return new Response("Invalid JSON body", { status: 400 })
+  }
 }

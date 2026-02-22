@@ -62,6 +62,9 @@ export function isPresenceMessage(msg: any): msg is PresenceMessage {
  * Parse and validate an incoming message
  */
 export function parseNchanMessage(data: string): NchanMessage | null {
+  if (!data || data.trim() === "") {
+    return null
+  }
   try {
     const parsed = JSON.parse(data)
 
@@ -81,7 +84,7 @@ export function parseNchanMessage(data: string): NchanMessage | null {
 
     return parsed as NchanMessage
   } catch (error) {
-    console.error("Failed to parse nchan message:", error)
+    console.error(`Failed to parse nchan message: "${data}"`, error)
     return null
   }
 }

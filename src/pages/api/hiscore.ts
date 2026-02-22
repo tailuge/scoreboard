@@ -51,8 +51,14 @@ export default async function handler(request: NextRequest) {
   logger.log(`url.searchParams = ${url.searchParams}`)
   const raw = new URLSearchParams(body).get("state")
   logger.log(raw)
-  const json = JSON.parse(JSONCrush.uncrush(raw))
-  logger.log(json)
+  let json: any
+  try {
+    json = JSON.parse(JSONCrush.uncrush(raw))
+    logger.log(json)
+  } catch (error) {
+    logger.error("Failed to parse hiscore state:", error)
+    return new Response("Invalid score state", { status: 400 })
+  }
 
   // require up to date client version
   if (json?.v !== 1) {
