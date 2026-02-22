@@ -96,6 +96,15 @@ export function GameGrid({
             >
               Online
             </ActionButton>
+            {game.ruleType === "nineball" && (
+              <ActionButton
+                href={`${highscoreUrl}&bot=true`}
+                hoverBorderColor="hover:border-purple-500"
+                hoverTextColor="hover:text-purple-400"
+              >
+                Play with Bot
+              </ActionButton>
+            )}
           </div>
         )
       })}

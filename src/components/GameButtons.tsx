@@ -77,7 +77,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isInternal = href.startsWith("/")
 
-  const commonClasses = `w-32 h-8 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-sm transition-colors`
+  const commonClasses = `w-32 h-6 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
 
   if (isInternal) {
     return (

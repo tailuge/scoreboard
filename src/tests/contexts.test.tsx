@@ -173,7 +173,6 @@ describe("LobbyContext", () => {
     )
     consoleSpy.mockRestore()
   })
-
 })
 
 describe("UserContext", () => {

@@ -34,7 +34,11 @@ export function UserProvider({
       setUserName(storedUserName)
     } else {
       // For new users or users with a generic anonymous name, use localized "Anonymous"
-      setUserName(getAnonymousName(typeof navigator !== "undefined" ? navigator.language : undefined))
+      setUserName(
+        getAnonymousName(
+          typeof navigator !== "undefined" ? navigator.language : undefined
+        )
+      )
     }
     localStorage.setItem("userId", userId)
   }, [userId])

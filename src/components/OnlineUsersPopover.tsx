@@ -1,15 +1,15 @@
 // src/components/OnlineUsersPopover.tsx
-import { UsersIcon } from "@heroicons/react/24/solid";
-import React, { useState, useRef, useEffect } from "react";
-import { localeToFlag } from "@/utils/locale";
-import type { PresenceUser } from "./hooks/usePresenceList";
+import { UsersIcon } from "@heroicons/react/24/solid"
+import React, { useState, useRef, useEffect } from "react"
+import { localeToFlag } from "@/utils/locale"
+import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
-  readonly count: number;
-  readonly users: PresenceUser[];
-  readonly totalCount?: number;
-  readonly currentUserId?: string;
-};
+  readonly count: number
+  readonly users: PresenceUser[]
+  readonly totalCount?: number
+  readonly currentUserId?: string
+}
 
 export function OnlineUsersPopover({
   count,
@@ -17,27 +17,27 @@ export function OnlineUsersPopover({
   totalCount,
   currentUserId,
 }: OnlineUsersPopoverProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   // Close on click outside
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [isOpen])
 
-  const overflow = totalCount ? totalCount - users.length : 0;
+  const overflow = totalCount ? totalCount - users.length : 0
 
   return (
     <div ref={containerRef} className="relative">
@@ -117,5 +117,5 @@ export function OnlineUsersPopover({
         </div>
       )}
     </div>
-  );
+  )
 }
