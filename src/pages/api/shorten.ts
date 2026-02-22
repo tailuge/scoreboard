@@ -31,7 +31,7 @@ export default async function handler(request: NextRequest) {
     const body = await shortener.shorten(json)
     return new Response(JSON.stringify(body))
   } catch (error) {
+    logger.error("Shorten API error:", error)
     return new Response("Request failed", { status: 400 })
-    return new Response("Invalid JSON body", { status: 400 })
   }
 }

@@ -75,10 +75,7 @@ export function usePresenceList(
   }
 
   const effectiveUserName =
-    userName ??
-    getAnonymousName(
-      typeof navigator !== "undefined" ? navigator.language : undefined
-    )
+    userName ?? getAnonymousName(globalThis.navigator?.language)
 
   useEffect(() => {
     if (!userId) return
