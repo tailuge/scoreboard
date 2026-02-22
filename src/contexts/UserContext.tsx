@@ -23,25 +23,31 @@ export function UserProvider({
 }: {
   readonly children: React.ReactNode
 }) {
-  const [userId] = useState(() => getUID())
+  const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("Anonymous")
   const router = useRouter()
 
   useEffect(() => {
-    const storedUserName = localStorage.getItem("userName")
+    const storedId = globalThis.localStorage.getItem("userId")
+    if (storedId) {
+      setUserId(storedId)
+      console.log("Loaded player ID: " + storedId)
+    } else {
+      const newId = getUID()
+      setUserId(newId)
+      globalThis.localStorage.setItem("userId", newId)
+      console.log("Generated new player ID: " + newId)
+    }
+
+    const storedUserName = globalThis.localStorage.getItem("userName")
     const anonymousNames = Object.values(anonByLang)
     if (storedUserName && !anonymousNames.includes(storedUserName)) {
       setUserName(storedUserName)
     } else {
       // For new users or users with a generic anonymous name, use localized "Anonymous"
-      setUserName(
-        getAnonymousName(
-          typeof navigator !== "undefined" ? navigator.language : undefined
-        )
-      )
+      setUserName(getAnonymousName(globalThis.navigator?.language))
     }
-    localStorage.setItem("userId", userId)
-  }, [userId])
+  }, [])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -49,13 +55,13 @@ export function UserProvider({
     const urlUserName = router.query.username as string
     if (urlUserName) {
       setUserName(urlUserName)
-      localStorage.setItem("userName", urlUserName)
+      globalThis.localStorage.setItem("userName", urlUserName)
     }
   }, [router.isReady, router.query.username])
 
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
-    localStorage.setItem("userName", name)
+    globalThis.localStorage.setItem("userName", name)
   }, [])
 
   const contextValue = useMemo(

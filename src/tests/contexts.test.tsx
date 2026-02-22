@@ -330,4 +330,49 @@ describe("UserContext", () => {
     )
     consoleSpy.mockRestore()
   })
+  it("loads player ID from localStorage", async () => {
+    globalThis.localStorage.setItem("userId", "stored-id")
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {})
+
+    const TestComponent = () => {
+      const { userId } = useUser()
+      return <div data-testid="user-id">{userId}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId("user-id").textContent).toBe("stored-id")
+    })
+    expect(logSpy).toHaveBeenCalledWith("Loaded player ID: stored-id")
+    logSpy.mockRestore()
+  })
+
+  it("generates and saves new player ID if not in localStorage", async () => {
+    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {})
+
+    const TestComponent = () => {
+      const { userId } = useUser()
+      return <div data-testid="user-id">{userId}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    await waitFor(() => {
+      const id = screen.getByTestId("user-id").textContent
+      expect(id).toBeTruthy()
+      expect(id!.length).toBeGreaterThan(5)
+      expect(globalThis.localStorage.getItem("userId")).toBe(id)
+      expect(logSpy).toHaveBeenCalledWith("Generated new player ID: " + id)
+    })
+    logSpy.mockRestore()
+  })
 })
