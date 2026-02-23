@@ -217,23 +217,36 @@
     <script type="module">
       import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm"
 
+      const DEFAULT_LOBBY_ORIGIN = "https://scoreboard-tailuge.vercel.app"
+
+      function getLobbyUrl() {
+        if (globalThis.location.protocol === "file:") {
+          return new URL("/lobby", DEFAULT_LOBBY_ORIGIN)
+        }
+        return new URL("/lobby", globalThis.location.origin)
+      }
+
       // Function to create an iframe
       function createIframe(options = {}) {
         const username = options.username || faker.person.firstName()
+        const playerId =
+          options.playerId || faker.string.alphanumeric(8).toLowerCase()
         const iframe = document.createElement("iframe")
-        let src = `https://scoreboard-tailuge.vercel.app/lobby?username=${username}`
+        const src = getLobbyUrl()
+        src.searchParams.set("username", username)
+        src.searchParams.set("playerId", playerId)
 
         if (options.action) {
-          src += `&action=${options.action}`
+          src.searchParams.set("action", options.action)
         }
         if (options.ruleType) {
-          src += `&ruletype=${options.ruleType}`
+          src.searchParams.set("ruletype", options.ruleType)
           if (options.ruleType === "snooker") {
-            src += "&reds=3"
+            src.searchParams.set("reds", "3")
           }
         }
 
-        iframe.src = src
+        iframe.src = src.toString()
         iframe.width = "99.5%"
         iframe.height = "99.5%"
         iframe.frameBorder = "0"

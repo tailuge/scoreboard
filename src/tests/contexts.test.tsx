@@ -352,6 +352,47 @@ describe("UserContext", () => {
     logSpy.mockRestore()
   })
 
+  it("overrides player ID from router query param playerId when ready", async () => {
+    globalThis.localStorage.setItem("userId", "stored-id")
+    setupRouterMock({ playerId: "router-id" })
+
+    const TestComponent = () => {
+      const { userId } = useUser()
+      return <div data-testid="user-id">{userId}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId("user-id").textContent).toBe("router-id")
+    })
+    expect(globalThis.localStorage.getItem("userId")).toBe("router-id")
+  })
+
+  it("accepts router query param userId as alias", async () => {
+    setupRouterMock({ userId: "alias-id" })
+
+    const TestComponent = () => {
+      const { userId } = useUser()
+      return <div data-testid="user-id">{userId}</div>
+    }
+
+    render(
+      <UserProvider>
+        <TestComponent />
+      </UserProvider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId("user-id").textContent).toBe("alias-id")
+    })
+    expect(globalThis.localStorage.getItem("userId")).toBe("alias-id")
+  })
+
   it("generates and saves new player ID if not in localStorage", async () => {
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {})
 

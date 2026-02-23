@@ -16,6 +16,8 @@ interface UserContextType {
   setUserName: (name: string) => void
 }
 
+type RouterQueryValue = string | string[] | undefined
+
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export function UserProvider({
@@ -52,12 +54,28 @@ export function UserProvider({
   useEffect(() => {
     if (!router.isReady) return
 
-    const urlUserName = router.query.username as string
+    const getQueryValue = (value: RouterQueryValue) =>
+      Array.isArray(value) ? value[0] : value
+
+    const urlUserId = getQueryValue(
+      router.query.playerId ?? router.query.userId
+    )
+    if (urlUserId) {
+      setUserId(urlUserId)
+      globalThis.localStorage.setItem("userId", urlUserId)
+    }
+
+    const urlUserName = getQueryValue(router.query.username)
     if (urlUserName) {
       setUserName(urlUserName)
       globalThis.localStorage.setItem("userName", urlUserName)
     }
-  }, [router.isReady, router.query.username])
+  }, [
+    router.isReady,
+    router.query.playerId,
+    router.query.userId,
+    router.query.username,
+  ])
 
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
