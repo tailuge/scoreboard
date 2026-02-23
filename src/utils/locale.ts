@@ -68,7 +68,7 @@ export function getAnonymousName(locale?: string): string {
 
 export function localeToFlag(locale?: string): string {
   const region = locale?.split("-")[1]
-  if (!region || region.length !== 2) return "🌐"
+  if (region?.length !== 2) return "🌐"
   return region
     .toUpperCase()
     .replaceAll(/./g, (c) =>
