@@ -71,8 +71,8 @@ export default function Game() {
 
       <LogoSection />
 
-      <div className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 flex flex-col gap-4">
+      <div className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-4">
           <GroupBox
             leftBadge={<User />}
             rightBadge={
@@ -84,16 +84,18 @@ export default function Game() {
               />
             }
           >
-            <GameGrid
-              userName={userName}
-              snookerReds={snookerReds}
-              onSnookerRedsChange={setSnookerReds}
-              threecushionRaceTo={threecushionRaceTo}
-              onThreecushionRaceToChange={setThreecushionRaceTo}
-            />
+            <div className="-mt-3">
+              <GameGrid
+                userName={userName}
+                snookerReds={snookerReds}
+                onSnookerRedsChange={setSnookerReds}
+                threecushionRaceTo={threecushionRaceTo}
+                onThreecushionRaceToChange={setThreecushionRaceTo}
+              />
+            </div>
           </GroupBox>
         </div>
-        <div className="lg:col-span-1 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <GroupBox title="Top Scores">
             <HighscoreGrid />
           </GroupBox>

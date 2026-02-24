@@ -23,7 +23,7 @@ export function LocationTimeBadge({
     ? countryCodeToFlagEmoji(locationCountry)
     : null
   const hasLocation = locationCity || countryFlag
-  const textSize = compact ? "text-[8px]" : "text-[9px]"
+  const textSize = compact ? "text-[9px]" : "text-[10px]"
   const textColor = compact ? "text-gray-500/70" : "text-gray-500"
 
   return (

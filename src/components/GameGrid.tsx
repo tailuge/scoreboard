@@ -102,7 +102,7 @@ export function GameGrid({
                 hoverBorderColor="hover:border-purple-500"
                 hoverTextColor="hover:text-purple-400"
               >
-                Play with Bot
+                Play vs Bot
               </ActionButton>
             )}
           </div>
