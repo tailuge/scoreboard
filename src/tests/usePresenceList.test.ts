@@ -56,7 +56,7 @@ describe("usePresenceList", () => {
           userId,
           userName,
           locale: expect.any(String),
-          originUrl: expect.any(String),
+          originUrl: expect.stringMatching(/^origin:/),
         })
       )
     })
@@ -127,7 +127,7 @@ describe("usePresenceList", () => {
           userId,
           userName,
           locale: expect.any(String),
-          originUrl: expect.any(String),
+          originUrl: expect.stringMatching(/^origin:/),
         })
       )
 

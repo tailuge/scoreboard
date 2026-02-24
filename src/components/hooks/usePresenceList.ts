@@ -76,7 +76,9 @@ export function usePresenceList(
 
   const effectiveUserName =
     userName ?? getAnonymousName(globalThis.navigator?.language)
-  const originUrl = globalThis.location?.href ?? ""
+  const originUrl = globalThis.location?.host
+    ? `origin:${globalThis.location.host}`
+    : ""
 
   useEffect(() => {
     if (!userId) return

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
-import { logger } from "@/utils/logger"
 import { navigateTo } from "@/utils/navigation"
 
 interface LeaderboardTableProps {
