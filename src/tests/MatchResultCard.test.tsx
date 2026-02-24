@@ -87,8 +87,8 @@ describe("MatchResultCard", () => {
   it("has the correct border classes", () => {
     const { container } = render(<MatchResultCard result={mockResult} />)
     const card = container.firstChild as HTMLElement
-    expect(card).toHaveClass("border-b")
-    expect(card).toHaveClass("border-gray-800")
+    expect(card).not.toHaveClass("border-b")
+    expect(card).toHaveClass("border-gray-800/40")
   })
 
   it("renders solo result correctly", () => {

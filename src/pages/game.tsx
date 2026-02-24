@@ -26,7 +26,7 @@ export default function Game() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center p-4 bg-black">
+    <div className="relative min-h-screen flex flex-col items-center p-4 bg-[var(--background)]">
       <Head>
         <title>Play Billiards Online | Free Snooker, Pool & Carom Games</title>
         <meta

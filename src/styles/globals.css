@@ -70,7 +70,7 @@
 }
 
 :root {
-  --background: #000000;
+  --background: #000010;
   --foreground: #ededed;
 }
 
@@ -140,11 +140,11 @@ body {
 .pill-base,
 .user-pill,
 .groupbox-title {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.18em;
   background: linear-gradient(
     135deg,
-    rgba(20, 22, 28, 0.95),
+    rgba(10, 12, 18, 0.7),
     rgba(13, 14, 18, 1)
   );
   border-radius: 4px;
@@ -201,8 +201,8 @@ body {
   background: linear-gradient(
     135deg,
     rgba(180, 190, 210, 0.25) 0%,
-    rgba(180, 190, 210, 0.08) 50%,
-    rgba(180, 190, 210, 0.03) 100%
+    rgba(180, 190, 210, 0.18) 50%,
+    rgba(180, 190, 210, 0.1) 100%
   );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
