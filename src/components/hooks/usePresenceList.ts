@@ -8,12 +8,14 @@ export interface PresenceUser {
   userId: string
   userName: string
   locale?: string
+  originUrl?: string
 }
 
 interface PresenceEntry {
   userName: string
   locale?: string
   lastSeen: number
+  originUrl?: string
 }
 
 const HEARTBEAT_INTERVAL_MS = 60000
@@ -25,13 +27,13 @@ function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
   msg: PresenceMessage
 ): void {
-  const { type, userId, userName, locale, timestamp } = msg
+  const { type, userId, userName, locale, timestamp, originUrl } = msg
   const lastSeen = timestamp ?? Date.now()
 
   if (type === "leave") {
     map.delete(userId)
   } else {
-    map.set(userId, { userName, locale, lastSeen })
+    map.set(userId, { userName, locale, lastSeen, originUrl })
   }
 }
 
@@ -48,6 +50,7 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
       userId,
       userName: entry.userName,
       locale: entry.locale,
+      originUrl: entry.originUrl,
     })
   }
 

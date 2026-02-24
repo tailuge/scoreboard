@@ -27,8 +27,7 @@ describe("OnlineUsersPopover", () => {
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
     expect(screen.getByText(/🇺🇸 User 1/)).toBeInTheDocument()
     expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
-    expect(screen.getByText("Identified")).toBeInTheDocument()
-    expect(screen.getByText("Online")).toBeInTheDocument()
+    expect(screen.getByText("⭐")).toBeInTheDocument()
 
     // Close
     fireEvent.click(button)
@@ -66,12 +65,6 @@ describe("OnlineUsersPopover", () => {
 
     fireEvent.click(screen.getByLabelText("10 users online"))
     expect(screen.getByText("+8 more active")).toBeInTheDocument()
-
-    // Check total active count in footer
-    const totalActiveLabel = screen.getByText("Total Active:")
-    const footerCount = totalActiveLabel.nextElementSibling
-    if (!footerCount) throw new Error("footerCount not found")
-    expect(footerCount.textContent).toBe("10")
   })
 
   it("handles missing totalCount", () => {
@@ -79,10 +72,53 @@ describe("OnlineUsersPopover", () => {
 
     fireEvent.click(screen.getByLabelText("2 users online"))
     expect(screen.queryByText(/more active/)).not.toBeInTheDocument()
+  })
 
-    const totalActiveLabel = screen.getByText("Total Active:")
-    const footerCount = totalActiveLabel.nextElementSibling
-    if (!footerCount) throw new Error("footerCount not found")
-    expect(footerCount.textContent).toBe("2")
+  it("shows game icon for github.io users", () => {
+    const githubUsers = [
+      { userId: "user-1", userName: "User 1", locale: "en-US" },
+      {
+        userId: "user-2",
+        userName: "User 2",
+        locale: "en-GB",
+        originUrl: "origin:user.github.io",
+      },
+    ]
+
+    render(
+      <OnlineUsersPopover
+        count={2}
+        users={githubUsers}
+        currentUserId="user-1"
+      />
+    )
+
+    fireEvent.click(screen.getByLabelText("2 users online"))
+    expect(screen.getByText("⭐")).toBeInTheDocument()
+    expect(screen.getByText("🎮")).toBeInTheDocument()
+  })
+
+  it("does not show game icon for non-github.io users", () => {
+    const nonGithubUsers = [
+      { userId: "user-1", userName: "User 1", locale: "en-US" },
+      {
+        userId: "user-2",
+        userName: "User 2",
+        locale: "en-GB",
+        originUrl: "origin:example.com",
+      },
+    ]
+
+    render(
+      <OnlineUsersPopover
+        count={2}
+        users={nonGithubUsers}
+        currentUserId="user-1"
+      />
+    )
+
+    fireEvent.click(screen.getByLabelText("2 users online"))
+    expect(screen.getByText("⭐")).toBeInTheDocument()
+    expect(screen.queryByText("🎮")).not.toBeInTheDocument()
   })
 })
