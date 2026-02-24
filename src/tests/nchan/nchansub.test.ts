@@ -7,6 +7,9 @@ class MockWebSocket {
   onmessage: (event: MessageEvent) => void = () => {}
   onerror: (error: Event) => void = () => {}
   onclose: (event: CloseEvent) => void = () => {}
+  readyState = 1
+  protocol = ""
+  extensions = ""
   close = jest.fn()
   send = jest.fn()
 
@@ -55,6 +58,20 @@ describe("NchanSub", () => {
       expect.stringMatching(/^\d{2}:\d{2}:\d{2} <- test-message$/)
     )
     expect(notifyMock).toHaveBeenCalledWith("test-message")
+  })
+
+  it("should log metadata for empty messages", () => {
+    const logSpy = jest.spyOn(logger, "log")
+    sub.start()
+    const mockSocket = sub["socket"] as unknown as MockWebSocket
+    mockSocket.onmessage({ data: "", origin: "" } as MessageEvent)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /^\d{2}:\d{2}:\d{2} <- <empty message> origin="n\/a" dataType=string length=0 readyState=OPEN protocol="" extensions=""$/
+      )
+    )
+    expect(notifyMock).toHaveBeenCalledWith("")
   })
 
   it("should attempt to reconnect on close if shouldReconnect is true", () => {

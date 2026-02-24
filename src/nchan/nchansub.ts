@@ -35,7 +35,19 @@ export class NchanSub {
     this.socket.onmessage = (event: MessageEvent) => {
       const now = new Date()
       const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
-      logger.log(`${time} <- ${event.data}`)
+      const data = event.data
+
+      if (typeof data === "string" && data.trim() === "") {
+        const dataLength = data.length
+        const readyState = this.socket?.readyState
+        const readyStateLabel = this.getReadyStateLabel(readyState)
+        logger.log(
+          `${time} <- <empty message> origin="${event.origin || "n/a"}" dataType=${typeof data} length=${dataLength} readyState=${readyStateLabel} protocol="${this.socket?.protocol || ""}" extensions="${this.socket?.extensions || ""}"`
+        )
+      } else {
+        logger.log(`${time} <- ${data}`)
+      }
+
       this.notify(event.data)
     }
 
@@ -48,6 +60,21 @@ export class NchanSub {
       if (this.shouldReconnect) {
         this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
       }
+    }
+  }
+
+  private getReadyStateLabel(readyState?: number): string {
+    switch (readyState) {
+      case 0:
+        return "CONNECTING"
+      case 1:
+        return "OPEN"
+      case 2:
+        return "CLOSING"
+      case 3:
+        return "CLOSED"
+      default:
+        return "UNKNOWN"
     }
   }
 
