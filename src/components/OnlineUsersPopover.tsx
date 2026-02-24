@@ -81,7 +81,7 @@ export function OnlineUsersPopover({
           className="absolute top-full right-0 mt-2 z-50 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
           aria-label="Online users"
         >
-          <div className="min-w-[200px] max-w-[260px] rounded-xl bg-gunmetal/60 backdrop-blur-sm border border-gunmetal shadow-2xl relative overflow-hidden">
+          <div className="min-w-[200px] max-w-[260px] rounded-xl bg-gunmetal/60 backdrop-blur-sm border border-gunmetal shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -92,10 +92,9 @@ export function OnlineUsersPopover({
 
             <div className="relative p-3">
               <div className="flex items-center justify-between mb-3 border-b border-gunmetal/50 pb-2">
-                <span className="text-[9px] uppercase tracking-[0.2em] text-green-accent/70">
+                <span className="text-[11px] uppercase tracking-[0.2em] text-green-accent/70">
                   Online Users
                 </span>
-                <span className="h-1 w-1 rounded-full bg-green-accent animate-pulse" />
               </div>
 
               <ul className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
