@@ -24,7 +24,6 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         const response = await fetch(url)
         if (!response.ok) throw new Error("Failed to fetch leaderboard data")
         const jsonData = await response.json()
-        logger.log(`fetched leaderboard data: ${jsonData}`)
         setData(jsonData)
       } catch (error) {
         console.error("Error fetching leaderboard data:", error)

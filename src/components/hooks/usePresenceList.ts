@@ -76,6 +76,7 @@ export function usePresenceList(
 
   const effectiveUserName =
     userName ?? getAnonymousName(globalThis.navigator?.language)
+  const originUrl = globalThis.location?.href ?? ""
 
   useEffect(() => {
     if (!userId) return
@@ -86,6 +87,7 @@ export function usePresenceList(
         userId,
         userName: effectiveUserName,
         locale: navigator.language,
+        originUrl,
         timestamp: Date.now(),
       })
     }
@@ -96,6 +98,7 @@ export function usePresenceList(
         userId,
         userName: effectiveUserName,
         locale: navigator.language,
+        originUrl,
         timestamp: Date.now(),
       })
     }, JOIN_DELAY_MS)
@@ -109,7 +112,7 @@ export function usePresenceList(
         intervalRef.current = null
       }
     }
-  }, [userId, effectiveUserName])
+  }, [userId, effectiveUserName, originUrl])
 
   useEffect(() => {
     if (!lastMessage) return

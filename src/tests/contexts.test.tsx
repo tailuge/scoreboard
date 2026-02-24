@@ -147,6 +147,30 @@ describe("LobbyContext", () => {
     })
   })
 
+  it("can disable lobby subscription", () => {
+    render(
+      <LobbyProvider subscribeLobby={false} subscribePresence={true}>
+        <div />
+      </LobbyProvider>
+    )
+
+    expect(instances).toHaveLength(1)
+    expect(instances[0]._type).toBe("presence")
+    expect(instances[0].start).toHaveBeenCalled()
+  })
+
+  it("can disable presence subscription", () => {
+    render(
+      <LobbyProvider subscribeLobby={true} subscribePresence={false}>
+        <div />
+      </LobbyProvider>
+    )
+
+    expect(instances).toHaveLength(1)
+    expect(instances[0]._type).toBe("lobby")
+    expect(instances[0].start).toHaveBeenCalled()
+  })
+
   it("throws error when useLobbyMessages is used outside provider", () => {
     const TestComponent = () => {
       useLobbyMessages()

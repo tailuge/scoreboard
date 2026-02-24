@@ -1,4 +1,5 @@
 import { NchanSub } from "../../nchan/nchansub"
+import { logger } from "../../utils/logger"
 
 // Mock WebSocket
 class MockWebSocket {
@@ -42,6 +43,7 @@ describe("NchanSub", () => {
   })
 
   it("should handle incoming messages", () => {
+    const logSpy = jest.spyOn(logger, "log")
     sub.start()
     const mockSocket = sub["socket"] as unknown as MockWebSocket
     const messageEvent = { data: "test-message" } as MessageEvent
@@ -49,6 +51,9 @@ describe("NchanSub", () => {
     // Simulate onmessage
     mockSocket.onmessage(messageEvent)
 
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/^\d{2}:\d{2}:\d{2} <- test-message$/)
+    )
     expect(notifyMock).toHaveBeenCalledWith("test-message")
   })
 

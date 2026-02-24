@@ -36,6 +36,7 @@ export interface PresenceMessage extends BaseMessage {
   userId: string
   userName: string
   locale?: string
+  originUrl?: string
   timestamp?: number
 }
 

@@ -33,7 +33,9 @@ export class NchanSub {
     }
 
     this.socket.onmessage = (event: MessageEvent) => {
-      logger.log(`Received message: ${event.data}`)
+      const now = new Date()
+      const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
+      logger.log(`${time} <- ${event.data}`)
       this.notify(event.data)
     }
 

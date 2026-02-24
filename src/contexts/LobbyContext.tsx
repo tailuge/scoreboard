@@ -24,7 +24,13 @@ const LobbyContext = createContext<LobbyContextType | undefined>(undefined)
 
 export function LobbyProvider({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  subscribeLobby = true,
+  subscribePresence = true,
+}: Readonly<{
+  children: React.ReactNode
+  subscribeLobby?: boolean
+  subscribePresence?: boolean
+}>) {
   const [lastMessage, setLastMessage] = useState<any>(null) // Legacy state
   const [lastLobbyMessage, setLastLobbyMessage] = useState<LobbyMessage | null>(
     null
@@ -33,57 +39,63 @@ export function LobbyProvider({
     useState<PresenceMessage | null>(null)
 
   useEffect(() => {
-    const lobbySub = new NchanSub(
-      "lobby",
-      (msg) => {
-        try {
-          // Parse and route the message
-          const parsed = parseNchanMessage(msg)
+    const subs: NchanSub[] = []
 
-          if (!parsed) {
-            return // Invalid message
+    if (subscribeLobby) {
+      const lobbySub = new NchanSub(
+        "lobby",
+        (msg) => {
+          try {
+            // Parse and route the message
+            const parsed = parseNchanMessage(msg)
+
+            if (!parsed) {
+              return // Invalid message
+            }
+
+            // Route based on message type
+            if (isLobbyMessage(parsed)) {
+              setLastLobbyMessage(parsed)
+              // Also update legacy state for backward compatibility
+              setLastMessage(parsed)
+            }
+          } catch {
+            // Ignore non-JSON messages or handle them if necessary
           }
-
-          // Route based on message type
-          if (isLobbyMessage(parsed)) {
-            setLastLobbyMessage(parsed)
-            // Also update legacy state for backward compatibility
-            setLastMessage(parsed)
-          }
-        } catch {
-          // Ignore non-JSON messages or handle them if necessary
-        }
-      },
-      "lobby"
-    )
-
-    const presenceSub = new NchanSub(
-      "lobby",
-      (msg) => {
-        try {
-          const parsed = parseNchanMessage(msg)
-
-          if (!parsed) {
-            return
-          }
-
-          if (isPresenceMessage(parsed)) {
-            setLastPresenceMessage(parsed)
-          }
-        } catch {
-          // Ignore non-JSON messages or handle them if necessary
-        }
-      },
-      "presence"
-    )
-
-    lobbySub.start()
-    presenceSub.start()
-    return () => {
-      lobbySub.stop()
-      presenceSub.stop()
+        },
+        "lobby"
+      )
+      subs.push(lobbySub)
     }
-  }, [])
+
+    if (subscribePresence) {
+      const presenceSub = new NchanSub(
+        "lobby",
+        (msg) => {
+          try {
+            const parsed = parseNchanMessage(msg)
+
+            if (!parsed) {
+              return
+            }
+
+            if (isPresenceMessage(parsed)) {
+              setLastPresenceMessage(parsed)
+            }
+          } catch {
+            // Ignore non-JSON messages or handle them if necessary
+          }
+        },
+        "presence"
+      )
+      subs.push(presenceSub)
+    }
+
+    subs.forEach((sub) => sub.start())
+    return () => {
+      subs.forEach((sub) => sub.stop())
+    }
+  }, [subscribeLobby, subscribePresence])
 
   const value = useMemo(
     () => ({ lastMessage, lastLobbyMessage, lastPresenceMessage }),
