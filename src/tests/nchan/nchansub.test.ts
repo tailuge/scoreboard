@@ -71,7 +71,7 @@ describe("NchanSub", () => {
         /^\d{2}:\d{2}:\d{2} <- <empty message> origin="n\/a" dataType=string length=0 readyState=OPEN protocol="" extensions=""$/
       )
     )
-    expect(notifyMock).toHaveBeenCalledWith("")
+    expect(notifyMock).not.toHaveBeenCalled()
   })
 
   it("should attempt to reconnect on close if shouldReconnect is true", () => {

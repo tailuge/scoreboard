@@ -44,11 +44,12 @@ export class NchanSub {
         logger.log(
           `${time} <- <empty message> origin="${event.origin || "n/a"}" dataType=${typeof data} length=${dataLength} readyState=${readyStateLabel} protocol="${this.socket?.protocol || ""}" extensions="${this.socket?.extensions || ""}"`
         )
+        return
       } else {
         logger.log(`${time} <- ${data}`)
       }
 
-      this.notify(event.data)
+      this.notify(data)
     }
 
     this.socket.onerror = (error: Event) => {
