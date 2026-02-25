@@ -18,7 +18,7 @@ export function GameButton({
   ariaLabel,
 }: GameButtonProps) {
   const content = (
-    <div className="relative w-full h-full p-4 transition-transform duration-300 group-hover:scale-110">
+    <div className="relative w-full h-full p-2 transition-transform duration-300 group-hover:scale-110">
       <Image
         src={icon}
         alt={alt}
@@ -30,7 +30,7 @@ export function GameButton({
     </div>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-24`
 
   if (href) {
     const isInternal = href.startsWith("/")
@@ -77,7 +77,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isInternal = href.startsWith("/")
 
-  const commonClasses = `w-32 h-7 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
+  const commonClasses = `w-32 h-10 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
 
   if (isInternal) {
     return (

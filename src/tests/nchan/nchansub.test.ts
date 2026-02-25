@@ -60,16 +60,14 @@ describe("NchanSub", () => {
     expect(notifyMock).toHaveBeenCalledWith("test-message")
   })
 
-  it("should log metadata for empty messages", () => {
+  it("should silently ignore empty messages", () => {
     const logSpy = jest.spyOn(logger, "log")
     sub.start()
     const mockSocket = sub["socket"] as unknown as MockWebSocket
     mockSocket.onmessage({ data: "", origin: "" } as MessageEvent)
 
-    expect(logSpy).toHaveBeenCalledWith(
-      expect.stringMatching(
-        /^\d{2}:\d{2}:\d{2} <- <empty message> origin="n\/a" dataType=string length=0 readyState=OPEN protocol="" extensions=""$/
-      )
+    expect(logSpy).not.toHaveBeenCalledWith(
+      expect.stringContaining("<empty message>")
     )
     expect(notifyMock).not.toHaveBeenCalled()
   })
