@@ -38,6 +38,8 @@ export interface PresenceMessage extends BaseMessage {
   locale?: string
   originUrl?: string
   timestamp?: number
+  isBot?: boolean
+  ruletype?: string
 }
 
 /**

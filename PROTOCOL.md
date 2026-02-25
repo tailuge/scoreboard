@@ -26,7 +26,7 @@ All presence events must be JSON:
   "userId": "string",
   "userName": "string",
   "locale": "en-US",
-  "originUrl": "origin:your-host.example",
+  "originUrl": "your-host.example",
   "timestamp": 1771915194402
 }
 ```

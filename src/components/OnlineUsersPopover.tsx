@@ -40,6 +40,13 @@ export function OnlineUsersPopover({
   const overflow = totalCount ? totalCount - users.length : 0
 
   const getUserBadge = (user: PresenceUser) => {
+    if (user.isBot) {
+      return (
+        <span className="text-[10px]" title="Bot">
+          🤖
+        </span>
+      )
+    }
     if (user.userId === currentUserId) {
       return (
         <span className="text-[10px]" title="Identified">

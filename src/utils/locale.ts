@@ -65,13 +65,35 @@ export function getAnonymousName(locale?: string): string {
   const baseLocale = locale.split("-")[0].toLowerCase()
   return anonByLang[baseLocale] || anonByLang.la
 }
+const languageToRegion: Record<string, string> = {
+  en: "GB",
+  zh: "CN",
+  pt: "BR",
+  es: "ES",
+  fr: "FR",
+  de: "DE",
+  ja: "JP",
+  ko: "KR",
+  it: "IT",
+  nl: "NL",
+  sv: "SE",
+  pl: "PL",
+  ru: "RU",
+}
 
 export function localeToFlag(locale?: string): string {
-  const region = locale?.split("-")[1]
-  if (region?.length !== 2) return "🌐"
+  if (!locale) return "🌐"
+
+  const [lang, regionPart] = locale.split("-")
+
+  const region =
+    regionPart?.length === 2
+      ? regionPart
+      : languageToRegion[lang?.toLowerCase()]
+
+  if (!region) return "🌐"
+
   return region
     .toUpperCase()
-    .replaceAll(/./g, (c) =>
-      String.fromCodePoint(127397 + (c.codePointAt(0) ?? 0))
-    )
+    .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)))
 }

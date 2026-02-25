@@ -9,6 +9,7 @@ export interface PresenceUser {
   userName: string
   locale?: string
   originUrl?: string
+  isBot?: boolean
 }
 
 interface PresenceEntry {
@@ -16,6 +17,7 @@ interface PresenceEntry {
   locale?: string
   lastSeen: number
   originUrl?: string
+  isBot?: boolean
 }
 
 const HEARTBEAT_INTERVAL_MS = 60000
@@ -27,13 +29,13 @@ function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
   msg: PresenceMessage
 ): void {
-  const { type, userId, userName, locale, timestamp, originUrl } = msg
+  const { type, userId, userName, locale, timestamp, originUrl, isBot } = msg
   const lastSeen = timestamp ?? Date.now()
 
   if (type === "leave") {
     map.delete(userId)
   } else {
-    map.set(userId, { userName, locale, lastSeen, originUrl })
+    map.set(userId, { userName, locale, lastSeen, originUrl, isBot })
   }
 }
 
@@ -51,6 +53,7 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
       userName: entry.userName,
       locale: entry.locale,
       originUrl: entry.originUrl,
+      isBot: entry.isBot,
     })
   }
 
@@ -80,7 +83,7 @@ export function usePresenceList(
   const effectiveUserName =
     userName ?? getAnonymousName(globalThis.navigator?.language)
   const originUrl = globalThis.location?.host
-    ? `origin:${globalThis.location.host}`
+    ? `${globalThis.location.host}`
     : ""
 
   useEffect(() => {

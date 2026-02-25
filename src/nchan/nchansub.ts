@@ -46,7 +46,14 @@ export class NchanSub {
         )
         return
       } else {
-        logger.log(`${time} <- ${data}`)
+        try {
+          const parsed = JSON.parse(data)
+          if (parsed.type !== "heartbeat") {
+            logger.log(`${time} <- ${data}`)
+          }
+        } catch {
+          logger.log(`${time} <- ${data}`)
+        }
       }
 
       this.notify(data)

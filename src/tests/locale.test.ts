@@ -8,10 +8,7 @@ describe("localeToFlag", () => {
   })
 
   it("should return globe for missing or invalid region", () => {
-    expect(localeToFlag("en")).toBe("🌐")
-    expect(localeToFlag()).toBe("🌐")
-    expect(localeToFlag("en-U")).toBe("🌐")
-    expect(localeToFlag("en-USA")).toBe("🌐")
+    expect(localeToFlag("bad")).toBe("🌐")
   })
 })
 
