@@ -61,6 +61,25 @@ export function GameGrid({
           highscoreUrl += `&raceTo=${threecushionRaceTo}`
         }
 
+        let gameButtonChildren: React.ReactNode = null
+        if (game.ruleType === "snooker") {
+          gameButtonChildren = (
+            <RedBallButtons
+              selectedValue={snookerReds}
+              onChange={onSnookerRedsChange}
+            />
+          )
+        } else if (game.ruleType === "nineball") {
+          gameButtonChildren = <ButtonOptionsPlaceholder />
+        } else if (game.ruleType === "threecushion") {
+          gameButtonChildren = (
+            <RaceToButtons
+              selectedValue={threecushionRaceTo}
+              onChange={onThreecushionRaceToChange}
+            />
+          )
+        }
+
         return (
           <div key={game.name} className="flex flex-col gap-1 items-center">
             <GameButton
@@ -68,20 +87,9 @@ export function GameGrid({
               alt={game.alt}
               href={highscoreUrl}
               ariaLabel={`Play ${game.name}`}
-            />
-            {game.ruleType === "snooker" && (
-              <RedBallButtons
-                selectedValue={snookerReds}
-                onChange={onSnookerRedsChange}
-              />
-            )}
-            {game.ruleType === "nineball" && <ButtonOptionsPlaceholder />}
-            {game.ruleType === "threecushion" && (
-              <RaceToButtons
-                selectedValue={threecushionRaceTo}
-                onChange={onThreecushionRaceToChange}
-              />
-            )}
+            >
+              {gameButtonChildren}
+            </GameButton>
             <ActionButton
               href={highscoreUrl}
               hoverBorderColor="hover:border-blue-500"

@@ -8,6 +8,7 @@ export type GameButtonProps = {
   readonly href?: string
   readonly onClick?: () => void
   readonly ariaLabel: string
+  readonly children?: React.ReactNode
 }
 
 export function GameButton({
@@ -16,21 +17,25 @@ export function GameButton({
   href,
   onClick,
   ariaLabel,
+  children,
 }: GameButtonProps) {
   const content = (
-    <div className="relative w-full h-full p-2 transition-transform duration-300 group-hover:scale-110">
-      <Image
-        src={icon}
-        alt={alt}
-        fill
-        className="object-contain p-2"
-        sizes="(max-width: 768px) 33vw, 20vw"
-        priority
-      />
-    </div>
+    <>
+      <div className="relative w-full flex-1 p-2 transition-transform duration-300 group-hover:scale-110">
+        <Image
+          src={icon}
+          alt={alt}
+          fill
+          className="object-contain p-2"
+          sizes="(max-width: 768px) 33vw, 20vw"
+          priority
+        />
+      </div>
+      {children && <div className="pb-1">{children}</div>}
+    </>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-xl border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-24`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-lg border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
 
   if (href) {
     const isInternal = href.startsWith("/")
@@ -77,7 +82,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isInternal = href.startsWith("/")
 
-  const commonClasses = `w-32 h-10 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
+  const commonClasses = `w-32 h-10 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-md border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
 
   if (isInternal) {
     return (
