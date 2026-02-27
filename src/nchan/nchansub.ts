@@ -82,11 +82,14 @@ export class NchanSub {
       console.error(`WebSocket error:`, error)
     }
 
+    const currentSocket = this.socket
     this.socket.onclose = (event: CloseEvent) => {
       logger.log("Disconnected from %s:", this.subscribeUrl, event.reason)
-      this.socket = null
-      if (this.shouldReconnect && !this.isPageHidden) {
-        this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
+      if (this.socket === currentSocket) {
+        this.socket = null
+        if (this.shouldReconnect && !this.isPageHidden) {
+          this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
+        }
       }
     }
   }

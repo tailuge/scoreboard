@@ -1,24 +1,18 @@
 import { NchanSub } from "../../nchan/nchansub"
 import { logger } from "../../utils/logger"
-
-// Mock WebSocket
-class MockWebSocket {
-  onopen: () => void = () => {}
-  onmessage: (event: MessageEvent) => void = () => {}
-  onerror: (error: Event) => void = () => {}
-  onclose: (event: CloseEvent) => void = () => {}
-  readyState = 1
-  protocol = ""
-  extensions = ""
-  close = jest.fn()
-  send = jest.fn()
-
-  constructor(public url: string) {}
-}
-
-globalThis.WebSocket = MockWebSocket as any
+import { MockWebSocket, setupWebSocketMock } from "./nchanTestUtils"
 
 describe("NchanSub bfcache", () => {
+  let cleanupWebSocketMock: () => void
+
+  beforeAll(() => {
+    cleanupWebSocketMock = setupWebSocketMock()
+  })
+
+  afterAll(() => {
+    cleanupWebSocketMock()
+  })
+
   let sub: NchanSub
   const channel = "test-channel"
   const notifyMock = jest.fn()
