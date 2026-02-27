@@ -10,17 +10,14 @@ export function LogoSection() {
   const opacity = useTransform(scrollY, [0, 150], [1, 0])
 
   return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 top-2 z-0 flex justify-center"
-    >
+    <div className="pointer-events-none fixed inset-x-0 top-2 z-0 flex justify-center">
       <div
         className="relative flex justify-center items-center"
         style={{ width: "80%" }}
       >
         <Image
           src="/assets/logo_res.png"
-          alt=""
+          alt="Billiards Online Logo"
           width={352}
           height={75}
           className="h-auto w-[232px] opacity-40"
@@ -33,7 +30,7 @@ export function LogoSection() {
               "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 2px)",
           }}
         />
-        <motion.span
+        <motion.h1
           className="absolute left-1/2 -translate-x-1/2"
           style={{
             top: "44px",
@@ -48,7 +45,7 @@ export function LogoSection() {
           }}
         >
           Billiards
-        </motion.span>
+        </motion.h1>
       </div>
     </div>
   )

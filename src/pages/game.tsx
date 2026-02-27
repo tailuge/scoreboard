@@ -28,10 +28,10 @@ export default function Game() {
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 bg-[var(--background)]">
       <Head>
-        <title>Play Billiards Online | Free Snooker, Pool & Carom Games</title>
+        <title>Play Billiards Online - Snooker, 9-Ball Pool & Carom Games</title>
         <meta
           name="description"
-          content="Play free online billiards games! Choose from Snooker, 9-Ball, and Three Cushion. Challenge high scores or compete against players worldwide in multiplayer matches."
+          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
         />
         <link
           rel="canonical"
@@ -39,11 +39,11 @@ export default function Game() {
         />
         <meta
           property="og:title"
-          content="Play Billiards Online | Free Snooker, Pool & Carom Games"
+          content="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
         />
         <meta
           property="og:description"
-          content="Play free online billiards games! Choose from Snooker, 9-Ball, and Three Cushion. Challenge high scores or compete against players worldwide in multiplayer matches."
+          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
         />
         <meta property="og:type" content="website" />
         <meta
@@ -57,11 +57,11 @@ export default function Game() {
         <meta name="twitter:card" content="summary" />
         <meta
           name="twitter:title"
-          content="Play Billiards Online | Free Snooker, Pool & Carom Games"
+          content="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
         />
         <meta
           name="twitter:description"
-          content="Play free online billiards games! Choose from Snooker, 9-Ball, and Three Cushion. Challenge high scores or compete against players worldwide in multiplayer matches."
+          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
         />
         <meta
           name="twitter:image"

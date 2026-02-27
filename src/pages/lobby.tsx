@@ -129,10 +129,10 @@ export default function Lobby() {
   return (
     <>
       <Head>
-        <title>Billiards Lobby | Join Multiplayer Games Online</title>
+        <title>Multiplayer Billiards Lobby - Play Pool & Snooker Online</title>
         <meta
           name="description"
-          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
         />
         <link
           rel="canonical"
@@ -140,11 +140,11 @@ export default function Lobby() {
         />
         <meta
           property="og:title"
-          content="Billiards Lobby | Join Multiplayer Games Online"
+          content="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
         />
         <meta
           property="og:description"
-          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
         />
         <meta property="og:type" content="website" />
         <meta
@@ -158,11 +158,11 @@ export default function Lobby() {
         <meta name="twitter:card" content="summary" />
         <meta
           name="twitter:title"
-          content="Billiards Lobby | Join Multiplayer Games Online"
+          content="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
         />
         <meta
           name="twitter:description"
-          content="Join the billiards lobby to play Snooker, 9-Ball, and Three Cushion online with players worldwide. Find open tables or create your own game."
+          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
         />
         <meta
           name="twitter:image"

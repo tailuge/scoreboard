@@ -7,10 +7,10 @@ const LeaderboardPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-4 md:p-8 font-sans text-gray-100">
       <Head>
-        <title>Billiards Leaderboard | Top Scores & Rankings</title>
+        <title>Billiards Global Leaderboard - Top Snooker & Pool Scores</title>
         <meta
           name="description"
-          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+          content="Check the latest rankings and high scores for Snooker, 9-Ball, and Three-Cushion billiards. Watch replays of record-breaking breaks and shots."
         />
         <link
           rel="canonical"
@@ -18,11 +18,11 @@ const LeaderboardPage: React.FC = () => {
         />
         <meta
           property="og:title"
-          content="Billiards Leaderboard | Top Scores & Rankings"
+          content="Billiards Global Leaderboard - Top Snooker & Pool Scores"
         />
         <meta
           property="og:description"
-          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+          content="Check the latest rankings and high scores for Snooker, 9-Ball, and Three-Cushion billiards. Watch replays of record-breaking breaks and shots."
         />
         <meta property="og:type" content="website" />
         <meta
@@ -36,11 +36,11 @@ const LeaderboardPage: React.FC = () => {
         <meta name="twitter:card" content="summary" />
         <meta
           name="twitter:title"
-          content="Billiards Leaderboard | Top Scores & Rankings"
+          content="Billiards Global Leaderboard - Top Snooker & Pool Scores"
         />
         <meta
           name="twitter:description"
-          content="View the top billiards scores and player rankings for Snooker, 9-Ball, and Three Cushion. See who holds the high break records and watch replays of amazing shots."
+          content="Check the latest rankings and high scores for Snooker, 9-Ball, and Three-Cushion billiards. Watch replays of record-breaking breaks and shots."
         />
         <meta
           name="twitter:image"
