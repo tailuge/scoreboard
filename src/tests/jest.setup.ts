@@ -83,3 +83,14 @@ globalThis.Headers ??= class Headers {
     }
   }
 } as any
+
+jest.mock("next/font/google", () => ({
+  Exo: jest.fn(() => ({
+    variable: "--font-exo",
+    className: "exo-font",
+  })),
+  Bitcount_Prop_Double: jest.fn(() => ({
+    variable: "--font-bitcount",
+    className: "bitcount-font",
+  })),
+}))

@@ -9,6 +9,10 @@ jest.mock("next/font/google", () => ({
     variable: "--font-exo",
     className: "font-exo",
   })),
+  Bitcount_Prop_Double: jest.fn(() => ({
+    variable: "--font-bitcount",
+    className: "font-bitcount",
+  })),
 }))
 
 // Mock next/router

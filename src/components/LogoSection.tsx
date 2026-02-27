@@ -34,7 +34,7 @@ export function LogoSection() {
           className="absolute left-1/2 -translate-x-1/2"
           style={{
             top: "44px",
-            fontFamily: '"Bitcount Prop Double", monospace',
+            fontFamily: "var(--font-bitcount), monospace",
             fontSize: "16px",
             color: "#fceb7a",
             textShadow: "1.5px 1.5px 0 #00000080",
