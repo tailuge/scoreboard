@@ -9,6 +9,7 @@ export class NchanSub {
   private readonly base =
     process.env.NEXT_PUBLIC_WEBSOCKET_HOST || "billiards-network.onrender.com"
   private readonly channel: string
+  private isPageHidden: boolean = false
 
   constructor(
     channel: string,
@@ -20,9 +21,33 @@ export class NchanSub {
     this.notify = notify
   }
 
+  private handlePageHide = () => {
+    this.isPageHidden = true
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout)
+      this.reconnectTimeout = null
+    }
+    if (this.socket) {
+      this.socket.close()
+      logger.log(`Closed connection for bfcache: ${this.subscribeUrl}`)
+    }
+  }
+
+  private handlePageShow = (event: PageTransitionEvent) => {
+    this.isPageHidden = false
+    if (event.persisted && this.shouldReconnect) {
+      logger.log(`Restoring connection from bfcache: ${this.subscribeUrl}`)
+      this.connect()
+    }
+  }
+
   start() {
     this.shouldReconnect = true
     this.connect()
+    if (typeof window !== "undefined") {
+      window.addEventListener("pagehide", this.handlePageHide)
+      window.addEventListener("pageshow", this.handlePageShow)
+    }
   }
 
   private connect() {
@@ -59,7 +84,8 @@ export class NchanSub {
 
     this.socket.onclose = (event: CloseEvent) => {
       logger.log("Disconnected from %s:", this.subscribeUrl, event.reason)
-      if (this.shouldReconnect) {
+      this.socket = null
+      if (this.shouldReconnect && !this.isPageHidden) {
         this.reconnectTimeout = setTimeout(() => this.connect(), 30000)
       }
     }
@@ -82,6 +108,10 @@ export class NchanSub {
 
   stop() {
     this.shouldReconnect = false
+    if (typeof window !== "undefined") {
+      window.removeEventListener("pagehide", this.handlePageHide)
+      window.removeEventListener("pageshow", this.handlePageShow)
+    }
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout)
       this.reconnectTimeout = null
