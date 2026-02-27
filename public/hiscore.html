@@ -212,7 +212,7 @@
         >
         |
         <a
-          href="https://scoreboard-tailuge.vercel.app/leaderboard.html"
+          href="https://scoreboard-tailuge.vercel.app/leaderboard"
           target="_blank"
           >Leaderboard</a
         >
@@ -245,7 +245,7 @@
         details.append("id", input.value)
         url.search = details.toString()
         await postData(url, globalThis.location.search)
-        globalThis.location.href = "/leaderboard.html"
+        globalThis.location.href = "/leaderboard"
       }
 
       const button = document.getElementById("submit")
