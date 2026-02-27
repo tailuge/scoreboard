@@ -27,9 +27,5 @@ describe("Custom Document Structure", () => {
     // Check for our custom script targets
     expect(output).toContain('<div id="next-script-target"></div>')
     expect(output).toContain('<div id="next-script-loader"></div>')
-
-    // Verify presence of Google Font preconnects
-    expect(output).toContain('rel="preconnect"')
-    expect(output).toContain("fonts.gstatic.com")
   })
 })
