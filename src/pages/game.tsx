@@ -87,6 +87,7 @@ export default function Game() {
             <div className="-mt-3">
               <GameGrid
                 userName={userName}
+                userId={userId}
                 snookerReds={snookerReds}
                 onSnookerRedsChange={setSnookerReds}
                 threecushionRaceTo={threecushionRaceTo}

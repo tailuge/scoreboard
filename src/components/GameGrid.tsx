@@ -33,12 +33,14 @@ const GAMES = [
 
 export function GameGrid({
   userName,
+  userId,
   snookerReds,
   onSnookerRedsChange,
   threecushionRaceTo,
   onThreecushionRaceToChange,
 }: {
   readonly userName: string
+  readonly userId: string
   readonly snookerReds: number
   readonly onSnookerRedsChange: (value: number) => void
   readonly threecushionRaceTo: number
@@ -54,7 +56,7 @@ export function GameGrid({
           onlineUrl += `&raceTo=${threecushionRaceTo}`
         }
 
-        let highscoreUrl = `${game.highscoreUrl}&playername=${encodeURIComponent(userName)}`
+        let highscoreUrl = `${game.highscoreUrl}&playername=${encodeURIComponent(userName)}&clientId=${encodeURIComponent(userId)}`
         if (game.ruleType === "snooker") {
           highscoreUrl += `&reds=${snookerReds}`
         } else if (game.ruleType === "threecushion") {
