@@ -44,7 +44,7 @@ export class NchanSub {
   start() {
     this.shouldReconnect = true
     this.connect()
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.addEventListener("pagehide", this.handlePageHide)
       globalThis.window.addEventListener("pageshow", this.handlePageShow)
     }
@@ -111,7 +111,7 @@ export class NchanSub {
 
   stop() {
     this.shouldReconnect = false
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.removeEventListener("pagehide", this.handlePageHide)
       globalThis.window.removeEventListener("pageshow", this.handlePageShow)
     }
