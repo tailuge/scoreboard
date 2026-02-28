@@ -97,7 +97,9 @@ describe("NchanSub", () => {
       window.dispatchEvent(new Event("pagehide"))
 
       expect(mockSocket.close).toHaveBeenCalled()
-      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Closed connection for bfcache"))
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Closed connection for bfcache")
+      )
       expect(sub["isPageHidden"]).toBe(true)
     })
 

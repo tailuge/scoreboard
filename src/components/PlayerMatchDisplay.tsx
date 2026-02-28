@@ -1,9 +1,9 @@
 interface PlayerMatchDisplayProps {
-  readonly winner: string;
-  readonly winnerScore: number;
-  readonly loser?: string | null;
-  readonly loserScore?: number | null;
-  readonly compact: boolean;
+  readonly winner: string
+  readonly winnerScore: number
+  readonly loser?: string | null
+  readonly loserScore?: number | null
+  readonly compact: boolean
 }
 
 export function PlayerMatchDisplay({
@@ -20,7 +20,7 @@ export function PlayerMatchDisplay({
       >
         {winner}
       </span>
-    );
+    )
   }
 
   return (
@@ -39,5 +39,5 @@ export function PlayerMatchDisplay({
         <span className="text-gray-600 font-mono-data">({loserScore})</span>
       </span>
     </>
-  );
+  )
 }

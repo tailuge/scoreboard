@@ -1,12 +1,12 @@
-import React from "react";
-import LeaderboardTable from "./LeaderboardTable";
+import React from "react"
+import LeaderboardTable from "./LeaderboardTable"
 
 export function HighscoreGrid() {
   const games = [
     { name: "Snooker", ruleType: "snooker" },
     { name: "Nine Ball", ruleType: "nineball" },
     { name: "Three Cushion", ruleType: "threecushion" },
-  ];
+  ]
 
   return (
     <div className="grid grid-cols-3 gap-2 w-full">
@@ -25,5 +25,5 @@ export function HighscoreGrid() {
         </div>
       ))}
     </div>
-  );
+  )
 }

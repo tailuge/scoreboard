@@ -72,7 +72,7 @@ export function OnlineUsersPopover({
           if (!isOpen) console.log("Online users:", users)
           setIsOpen(!isOpen)
         }}
-        className={`user-pill ${isOpen ? "brightness-125 border-white/30" : ""}`}
+        className={`user-pill z-10 ${isOpen ? "brightness-125 border-white/30" : ""}`}
         aria-label={`${count} users online`}
         aria-expanded={isOpen}
       >
@@ -85,7 +85,7 @@ export function OnlineUsersPopover({
 
       {isOpen && (
         <div
-          className="absolute top-full right-0 mt-2 z-50 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
+          className="absolute top-0 right-0 z-0 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
           aria-label="Online users"
         >
           <div className="min-w-[200px] max-w-[260px] rounded-xl bg-gunmetal/60 backdrop-blur-sm border border-gunmetal shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
