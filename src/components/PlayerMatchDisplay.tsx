@@ -1,9 +1,9 @@
 interface PlayerMatchDisplayProps {
-  readonly winner: string
-  readonly winnerScore: number
-  readonly loser?: string | null
-  readonly loserScore?: number | null
-  readonly compact: boolean
+  readonly winner: string;
+  readonly winnerScore: number;
+  readonly loser?: string | null;
+  readonly loserScore?: number | null;
+  readonly compact: boolean;
 }
 
 export function PlayerMatchDisplay({
@@ -16,28 +16,28 @@ export function PlayerMatchDisplay({
   if (!loser) {
     return (
       <span
-        className={`text-gray-400 truncate ${compact ? "text-[10px]" : "text-xs"}`}
+        className={`text-gray-200 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
         {winner}
       </span>
-    )
+    );
   }
 
   return (
     <>
       <span
-        className={`text-gray-400 truncate ${compact ? "text-[10px]" : "text-xs"}`}
+        className={`text-gray-200 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
         {winner}{" "}
-        <span className="text-gray-500 font-mono-data">({winnerScore})</span>
+        <span className="text-gray-400 font-mono-data">({winnerScore})</span>
       </span>
-      <span className="text-gray-500 text-[9px] flex-shrink-0">vs</span>
+      <span className="text-gray-400 text-[9px] flex-shrink-0">vs</span>
       <span
-        className={`text-gray-500 truncate ${compact ? "text-[10px]" : "text-xs"}`}
+        className={`text-gray-300 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
         {loser}{" "}
         <span className="text-gray-600 font-mono-data">({loserScore})</span>
       </span>
     </>
-  )
+  );
 }

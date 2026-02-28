@@ -10,43 +10,22 @@ export function LogoSection() {
   const opacity = useTransform(scrollY, [0, 150], [1, 0])
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-2 z-0 flex justify-center">
-      <div
-        className="relative flex justify-center items-center"
-        style={{ width: "80%" }}
+    <div className="pointer-events-none fixed inset-x-0 top-12 z-0 flex justify-center">
+      <motion.h1
+        className="font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
+        style={{
+          opacity,
+          fontFamily: "var(--font-bitcount), monospace",
+          fontSize: "16px",
+          color: "#fceb7a",
+          textShadow: "1.5px 1.5px 0 #00000080",
+          letterSpacing: "1px",
+          transformOrigin: "center",
+          scale: 3,
+        }}
       >
-        <Image
-          src="/assets/logo_res.png"
-          alt="Billiards Online Logo"
-          width={352}
-          height={75}
-          className="h-auto w-[232px] opacity-40"
-          priority
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 2px)",
-          }}
-        />
-        <motion.h1
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{
-            top: "44px",
-            fontFamily: "var(--font-bitcount), monospace",
-            fontSize: "16px",
-            color: "#fceb7a",
-            textShadow: "1.5px 1.5px 0 #00000080",
-            letterSpacing: "1px",
-            transformOrigin: "center",
-            opacity,
-            scale: 3,
-          }}
-        >
-          Billiards
-        </motion.h1>
-      </div>
+        Billiards
+      </motion.h1>
     </div>
   )
 }

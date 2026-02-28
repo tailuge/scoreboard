@@ -26,7 +26,7 @@ export default function Game() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center p-4 bg-[var(--background)]">
+    <div className="relative min-h-screen p-4 flex flex-col items-center">
       <Head>
         <title>Play Billiards Online - Snooker, 9-Ball Pool & Carom Games</title>
         <meta
@@ -69,40 +69,53 @@ export default function Game() {
         />
       </Head>
 
+      {/* Static Background */}
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          // To adjust darkness, change the alpha value (0.5) in the rgba colors below.
+          // 0.0 is fully transparent (original image), 1.0 is fully black.
+          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(/assets/bg.jpg)",
+          backgroundSize: "100% auto",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          backgroundPosition: "top center",
+        }}
+      />
+
       <LogoSection />
 
-      <div className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-4">
-        <div className="flex flex-col gap-4">
-          <GroupBox
-            leftBadge={<User />}
-            rightBadge={
-              <OnlineUsersPopover
-                count={presenceCount}
-                users={presenceUsers}
-                totalCount={presenceCount}
-                currentUserId={userId}
-              />
-            }
-          >
-            <div className="-mt-3">
-              <GameGrid
-                userName={userName}
-                userId={userId}
-                snookerReds={snookerReds}
-                onSnookerRedsChange={setSnookerReds}
-                threecushionRaceTo={threecushionRaceTo}
-                onThreecushionRaceToChange={setThreecushionRaceTo}
-              />
-            </div>
-          </GroupBox>
-        </div>
-        <div className="flex flex-col gap-4">
+      <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-4">
+        <GroupBox
+          leftBadge={<User />}
+          rightBadge={
+            <OnlineUsersPopover
+              count={presenceCount}
+              users={presenceUsers}
+              totalCount={presenceCount}
+              currentUserId={userId}
+            />
+          }
+        >
+          <div className="-mt-3">
+            <GameGrid
+              userName={userName}
+              userId={userId}
+              snookerReds={snookerReds}
+              onSnookerRedsChange={setSnookerReds}
+              threecushionRaceTo={threecushionRaceTo}
+              onThreecushionRaceToChange={setThreecushionRaceTo}
+            />
+          </div>
+        </GroupBox>
+
+        <div className="grid grid-cols-1 gap-4">
           <GroupBox title="Top Scores">
             <HighscoreGrid />
           </GroupBox>
           <MatchHistoryList liveTables={tables} onSpectate={handleSpectate} />
         </div>
-      </div>
+      </main>
     </div>
   )
 }

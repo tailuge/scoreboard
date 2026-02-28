@@ -1,13 +1,13 @@
-import { countryCodeToFlagEmoji } from "@/utils/game"
+import { countryCodeToFlagEmoji } from "@/utils/game";
 
 interface LocationTimeBadgeProps {
-  readonly locationCity?: string | null
-  readonly locationCountry?: string | null
-  readonly formattedTime: string
-  readonly hasReplay: boolean
-  readonly matchId: string
-  readonly compact: boolean
-  readonly isLive?: boolean
+  readonly locationCity?: string | null;
+  readonly locationCountry?: string | null;
+  readonly formattedTime: string;
+  readonly hasReplay: boolean;
+  readonly matchId: string;
+  readonly compact: boolean;
+  readonly isLive?: boolean;
 }
 
 export function LocationTimeBadge({
@@ -21,10 +21,10 @@ export function LocationTimeBadge({
 }: LocationTimeBadgeProps) {
   const countryFlag = locationCountry
     ? countryCodeToFlagEmoji(locationCountry)
-    : null
-  const hasLocation = locationCity || countryFlag
-  const textSize = compact ? "text-[9px]" : "text-[10px]"
-  const textColor = compact ? "text-gray-500/70" : "text-gray-500"
+    : null;
+  const hasLocation = locationCity || countryFlag;
+  const textSize = compact ? "text-[10px]" : "text-[11px]";
+  const textColor = compact ? "text-gray-400/70" : "text-gray-400";
 
   return (
     <div
@@ -43,21 +43,21 @@ export function LocationTimeBadge({
         <MatchBadge variant="replay" compact={compact} matchId={matchId} />
       )}
     </div>
-  )
+  );
 }
 
-type MatchBadgeVariant = "live" | "replay"
+type MatchBadgeVariant = "live" | "replay";
 
 interface MatchBadgeProps {
-  readonly variant: MatchBadgeVariant
-  readonly compact: boolean
-  readonly matchId?: string
+  readonly variant: MatchBadgeVariant;
+  readonly compact: boolean;
+  readonly matchId?: string;
 }
 
 function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
   const sizeClasses = compact
     ? "text-[8px] px-1 py-0.5"
-    : "text-[9px] px-1.5 py-0.5"
+    : "text-[9px] px-1.5 py-0.5";
 
   if (variant === "live") {
     return (
@@ -66,7 +66,7 @@ function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
       >
         Live
       </span>
-    )
+    );
   }
 
   return (
@@ -79,5 +79,5 @@ function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
     >
       Replay
     </a>
-  )
+  );
 }
