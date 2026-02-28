@@ -194,15 +194,15 @@ body {
 .groupbox-border {
   position: absolute;
   inset: 0;
-  border-radius: 0.75rem;
-  padding: 0.5px;
+  border-radius: 1rem;
+  padding: 1px;
   pointer-events: none;
   z-index: 1;
   background: linear-gradient(
     135deg,
-    rgba(180, 190, 210, 0.25) 0%,
-    rgba(180, 190, 210, 0.18) 50%,
-    rgba(180, 190, 210, 0.1) 100%
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 100%
   );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -215,12 +215,12 @@ body {
 .online-users-border {
   position: absolute;
   inset: 0;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   padding: 1px;
   pointer-events: none;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.05) 100%
   );
   -webkit-mask:

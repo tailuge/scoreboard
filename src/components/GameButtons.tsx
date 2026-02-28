@@ -35,7 +35,7 @@ export function GameButton({
     </>
   )
 
-  const commonClasses = `group relative flex flex-col items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-lg border border-gunmetal hover:border-blue-500 hover:bg-gunmetal/50 transition-all duration-200 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] hover:shadow-lg active:shadow-inner active:translate-y-0.5 aspect-square block w-32 h-32`
+  const commonClasses = `group relative flex flex-col items-center justify-center bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_0_rgba(0,0,0,0.1)] active:scale-95 aspect-square block w-32 h-32 overflow-hidden after:absolute after:inset-0 after:bg-linear-to-tr after:from-white/5 after:via-white/10 after:to-transparent after:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.05),transparent)]`
 
   if (href) {
     const isInternal = href.startsWith("/")
@@ -82,7 +82,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isInternal = href.startsWith("/")
 
-  const commonClasses = `w-32 h-10 flex items-center justify-center bg-gunmetal/30 backdrop-blur-sm rounded-md border border-gunmetal ${hoverBorderColor} ${hoverTextColor} text-xs transition-colors`
+  const commonClasses = `w-32 h-10 flex items-center justify-center bg-white/5 backdrop-blur-2xl rounded-xl border border-white/10 ${hoverBorderColor} ${hoverTextColor} text-xs transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_0_rgba(0,0,0,0.1)] active:scale-95 overflow-hidden after:absolute after:inset-0 after:bg-linear-to-tr after:from-white/5 after:via-white/10 after:to-transparent after:pointer-events-none`
 
   if (isInternal) {
     return (
