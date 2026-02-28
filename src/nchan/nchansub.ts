@@ -21,7 +21,7 @@ export class NchanSub {
     this.notify = notify
   }
 
-  private handlePageHide = () => {
+  private readonly handlePageHide = () => {
     this.isPageHidden = true
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout)
@@ -33,7 +33,7 @@ export class NchanSub {
     }
   }
 
-  private handlePageShow = (event: PageTransitionEvent) => {
+  private readonly handlePageShow = (event: PageTransitionEvent) => {
     this.isPageHidden = false
     if (event.persisted && this.shouldReconnect) {
       logger.log(`Restoring connection from bfcache: ${this.subscribeUrl}`)
@@ -44,9 +44,9 @@ export class NchanSub {
   start() {
     this.shouldReconnect = true
     this.connect()
-    if (typeof window !== "undefined") {
-      window.addEventListener("pagehide", this.handlePageHide)
-      window.addEventListener("pageshow", this.handlePageShow)
+    if (typeof globalThis.window !== "undefined") {
+      globalThis.window.addEventListener("pagehide", this.handlePageHide)
+      globalThis.window.addEventListener("pageshow", this.handlePageShow)
     }
   }
 
@@ -111,9 +111,9 @@ export class NchanSub {
 
   stop() {
     this.shouldReconnect = false
-    if (typeof window !== "undefined") {
-      window.removeEventListener("pagehide", this.handlePageHide)
-      window.removeEventListener("pageshow", this.handlePageShow)
+    if (typeof globalThis.window !== "undefined") {
+      globalThis.window.removeEventListener("pagehide", this.handlePageHide)
+      globalThis.window.removeEventListener("pageshow", this.handlePageShow)
     }
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout)

@@ -94,7 +94,7 @@ describe("NchanSub", () => {
       const mockSocket = sub["socket"] as unknown as MockWebSocket
       const logSpy = jest.spyOn(logger, "log")
 
-      window.dispatchEvent(new Event("pagehide"))
+      globalThis.dispatchEvent(new Event("pagehide"))
 
       expect(mockSocket.close).toHaveBeenCalled()
       expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Closed connection for bfcache"))
@@ -105,7 +105,7 @@ describe("NchanSub", () => {
       sub.start()
       const mockSocket = sub["socket"] as unknown as MockWebSocket
 
-      window.dispatchEvent(new Event("pagehide"))
+      globalThis.dispatchEvent(new Event("pagehide"))
       mockSocket.onclose({ reason: "away" } as CloseEvent)
 
       const connectSpy = jest.spyOn(sub as any, "connect")
@@ -118,11 +118,11 @@ describe("NchanSub", () => {
       const connectSpy = jest.spyOn(NchanSub.prototype as any, "connect")
       sub.start()
 
-      window.dispatchEvent(new Event("pagehide"))
+      globalThis.dispatchEvent(new Event("pagehide"))
 
       const pageShowEvent = new Event("pageshow") as any
       pageShowEvent.persisted = true
-      window.dispatchEvent(pageShowEvent)
+      globalThis.dispatchEvent(pageShowEvent)
 
       expect(sub["isPageHidden"]).toBe(false)
       expect(connectSpy).toHaveBeenCalledTimes(2)
@@ -133,11 +133,11 @@ describe("NchanSub", () => {
       const connectSpy = jest.spyOn(NchanSub.prototype as any, "connect")
       sub.start()
 
-      window.dispatchEvent(new Event("pagehide"))
+      globalThis.dispatchEvent(new Event("pagehide"))
 
       const pageShowEvent = new Event("pageshow") as any
       pageShowEvent.persisted = false
-      window.dispatchEvent(pageShowEvent)
+      globalThis.dispatchEvent(pageShowEvent)
 
       expect(sub["isPageHidden"]).toBe(false)
       expect(connectSpy).toHaveBeenCalledTimes(1)
