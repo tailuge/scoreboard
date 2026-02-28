@@ -9,7 +9,7 @@ export function LogoSection() {
   const opacity = useTransform(scrollY, [0, 150], [1, 0])
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-12 z-0 flex justify-center">
+    <div className="pointer-events-none fixed inset-x-0 top-10 z-0 flex justify-center">
       <motion.h1
         className="font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
         style={{

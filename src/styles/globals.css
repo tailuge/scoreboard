@@ -52,7 +52,6 @@
   looks the same as it did with Tailwind CSS v3.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -90,7 +89,6 @@ body {
 }
 
 @keyframes glow-pulse {
-
   0%,
   100% {
     opacity: 0.4;
@@ -99,7 +97,8 @@ body {
 
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 20px var(--color-cyan-accent)) drop-shadow(0 0 40px var(--color-cyan-glow));
+    filter: drop-shadow(0 0 20px var(--color-cyan-accent))
+      drop-shadow(0 0 40px var(--color-cyan-glow));
   }
 }
 
@@ -183,7 +182,9 @@ body {
   background: rgba(12, 45, 12, 0.85);
   transform: scale(1.02);
   border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 15px var(--color-green-glow);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    0 0 15px var(--color-green-glow);
 }
 
 /* GroupBox Border */
@@ -203,9 +204,11 @@ body {
   border-radius: 1rem;
   padding: 1px;
   pointer-events: none;
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);

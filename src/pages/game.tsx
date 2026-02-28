@@ -28,7 +28,9 @@ export default function Game() {
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
       <Head>
-        <title>Play Billiards Online - Snooker, 9-Ball Pool & Carom Games</title>
+        <title>
+          Play Billiards Online - Snooker, 9-Ball Pool & Carom Games
+        </title>
         <meta
           name="description"
           content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
@@ -75,7 +77,8 @@ export default function Game() {
         style={{
           // To adjust darkness, change the alpha value (0.5) in the rgba colors below.
           // 0.0 is fully transparent (original image), 1.0 is fully black.
-          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(/assets/bg.jpg)",
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.6)), url(/assets/bg.jpg)",
           backgroundSize: "100% auto",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
@@ -87,7 +90,7 @@ export default function Game() {
 
       <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-6">
         <GroupBox
-        title="Play"
+          title="Play"
           leftBadge={<User />}
           rightBadge={
             <OnlineUsersPopover
