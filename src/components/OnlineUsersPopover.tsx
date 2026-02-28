@@ -72,15 +72,15 @@ export function OnlineUsersPopover({
           if (!isOpen) console.log("Online users:", users)
           setIsOpen(!isOpen)
         }}
-        className="flex items-center gap-1.5 text-green-accent hover:text-green-400 transition-all cursor-pointer group px-2 py-1 rounded-md hover:bg-green-accent/10"
+        className={`user-pill ${isOpen ? "brightness-125 border-white/30" : ""}`}
         aria-label={`${count} users online`}
         aria-expanded={isOpen}
       >
         <UsersIcon
-          className="h-3.5 w-3.5 group-hover:scale-110 transition-transform"
+          className="h-4 w-4 group-hover:scale-110 transition-transform"
           aria-hidden="true"
         />
-        <span className="text-[11px] tracking-widest font-bold">{count}</span>
+        <span className="font-bold">{count}</span>
       </button>
 
       {isOpen && (
