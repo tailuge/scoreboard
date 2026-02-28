@@ -26,10 +26,7 @@ export function User() {
   if (isEditing) {
     return (
       <div className="user-pill">
-        <UserIcon
-          className="h-3.5 w-3.5 text-green-accent"
-          aria-hidden="true"
-        />
+        <UserIcon className="h-4 w-4 text-green-accent" aria-hidden="true" />
         <input
           ref={inputRef}
           type="text"
