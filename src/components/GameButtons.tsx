@@ -82,7 +82,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const isInternal = href.startsWith("/")
 
-  const commonClasses = `w-32 h-10 flex items-center justify-center bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 ${hoverBorderColor} ${hoverTextColor} text-xs transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_0_rgba(0,0,0,0.1)] active:scale-95 overflow-hidden after:absolute after:inset-0 after:bg-linear-to-tr after:from-white/5 after:via-white/10 after:to-transparent after:pointer-events-none`
+  const commonClasses = `w-32 h-10 flex items-center justify-center bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 ${hoverBorderColor} ${hoverTextColor} text-sm transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_0_rgba(0,0,0,0.1)] active:scale-95 overflow-hidden after:absolute after:inset-0 after:bg-linear-to-tr after:from-white/5 after:via-white/10 after:to-transparent after:pointer-events-none`
 
   if (isInternal) {
     return (
