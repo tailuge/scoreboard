@@ -66,7 +66,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     }
   }
 
-  const rows = useMemo(() => {
+  type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
+
+  const rows = useMemo<LeaderboardRowItem[]>(() => {
     const displayData = limit ? data.slice(0, limit) : data
     const placeholdersCount = limit
       ? Math.max(0, limit - displayData.length)
@@ -82,6 +84,76 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       })),
     ]
   }, [data, limit, ruleType])
+
+  const renderPlaceholderRow = (item: LeaderboardRowItem) => (
+    <tr key={item.id} className={compact ? "h-[18px]" : "h-[28px]"}>
+      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
+        &nbsp;
+      </td>
+      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
+        &nbsp;
+      </td>
+      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
+        &nbsp;
+      </td>
+      {!compact && (
+        <>
+          <td />
+          <td />
+        </>
+      )}
+    </tr>
+  )
+
+  const renderDataRow = (item: LeaderboardRowItem, index: number) => (
+    <tr
+      key={item.id}
+      className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item ${compact ? "h-[18px]" : "h-[28px]"}`}
+      onClick={() => handleRowClick(item.id)}
+    >
+      <td
+        className={`text-left ${compact ? "px-1 py-0 text-gray-400" : "px-2 py-1"}`}
+      >
+        <div className={compact ? "scale-75 origin-left" : ""}>
+          {renderTrophy(index)}
+        </div>
+      </td>
+      <td
+        className={`text-left font-mono-data ${compact ? "px-1 py-0 text-gray-300/80" : "px-2 py-1 text-gray-400"}`}
+      >
+        {item.score}
+      </td>
+      <td
+        className={`text-left truncate ${compact ? "px-1 py-0 text-gray-300/80 max-w-[60px]" : "px-2 py-1 text-gray-300 max-w-[120px]"}`}
+      >
+        <span className={compact ? "font-medium" : "font-semibold"}>
+          {item.name}
+        </span>
+      </td>
+      {!compact && (
+        <>
+          <td className="px-2 py-1 text-left">
+            <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>replay</a>
+          </td>
+          <td className="px-2 py-1 text-left">
+            <button
+              onClick={(e) => handleLike(e, item.id)}
+              className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-1.5 py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
+            >
+              👍 {item.likes || 0}
+            </button>
+          </td>
+        </>
+      )}
+    </tr>
+  )
+
+  const renderRow = (item: LeaderboardRowItem, index: number) => {
+    if (item.isPlaceholder) {
+      return renderPlaceholderRow(item)
+    }
+    return renderDataRow(item, index)
+  }
 
   return (
     <div className="w-full overflow-x-auto">
@@ -103,81 +175,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
             </tr>
           </thead>
         )}
-        <tbody>
-          {rows.map((item, index) => {
-            if ("isPlaceholder" in item && item.isPlaceholder) {
-              return (
-                <tr key={item.id} className={compact ? "h-[22px]" : "h-[28px]"}>
-                  <td
-                    className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}
-                  >
-                    &nbsp;
-                  </td>
-                  <td
-                    className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}
-                  >
-                    &nbsp;
-                  </td>
-                  <td
-                    className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}
-                  >
-                    &nbsp;
-                  </td>
-                  {!compact && (
-                    <>
-                      <td />
-                      <td />
-                    </>
-                  )}
-                </tr>
-              )
-            }
-            return (
-              <tr
-                key={item.id}
-                className="group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item"
-                onClick={() => handleRowClick(item.id)}
-              >
-                <td
-                  className={`text-left ${compact ? "px-1 py-0 text-gray-400" : "px-2 py-1"}`}
-                >
-                  <div className={compact ? "scale-75 origin-left" : ""}>
-                    {renderTrophy(index)}
-                  </div>
-                </td>
-                <td
-                  className={`text-left font-mono-data ${compact ? "px-1 py-0 text-gray-300/80" : "px-2 py-1 text-gray-400"}`}
-                >
-                  {item.score}
-                </td>
-                <td
-                  className={`text-left truncate ${compact ? "px-1 py-0 text-gray-300/80 max-w-[60px]" : "px-2 py-1 text-gray-300 max-w-[120px]"}`}
-                >
-                  <span className={compact ? "font-medium" : "font-semibold"}>
-                    {item.name}
-                  </span>
-                </td>
-                {!compact && (
-                  <>
-                    <td className="px-2 py-1 text-left">
-                      <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>
-                        replay
-                      </a>
-                    </td>
-                    <td className="px-2 py-1 text-left">
-                      <button
-                        onClick={(e) => handleLike(e, item.id)}
-                        className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-1.5 py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
-                      >
-                        👍 {item.likes || 0}
-                      </button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
+        <tbody>{rows.map(renderRow)}</tbody>
       </table>
     </div>
   )
