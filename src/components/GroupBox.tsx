@@ -15,7 +15,7 @@ export function GroupBox({
   leftBadge,
 }: GroupBoxProps) {
   return (
-    <div className="relative w-full rounded-lg pt-6 pb-4 px-6 shadow-[0_30px_60px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.05)] transition-all duration-500">
+    <div className="relative w-full rounded-lg pt-8 pb-2 px-6 shadow-[0_30px_60px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.05)] transition-all duration-500">
       <div className="absolute inset-0 rounded-lg bg-white/5 backdrop-blur-sm pointer-events-none" />
       <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03),transparent)]" />
       <div className="groupbox-border" />

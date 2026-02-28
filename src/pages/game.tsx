@@ -85,8 +85,9 @@ export default function Game() {
 
       <LogoSection />
 
-      <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-4">
+      <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-6">
         <GroupBox
+        title="Play"
           leftBadge={<User />}
           rightBadge={
             <OnlineUsersPopover
@@ -109,7 +110,7 @@ export default function Game() {
           </div>
         </GroupBox>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-6">
           <GroupBox title="Top Scores">
             <HighscoreGrid />
           </GroupBox>
