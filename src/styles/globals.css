@@ -146,6 +146,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  color: var(--color-green-accent);
 }
 
 .groupbox-title {
@@ -161,10 +162,6 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-.pill-base,
-.user-pill {
-  color: var(--color-green-accent);
-}
 
 .user-pill {
   padding: 4px 12px;
