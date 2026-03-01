@@ -114,7 +114,7 @@ export default function Game() {
         </GroupBox>
 
         <div className="grid grid-cols-1 gap-6">
-          <GroupBox title="Top Scores">
+          <GroupBox title="Top Scores" titleHref="/leaderboard">
             <HighscoreGrid />
           </GroupBox>
           <MatchHistoryList liveTables={tables} onSpectate={handleSpectate} />

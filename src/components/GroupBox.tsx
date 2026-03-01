@@ -1,8 +1,10 @@
 // src/components/GroupBox.tsx
 import React from "react"
+import Link from "next/link"
 
 type GroupBoxProps = {
   readonly title?: string
+  readonly titleHref?: string
   readonly children: React.ReactNode
   readonly rightBadge?: React.ReactNode
   readonly leftBadge?: React.ReactNode
@@ -10,6 +12,7 @@ type GroupBoxProps = {
 
 export function GroupBox({
   title,
+  titleHref,
   children,
   rightBadge,
   leftBadge,
@@ -22,7 +25,13 @@ export function GroupBox({
 
       {title && (
         <h2 className="groupbox-title absolute top-0 left-1/2 px-4 py-1">
-          {title}
+          {titleHref ? (
+            <Link href={titleHref} className="no-underline">
+              {title}
+            </Link>
+          ) : (
+            title
+          )}
         </h2>
       )}
 
