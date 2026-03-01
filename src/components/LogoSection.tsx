@@ -9,9 +9,9 @@ export function LogoSection() {
   const opacity = useTransform(scrollY, [0, 150], [1, 0])
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-10 z-0 flex justify-center">
+    <div className="fixed inset-x-0 top-10 z-0 flex justify-center">
       <motion.h1
-        className="font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
+        className="cursor-pointer font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
         style={{
           opacity,
           fontFamily: "var(--font-bitcount), monospace",
@@ -22,6 +22,13 @@ export function LogoSection() {
           transformOrigin: "center",
           scale: 3,
         }}
+        onClick={() =>
+          window.open(
+            "https://github.com/tailuge/billiards",
+            "_blank",
+            "noopener,noreferrer"
+          )
+        }
       >
         Billiards
       </motion.h1>
