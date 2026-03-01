@@ -1,8 +1,0 @@
-{
-  "track_id": "match_history_alignment_20260201",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-01T12:00:00Z",
-  "updated_at": "2026-02-01T12:00:00Z",
-  "description": "Align MatchHistoryList and MatchResultCard styling with high scores in game.tsx, using trophy emojis and row borders."
-}
