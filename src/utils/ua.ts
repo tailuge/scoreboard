@@ -43,22 +43,34 @@ export function detectBrowser(uaString?: string): string {
 
 export function browserIcon(browser?: string): string {
   switch (browser) {
-    case "Chrome": return "🌐"
-    case "Firefox": return "🦊"
-    case "Safari": return "🧭"
-    case "Edge": return "🔵"
-    case "Opera": return "🅾️"
-    default: return "🌍"
+    case "Chrome":
+      return "🌐"
+    case "Firefox":
+      return "🦊"
+    case "Safari":
+      return "🧭"
+    case "Edge":
+      return "🔵"
+    case "Opera":
+      return "🅾️"
+    default:
+      return "🌍"
   }
 }
 
 export function osIcon(os?: string): string {
   switch (os) {
-    case "Windows": return "🪟"
-    case "macOS": return "🍎"
-    case "Linux": return "🐧"
-    case "Android": return "🤖"
-    case "iOS": return "📱"
-    default: return "💻"
+    case "Windows":
+      return "🪟"
+    case "macOS":
+      return "🍎"
+    case "Linux":
+      return "🐧"
+    case "Android":
+      return "🤖"
+    case "iOS":
+      return "📱"
+    default:
+      return "💻"
   }
 }

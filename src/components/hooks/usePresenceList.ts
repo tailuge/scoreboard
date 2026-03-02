@@ -31,7 +31,8 @@ function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
   msg: PresenceMessage
 ): void {
-  const { type, userId, userName, locale, timestamp, originUrl, isBot, ua } = msg
+  const { type, userId, userName, locale, timestamp, originUrl, isBot, ua } =
+    msg
   const lastSeen = timestamp ?? Date.now()
 
   if (type === "leave") {

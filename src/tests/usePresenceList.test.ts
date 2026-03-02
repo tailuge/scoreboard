@@ -182,7 +182,12 @@ describe("usePresenceList", () => {
       })
 
       expect(result.current.users).toEqual([
-        { userId: "user-2", userName: "User Two", locale: "en-US", ua: undefined },
+        {
+          userId: "user-2",
+          userName: "User Two",
+          locale: "en-US",
+          ua: undefined,
+        },
       ])
       expect(result.current.count).toBe(1)
     })

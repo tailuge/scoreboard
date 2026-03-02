@@ -1,16 +1,16 @@
 // src/components/OnlineUsersPopover.tsx
-import { UsersIcon } from "@heroicons/react/24/solid"
-import React, { useState, useRef, useEffect } from "react"
-import { localeToFlag } from "@/utils/locale"
-import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
-import type { PresenceUser } from "./hooks/usePresenceList"
+import { UsersIcon } from "@heroicons/react/24/solid";
+import React, { useState, useRef, useEffect } from "react";
+import { localeToFlag } from "@/utils/locale";
+import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua";
+import type { PresenceUser } from "./hooks/usePresenceList";
 
 type OnlineUsersPopoverProps = {
-  readonly count: number
-  readonly users: PresenceUser[]
-  readonly totalCount?: number
-  readonly currentUserId?: string
-}
+  readonly count: number;
+  readonly users: PresenceUser[];
+  readonly totalCount?: number;
+  readonly currentUserId?: string;
+};
 
 export function OnlineUsersPopover({
   count,
@@ -18,27 +18,27 @@ export function OnlineUsersPopover({
   totalCount,
   currentUserId,
 }: OnlineUsersPopoverProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Close on click outside
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [isOpen])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
 
-  const overflow = totalCount ? totalCount - users.length : 0
+  const overflow = totalCount ? totalCount - users.length : 0;
 
   const getUserBadge = (user: PresenceUser) => {
     if (user.isBot) {
@@ -46,17 +46,17 @@ export function OnlineUsersPopover({
         <span className="text-[10px]" title="Bot">
           🤖
         </span>
-      )
+      );
     }
     if (user.userId === currentUserId) {
       return (
         <span className="text-[10px]" title="Identified">
           ⭐
         </span>
-      )
+      );
     }
-    const cleanOrigin = user.originUrl?.replace("origin:", "") ?? ""
-    let isGithubIo = false
+    const cleanOrigin = user.originUrl?.replace("origin:", "") ?? "";
+    let isGithubIo = false;
     if (cleanOrigin) {
       try {
         // Ensure we have a valid URL string; add a scheme if missing
@@ -64,10 +64,10 @@ export function OnlineUsersPopover({
           cleanOrigin.startsWith("http://") ||
           cleanOrigin.startsWith("https://")
             ? new URL(cleanOrigin)
-            : new URL(`https://${cleanOrigin}`)
-        const hostname = url.hostname.toLowerCase()
+            : new URL(`https://${cleanOrigin}`);
+        const hostname = url.hostname.toLowerCase();
         isGithubIo =
-          hostname === "github.io" || hostname.endsWith(".github.io")
+          hostname === "github.io" || hostname.endsWith(".github.io");
       } catch {
         // Invalid URL; leave isGithubIo as false
       }
@@ -77,17 +77,17 @@ export function OnlineUsersPopover({
         <span className="text-[10px]" title="github.io">
           🎮
         </span>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <div ref={containerRef} className="relative">
       <button
         onClick={() => {
-          if (!isOpen) console.log("Online users:", users)
-          setIsOpen(!isOpen)
+          if (!isOpen) console.log("Online users:", users);
+          setIsOpen(!isOpen);
         }}
         className={`user-pill z-10 ${isOpen ? "brightness-125 border-white/30" : ""}`}
         aria-label={`${count} users online`}
@@ -102,10 +102,10 @@ export function OnlineUsersPopover({
 
       {isOpen && (
         <div
-          className="absolute top-0 right-0 z-0 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
+          className="absolute top-8 right-0 z-0 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
           aria-label="Online users"
         >
-          <div className="min-w-[200px] max-w-[260px] rounded-xl bg-gunmetal/60 backdrop-blur-sm border border-gunmetal shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+          <div className="min-w-[200px] max-w-[260px] rounded-md bg-gunmetal/60 backdrop-blur-sm border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]  relative overflow-hidden">
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -133,10 +133,18 @@ export function OnlineUsersPopover({
                         aria-hidden="true"
                       />
                       <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-                        {localeToFlag(user.locale)} {osIcon(detectOS(user.ua))} {browserIcon(detectBrowser(user.ua))} {user.userName}
+                        {localeToFlag(user.locale)} {user.userName}
                       </span>
                     </div>
-                    {getUserBadge(user)}
+                    <div className="flex items-center gap-0.5">
+                      <span className="text-[9px]">
+                        {osIcon(detectOS(user.ua))}
+                      </span>
+                      <span className="text-[9px]">
+                        {browserIcon(detectBrowser(user.ua))}
+                      </span>
+                      {getUserBadge(user)}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -151,5 +159,5 @@ export function OnlineUsersPopover({
         </div>
       )}
     </div>
-  )
+  );
 }
