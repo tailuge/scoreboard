@@ -12,10 +12,10 @@ export function detectOS(): string {
   const ua = nav.userAgent
 
   if (ua.includes("Windows")) return "Windows"
-  if (ua.includes("Mac")) return "macOS"
-  if (ua.includes("Linux")) return "Linux"
   if (ua.includes("Android")) return "Android"
   if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS"
+  if (ua.includes("Mac")) return "macOS"
+  if (ua.includes("Linux")) return "Linux"
 
   return "Unknown"
 }
