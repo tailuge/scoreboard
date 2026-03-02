@@ -52,6 +52,7 @@ describe("UA Utils", () => {
     const browserTests = [
       ["Mozilla/5.0 ... Edg/110.0.1587.41", "Edge"],
       ["Mozilla/5.0 ... OPR/94.0.4606.81", "Opera"],
+      ["Mozilla/5.0 ... Chrome/110.0.0.0 Safari/537.36 Brave", "Brave"],
       ["Mozilla/5.0 ... Chrome/110.0.0.0 Safari/537.36", "Chrome"],
       ["Mozilla/5.0 ... Firefox/109.0", "Firefox"],
       ["Mozilla/5.0 ... Version/16.1 Safari/605.1.15", "Safari"],
@@ -74,6 +75,7 @@ describe("UA Utils", () => {
       ["Safari", "🧭"],
       ["Edge", "🔵"],
       ["Opera", "🅾️"],
+      ["Brave", "🦁"],
       ["Unknown", "🌍"],
       [undefined, "🌍"],
     ])("should return icon for %s as %s", (browser, expectedIcon) => {

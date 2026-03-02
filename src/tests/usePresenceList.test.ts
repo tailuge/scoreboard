@@ -104,6 +104,46 @@ describe("usePresenceList", () => {
         configurable: true,
       })
     })
+
+    it("should append ' Brave' to UA when Brave is detected", async () => {
+      const originalNavigator = globalThis.navigator
+      const mockUserAgent =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+
+      Object.defineProperty(globalThis, "navigator", {
+        value: {
+          ...originalNavigator,
+          userAgent: mockUserAgent,
+          brave: {
+            isBrave: jest.fn().mockResolvedValue(true),
+          },
+        },
+        configurable: true,
+      })
+
+      const { result } = renderHook(() => usePresenceList(userId, userName))
+
+      // Wait for useEffect to run the async Brave check
+      await act(async () => {
+        await Promise.resolve()
+      })
+
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
+
+      expect(mockPublishPresence).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "join",
+          ua: `${mockUserAgent} Brave`,
+        })
+      )
+
+      Object.defineProperty(globalThis, "navigator", {
+        value: originalNavigator,
+        configurable: true,
+      })
+    })
   })
 
   describe("heartbeat", () => {

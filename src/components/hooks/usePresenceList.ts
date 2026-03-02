@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useReducer } from "react"
+import { useEffect, useMemo, useRef, useReducer, useState } from "react"
 import { NchanPub } from "@/nchan/nchanpub"
 import { usePresenceMessages } from "@/contexts/LobbyContext"
 import type { PresenceMessage } from "@/nchan/types"
@@ -79,6 +79,9 @@ export function usePresenceList(
   const pubRef = useRef<NchanPub | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const [updateCount, forceUpdate] = useReducer((x: number) => x + 1, 0)
+  const [userAgent, setUserAgent] = useState<string | undefined>(
+    globalThis.navigator?.userAgent
+  )
 
   if (!pubRef.current) {
     pubRef.current = new NchanPub("lobby")
@@ -91,9 +94,17 @@ export function usePresenceList(
     : ""
 
   useEffect(() => {
-    if (!userId) return
+    const checkBrave = async () => {
+      const nav = globalThis.navigator as any
+      if (nav?.brave?.isBrave && (await nav.brave.isBrave())) {
+        setUserAgent((prev) => (prev ? `${prev} Brave` : "Brave"))
+      }
+    }
+    checkBrave()
+  }, [])
 
-    const ua = globalThis.navigator?.userAgent
+  useEffect(() => {
+    if (!userId) return
 
     const publishHeartbeat = () => {
       pubRef.current?.publishPresence({
@@ -103,7 +114,7 @@ export function usePresenceList(
         locale: navigator.language,
         originUrl,
         timestamp: Date.now(),
-        ua,
+        ua: userAgent,
       })
     }
 
@@ -115,7 +126,7 @@ export function usePresenceList(
         locale: navigator.language,
         originUrl,
         timestamp: Date.now(),
-        ua,
+        ua: userAgent,
       })
     }, JOIN_DELAY_MS)
 
@@ -128,7 +139,7 @@ export function usePresenceList(
         intervalRef.current = null
       }
     }
-  }, [userId, effectiveUserName, originUrl])
+  }, [userId, effectiveUserName, originUrl, userAgent])
 
   useEffect(() => {
     if (!lastMessage) return
