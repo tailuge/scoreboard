@@ -56,7 +56,23 @@ export function OnlineUsersPopover({
       )
     }
     const cleanOrigin = user.originUrl?.replace("origin:", "") ?? ""
-    if (cleanOrigin.includes("github.io")) {
+    let isGithubIo = false
+    if (cleanOrigin) {
+      try {
+        // Ensure we have a valid URL string; add a scheme if missing
+        const url =
+          cleanOrigin.startsWith("http://") ||
+          cleanOrigin.startsWith("https://")
+            ? new URL(cleanOrigin)
+            : new URL(`https://${cleanOrigin}`)
+        const hostname = url.hostname.toLowerCase()
+        isGithubIo =
+          hostname === "github.io" || hostname.endsWith(".github.io")
+      } catch {
+        // Invalid URL; leave isGithubIo as false
+      }
+    }
+    if (isGithubIo) {
       return (
         <span className="text-[10px]" title="github.io">
           🎮
