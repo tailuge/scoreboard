@@ -40,6 +40,8 @@ export interface PresenceMessage extends BaseMessage {
   timestamp?: number
   isBot?: boolean
   ruletype?: string
+  os?: string
+  browser?: string
 }
 
 /**
