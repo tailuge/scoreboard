@@ -9,9 +9,7 @@ interface LiveMatchesListProps {
 }
 
 export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
-  const activeGames = tables.filter(
-    (t) => t.players.length === 2 && !t.completed
-  )
+  const activeGames = tables.filter((t) => t.players.length === 2)
 
   return (
     <div className="mb-4">

@@ -18,9 +18,7 @@ export function MatchHistoryList({
 }: MatchHistoryListProps) {
   const { results, isLoading } = useMatchHistory()
 
-  const activeGames = liveTables.filter(
-    (t) => t.players.length === 2 && !t.completed
-  )
+  const activeGames = liveTables.filter((t) => t.players.length === 2)
 
   const renderContent = () => {
     const hasLiveGames = activeGames.length > 0

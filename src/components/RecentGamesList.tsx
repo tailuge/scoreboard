@@ -16,9 +16,7 @@ export function RecentGamesList() {
     await tableAction(tableId, "spectate")
   }
 
-  const liveMatches = tables.filter(
-    (t) => t.players.length === 2 && !t.completed
-  )
+  const liveMatches = tables.filter((t) => t.players.length === 2)
 
   const renderContent = () => {
     if (

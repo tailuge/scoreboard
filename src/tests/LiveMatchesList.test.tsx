@@ -57,7 +57,9 @@ describe("LiveMatchesList", () => {
 
     render(
       <LiveMatchesList
-        tables={[{ ...activeTable, completed: true }]}
+        tables={[
+          { ...activeTable, players: [{ id: "player-1", name: "Player One" }] },
+        ]}
         onSpectate={onSpectate}
       />
     )
