@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { NextRequest, userAgent } from "next/server"
 import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
 import { getUID } from "@/utils/uid"
@@ -110,6 +110,16 @@ async function handlePost(request: NextRequest) {
       ? decodeURIComponent(locationCityRaw)
       : undefined
 
+    let browser, os, ua
+    try {
+      const uaInfo = userAgent(request)
+      browser = uaInfo.browser
+      os = uaInfo.os
+      ua = uaInfo.ua
+    } catch (e) {
+      logger.log("Error parsing user agent:", e)
+    }
+
     // Basic validation
     // winner and winnerScore are required.
     // loser and loserScore are optional for solo results.
@@ -125,6 +135,9 @@ async function handlePost(request: NextRequest) {
       locationCountry,
       locationRegion,
       locationCity,
+      userAgent: ua,
+      browser: browser?.name,
+      os: os?.name,
     }
 
     await matchResultService.addMatchResult(newResult, replayData)

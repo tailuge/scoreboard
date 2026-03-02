@@ -1,7 +1,7 @@
 import handler from "../pages/api/match-results"
 import { NextRequest } from "next/server"
 import { MatchResultService } from "../services/MatchResultService"
-import type { MatchResult } from "../types/match"
+import { MatchResult } from "../types/match"
 
 jest.mock("../services/MatchResultService")
 const MockMatchResultService = MatchResultService as jest.MockedClass<
@@ -103,6 +103,42 @@ describe("/api/match-results handler", () => {
         ruleType: "snooker",
         id: expect.any(String),
         timestamp: expect.any(Number),
+      }),
+      undefined
+    )
+  })
+
+  it("should capture user agent headers on POST request", async () => {
+    const result = {
+      winner: "A",
+      winnerScore: 10,
+    }
+
+    const addSpy = jest
+      .spyOn(MockMatchResultService.prototype, "addMatchResult")
+      .mockResolvedValue(undefined)
+
+    const headers = new Map([
+      ["user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"],
+    ])
+
+    req = {
+      method: "POST",
+      nextUrl: new URL("https://localhost/api/match-results"),
+      json: jest.fn().mockResolvedValue(result),
+      headers: {
+        get: (name: string) => headers.get(name) || null,
+      },
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(201)
+    expect(addSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userAgent: expect.stringContaining("Mozilla"),
+        browser: "Chrome",
+        os: "Mac OS",
       }),
       undefined
     )
