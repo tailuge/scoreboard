@@ -17,7 +17,11 @@ export default function Game() {
     userId,
     userName
   )
-  const { tables, tableAction } = useLobbyTables(userId, userName)
+  const {
+    tables,
+    tableAction,
+    isLoading: tablesLoading,
+  } = useLobbyTables(userId, userName)
   const [snookerReds, setSnookerReds] = useState(3)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
 
@@ -117,7 +121,11 @@ export default function Game() {
           <GroupBox title="Top Scores" titleHref="/leaderboard">
             <HighscoreGrid />
           </GroupBox>
-          <MatchHistoryList liveTables={tables} onSpectate={handleSpectate} />
+          <MatchHistoryList
+            liveTables={tables}
+            tablesLoading={tablesLoading}
+            onSpectate={handleSpectate}
+          />
         </div>
       </main>
     </div>

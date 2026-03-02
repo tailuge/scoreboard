@@ -42,6 +42,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     const tables = await tableService.getTables()
+    console.log("API /api/tables response:", tables)
     res.status(200).json(tables)
   } else if (req.method === "POST") {
     logger.log("Create table request")

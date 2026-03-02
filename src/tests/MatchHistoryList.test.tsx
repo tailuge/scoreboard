@@ -75,4 +75,35 @@ describe("MatchHistoryList", () => {
       ).not.toBeInTheDocument()
     })
   })
+
+  it("renders live games in the recent matches list", async () => {
+    const mockLiveTable = {
+      id: "table-123",
+      creator: { id: "u1", name: "PlayerOne" },
+      players: [
+        { id: "u1", name: "PlayerOne" },
+        { id: "u2", name: "PlayerTwo" },
+      ],
+      spectators: [],
+      createdAt: Date.now(),
+      lastUsedAt: Date.now(),
+      isActive: true,
+      ruleType: "snooker" as const,
+      completed: false,
+    }
+
+    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    })
+
+    render(
+      <MatchHistoryList liveTables={[mockLiveTable]} tablesLoading={false} />
+    )
+    await waitFor(() => {
+      expect(screen.getByText("PlayerOne")).toBeInTheDocument()
+      expect(screen.getByText("PlayerTwo")).toBeInTheDocument()
+      expect(screen.getByText("Live")).toBeInTheDocument()
+    })
+  })
 })

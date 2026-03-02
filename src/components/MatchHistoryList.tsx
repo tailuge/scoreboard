@@ -7,11 +7,13 @@ import { useMatchHistory } from "./hooks/useMatchHistory"
 
 interface MatchHistoryListProps {
   readonly liveTables?: Table[]
+  readonly tablesLoading?: boolean
   readonly onSpectate?: (tableId: string) => void
 }
 
 export function MatchHistoryList({
   liveTables = [],
+  tablesLoading,
   onSpectate,
 }: MatchHistoryListProps) {
   const { results, isLoading } = useMatchHistory()
@@ -24,7 +26,7 @@ export function MatchHistoryList({
     const hasLiveGames = activeGames.length > 0
     const hasHistory = results.length > 0
 
-    if (isLoading && results.length === 0 && !hasLiveGames) {
+    if ((tablesLoading || isLoading) && results.length === 0 && !hasLiveGames) {
       return (
         <div className="text-center py-8 text-gray-500 text-sm animate-pulse">
           Loading match history...
@@ -32,7 +34,7 @@ export function MatchHistoryList({
       )
     }
 
-    if (!hasLiveGames && !hasHistory) {
+    if (!tablesLoading && !isLoading && !hasLiveGames && !hasHistory) {
       return (
         <div className="text-center py-8 text-gray-500 text-sm italic">
           No matches recorded yet.
