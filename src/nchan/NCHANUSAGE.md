@@ -43,6 +43,7 @@ interface PresenceMessage {
   type: "join" | "heartbeat" | "leave";
   userId: string;
   userName: string;
+  ua?: string;
   timestamp?: number;
 }
 ```
@@ -61,6 +62,7 @@ type PresenceMessage = {
   type: "join" | "heartbeat" | "leave";
   userId: string;
   userName: string;
+  ua?: string;
   timestamp?: number;
 };
 

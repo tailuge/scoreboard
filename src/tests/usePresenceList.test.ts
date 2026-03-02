@@ -57,8 +57,7 @@ describe("usePresenceList", () => {
           userName,
           locale: expect.any(String),
           originUrl: expect.any(String),
-          os: expect.any(String),
-          browser: expect.any(String),
+          ua: expect.any(String),
         })
       )
     })
@@ -130,8 +129,7 @@ describe("usePresenceList", () => {
           userName,
           locale: expect.any(String),
           originUrl: expect.any(String),
-          os: expect.any(String),
-          browser: expect.any(String),
+          ua: expect.any(String),
         })
       )
 
@@ -184,7 +182,7 @@ describe("usePresenceList", () => {
       })
 
       expect(result.current.users).toEqual([
-        { userId: "user-2", userName: "User Two", locale: "en-US", os: undefined, browser: undefined },
+        { userId: "user-2", userName: "User Two", locale: "en-US", ua: undefined },
       ])
       expect(result.current.count).toBe(1)
     })
