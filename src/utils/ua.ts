@@ -67,7 +67,7 @@ export function osIcon(os?: string): string {
     case "Linux":
       return "🐧"
     case "Android":
-      return "🤖"
+      return "📱"
     case "iOS":
       return "📱"
     default:
