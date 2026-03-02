@@ -12,6 +12,9 @@ export interface MatchResult {
   locationCountry?: string
   locationRegion?: string
   locationCity?: string
+  userAgent?: string
+  browser?: string
+  os?: string
 }
 
 export function getRuleType(result: MatchResult): RuleType {
