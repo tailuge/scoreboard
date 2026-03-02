@@ -24,6 +24,10 @@ const scoretable = new ScoreTable(kv)
  *         description: A list of the top ten ranks
  */
 export default async function handler(request: NextRequest) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 200 })
+  }
+
   const url = request.nextUrl
   const data = await scoretable.topTen(url.searchParams.get("ruletype"))
   return new Response(JSON.stringify(data))

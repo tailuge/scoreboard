@@ -33,10 +33,14 @@ const matchResultService = new MatchResultService(kv)
  *         description: Internal server error
  */
 export default async function handler(request: NextRequest) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 200 })
+  }
+
   if (request.method !== "GET") {
     return new Response(`Method ${request.method} Not Allowed`, {
       status: 405,
-      headers: { Allow: "GET" },
+      headers: { Allow: "GET, OPTIONS" },
     })
   }
 
