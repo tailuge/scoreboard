@@ -133,7 +133,8 @@ export function OnlineUsersPopover({
                         aria-hidden="true"
                       />
                       <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-                        {localeToFlag(user.locale)} {user.userName}
+                        {localeToFlag(user.locale)?.replace("🇺🇸", "🇬🇧")}{" "}
+                        {user.userName}
                       </span>
                     </div>
                     <div className="flex items-center gap-0.5">

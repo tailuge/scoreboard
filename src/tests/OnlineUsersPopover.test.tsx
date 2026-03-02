@@ -25,10 +25,8 @@ describe("OnlineUsersPopover", () => {
     // Open
     fireEvent.click(button)
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
-    expect(screen.getByText(/🇺🇸/)).toBeInTheDocument()
-    expect(screen.getByText(/User 1/)).toBeInTheDocument()
-    expect(screen.getByText(/🇬🇧/)).toBeInTheDocument()
-    expect(screen.getByText(/User 2/)).toBeInTheDocument()
+    expect(screen.getByText(/🇬🇧 User 1/)).toBeInTheDocument()
+    expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
     expect(screen.getByText("⭐")).toBeInTheDocument()
 
     // Close

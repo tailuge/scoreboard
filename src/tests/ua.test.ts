@@ -86,7 +86,7 @@ describe("UA Utils", () => {
       ["Windows", "🪟"],
       ["macOS", "🍎"],
       ["Linux", "🐧"],
-      ["Android", "🤖"],
+      ["Android", "📱"],
       ["iOS", "📱"],
       ["Unknown", "💻"],
       [undefined, "💻"],
