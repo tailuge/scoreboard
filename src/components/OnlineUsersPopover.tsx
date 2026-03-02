@@ -2,7 +2,7 @@
 import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
 import { localeToFlag } from "@/utils/locale"
-import { browserIcon, osIcon } from "@/utils/ua"
+import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
 import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
@@ -117,7 +117,7 @@ export function OnlineUsersPopover({
                         aria-hidden="true"
                       />
                       <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-                        {localeToFlag(user.locale)} {osIcon(user.os)} {browserIcon(user.browser)} {user.userName}
+                        {localeToFlag(user.locale)} {osIcon(detectOS(user.ua))} {browserIcon(detectBrowser(user.ua))} {user.userName}
                       </span>
                     </div>
                     {getUserBadge(user)}

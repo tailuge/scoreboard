@@ -106,6 +106,7 @@ describe("Nchan Message Types", () => {
         type: "join",
         userId: "123",
         userName: "Test",
+        ua: "Mozilla/5.0",
       }
 
       expect(isPresenceMessage(presenceMsg)).toBe(true)

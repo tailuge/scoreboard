@@ -3,7 +3,6 @@ import { NchanPub } from "@/nchan/nchanpub"
 import { usePresenceMessages } from "@/contexts/LobbyContext"
 import type { PresenceMessage } from "@/nchan/types"
 import { getAnonymousName } from "@/utils/locale"
-import { detectOS, detectBrowser } from "@/utils/ua"
 
 export interface PresenceUser {
   userId: string
@@ -11,8 +10,7 @@ export interface PresenceUser {
   locale?: string
   originUrl?: string
   isBot?: boolean
-  os?: string
-  browser?: string
+  ua?: string
 }
 
 interface PresenceEntry {
@@ -21,8 +19,7 @@ interface PresenceEntry {
   lastSeen: number
   originUrl?: string
   isBot?: boolean
-  os?: string
-  browser?: string
+  ua?: string
 }
 
 const HEARTBEAT_INTERVAL_MS = 60000
@@ -34,13 +31,13 @@ function applyPresenceMessage(
   map: Map<string, PresenceEntry>,
   msg: PresenceMessage
 ): void {
-  const { type, userId, userName, locale, timestamp, originUrl, isBot, os, browser } = msg
+  const { type, userId, userName, locale, timestamp, originUrl, isBot, ua } = msg
   const lastSeen = timestamp ?? Date.now()
 
   if (type === "leave") {
     map.delete(userId)
   } else {
-    map.set(userId, { userName, locale, lastSeen, originUrl, isBot, os, browser })
+    map.set(userId, { userName, locale, lastSeen, originUrl, isBot, ua })
   }
 }
 
@@ -59,8 +56,7 @@ function getOnlineUsers(map: Map<string, PresenceEntry>): PresenceUser[] {
       locale: entry.locale,
       originUrl: entry.originUrl,
       isBot: entry.isBot,
-      os: entry.os,
-      browser: entry.browser,
+      ua: entry.ua,
     })
   }
 
@@ -96,8 +92,7 @@ export function usePresenceList(
   useEffect(() => {
     if (!userId) return
 
-    const os = detectOS()
-    const browser = detectBrowser()
+    const ua = globalThis.navigator?.userAgent
 
     const publishHeartbeat = () => {
       pubRef.current?.publishPresence({
@@ -107,8 +102,7 @@ export function usePresenceList(
         locale: navigator.language,
         originUrl,
         timestamp: Date.now(),
-        os,
-        browser,
+        ua,
       })
     }
 
@@ -120,8 +114,7 @@ export function usePresenceList(
         locale: navigator.language,
         originUrl,
         timestamp: Date.now(),
-        os,
-        browser,
+        ua,
       })
     }, JOIN_DELAY_MS)
 
