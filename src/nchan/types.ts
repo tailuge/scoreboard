@@ -41,6 +41,7 @@ export interface PresenceMessage extends BaseMessage {
   isBot?: boolean
   ruletype?: string
   ua?: string
+  opponentId?: string | null
 }
 
 /**

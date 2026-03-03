@@ -1,5 +1,6 @@
 import Head from "next/head"
-import React, { useState } from "react"
+import { useRouter } from "next/router"
+import React, { useState, useMemo } from "react"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
@@ -13,10 +14,15 @@ import { HighscoreGrid } from "@/components/HighscoreGrid"
 
 export default function Game() {
   const { userId, userName } = useUser()
+  const router = useRouter()
   const { users: presenceUsers, count: presenceCount } = usePresenceList(
     userId,
     userName
   )
+
+  const incomingChallenge = useMemo(() => {
+    return presenceUsers.find((u) => u.opponentId === userId)
+  }, [presenceUsers, userId])
   const {
     tables,
     tableAction,
@@ -97,12 +103,34 @@ export default function Game() {
           title="Play"
           leftBadge={<User />}
           rightBadge={
-            <OnlineUsersPopover
-              count={presenceCount}
-              users={presenceUsers}
-              totalCount={presenceCount}
-              currentUserId={userId}
-            />
+            <div className="flex items-center gap-2">
+              {incomingChallenge && (
+                <button
+                  onClick={() => {
+                    router.push({
+                      pathname: "/lobby",
+                      query: {
+                        ruletype: incomingChallenge.ruletype,
+                        opponentId: incomingChallenge.userId,
+                        opponentName: incomingChallenge.userName,
+                        action: "join",
+                      },
+                    })
+                  }}
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-[10px] font-bold text-red-400 hover:bg-red-500/40 transition-all animate-pulse"
+                  title={`Challenge from ${incomingChallenge.userName}`}
+                >
+                  <span className="text-sm">⚔️</span>
+                  <span>ACCEPT</span>
+                </button>
+              )}
+              <OnlineUsersPopover
+                count={presenceCount}
+                users={presenceUsers}
+                totalCount={presenceCount}
+                currentUserId={userId}
+              />
+            </div>
           }
         >
           <div className="-mt-3">
