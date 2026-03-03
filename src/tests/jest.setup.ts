@@ -59,6 +59,14 @@ globalThis.Response ??= class Response {
   }
 } as any
 
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    isReady: true,
+    query: {},
+  })),
+}))
+
 globalThis.Headers ??= class Headers {
   _headers: Map<string, any>
 

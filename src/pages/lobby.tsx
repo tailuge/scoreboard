@@ -24,9 +24,26 @@ export default function Lobby() {
     ruleType: string
   } | null>(null)
   const shownModals = useRef<Set<string>>(new Set())
+
+  const opponentId = router.query.opponentId as string | undefined
+  const opponentName = router.query.opponentName as string | undefined
+  const queryRuleType = router.query.ruletype as string | undefined
+
+  const [activeOpponentId, setActiveOpponentId] = useState<string | null>(null)
+  const [activeRuleType, setActiveRuleType] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (router.isReady) {
+      if (opponentId) setActiveOpponentId(opponentId)
+      if (queryRuleType) setActiveRuleType(queryRuleType)
+    }
+  }, [router.isReady, opponentId, queryRuleType])
+
   const { users: presenceUsers, count: presenceCount } = usePresenceList(
     userId,
-    userName
+    userName,
+    activeOpponentId,
+    activeRuleType
   )
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
@@ -44,6 +61,8 @@ export default function Lobby() {
     }
     setSeekingRuleType(null)
     setSeekingTableId(null)
+    setActiveOpponentId(null)
+    setActiveRuleType(null)
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
   }, [seekingTableId, deleteTable])
 
@@ -185,6 +204,44 @@ export default function Lobby() {
               }
             >
               <div className="flex flex-col gap-6">
+                {activeOpponentId && !activeRuleType && (
+                  <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300">
+                    <h3 className="text-xl font-bold text-white mb-4">
+                      Challenge {opponentName || "Player"}
+                    </h3>
+                    <p className="text-sm text-gray-300 mb-6">
+                      Select game rules:
+                    </p>
+                    <div className="grid grid-cols-1 gap-3">
+                      {["snooker", "nineball", "threecushion"].map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => {
+                            setActiveRuleType(type)
+                            handleFindOrCreate(type)
+                          }}
+                          className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95 capitalize"
+                        >
+                        {type === "threecushion" && "Three Cushion"}
+                        {type === "nineball" && "Nine Ball"}
+                        {type === "snooker" && "Snooker"}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => {
+                          setActiveOpponentId(null)
+                          const newQuery = { ...router.query }
+                          delete newQuery.opponentId
+                          delete newQuery.opponentName
+                          router.push({ pathname: "/lobby", query: newQuery })
+                        }}
+                        className="mt-2 text-sm text-gray-400 hover:text-white"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {seekingRuleType && (
                   <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
                     <div className="relative mx-auto mb-5 h-14 w-14">

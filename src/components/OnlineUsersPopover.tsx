@@ -1,6 +1,7 @@
 // src/components/OnlineUsersPopover.tsx
 import { UsersIcon } from "@heroicons/react/24/solid";
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 import { localeToFlag } from "@/utils/locale";
 import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua";
 import type { PresenceUser } from "./hooks/usePresenceList";
@@ -20,6 +21,7 @@ export function OnlineUsersPopover({
 }: OnlineUsersPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Close on click outside
   useEffect(() => {
@@ -145,6 +147,23 @@ export function OnlineUsersPopover({
                         {browserIcon(detectBrowser(user.ua))}
                       </span>
                       {getUserBadge(user)}
+                      {user.userId !== currentUserId && !user.isBot && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const query = {
+                              ...router.query,
+                              opponentId: user.userId,
+                              opponentName: user.userName,
+                            };
+                            router.push({ pathname: "/lobby", query });
+                            setIsOpen(false);
+                          }}
+                          className="ml-2 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[9px] font-bold text-cyan-300 hover:bg-cyan-500/40 transition-colors"
+                        >
+                          Challenge
+                        </button>
+                      )}
                     </div>
                   </li>
                 ))}

@@ -121,7 +121,7 @@ describe("usePresenceList", () => {
         configurable: true,
       })
 
-      const { result } = renderHook(() => usePresenceList(userId, userName))
+      renderHook(() => usePresenceList(userId, userName))
 
       // Wait for useEffect to run the async Brave check
       await act(async () => {
