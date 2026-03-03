@@ -222,9 +222,9 @@ export default function Lobby() {
                           }}
                           className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95 capitalize"
                         >
-                        {type === "threecushion" && "Three Cushion"}
-                        {type === "nineball" && "Nine Ball"}
-                        {type === "snooker" && "Snooker"}
+                          {type === "threecushion" && "Three Cushion"}
+                          {type === "nineball" && "Nine Ball"}
+                          {type === "snooker" && "Snooker"}
                         </button>
                       ))}
                       <button

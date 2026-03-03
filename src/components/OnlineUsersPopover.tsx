@@ -1,17 +1,17 @@
 // src/components/OnlineUsersPopover.tsx
-import { UsersIcon } from "@heroicons/react/24/solid";
-import React, { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/router";
-import { localeToFlag } from "@/utils/locale";
-import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua";
-import type { PresenceUser } from "./hooks/usePresenceList";
+import { UsersIcon } from "@heroicons/react/24/solid"
+import React, { useState, useRef, useEffect } from "react"
+import { useRouter } from "next/router"
+import { localeToFlag } from "@/utils/locale"
+import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
+import type { PresenceUser } from "./hooks/usePresenceList"
 
 type OnlineUsersPopoverProps = {
-  readonly count: number;
-  readonly users: PresenceUser[];
-  readonly totalCount?: number;
-  readonly currentUserId?: string;
-};
+  readonly count: number
+  readonly users: PresenceUser[]
+  readonly totalCount?: number
+  readonly currentUserId?: string
+}
 
 export function OnlineUsersPopover({
   count,
@@ -19,28 +19,30 @@ export function OnlineUsersPopover({
   totalCount,
   currentUserId,
 }: OnlineUsersPopoverProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   // Close on click outside
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return
 
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [isOpen])
 
-  const overflow = totalCount ? totalCount - users.length : 0;
+  const overflow = totalCount ? totalCount - users.length : 0
+
+  const otherUsers = users.filter((user) => user.userId !== currentUserId)
 
   const getUserBadge = (user: PresenceUser) => {
     if (user.isBot) {
@@ -48,17 +50,17 @@ export function OnlineUsersPopover({
         <span className="text-[10px]" title="Bot">
           🤖
         </span>
-      );
+      )
     }
     if (user.userId === currentUserId) {
       return (
         <span className="text-[10px]" title="Identified">
           ⭐
         </span>
-      );
+      )
     }
-    const cleanOrigin = user.originUrl?.replace("origin:", "") ?? "";
-    let isGithubIo = false;
+    const cleanOrigin = user.originUrl?.replace("origin:", "") ?? ""
+    let isGithubIo = false
     if (cleanOrigin) {
       try {
         // Ensure we have a valid URL string; add a scheme if missing
@@ -66,10 +68,9 @@ export function OnlineUsersPopover({
           cleanOrigin.startsWith("http://") ||
           cleanOrigin.startsWith("https://")
             ? new URL(cleanOrigin)
-            : new URL(`https://${cleanOrigin}`);
-        const hostname = url.hostname.toLowerCase();
-        isGithubIo =
-          hostname === "github.io" || hostname.endsWith(".github.io");
+            : new URL(`https://${cleanOrigin}`)
+        const hostname = url.hostname.toLowerCase()
+        isGithubIo = hostname === "github.io" || hostname.endsWith(".github.io")
       } catch {
         // Invalid URL; leave isGithubIo as false
       }
@@ -79,17 +80,17 @@ export function OnlineUsersPopover({
         <span className="text-[10px]" title="github.io">
           🎮
         </span>
-      );
+      )
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <div ref={containerRef} className="relative">
       <button
         onClick={() => {
-          if (!isOpen) console.log("Online users:", users);
-          setIsOpen(!isOpen);
+          if (!isOpen) console.log("Online users:", users)
+          setIsOpen(!isOpen)
         }}
         className={`user-pill z-10 ${isOpen ? "brightness-125 border-white/30" : ""}`}
         aria-label={`${count} users online`}
@@ -124,7 +125,7 @@ export function OnlineUsersPopover({
               </div>
 
               <ul className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
-                {users.map((user) => (
+                {otherUsers.map((user) => (
                   <li
                     key={user.userId}
                     className="flex items-center justify-between group stagger-item"
@@ -150,14 +151,14 @@ export function OnlineUsersPopover({
                       {user.userId !== currentUserId && !user.isBot && (
                         <button
                           onClick={(e) => {
-                            e.stopPropagation();
+                            e.stopPropagation()
                             const query = {
                               ...router.query,
                               opponentId: user.userId,
                               opponentName: user.userName,
-                            };
-                            router.push({ pathname: "/lobby", query });
-                            setIsOpen(false);
+                            }
+                            router.push({ pathname: "/lobby", query })
+                            setIsOpen(false)
                           }}
                           className="ml-2 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[9px] font-bold text-cyan-300 hover:bg-cyan-500/40 transition-colors"
                         >
@@ -179,5 +180,5 @@ export function OnlineUsersPopover({
         </div>
       )}
     </div>
-  );
+  )
 }

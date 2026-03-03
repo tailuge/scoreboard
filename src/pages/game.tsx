@@ -117,11 +117,11 @@ export default function Game() {
                       },
                     })
                   }}
-                  className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-[10px] font-bold text-red-400 hover:bg-red-500/40 transition-all animate-pulse"
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-800/70 border border-red-500/40 text-[12px] font-bold text-white-400 hover:bg-red-500/40 transition-all animate-pulse"
                   title={`Challenge from ${incomingChallenge.userName}`}
                 >
                   <span className="text-sm">⚔️</span>
-                  <span>ACCEPT</span>
+                  <span>Challenge from {incomingChallenge.userName}</span>
                 </button>
               )}
               <OnlineUsersPopover

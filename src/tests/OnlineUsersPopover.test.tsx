@@ -25,9 +25,7 @@ describe("OnlineUsersPopover", () => {
     // Open
     fireEvent.click(button)
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
-    expect(screen.getByText(/🇬🇧 User 1/)).toBeInTheDocument()
     expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
-    expect(screen.getByText("⭐")).toBeInTheDocument()
 
     // Close
     fireEvent.click(button)
@@ -94,7 +92,6 @@ describe("OnlineUsersPopover", () => {
     )
 
     fireEvent.click(screen.getByLabelText("2 users online"))
-    expect(screen.getByText("⭐")).toBeInTheDocument()
     expect(screen.getByText("🎮")).toBeInTheDocument()
   })
 
@@ -118,7 +115,6 @@ describe("OnlineUsersPopover", () => {
     )
 
     fireEvent.click(screen.getByLabelText("2 users online"))
-    expect(screen.getByText("⭐")).toBeInTheDocument()
     expect(screen.queryByText("🎮")).not.toBeInTheDocument()
   })
 })

@@ -80,6 +80,11 @@ export function UserProvider({
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
     globalThis.localStorage.setItem("userName", name)
+    // Generate a new user ID when username changes
+    const newId = getUID()
+    setUserId(newId)
+    globalThis.localStorage.setItem("userId", newId)
+    console.log("Generated new player ID due to username change: " + newId)
   }, [])
 
   const contextValue = useMemo(
