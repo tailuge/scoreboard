@@ -16,7 +16,7 @@
     "docker:buildpi": "docker buildx build --platform linux/arm64 -t tailuge/billiards-network src/nchan",
     "docker:push": "docker push tailuge/billiards-network",
     "e2e": "playwright test",
-    "e2e:report": "concurrently -k \"yarn dev\" \"wait-on http://localhost:3000 && playwright test\"",
+    "e2e:report": "playwright show-report public/playwright-report",
     "e2e:headed": "playwright test --headed"
   },
   "keywords": [

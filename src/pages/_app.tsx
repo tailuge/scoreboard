@@ -13,6 +13,7 @@ const exo = Exo({
 const bitcount = Bitcount_Prop_Double({
   subsets: ["latin"],
   variable: "--font-bitcount",
+  adjustFontFallback: false,
 })
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
