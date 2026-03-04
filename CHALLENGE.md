@@ -34,3 +34,18 @@ In the main `Game` component (`src/pages/game.tsx`) or global presence hook:
 - **Terminology**: Use `ruletype` (lowercase) for query parameters and presence fields to match existing conventions in `src/nchan/types.ts` and `GameGrid.tsx`.
 - **Presence**: Update `PresenceMessage` in `src/nchan/types.ts` to include `opponentId?: string`.
 - **Flow**: The lobby handles the actual table pairing; this system focuses on the signaling and navigation required to bring two players together.
+
+## 4. External Challenge Acceptance
+
+An external application can trigger a challenge acceptance by navigating the user to the lobby with specific query parameters. This triggers the automatic matchmaking flow.
+
+**Endpoint**: `/lobby`
+
+**Query Parameters**:
+- `action=join` (Required): Triggers the automatic join logic in the lobby.
+- `ruletype` (Required): The game type to join (`snooker`, `nineball`, or `threecushion`).
+- `opponentId` (Required): The unique ID of the challenger to signal acceptance back via presence.
+- `opponentName` (Optional): The display name of the challenger for UI consistency.
+
+**Example URL**:
+`/lobby?action=join&ruletype=snooker&opponentId=user-123&opponentName=Alice`
