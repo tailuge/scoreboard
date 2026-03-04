@@ -49,6 +49,7 @@ pnpm-lock.yaml
 .vscode
 
 #playwright
+public/test-results
 /test-results
 .gemini/
 gha-creds-*.json
