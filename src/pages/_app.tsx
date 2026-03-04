@@ -1,5 +1,5 @@
 import "@/styles/globals.css"
-import { Exo, Bitcount_Prop_Double } from "next/font/google"
+import { Exo } from "next/font/google"
 import type { AppProps } from "next/app"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -10,11 +10,6 @@ const exo = Exo({
   variable: "--font-exo",
 })
 
-const bitcount = Bitcount_Prop_Double({
-  subsets: ["latin"],
-  variable: "--font-bitcount",
-  adjustFontFallback: false,
-})
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import { UserProvider } from "@/contexts/UserContext"
@@ -30,9 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <link rel="icon" type="image/png" href="/golden-cup.png" />
         </Head>
-        <main
-          className={`${exo.variable} ${bitcount.variable} ${exo.className} font-sans`}
-        >
+        <main className={`${exo.variable} ${exo.className} font-sans`}>
           <Component {...pageProps} />
         </main>
         <SpeedInsights />

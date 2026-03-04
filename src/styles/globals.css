@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Bitcount+Prop+Double:wght@100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -72,6 +73,7 @@
 :root {
   --background: #000010;
   --foreground: #ededed;
+  --font-bitcount: "Bitcount Prop Double";
 }
 
 body,
