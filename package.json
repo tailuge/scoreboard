@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "tsc --noEmit && eslint .",
     "lint:smells": "oxlint src && jscpd src --ignore \"src/tests/**\"",
-    "prettify": "prettier --write --no-error-on-unmatched-pattern --trailing-comma es5 --no-semi {src,public}/**/*.{ts,tsx,html,css} *.json",
+    "prettify": "prettier --write --no-error-on-unmatched-pattern --trailing-comma es5 --no-semi {src,public}/**/*.{ts,tsx,css} *.json",
     "deps": "npx yarn-check --skip-unused",
     "coverage": "jest --coverage --config src/tests/jest.config.js",
     "test": "jest --config src/tests/jest.config.js",
