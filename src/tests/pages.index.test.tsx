@@ -7,12 +7,8 @@ jest.mock("next/router", () => ({
 }))
 
 describe("Home page", () => {
-  it("should redirect to /game", () => {
-    const replace = jest.fn()
-    ;(useRouter as jest.Mock).mockReturnValue({ replace })
-
-    render(<Home />)
-
-    expect(replace).toHaveBeenCalledWith("/game")
+  it("should render null", () => {
+    const { container } = render(<Home />)
+    expect(container.firstChild).toBeNull()
   })
 })

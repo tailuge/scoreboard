@@ -6,11 +6,13 @@ export function User() {
   const { userName, userId, setUserName } = useUser()
   const [isEditing, setIsEditing] = useState(false)
   const [newUserName, setNewUserName] = useState(userName)
+  const [prevUserName, setPrevUserName] = useState(userName)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
+  if (userName !== prevUserName) {
+    setPrevUserName(userName)
     setNewUserName(userName)
-  }, [userName])
+  }
 
   useEffect(() => {
     if (isEditing && inputRef.current) {

@@ -1,6 +1,6 @@
-import Head from "next/head"
 import { useRouter } from "next/router"
 import React, { useState, useMemo } from "react"
+import { SEO } from "@/components/SEO"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
@@ -37,49 +37,12 @@ export default function Game() {
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
-      <Head>
-        <title>
-          Play Billiards Online - Snooker, 9-Ball Pool & Carom Games
-        </title>
-        <meta
-          name="description"
-          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
-        />
-        <link
-          rel="canonical"
-          href="https://scoreboard-tailuge.vercel.app/game"
-        />
-        <meta
-          property="og:title"
-          content="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
-        />
-        <meta
-          property="og:description"
-          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://scoreboard-tailuge.vercel.app/game"
-        />
-        <meta
-          property="og:image"
-          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
-        />
-        <meta name="twitter:card" content="summary" />
-        <meta
-          name="twitter:title"
-          content="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
-        />
-        <meta
-          name="twitter:description"
-          content="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
-        />
-        <meta
-          name="twitter:image"
-          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
-        />
-      </Head>
+      <SEO
+        title="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
+        description="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
+        canonical="https://scoreboard-tailuge.vercel.app/game"
+        ogUrl="https://scoreboard-tailuge.vercel.app/game"
+      />
 
       {/* Static Background */}
       <div

@@ -6,7 +6,7 @@ import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
-import Head from "next/head"
+import { SEO } from "@/components/SEO"
 import { markUsage } from "@/utils/usage"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
@@ -138,58 +138,27 @@ export default function Lobby() {
   useEffect(() => {
     return () => {
       if (seekingTableIdRef.current) {
+        // Use keepalive for the delete request on unmount to ensure it completes
         fetch(`/api/tables/${seekingTableIdRef.current}/delete`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId }),
-        })
+          keepalive: true,
+        }).catch((err) =>
+          console.error("Failed to delete table on unmount", err)
+        )
       }
     }
   }, [userId])
 
   return (
     <>
-      <Head>
-        <title>Multiplayer Billiards Lobby - Play Pool & Snooker Online</title>
-        <meta
-          name="description"
-          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
-        />
-        <link
-          rel="canonical"
-          href="https://scoreboard-tailuge.vercel.app/lobby"
-        />
-        <meta
-          property="og:title"
-          content="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
-        />
-        <meta
-          property="og:description"
-          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content="https://scoreboard-tailuge.vercel.app/lobby"
-        />
-        <meta
-          property="og:image"
-          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
-        />
-        <meta name="twitter:card" content="summary" />
-        <meta
-          name="twitter:title"
-          content="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
-        />
-        <meta
-          name="twitter:description"
-          content="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
-        />
-        <meta
-          name="twitter:image"
-          content="https://scoreboard-tailuge.vercel.app/golden-cup.png"
-        />
-      </Head>
+      <SEO
+        title="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
+        description="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
+        canonical="https://scoreboard-tailuge.vercel.app/lobby"
+        ogUrl="https://scoreboard-tailuge.vercel.app/lobby"
+      />
       <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
         <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2">
