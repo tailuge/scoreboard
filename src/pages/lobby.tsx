@@ -109,6 +109,8 @@ export default function Lobby() {
         setSeekingTableId(null)
         if (timeoutRef.current) clearTimeout(timeoutRef.current)
         setModalTable({ id: table.id, ruleType: table.ruleType })
+        // Clear challenge from presence to remove it from recipient's screen
+        setActiveOpponentId(null)
         shownModals.current.add(table.id)
       }
     })
