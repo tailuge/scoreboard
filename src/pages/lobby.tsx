@@ -42,7 +42,7 @@ export default function Lobby() {
   const { users: presenceUsers, count: presenceCount } = usePresenceList(
     userId,
     userName,
-    activeOpponentId,
+    activeRuleType ? activeOpponentId : null,
     activeRuleType
   )
 

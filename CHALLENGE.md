@@ -15,7 +15,8 @@ In the `OnlineUsersPopover` component (`src/components/OnlineUsersPopover.tsx`):
 Modify the Lobby route handler (`src/pages/lobby.tsx`):
 - **Rule Selection**: If `opponentId` is present in the URL but `ruletype` is missing, display a selection modal for the game type (**Snooker**, **Nine Ball**, or **Three Cushion**).
 - **Matchmaking**: Once a rule is selected, trigger the existing `findOrCreateTable` flow.
-- **Presence Signal**: Extend the presence broadcast to include `opponentId` and `ruletype` when a challenge is active.
+- **Presence Signal**: Extend the presence broadcast to include `opponentId` and `ruletype` **only after** a rule selection has been made.
+
 - **Cancellation**: If the challenger leaves the lobby or cancels selection, broadcast a presence update with `opponentId: null` to clear the challenge state for the recipient.
 
 ## 3. Global Challenge Listener
