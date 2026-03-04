@@ -31,6 +31,8 @@
 - Location: Add tests under `src/tests` and colocate fixtures there.
 - Naming: `*.test.ts` or `*.test.tsx` (for example `src/tests/TableService.test.ts`).
 - Always run: `yarn test` and `yarn lint` after changes.
+- Cloud-based LLM agents must **not** run `yarn e2e`/Playwright in this repo. E2E startup depends on server-side DB/KV credentials that are not available in hosted agent environments.
+- For cloud agents, validate changes with `yarn test` and `yarn lint` only, unless a human explicitly provides credentials and requests E2E.
 
 ## Configuration & Ops Notes
 - KV and Nchan are required for full functionality; local tests may use mocks.
