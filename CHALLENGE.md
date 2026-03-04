@@ -46,6 +46,8 @@ An external application can trigger a challenge acceptance by navigating the use
 - `ruletype` (Required): The game type to join (`snooker`, `nineball`, or `threecushion`).
 - `opponentId` (Required): The unique ID of the challenger to signal acceptance back via presence.
 - `opponentName` (Optional): The display name of the challenger for UI consistency.
+- `userId` or `playerId` (Optional): The unique ID of the player accepting the challenge.
+- `username` (Optional): The display name of the player accepting the challenge.
 
 **Example URL**:
-`/lobby?action=join&ruletype=snooker&opponentId=user-123&opponentName=Alice`
+`/lobby?action=join&ruletype=snooker&opponentId=user-123&opponentName=Alice&username=Bob&userId=user-456`
