@@ -16,20 +16,23 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   const [data, setData] = useState<LeaderboardItem[]>([])
 
   useEffect(() => {
+    const controller = new AbortController()
     const fetchData = async () => {
       try {
         const params = new URLSearchParams({ ruletype: ruleType })
         const url = `/api/rank?${params.toString()}`
-        const response = await fetch(url)
+        const response = await fetch(url, { signal: controller.signal })
         if (!response.ok) throw new Error("Failed to fetch leaderboard data")
         const jsonData = await response.json()
         setData(jsonData)
       } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return
         console.error("Error fetching leaderboard data:", error)
       }
     }
 
     fetchData()
+    return () => controller.abort()
   }, [ruleType])
 
   const handleLike = async (e: React.MouseEvent, id: string) => {

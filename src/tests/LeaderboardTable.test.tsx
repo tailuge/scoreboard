@@ -22,7 +22,8 @@ describe("LeaderboardTable", () => {
     render(<LeaderboardTable ruleType="snooker" />)
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/api/rank?ruletype=snooker")
+      expect.stringContaining("/api/rank?ruletype=snooker"),
+      expect.any(Object)
     )
 
     await waitFor(() => {
