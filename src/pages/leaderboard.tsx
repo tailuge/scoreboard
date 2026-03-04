@@ -1,12 +1,12 @@
 import React from "react"
-import { SEO } from "@/components/SEO"
+import { Seo } from "@/components/Seo"
 import LeaderboardTable from "../components/LeaderboardTable"
 import { GroupBox } from "../components/GroupBox"
 
 const LeaderboardPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-4 md:p-8 font-sans text-gray-100">
-      <SEO
+      <Seo
         title="Billiards Global Leaderboard - Top Snooker & Pool Scores"
         description="Check the latest rankings and high scores for Snooker, 9-Ball, and Three-Cushion billiards. Watch replays of record-breaking breaks and shots."
         canonical="https://scoreboard-tailuge.vercel.app/leaderboard"

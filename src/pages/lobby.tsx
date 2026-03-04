@@ -6,7 +6,7 @@ import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
 import { usePresenceList } from "@/components/hooks/usePresenceList"
-import { SEO } from "@/components/SEO"
+import { Seo } from "@/components/Seo"
 import { markUsage } from "@/utils/usage"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
@@ -153,7 +153,7 @@ export default function Lobby() {
 
   return (
     <>
-      <SEO
+      <Seo
         title="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
         description="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
         canonical="https://scoreboard-tailuge.vercel.app/lobby"

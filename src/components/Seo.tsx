@@ -1,7 +1,7 @@
 import Head from "next/head"
 import React from "react"
 
-interface SEOProps {
+interface SeoProps {
   title: string
   description: string
   canonical?: string
@@ -17,7 +17,7 @@ interface SEOProps {
   refresh?: string
 }
 
-export const SEO: React.FC<SEOProps> = ({
+export const Seo: React.FC<SeoProps> = ({
   title,
   description,
   canonical,
