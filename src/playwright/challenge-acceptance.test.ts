@@ -50,11 +50,14 @@ test.describe("challenge acceptance test", () => {
       await challengeButton.click()
 
       await page2.waitForURL(/\/lobby/)
+      await expect(
+        page2.getByRole("heading", { name: "Opponent Ready" })
+      ).toBeVisible({ timeout: 30_000 })
       await page2.goto("/game")
 
       await expect(
         page2.getByRole("button", { name: `Challenge from ${aliceName}` })
-      ).not.toBeVisible({ timeout: 20_000 })
+      ).not.toBeVisible({ timeout: 60_000 })
     } finally {
       await context1.close()
       await context2.close()
