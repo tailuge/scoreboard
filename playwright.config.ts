@@ -7,7 +7,11 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   retries: process.env.CI ? 2 : 0,
-  reporter: [["html", { outputFolder: "public/playwright-report", open: "never" }]],
+  outputDir: "/tmp/test-results",
+  snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}{ext}",
+  reporter: [
+    ["html", { outputFolder: "public/playwright-report", open: "never" }],
+  ],
   use: {
     baseURL,
     trace: "on-first-retry",

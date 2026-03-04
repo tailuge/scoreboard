@@ -50,7 +50,6 @@ pnpm-lock.yaml
 
 #playwright
 /test-results
-/playwright-report
 .gemini/
 gha-creds-*.json
 telemetry-id

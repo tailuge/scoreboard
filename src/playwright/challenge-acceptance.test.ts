@@ -40,6 +40,9 @@ test.describe("challenge acceptance test", () => {
       await bobRow.getByRole("button", { name: "Challenge" }).click()
       await page1.waitForURL(/\/lobby/)
 
+      // Alice selects a rule type
+      await page1.getByRole("button", { name: "Nine Ball" }).click()
+
       const challengeButton = page2.getByRole("button", {
         name: `Challenge from ${aliceName}`,
       })
