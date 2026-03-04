@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import React, { useState, useMemo } from "react"
-import { SEO } from "@/components/SEO"
+import { Seo } from "@/components/Seo"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
@@ -37,7 +37,7 @@ export default function Game() {
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
-      <SEO
+      <Seo
         title="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
         description="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
         canonical="https://scoreboard-tailuge.vercel.app/game"
