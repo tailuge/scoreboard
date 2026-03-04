@@ -106,18 +106,6 @@ export function LobbyProvider({
 }
 
 /**
- * Legacy hook for backward compatibility
- * @deprecated Use useLobbyMessages() instead
- */
-export function useLobbyContext() {
-  const context = useContext(LobbyContext)
-  if (context === undefined) {
-    throw new Error("useLobbyContext must be used within a LobbyProvider")
-  }
-  return context
-}
-
-/**
  * Hook to access lobby messages (match events, table updates, etc.)
  */
 export function useLobbyMessages() {

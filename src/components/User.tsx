@@ -55,5 +55,3 @@ export function User() {
     </button>
   )
 }
-
-export default User

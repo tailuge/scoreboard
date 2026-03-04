@@ -30,7 +30,6 @@ jest.mock("@/nchan/nchanpub", () => ({
 }))
 jest.mock("@/contexts/LobbyContext", () => ({
   LobbyProvider: jest.fn(({ children }) => <>{children}</>),
-  useLobbyContext: jest.fn(),
   useLobbyMessages: jest.fn(),
   usePresenceMessages: jest.fn(),
 }))

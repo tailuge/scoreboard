@@ -107,5 +107,3 @@ export function BallIcon({
     </svg>
   )
 }
-
-export default BallIcon

@@ -47,7 +47,7 @@ export interface PresenceMessage extends BaseMessage {
 /**
  * Union type of all message types
  */
-export type NchanMessage = LobbyMessage | PresenceMessage
+type NchanMessage = LobbyMessage | PresenceMessage
 
 /**
  * Type guard to check if a message is a LobbyMessage

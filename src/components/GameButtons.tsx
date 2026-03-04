@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import React from "react"
 
-export type GameButtonProps = {
+type GameButtonProps = {
   readonly icon: string
   readonly alt: string
   readonly href?: string
@@ -67,7 +67,7 @@ export function GameButton({
   )
 }
 
-export type ActionButtonProps = {
+type ActionButtonProps = {
   readonly href: string
   readonly children: React.ReactNode
   readonly hoverBorderColor: string

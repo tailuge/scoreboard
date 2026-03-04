@@ -3,7 +3,7 @@ import { VercelKV } from "@vercel/kv"
 import { logger } from "../utils/logger"
 
 // Create an adapter class for Vercel KV
-export class MockKV {
+class MockKV {
   private readonly mockRedis: InstanceType<typeof RedisMock>
 
   constructor() {

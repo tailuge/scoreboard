@@ -12,18 +12,6 @@ export const mockTable = {
 
 export const mockTables = [mockTable]
 
-export const mockMatchResult = {
-  id: "match-1",
-  winner: "Player One",
-  loser: "Player Two",
-  winnerScore: 10,
-  loserScore: 5,
-  ruleType: "nineball",
-  timestamp: Date.now(),
-}
-
-export const mockMatchResults = [mockMatchResult]
-
 export const mockLeaderboardData = [
   { id: "1", name: "Player 1", score: 100, likes: 5 },
   { id: "2", name: "Player 2", score: 90, likes: 3 },
