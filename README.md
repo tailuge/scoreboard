@@ -17,6 +17,8 @@ I have to intervene and untangle things now and then but these tools allowed me 
 
 [logs](https://scoreboard-tailuge.vercel.app/server-logs)
 
+[e2e](https://scoreboard-tailuge.vercel.app/playwright-report/index.html#?speedboard)
+
 ## scripts
 
 ### dev
