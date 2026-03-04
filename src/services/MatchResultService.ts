@@ -3,7 +3,7 @@ import { MatchResult, getRuleType } from "../types/match"
 
 const KEY = "match_results"
 const HISTORY_LIMIT = 50
-export const MATCH_REPLAY_KEY_PREFIX = "match_replay:"
+const MATCH_REPLAY_KEY_PREFIX = "match_replay:"
 
 export const getMatchReplayKey = (matchId: string): string =>
   `${MATCH_REPLAY_KEY_PREFIX}${matchId}`

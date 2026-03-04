@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useMemo } from "react"
 import { MatchResult, getRuleType } from "@/types/match"
-import BallIcon from "./BallIcon"
+import { BallIcon } from "./BallIcon"
 import { PlayerMatchDisplay } from "./PlayerMatchDisplay"
 import { LocationTimeBadge } from "./LocationTimeBadge"
 import { formatTimeAgo } from "@/utils/timeago"
@@ -141,5 +141,3 @@ export const MatchResultCard = memo(MatchResultCardComponent, (prev, next) => {
     prev.onClick === next.onClick
   )
 })
-
-export default MatchResultCard

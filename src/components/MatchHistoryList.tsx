@@ -60,5 +60,3 @@ export function MatchHistoryList({
     </GroupBox>
   )
 }
-
-export default MatchHistoryList

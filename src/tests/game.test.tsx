@@ -25,10 +25,9 @@ jest.mock("../nchan/nchanpub", () => ({
   })),
 }))
 
-// Mock usePresenceMessages
+// Mock LobbyContext hooks
 jest.mock("@/contexts/LobbyContext", () => ({
   LobbyProvider: jest.fn(({ children }) => <>{children}</>),
-  useLobbyContext: jest.fn(),
   useLobbyMessages: jest.fn(),
   usePresenceMessages: jest.fn(),
 }))
