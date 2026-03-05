@@ -1,19 +1,11 @@
 import React from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
 
 export function LogoSection() {
-  const { scrollY } = useScroll()
-
-  // Fade out quickly as scroll increases.
-  // At 0px scroll, opacity is 1. At 50px scroll, opacity is 0.
-  const opacity = useTransform(scrollY, [0, 150], [1, 0])
-
   return (
     <div className="fixed inset-x-0 top-10 z-0 flex justify-center">
-      <motion.h1
+      <h1
         className="cursor-pointer font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
         style={{
-          opacity,
           fontFamily: "var(--font-bitcount), monospace",
           fontSize: "16px",
           color: "#fceb7a",
@@ -22,6 +14,9 @@ export function LogoSection() {
           transformOrigin: "center",
           scale: 3,
         }}
+        tabIndex={0}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+        role="button"
         onClick={() =>
           window.open(
             "https://github.com/tailuge/billiards",
@@ -29,9 +24,18 @@ export function LogoSection() {
             "noopener,noreferrer"
           )
         }
+        onKeyDown={(e: React.KeyboardEvent<HTMLHeadingElement>) => {
+          if (e.key === "Enter" || e.key === " ") {
+            window.open(
+              "https://github.com/tailuge/billiards",
+              "_blank",
+              "noopener,noreferrer"
+            )
+          }
+        }}
       >
         Billiards
-      </motion.h1>
+      </h1>
     </div>
   )
 }
