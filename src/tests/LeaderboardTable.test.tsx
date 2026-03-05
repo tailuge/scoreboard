@@ -108,8 +108,9 @@ describe("LeaderboardTable", () => {
 
     await waitFor(() => screen.getByText("Player 1"))
 
-    // Compact mode hides thead
-    expect(screen.queryByRole("columnheader")).not.toBeInTheDocument()
+    // Compact mode hides thead text (Player/Score headers)
+    expect(screen.queryByText("Player")).not.toBeInTheDocument()
+    expect(screen.queryByText("Score")).not.toBeInTheDocument()
   })
 
   it("handles fetch error", async () => {

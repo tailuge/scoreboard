@@ -93,8 +93,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   const renderPlaceholderRow = (item: LeaderboardRowItem) => (
     <tr key={item.id} className={compact ? "h-[17px]" : "h-7"}>
-      <td className={`text-left ${cellClasses}`}>&nbsp;</td>
-      <td className={`text-left ${cellClasses}`}>&nbsp;</td>
+      <td className={`text-left ${cellClasses} pl-0 pr-0`}>&nbsp;</td>
+      <td className={`text-left ${cellClasses} pl-0`}>&nbsp;</td>
       <td className={`text-left ${cellClasses}`}>&nbsp;</td>
       {!compact && (
         <>
@@ -111,22 +111,24 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item ${compact ? "h-[17px]" : "h-7"}`}
       onClick={() => handleRowClick(item.id)}
     >
-      <td className={`text-left ${cellClasses} ${compact ? "text-gray-400" : ""}`}>
+      <td
+        className={`text-left ${cellClasses} pl-0 pr-0 ${compact ? "text-gray-400" : ""}`}
+      >
         <div className="flex items-center leading-none h-full">
           {renderTrophy(index, compact)}
         </div>
       </td>
       <td
-        className={`text-left font-mono-data leading-none ${cellClasses} ${compact ? "text-gray-300/80" : "text-gray-400"}`}
-      >
-        {item.score}
-      </td>
-      <td
-        className={`text-left truncate leading-none ${cellClasses} ${compact ? "text-gray-300/80 max-w-[60px]" : "text-gray-300 max-w-[120px]"}`}
+        className={`text-left truncate leading-none ${cellClasses} pl-0 ${compact ? "text-gray-300/80" : "text-gray-300"}`}
       >
         <span className={compact ? "font-medium" : "font-semibold"}>
           {item.name}
         </span>
+      </td>
+      <td
+        className={`text-left font-mono-data leading-none ${cellClasses} ${compact ? "text-gray-300/80" : "text-gray-400"}`}
+      >
+        {item.score}
       </td>
       {!compact && (
         <>
@@ -156,23 +158,25 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   return (
     <div className="w-full overflow-x-auto">
       <table
-        className={`w-full border-collapse ${compact ? "text-[11px]" : "text-sm"}`}
+        className={`w-full table-fixed border-collapse ${compact ? "text-[11px]" : "text-sm"}`}
       >
-        {!compact && (
-          <thead>
-            <tr>
-              <th className="px-2 py-1 text-left text-gray-400 font-medium w-8"></th>
-              <th className="px-2 py-1 text-left text-gray-400 font-medium">
-                Score
-              </th>
-              <th className="px-2 py-1 text-left text-gray-400 font-medium">
-                Player
-              </th>
-              <th className="px-2 py-1 text-left"></th>
-              <th className="px-2 py-1 text-left"></th>
-            </tr>
-          </thead>
-        )}
+        <thead>
+          <tr className={compact ? "h-0 invisible" : ""}>
+            <th className="p-0 text-left text-gray-400 font-medium w-[20px]"></th>
+            <th className="px-2 py-1 text-left text-gray-400 font-medium">
+              {!compact && "Player"}
+            </th>
+            <th className="px-2 py-1 text-left text-gray-400 font-medium w-[60px]">
+              {!compact && "Score"}
+            </th>
+            {!compact && (
+              <>
+                <th className="px-2 py-1 text-left w-16"></th>
+                <th className="px-2 py-1 text-left w-16"></th>
+              </>
+            )}
+          </tr>
+        </thead>
         <tbody>{rows.map(renderRow)}</tbody>
       </table>
     </div>

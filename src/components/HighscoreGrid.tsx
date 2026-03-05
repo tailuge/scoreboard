@@ -5,7 +5,9 @@ interface HighscoreGridProps {
   heightClass?: string
 }
 
-export function HighscoreGrid({ heightClass = "h-[62px]" }: HighscoreGridProps) {
+export function HighscoreGrid({
+  heightClass = "h-[62px]",
+}: HighscoreGridProps) {
   const games = [
     { name: "Snooker", ruleType: "snooker" },
     { name: "Nine Ball", ruleType: "nineball" },
