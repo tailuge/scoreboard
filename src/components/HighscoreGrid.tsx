@@ -22,11 +22,7 @@ export function HighscoreGrid({
             {game.name}
           </div>
           <div className={`overflow-hidden ${heightClass}`}>
-            <LeaderboardTable
-              ruleType={game.ruleType}
-              limit={3}
-              compact={true}
-            />
+            <LeaderboardTable ruleType={game.ruleType} limit={3} />
           </div>
         </div>
       ))}
