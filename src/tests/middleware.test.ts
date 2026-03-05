@@ -38,26 +38,26 @@ describe("middleware logic (manual verification)", () => {
   // This test documents expected behavior
   // Full integration testing would require running the Next.js server
   it("documents the CORS flow", () => {
-    const allowedOrigins = [
+    const allowedOrigins = new Set([
       "http://localhost:3000",
       "http://localhost:8080",
       "https://tailuge.github.io",
       "https://billiards.tailuge.workers.dev",
-    ]
+    ])
 
     // Test allowed origins
-    expect(allowedOrigins.includes("https://tailuge.github.io")).toBe(true)
+    expect(allowedOrigins.has("https://tailuge.github.io")).toBe(true)
     expect(
-      allowedOrigins.includes("https://billiards.tailuge.workers.dev")
+      allowedOrigins.has("https://billiards.tailuge.workers.dev")
     ).toBe(true)
-    expect(allowedOrigins.includes("http://localhost:3000")).toBe(true)
+    expect(allowedOrigins.has("http://localhost:3000")).toBe(true)
 
     // Test blocked origins
-    expect(allowedOrigins.includes("https://random.com")).toBe(false)
-    expect(allowedOrigins.includes("https://billiards.other.workers.dev")).toBe(
+    expect(allowedOrigins.has("https://random.com")).toBe(false)
+    expect(allowedOrigins.has("https://billiards.other.workers.dev")).toBe(
       false
     )
-    expect(allowedOrigins.includes("")).toBe(false)
-    expect(allowedOrigins.includes(null as any)).toBe(false)
+    expect(allowedOrigins.has("")).toBe(false)
+    expect(allowedOrigins.has(null as any)).toBe(false)
   })
 })
