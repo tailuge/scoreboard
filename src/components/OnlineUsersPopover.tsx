@@ -62,8 +62,8 @@ export function OnlineUsersPopover({
     const isExternal = (() => {
       if (!user.originUrl) return false
       try {
-        const url = new URL(user.originUrl, window.location.origin)
-        return url.hostname !== window.location.hostname
+        const url = new URL(user.originUrl, globalThis.location.origin)
+        return url.hostname !== globalThis.location.hostname
       } catch {
         return false
       }
