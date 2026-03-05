@@ -1,39 +1,39 @@
-import { useRouter } from "next/router"
-import React, { useState, useMemo } from "react"
-import { Seo } from "@/components/Seo"
-import { GroupBox } from "../components/GroupBox"
-import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
-import { User } from "@/components/User"
-import { usePresenceList } from "@/components/hooks/usePresenceList"
-import { useUser } from "@/contexts/UserContext"
-import { MatchHistoryList } from "@/components/MatchHistoryList"
-import { useLobbyTables } from "@/components/hooks/useLobbyTables"
-import { GameGrid } from "@/components/GameGrid"
-import { LogoSection } from "@/components/LogoSection"
-import { HighscoreGrid } from "@/components/HighscoreGrid"
+import { useRouter } from "next/router";
+import React, { useState, useMemo } from "react";
+import { Seo } from "@/components/Seo";
+import { GroupBox } from "../components/GroupBox";
+import { OnlineUsersPopover } from "../components/OnlineUsersPopover";
+import { User } from "@/components/User";
+import { usePresenceList } from "@/components/hooks/usePresenceList";
+import { useUser } from "@/contexts/UserContext";
+import { MatchHistoryList } from "@/components/MatchHistoryList";
+import { useLobbyTables } from "@/components/hooks/useLobbyTables";
+import { GameGrid } from "@/components/GameGrid";
+import { LogoSection } from "@/components/LogoSection";
+import { HighscoreGrid } from "@/components/HighscoreGrid";
 
 export default function Game() {
-  const { userId, userName } = useUser()
-  const router = useRouter()
+  const { userId, userName } = useUser();
+  const router = useRouter();
   const { users: presenceUsers, count: presenceCount } = usePresenceList(
     userId,
-    userName
-  )
+    userName,
+  );
 
   const incomingChallenge = useMemo(() => {
-    return presenceUsers.find((u) => u.opponentId === userId)
-  }, [presenceUsers, userId])
+    return presenceUsers.find((u) => u.opponentId === userId);
+  }, [presenceUsers, userId]);
   const {
     tables,
     tableAction,
     isLoading: tablesLoading,
-  } = useLobbyTables(userId, userName)
-  const [snookerReds, setSnookerReds] = useState(3)
-  const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
+  } = useLobbyTables(userId, userName);
+  const [snookerReds, setSnookerReds] = useState(3);
+  const [threecushionRaceTo, setThreecushionRaceTo] = useState(3);
 
   const handleSpectate = async (tableId: string) => {
-    await tableAction(tableId, "spectate")
-  }
+    await tableAction(tableId, "spectate");
+  };
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
@@ -78,7 +78,7 @@ export default function Game() {
                         opponentName: incomingChallenge.userName,
                         action: "join",
                       },
-                    })
+                    });
                   }}
                   className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-800/70 border border-red-500/40 text-[12px] font-bold text-white-400 hover:bg-red-500/40 transition-all animate-pulse"
                   title={`Challenge from ${incomingChallenge.userName}`}
@@ -110,7 +110,7 @@ export default function Game() {
 
         <div className="grid grid-cols-1 gap-6">
           <GroupBox title="Top Scores" titleHref="/leaderboard">
-            <HighscoreGrid />
+            <HighscoreGrid className="-mt-3" />
           </GroupBox>
           <MatchHistoryList
             liveTables={tables}
@@ -120,5 +120,5 @@ export default function Game() {
         </div>
       </main>
     </div>
-  )
+  );
 }

@@ -86,11 +86,10 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     ];
   }, [data, limit, ruleType]);
 
-  const rowClass = "h-7";
   const cellClass = "px-0 py-0";
 
   const renderPlaceholderRow = (item: LeaderboardRowItem) => (
-    <tr key={item.id} className={rowClass}>
+    <tr key={item.id}>
       <td className={`text-left ${cellClass} pl-0 pr-0`}>&nbsp;</td>
       <td className={`text-left ${cellClass} pl-0`}>&nbsp;</td>
       <td className={`text-left ${cellClass}`}>&nbsp;</td>
@@ -102,7 +101,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   const renderDataRow = (item: LeaderboardRowItem, index: number) => (
     <tr
       key={item.id}
-      className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item ${rowClass}`}
+      className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item`}
       onClick={() => handleRowClick(item.id)}
     >
       <td className={`text-left ${cellClass} pl-0 pr-0`}>
@@ -116,11 +115,11 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         <span className="font-semibold">{item.name}</span>
       </td>
       <td
-        className={`text-center font-mono-data leading-none ${cellClass} text-gray-400`}
+        className={`text-center font-mono-data leading-none ${cellClass} text-gray-300`}
       >
         {item.score}
       </td>
-      <td className={`text-right ${cellClass}`}>
+      <td className={`text-right ${cellClass} text-gray-400`}>
         <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>replay</a>
       </td>
       <td className={`text-right ${cellClass}`}>
