@@ -29,7 +29,7 @@ export function LocationTimeBadge({
     ? countryCodeToFlagEmoji(locationCountry)
     : null
   const hasLocation = locationCity || countryFlag
-  const textSize = compact ? "text-[10px]" : "text-[11px]"
+  const textSize = compact ? "text-[10px]" : "text-[12px]"
   const textColor = compact ? "text-gray-400/70" : "text-gray-400"
 
   const hasSystemInfo = os || browser || version
