@@ -87,13 +87,14 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   }, [data, limit, ruleType]);
 
   const cellClass = "px-0 py-0";
+  const hideReplay = "@max-[300px]:hidden";
 
   const renderPlaceholderRow = (item: LeaderboardRowItem) => (
     <tr key={item.id}>
       <td className={`text-left ${cellClass} pl-0 pr-0`}>&nbsp;</td>
       <td className={`text-left ${cellClass} pl-0`}>&nbsp;</td>
       <td className={`text-left ${cellClass}`}>&nbsp;</td>
-      <td />
+      <td className={hideReplay} />
       <td />
     </tr>
   );
@@ -119,7 +120,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       >
         {item.score}
       </td>
-      <td className={`text-right ${cellClass} text-gray-400`}>
+      <td className={`text-right ${cellClass} text-gray-400 ${hideReplay}`}>
         <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>replay</a>
       </td>
       <td className={`text-right ${cellClass}`}>
@@ -141,7 +142,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   };
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto @container">
       <table className="w-full table-fixed border-collapse text-sm">
         <tbody>{rows.map(renderRow)}</tbody>
       </table>
