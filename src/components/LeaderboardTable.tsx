@@ -122,7 +122,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           onClick={(e) => handleLike(e, item.id)}
           className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-[4px] py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
         >
-          👍 {item.likes || 0}
+          👍{"\u00A0"}
+          {item.likes || 0}
         </button>
       </td>
     </tr>
