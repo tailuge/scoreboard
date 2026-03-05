@@ -108,6 +108,9 @@ function MatchResultCardComponent({
         matchId={result.id}
         compact={compact}
         isLive={isLive}
+        os={result.os}
+        browser={result.browser}
+        version={result.version}
       />
     </>
   )

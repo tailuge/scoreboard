@@ -8,6 +8,9 @@ interface LocationTimeBadgeProps {
   readonly matchId: string
   readonly compact: boolean
   readonly isLive?: boolean
+  readonly os?: string | null
+  readonly browser?: string | null
+  readonly version?: string | null
 }
 
 export function LocationTimeBadge({
@@ -18,6 +21,9 @@ export function LocationTimeBadge({
   matchId,
   compact,
   isLive,
+  os,
+  browser,
+  version,
 }: LocationTimeBadgeProps) {
   const countryFlag = locationCountry
     ? countryCodeToFlagEmoji(locationCountry)
@@ -25,6 +31,14 @@ export function LocationTimeBadge({
   const hasLocation = locationCity || countryFlag
   const textSize = compact ? "text-[10px]" : "text-[11px]"
   const textColor = compact ? "text-gray-400/70" : "text-gray-400"
+
+  const hasSystemInfo = os || browser || version
+  const systemInfoString = hasSystemInfo
+    ? ` | OS: ${os || "N/A"} | Browser: ${browser || "N/A"} | Version: ${version || "N/A"}`
+    : ""
+  const flagTitle = locationCountry
+    ? `${locationCountry}${systemInfoString}`
+    : undefined
 
   return (
     <div
@@ -34,9 +48,7 @@ export function LocationTimeBadge({
         <span>{formattedTime}</span>
         {hasLocation && <span>•</span>}
         {locationCity && <span>{locationCity}</span>}
-        {countryFlag && (
-          <span title={locationCountry || undefined}>{countryFlag}</span>
-        )}
+        {locationCountry && <span title={flagTitle}>{countryFlag}</span>}
       </span>
       {isLive && <MatchBadge variant="live" compact={compact} />}
       {!isLive && hasReplay && (
