@@ -56,14 +56,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     navigateTo(replayUrl)
   }
 
-  const renderTrophy = (index: number) => {
+  const renderTrophy = (index: number, isCompact: boolean) => {
+    const sizeClass = isCompact ? "text-[12px]" : "text-xl"
     switch (index) {
       case 0:
-        return <span className="text-xl">🏆</span>
+        return <span className={sizeClass}>🏆</span>
       case 1:
-        return <span className="text-xl">🥈</span>
+        return <span className={sizeClass}>🥈</span>
       case 2:
-        return <span className="text-xl">🥉</span>
+        return <span className={sizeClass}>🥉</span>
       default:
         return null
     }
@@ -88,17 +89,13 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     ]
   }, [data, limit, ruleType])
 
+  const cellClasses = compact ? "px-[3px] py-0" : "px-2 py-1"
+
   const renderPlaceholderRow = (item: LeaderboardRowItem) => (
-    <tr key={item.id} className={compact ? "h-[18px]" : "h-[28px]"}>
-      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
-        &nbsp;
-      </td>
-      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
-        &nbsp;
-      </td>
-      <td className={`text-left ${compact ? "px-1 py-0" : "px-2 py-1"}`}>
-        &nbsp;
-      </td>
+    <tr key={item.id} className={compact ? "h-[17px]" : "h-7"}>
+      <td className={`text-left ${cellClasses}`}>&nbsp;</td>
+      <td className={`text-left ${cellClasses}`}>&nbsp;</td>
+      <td className={`text-left ${cellClasses}`}>&nbsp;</td>
       {!compact && (
         <>
           <td />
@@ -111,23 +108,21 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   const renderDataRow = (item: LeaderboardRowItem, index: number) => (
     <tr
       key={item.id}
-      className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item ${compact ? "h-[18px]" : "h-[28px]"}`}
+      className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item ${compact ? "h-[17px]" : "h-7"}`}
       onClick={() => handleRowClick(item.id)}
     >
-      <td
-        className={`text-left ${compact ? "px-1 py-0 text-gray-400" : "px-2 py-1"}`}
-      >
-        <div className={compact ? "scale-75 origin-left" : ""}>
-          {renderTrophy(index)}
+      <td className={`text-left ${cellClasses} ${compact ? "text-gray-400" : ""}`}>
+        <div className="flex items-center leading-none h-full">
+          {renderTrophy(index, compact)}
         </div>
       </td>
       <td
-        className={`text-left font-mono-data ${compact ? "px-1 py-0 text-gray-300/80" : "px-2 py-1 text-gray-400"}`}
+        className={`text-left font-mono-data leading-none ${cellClasses} ${compact ? "text-gray-300/80" : "text-gray-400"}`}
       >
         {item.score}
       </td>
       <td
-        className={`text-left truncate ${compact ? "px-1 py-0 text-gray-300/80 max-w-[60px]" : "px-2 py-1 text-gray-300 max-w-[120px]"}`}
+        className={`text-left truncate leading-none ${cellClasses} ${compact ? "text-gray-300/80 max-w-[60px]" : "text-gray-300 max-w-[120px]"}`}
       >
         <span className={compact ? "font-medium" : "font-semibold"}>
           {item.name}

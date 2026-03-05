@@ -1,7 +1,11 @@
 import React from "react"
 import LeaderboardTable from "./LeaderboardTable"
 
-export function HighscoreGrid() {
+interface HighscoreGridProps {
+  heightClass?: string
+}
+
+export function HighscoreGrid({ heightClass = "h-[62px]" }: HighscoreGridProps) {
   const games = [
     { name: "Snooker", ruleType: "snooker" },
     { name: "Nine Ball", ruleType: "nineball" },
@@ -15,7 +19,7 @@ export function HighscoreGrid() {
           <div className="text-[10px] text-gray-400 uppercase tracking-widest text-center mb-1">
             {game.name}
           </div>
-          <div className="h-[88px] overflow-hidden">
+          <div className={`overflow-hidden ${heightClass}`}>
             <LeaderboardTable
               ruleType={game.ruleType}
               limit={3}
