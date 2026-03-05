@@ -3,8 +3,9 @@ import React from "react"
 export function LogoSection() {
   return (
     <div className="fixed inset-x-0 top-10 z-0 flex justify-center">
-      <h1
-        className="cursor-pointer font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg"
+      <button
+        type="button"
+        className="cursor-pointer font-bitcount text-yellow-400 text-5xl uppercase tracking-widest drop-shadow-lg bg-transparent border-none p-0 m-0"
         style={{
           fontFamily: "var(--font-bitcount), monospace",
           fontSize: "16px",
@@ -14,9 +15,6 @@ export function LogoSection() {
           transformOrigin: "center",
           scale: 3,
         }}
-        tabIndex={0}
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
-        role="button"
         onClick={() =>
           window.open(
             "https://github.com/tailuge/billiards",
@@ -24,18 +22,9 @@ export function LogoSection() {
             "noopener,noreferrer"
           )
         }
-        onKeyDown={(e: React.KeyboardEvent<HTMLHeadingElement>) => {
-          if (e.key === "Enter" || e.key === " ") {
-            window.open(
-              "https://github.com/tailuge/billiards",
-              "_blank",
-              "noopener,noreferrer"
-            )
-          }
-        }}
       >
         Billiards
-      </h1>
+      </button>
     </div>
   )
 }

@@ -59,30 +59,21 @@ export function OnlineUsersPopover({
         </span>
       )
     }
-    const cleanOrigin = user.originUrl?.replace("origin:", "") ?? ""
-    let isGithubIo = false
-    if (cleanOrigin) {
+    const isExternal = (() => {
+      if (!user.originUrl) return false
       try {
-        // Ensure we have a valid URL string; add a scheme if missing
-        const url =
-          cleanOrigin.startsWith("http://") ||
-          cleanOrigin.startsWith("https://")
-            ? new URL(cleanOrigin)
-            : new URL(`https://${cleanOrigin}`)
-        const hostname = url.hostname.toLowerCase()
-        isGithubIo = hostname === "github.io" || hostname.endsWith(".github.io")
+        const url = new URL(user.originUrl, window.location.origin)
+        return url.hostname !== window.location.hostname
       } catch {
-        // Invalid URL; leave isGithubIo as false
+        return false
       }
-    }
-    if (isGithubIo) {
-      return (
-        <span className="text-[10px]" title="github.io">
-          🎮
-        </span>
-      )
-    }
-    return null
+    })()
+
+    return isExternal ? (
+      <span className="text-[10px]" title="external">
+        🎮
+      </span>
+    ) : null
   }
 
   return (

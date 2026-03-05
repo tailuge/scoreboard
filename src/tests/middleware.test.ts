@@ -3,28 +3,32 @@ import { ALLOWED_ORIGINS } from "../middleware"
 
 describe("ALLOWED_ORIGINS config", () => {
   it("contains tailuge.github.io", () => {
-    expect(ALLOWED_ORIGINS).toContain("https://tailuge.github.io")
+    expect(ALLOWED_ORIGINS.has("https://tailuge.github.io")).toBe(true)
   })
 
   it("contains billiards.tailuge.workers.dev", () => {
-    expect(ALLOWED_ORIGINS).toContain("https://billiards.tailuge.workers.dev")
+    expect(ALLOWED_ORIGINS.has("https://billiards.tailuge.workers.dev")).toBe(
+      true
+    )
   })
 
   it("contains localhost:3000", () => {
-    expect(ALLOWED_ORIGINS).toContain("http://localhost:3000")
+    expect(ALLOWED_ORIGINS.has("http://localhost:3000")).toBe(true)
   })
 
   it("contains localhost:8080", () => {
-    expect(ALLOWED_ORIGINS).toContain("http://localhost:8080")
+    expect(ALLOWED_ORIGINS.has("http://localhost:8080")).toBe(true)
   })
 
   it("does not contain random origins", () => {
-    expect(ALLOWED_ORIGINS).not.toContain("https://evil.com")
-    expect(ALLOWED_ORIGINS).not.toContain("https://billiards.other.workers.dev")
+    expect(ALLOWED_ORIGINS.has("https://evil.com")).toBe(false)
+    expect(ALLOWED_ORIGINS.has("https://billiards.other.workers.dev")).toBe(
+      false
+    )
   })
 
   it("has expected number of origins", () => {
-    expect(ALLOWED_ORIGINS.length).toBe(4)
+    expect(ALLOWED_ORIGINS.size).toBe(4)
   })
 })
 
@@ -36,19 +40,23 @@ describe("middleware logic (manual verification)", () => {
   it("documents the CORS flow", () => {
     const allowedOrigins = [
       "http://localhost:3000",
-      "http://localhost:8080", 
+      "http://localhost:8080",
       "https://tailuge.github.io",
       "https://billiards.tailuge.workers.dev",
     ]
-    
+
     // Test allowed origins
     expect(allowedOrigins.includes("https://tailuge.github.io")).toBe(true)
-    expect(allowedOrigins.includes("https://billiards.tailuge.workers.dev")).toBe(true)
+    expect(
+      allowedOrigins.includes("https://billiards.tailuge.workers.dev")
+    ).toBe(true)
     expect(allowedOrigins.includes("http://localhost:3000")).toBe(true)
-    
+
     // Test blocked origins
     expect(allowedOrigins.includes("https://random.com")).toBe(false)
-    expect(allowedOrigins.includes("https://billiards.other.workers.dev")).toBe(false)
+    expect(allowedOrigins.includes("https://billiards.other.workers.dev")).toBe(
+      false
+    )
     expect(allowedOrigins.includes("")).toBe(false)
     expect(allowedOrigins.includes(null as any)).toBe(false)
   })

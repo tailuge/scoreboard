@@ -72,31 +72,8 @@ describe("OnlineUsersPopover", () => {
     expect(screen.queryByText(/more active/)).not.toBeInTheDocument()
   })
 
-  it("shows game icon for github.io users", () => {
-    const githubUsers = [
-      { userId: "user-1", userName: "User 1", locale: "en-US" },
-      {
-        userId: "user-2",
-        userName: "User 2",
-        locale: "en-GB",
-        originUrl: "origin:user.github.io",
-      },
-    ]
-
-    render(
-      <OnlineUsersPopover
-        count={2}
-        users={githubUsers}
-        currentUserId="user-1"
-      />
-    )
-
-    fireEvent.click(screen.getByLabelText("2 users online"))
-    expect(screen.getByText("🎮")).toBeInTheDocument()
-  })
-
-  it("does not show game icon for non-github.io users", () => {
-    const nonGithubUsers = [
+  it("shows game icon for external sites (non-github.io)", () => {
+    const externalUsers = [
       { userId: "user-1", userName: "User 1", locale: "en-US" },
       {
         userId: "user-2",
@@ -109,7 +86,29 @@ describe("OnlineUsersPopover", () => {
     render(
       <OnlineUsersPopover
         count={2}
-        users={nonGithubUsers}
+        users={externalUsers}
+        currentUserId="user-1"
+      />
+    )
+
+    fireEvent.click(screen.getByLabelText("2 users online"))
+    expect(screen.getByText("🎮")).toBeInTheDocument()
+  })
+
+  it("does not show game icon for same-origin users", () => {
+    const sameOriginUsers = [
+      { userId: "user-1", userName: "User 1", locale: "en-US" },
+      {
+        userId: "user-2",
+        userName: "User 2",
+        locale: "en-GB",
+      },
+    ]
+
+    render(
+      <OnlineUsersPopover
+        count={2}
+        users={sameOriginUsers}
         currentUserId="user-1"
       />
     )

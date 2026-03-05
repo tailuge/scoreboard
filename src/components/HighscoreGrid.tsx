@@ -1,20 +1,20 @@
-import React from "react";
-import LeaderboardTable from "./LeaderboardTable";
+import React from "react"
+import LeaderboardTable from "./LeaderboardTable"
 
 interface HighscoreGridProps {
-  heightClass?: string;
-  className?: string;
+  heightClass?: string
+  className?: string
 }
 
 export function HighscoreGrid({
   heightClass = "h-[72px]",
   className = "",
-}: HighscoreGridProps) {
+}: Readonly<HighscoreGridProps>) {
   const games = [
     { name: "Snooker", ruleType: "snooker" },
     { name: "Nine Ball", ruleType: "nineball" },
     { name: "Three Cushion", ruleType: "threecushion" },
-  ];
+  ]
 
   return (
     <div className={`grid grid-cols-3 gap-3 w-full ${className}`}>
@@ -29,5 +29,5 @@ export function HighscoreGrid({
         </div>
       ))}
     </div>
-  );
+  )
 }
