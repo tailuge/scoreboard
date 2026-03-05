@@ -5,6 +5,16 @@ import { logger } from "../utils/logger"
 
 logger.enabled = false
 
+// Silence console.log during tests
+beforeAll(() => {
+  jest.spyOn(console, "log").mockImplementation(() => {})
+  jest.spyOn(console, "debug").mockImplementation(() => {})
+})
+
+afterAll(() => {
+  jest.restoreAllMocks()
+})
+
 jest.mock("@vercel/kv", () => ({
   kv: mockKv,
 }))
