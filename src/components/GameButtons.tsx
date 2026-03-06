@@ -31,7 +31,7 @@ export function GameButton({
           priority
         />
       </div>
-      {children && <div className="pb-1">{children}</div>}
+      {children ? <div className="pb-1">{children}</div> : null}
     </>
   )
 

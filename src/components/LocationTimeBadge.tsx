@@ -46,14 +46,12 @@ export function LocationTimeBadge({
     >
       <span className="truncate flex items-center gap-1">
         <span>{formattedTime}</span>
-        {hasLocation && <span>•</span>}
-        {locationCity && <span>{locationCity}</span>}
-        {locationCountry && <span title={flagTitle}>{countryFlag}</span>}
+        {hasLocation ? <span>•</span> : null}
+        {locationCity ? <span>{locationCity}</span> : null}
+        {locationCountry ? <span title={flagTitle}>{countryFlag}</span> : null}
       </span>
-      {isLive && <MatchBadge variant="live" compact={compact} />}
-      {!isLive && hasReplay && (
-        <MatchBadge variant="replay" compact={compact} matchId={matchId} />
-      )}
+      {isLive ? <MatchBadge variant="live" compact={compact} /> : null}
+      {!isLive && hasReplay ? <MatchBadge variant="replay" compact={compact} matchId={matchId} /> : null}
     </div>
   )
 }
