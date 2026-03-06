@@ -44,9 +44,15 @@ const scoretable = new ScoreTable(kv)
  *       400:
  *         description: Client version is outdated
  */
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+}
+
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200, headers: CORS_HEADERS })
   }
 
   const url = request.nextUrl
@@ -61,7 +67,10 @@ export default async function handler(request: NextRequest) {
     logger.log(json)
   } catch (error) {
     logger.error("Failed to parse hiscore state:", error)
-    return new Response("Invalid score state", { status: 400 })
+    return new Response("Invalid score state", {
+      status: 400,
+      headers: CORS_HEADERS,
+    })
   }
 
   // require up to date client version
@@ -69,13 +78,16 @@ export default async function handler(request: NextRequest) {
     logger.log("Client version is outdated")
     return new Response(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
-      { status: 400 }
+      { status: 400, headers: CORS_HEADERS }
     )
   }
 
   const ruletype = url.searchParams.get("ruletype")
   if (!ruletype) {
-    return new Response("ruletype is required", { status: 400 })
+    return new Response("ruletype is required", {
+      status: 400,
+      headers: CORS_HEADERS,
+    })
   }
 
   const base = new Date("2024").valueOf()
@@ -87,7 +99,10 @@ export default async function handler(request: NextRequest) {
     data = await scoretable.topTen(ruletype)
   } catch (error) {
     logger.error("Error fetching top ten ranks:", error)
-    return new Response("Invalid ruletype", { status: 400 })
+    return new Response("Invalid ruletype", {
+      status: 400,
+      headers: CORS_HEADERS,
+    })
   }
 
   if (

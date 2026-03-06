@@ -24,18 +24,27 @@ const shortener = new Shortener(kv)
  *       200:
  *         description: Shortened data
  */
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+}
+
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200, headers: CORS_HEADERS })
   }
 
   try {
     const json = await request.json()
     logger.log(json)
     const body = await shortener.shorten(json)
-    return new Response(JSON.stringify(body))
+    return new Response(JSON.stringify(body), { headers: CORS_HEADERS })
   } catch (error) {
     logger.error("Shorten API error:", error)
-    return new Response("Request failed", { status: 400 })
+    return new Response("Request failed", {
+      status: 400,
+      headers: CORS_HEADERS,
+    })
   }
 }

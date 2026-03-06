@@ -44,7 +44,7 @@ describe("/api/rank handler", () => {
   })
 
   it("should return 400 for invalid ruletype", async () => {
-    const topTenSpy = jest
+    jest
       .spyOn(mockScoreTable.prototype, "topTen")
       .mockImplementationOnce(() => {
         throw new Error("Invalid ruletype")

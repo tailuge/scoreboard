@@ -51,9 +51,15 @@ const scoretable = new ScoreTable(kv)
  *       200:
  *         description: Liked successfully
  */
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+}
+
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200, headers: CORS_HEADERS })
   }
 
   const searchParams = request.nextUrl.searchParams
@@ -61,7 +67,10 @@ export default async function handler(request: NextRequest) {
   const id = searchParams.get("id")
 
   if (!ruletype || !id) {
-    return new Response("ruletype and id are required", { status: 400 })
+    return new Response("ruletype and id are required", {
+      status: 400,
+      headers: CORS_HEADERS,
+    })
   }
 
   if (request.method === "GET") {
@@ -70,13 +79,17 @@ export default async function handler(request: NextRequest) {
       url = await scoretable.get(ruletype, id)
     } catch (error) {
       logger.error("Error fetching rank by id:", error)
-      return new Response("Invalid ruletype", { status: 400 })
+      return new Response("Invalid ruletype", {
+        status: 400,
+        headers: CORS_HEADERS,
+      })
     }
     logger.log(`redirecting ${ruletype} id ${id} to ${url}`)
     return new Response(null, {
       status: 302,
       headers: {
         Location: url,
+        ...CORS_HEADERS,
       },
     })
   }
@@ -86,10 +99,13 @@ export default async function handler(request: NextRequest) {
       await scoretable.like(ruletype, id)
     } catch (error) {
       logger.error("Error liking rank entry:", error)
-      return new Response("Invalid ruletype", { status: 400 })
+      return new Response("Invalid ruletype", {
+        status: 400,
+        headers: CORS_HEADERS,
+      })
     }
     logger.log(`liked ${ruletype} id ${id}`)
   }
 
-  return new Response(null, { status: 200 })
+  return new Response(null, { status: 200, headers: CORS_HEADERS })
 }

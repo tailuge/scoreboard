@@ -32,15 +32,21 @@ const matchResultService = new MatchResultService(kv)
  *       500:
  *         description: Internal server error
  */
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+}
+
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200, headers: CORS_HEADERS })
   }
 
   if (request.method !== "GET") {
     return new Response(`Method ${request.method} Not Allowed`, {
       status: 405,
-      headers: { Allow: "GET, OPTIONS" },
+      headers: { Allow: "GET, OPTIONS", ...CORS_HEADERS },
     })
   }
 
@@ -49,20 +55,29 @@ export default async function handler(request: NextRequest) {
     const id = searchParams.get("id")
 
     if (!id) {
-      return new Response("ID is required", { status: 400 })
+      return new Response("ID is required", {
+        status: 400,
+        headers: CORS_HEADERS,
+      })
     }
 
     const replayData = await matchResultService.getMatchReplay(id)
 
     if (replayData === null) {
-      return new Response("Replay not found", { status: 404 })
+      return new Response("Replay not found", {
+        status: 404,
+        headers: CORS_HEADERS,
+      })
     }
 
     const matchResults = await matchResultService.getMatchResults()
     const matchResult = matchResults.find((result) => result.id === id)
 
     if (!matchResult) {
-      return new Response("Match result not found", { status: 404 })
+      return new Response("Match result not found", {
+        status: 404,
+        headers: CORS_HEADERS,
+      })
     }
 
     const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
@@ -71,6 +86,9 @@ export default async function handler(request: NextRequest) {
     return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {
     logger.log("Error fetching match replay:", error)
-    return new Response("Internal Server Error", { status: 500 })
+    return new Response("Internal Server Error", {
+      status: 500,
+      headers: CORS_HEADERS,
+    })
   }
 }
