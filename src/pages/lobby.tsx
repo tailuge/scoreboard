@@ -11,6 +11,7 @@ import { markUsage } from "@/utils/usage"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useAutoJoin } from "@/components/hooks/useAutoJoin"
+import { GAME_TYPES } from "@/config"
 
 export default function Lobby() {
   const { userId, userName } = useUser()
@@ -184,18 +185,16 @@ export default function Lobby() {
                       Select game rules:
                     </p>
                     <div className="grid grid-cols-1 gap-3">
-                      {["snooker", "nineball", "threecushion"].map((type) => (
+                      {GAME_TYPES.map((game) => (
                         <button
-                          key={type}
+                          key={game.ruleType}
                           onClick={() => {
-                            setActiveRuleType(type)
-                            handleFindOrCreate(type)
+                            setActiveRuleType(game.ruleType)
+                            handleFindOrCreate(game.ruleType)
                           }}
-                          className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95 capitalize"
+                          className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95"
                         >
-                          {type === "threecushion" && "Three Cushion"}
-                          {type === "nineball" && "Nine Ball"}
-                          {type === "snooker" && "Snooker"}
+                          {game.name}
                         </button>
                       ))}
                       <button
