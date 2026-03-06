@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { Shortener } from "@/services/shortener"
 import { logger } from "@/utils/logger"
+import { corsResponse } from "@/utils/cors"
 
 export const config = {
   runtime: "edge",
@@ -24,27 +25,18 @@ const shortener = new Shortener(kv)
  *       200:
  *         description: Shortened data
  */
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-}
-
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: CORS_HEADERS })
+    return corsResponse(null, { status: 200 })
   }
 
   try {
     const json = await request.json()
     logger.log(json)
     const body = await shortener.shorten(json)
-    return new Response(JSON.stringify(body), { headers: CORS_HEADERS })
+    return corsResponse(JSON.stringify(body))
   } catch (error) {
     logger.error("Shorten API error:", error)
-    return new Response("Request failed", {
-      status: 400,
-      headers: CORS_HEADERS,
-    })
+    return corsResponse("Request failed", { status: 400 })
   }
 }

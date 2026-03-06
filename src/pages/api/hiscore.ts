@@ -4,6 +4,7 @@ import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
+import { corsResponse } from "@/utils/cors"
 
 export const config = {
   runtime: "edge",
@@ -44,15 +45,9 @@ const scoretable = new ScoreTable(kv)
  *       400:
  *         description: Client version is outdated
  */
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-}
-
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: CORS_HEADERS })
+    return corsResponse(null, { status: 200 })
   }
 
   const url = request.nextUrl
@@ -67,27 +62,21 @@ export default async function handler(request: NextRequest) {
     logger.log(json)
   } catch (error) {
     logger.error("Failed to parse hiscore state:", error)
-    return new Response("Invalid score state", {
-      status: 400,
-      headers: CORS_HEADERS,
-    })
+    return corsResponse("Invalid score state", { status: 400 })
   }
 
   // require up to date client version
   if (json?.v !== 1) {
     logger.log("Client version is outdated")
-    return new Response(
+    return corsResponse(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
-      { status: 400, headers: CORS_HEADERS }
+      { status: 400 }
     )
   }
 
   const ruletype = url.searchParams.get("ruletype")
   if (!ruletype) {
-    return new Response("ruletype is required", {
-      status: 400,
-      headers: CORS_HEADERS,
-    })
+    return corsResponse("ruletype is required", { status: 400 })
   }
 
   const base = new Date("2024").valueOf()
@@ -98,11 +87,8 @@ export default async function handler(request: NextRequest) {
   try {
     data = await scoretable.topTen(ruletype)
   } catch (error) {
-    logger.error("Error fetching top ten ranks:", error)
-    return new Response("Invalid ruletype", {
-      status: 400,
-      headers: CORS_HEADERS,
-    })
+    logger.warn("Error fetching top ten ranks:", error)
+    return corsResponse("Invalid ruletype", { status: 400 })
   }
 
   if (

@@ -372,7 +372,6 @@ describe("UserContext", () => {
     await waitFor(() => {
       expect(screen.getByTestId("user-id").textContent).toBe("stored-id")
     })
-    expect(logSpy).toHaveBeenCalledWith("Loaded player ID: stored-id")
     logSpy.mockRestore()
   })
 
@@ -436,7 +435,6 @@ describe("UserContext", () => {
       expect(id).toBeTruthy()
       expect(id!.length).toBeGreaterThan(5)
       expect(globalThis.localStorage.getItem("userId")).toBe(id)
-      expect(logSpy).toHaveBeenCalledWith("Generated new player ID: " + id)
     })
     logSpy.mockRestore()
   })

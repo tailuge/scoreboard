@@ -3,6 +3,7 @@ import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
 import { getRuleType } from "@/types/match"
 import { logger } from "@/utils/logger"
+import { corsResponse } from "@/utils/cors"
 
 export const config = {
   runtime: "edge",
@@ -32,21 +33,15 @@ const matchResultService = new MatchResultService(kv)
  *       500:
  *         description: Internal server error
  */
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-}
-
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: CORS_HEADERS })
+    return corsResponse(null, { status: 200 })
   }
 
   if (request.method !== "GET") {
-    return new Response(`Method ${request.method} Not Allowed`, {
+    return corsResponse(`Method ${request.method} Not Allowed`, {
       status: 405,
-      headers: { Allow: "GET, OPTIONS", ...CORS_HEADERS },
+      headers: { Allow: "GET, OPTIONS" },
     })
   }
 
@@ -55,29 +50,20 @@ export default async function handler(request: NextRequest) {
     const id = searchParams.get("id")
 
     if (!id) {
-      return new Response("ID is required", {
-        status: 400,
-        headers: CORS_HEADERS,
-      })
+      return corsResponse("ID is required", { status: 400 })
     }
 
     const replayData = await matchResultService.getMatchReplay(id)
 
     if (replayData === null) {
-      return new Response("Replay not found", {
-        status: 404,
-        headers: CORS_HEADERS,
-      })
+      return corsResponse("Replay not found", { status: 404 })
     }
 
     const matchResults = await matchResultService.getMatchResults()
     const matchResult = matchResults.find((result) => result.id === id)
 
     if (!matchResult) {
-      return new Response("Match result not found", {
-        status: 404,
-        headers: CORS_HEADERS,
-      })
+      return corsResponse("Match result not found", { status: 404 })
     }
 
     const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
@@ -86,9 +72,6 @@ export default async function handler(request: NextRequest) {
     return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {
     logger.log("Error fetching match replay:", error)
-    return new Response("Internal Server Error", {
-      status: 500,
-      headers: CORS_HEADERS,
-    })
+    return corsResponse("Internal Server Error", { status: 500 })
   }
 }

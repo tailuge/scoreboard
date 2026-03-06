@@ -33,12 +33,10 @@ export function UserProvider({
     const storedId = globalThis.localStorage.getItem("userId")
     if (storedId) {
       setUserId(storedId)
-      console.log("Loaded player ID: " + storedId)
     } else {
       const newId = getUID()
       setUserId(newId)
       globalThis.localStorage.setItem("userId", newId)
-      console.log("Generated new player ID: " + newId)
     }
 
     const storedUserName = globalThis.localStorage.getItem("userName")

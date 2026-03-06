@@ -49,7 +49,10 @@ describe("/api/hiscore handler", () => {
 
     await handler(req)
 
-    expect(Response).toHaveBeenCalledWith(expect.any(String), { status: 400 })
+    expect(Response).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ status: 400 })
+    )
     expect(Response.redirect).not.toHaveBeenCalled()
   })
 

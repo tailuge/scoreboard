@@ -2,7 +2,6 @@ import handler from "@/pages/api/shorten"
 import { Shortener } from "@/services/shortener"
 import { NextRequest } from "next/server"
 
-// Mock the Shortener service
 jest.mock("@/services/shortener")
 
 const mockShortener = Shortener as jest.MockedClass<typeof Shortener>
@@ -11,11 +10,20 @@ describe("/api/shorten handler", () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    // Mock the global Response object for the edge runtime
     globalThis.Response = jest.fn().mockImplementation((body, init) => {
+      let responseHeaders: Map<string, string>
+      if (!init?.headers) {
+        responseHeaders = new Map()
+      } else if (init.headers instanceof Map) {
+        responseHeaders = init.headers
+      } else {
+        responseHeaders = new Map(
+          Object.entries(init.headers as Record<string, string>)
+        )
+      }
       return {
         status: init?.status || 200,
-        headers: new Map(init?.headers),
+        headers: responseHeaders,
         json: () => Promise.resolve(JSON.parse(body)),
         text: () => Promise.resolve(body),
       } as any
@@ -30,12 +38,10 @@ describe("/api/shorten handler", () => {
       shortUrl: "https://scoreboard-tailuge.vercel.app/api/replay/1",
     }
 
-    // Mock the Shortener's shorten method
     const shortenSpy = jest
       .spyOn(mockShortener.prototype, "shorten")
       .mockResolvedValue(shortenerResponse)
 
-    // Create a mock NextRequest
     const req = {
       json: jest.fn().mockResolvedValue(requestBody),
     } as unknown as NextRequest
@@ -43,7 +49,6 @@ describe("/api/shorten handler", () => {
     const response = await handler(req)
     const responseBody = await response.json()
 
-    // Assertions
     expect(response.status).toBe(200)
     expect(shortenSpy).toHaveBeenCalledWith(requestBody)
     expect(responseBody).toEqual(shortenerResponse)

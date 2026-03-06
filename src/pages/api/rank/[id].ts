@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { logger } from "@/utils/logger"
+import { corsResponse, CORS_HEADERS } from "@/utils/cors"
 
 export const config = {
   runtime: "edge",
@@ -51,15 +52,9 @@ const scoretable = new ScoreTable(kv)
  *       200:
  *         description: Liked successfully
  */
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-}
-
 export default async function handler(request: NextRequest) {
   if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: CORS_HEADERS })
+    return corsResponse(null, { status: 200 })
   }
 
   const searchParams = request.nextUrl.searchParams
@@ -67,10 +62,7 @@ export default async function handler(request: NextRequest) {
   const id = searchParams.get("id")
 
   if (!ruletype || !id) {
-    return new Response("ruletype and id are required", {
-      status: 400,
-      headers: CORS_HEADERS,
-    })
+    return corsResponse("ruletype and id are required", { status: 400 })
   }
 
   if (request.method === "GET") {
@@ -78,11 +70,8 @@ export default async function handler(request: NextRequest) {
     try {
       url = await scoretable.get(ruletype, id)
     } catch (error) {
-      logger.error("Error fetching rank by id:", error)
-      return new Response("Invalid ruletype", {
-        status: 400,
-        headers: CORS_HEADERS,
-      })
+      logger.warn("Error fetching rank by id:", error)
+      return corsResponse("Invalid ruletype", { status: 400 })
     }
     logger.log(`redirecting ${ruletype} id ${id} to ${url}`)
     return new Response(null, {
@@ -98,14 +87,11 @@ export default async function handler(request: NextRequest) {
     try {
       await scoretable.like(ruletype, id)
     } catch (error) {
-      logger.error("Error liking rank entry:", error)
-      return new Response("Invalid ruletype", {
-        status: 400,
-        headers: CORS_HEADERS,
-      })
+      logger.warn("Error liking rank entry:", error)
+      return corsResponse("Invalid ruletype", { status: 400 })
     }
     logger.log(`liked ${ruletype} id ${id}`)
   }
 
-  return new Response(null, { status: 200, headers: CORS_HEADERS })
+  return corsResponse(null, { status: 200 })
 }
