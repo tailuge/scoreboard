@@ -4,6 +4,7 @@ import { MatchResultService } from "@/services/MatchResultService"
 import { getRuleType } from "@/types/match"
 import { logger } from "@/utils/logger"
 import { corsResponse } from "@/utils/cors"
+import { GAME_BASE_URL } from "@/config"
 
 export const config = {
   runtime: "edge",
@@ -62,7 +63,7 @@ export default async function handler(request: NextRequest) {
       return corsResponse("Match result not found", { status: 404 })
     }
 
-    const viewerUrl = new URL("https://tailuge.github.io/billiards/dist/")
+    const viewerUrl = new URL(GAME_BASE_URL)
     viewerUrl.searchParams.set("ruletype", getRuleType(matchResult))
     viewerUrl.searchParams.set("state", replayData)
     return Response.redirect(viewerUrl.toString(), 307)

@@ -25,7 +25,7 @@ function withCorsHeaders(response: NextResponse, origin: string) {
   return response
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const origin = request.headers.get("origin")
 
   // Same-origin and non-browser requests often have no Origin header.

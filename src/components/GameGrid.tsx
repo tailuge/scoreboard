@@ -5,28 +5,28 @@ import {
   RedBallButtons,
 } from "./GameButtonOptions"
 import { GameButton, ActionButton } from "./GameButtons"
+import { GAME_BASE_URL } from "@/config"
 
 const GAMES = [
   {
     name: "Snooker",
     icon: "/snooker_icon.png",
     alt: "Play classic Snooker billiards online with 22 balls on a full-size table",
-    highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=snooker",
+    highscoreUrl: `${GAME_BASE_URL}?ruletype=snooker`,
     ruleType: "snooker",
   },
   {
     name: "Nine Ball",
     icon: "/nineball_icon.png",
     alt: "Play 9-Ball pool online - fast-paced pocket billiards game",
-    highscoreUrl: "https://tailuge.github.io/billiards/dist/?ruletype=nineball",
+    highscoreUrl: `${GAME_BASE_URL}?ruletype=nineball`,
     ruleType: "nineball",
   },
   {
     name: "Three Cushion",
     icon: "/threecushion_icon.png",
     alt: "Play Three Cushion carom billiards online - no pockets, hit three rails",
-    highscoreUrl:
-      "https://tailuge.github.io/billiards/dist/?ruletype=threecushion",
+    highscoreUrl: `${GAME_BASE_URL}?ruletype=threecushion`,
     ruleType: "threecushion",
   },
 ]

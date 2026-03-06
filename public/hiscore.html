@@ -251,7 +251,7 @@
       const button = document.getElementById("submit");
       button.onclick = hiscore;
 
-      const replayurl = new URL("https://tailuge.github.io/billiards/dist/");
+      const replayurl = new URL("https://tailuge.github.io/billiards/dist/"); // See src/config.ts for centralized configuration
       const params = new URLSearchParams(globalThis.location.search);
       replayurl.search = params.toString();
       const iframe = document.getElementById("embed");

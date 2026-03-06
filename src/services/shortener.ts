@@ -1,9 +1,10 @@
 import type { VercelKV } from "@vercel/kv"
 import { logger } from "@/utils/logger"
+import { GAME_BASE_URL } from "@/config"
 
 export class Shortener {
   readonly store: VercelKV
-  readonly replayUrl = "https://tailuge.github.io/billiards/dist/"
+  readonly replayUrl = GAME_BASE_URL
   readonly shortUrl = "https://scoreboard-tailuge.vercel.app/api/replay/"
   readonly notFound = "https://scoreboard-tailuge.vercel.app/notfound.html"
   readonly prefix = "urlkey"

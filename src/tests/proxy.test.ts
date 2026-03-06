@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { middleware, ALLOWED_ORIGINS } from "../middleware"
+import { proxy, ALLOWED_ORIGINS } from "../proxy"
 
 describe("middleware logic", () => {
   const nextUrl = new URL("http://localhost:3000/api/rank")
@@ -11,9 +11,9 @@ describe("middleware logic", () => {
       },
     })
 
-    const response = middleware(request)
+    const response = proxy(request)
     expect(response).toBeInstanceOf(NextResponse)
-    // For same-origin, middleware(request) returns NextResponse.next()
+    // For same-origin, proxy(request) returns NextResponse.next()
     // In this test environment, we check if it doesn't have CORS headers set by withCorsHeaders
     expect(response?.headers.get("Access-Control-Allow-Origin")).toBeNull()
   })
@@ -26,7 +26,7 @@ describe("middleware logic", () => {
       },
     })
 
-    const response = middleware(request)
+    const response = proxy(request)
     expect(response).toBeInstanceOf(NextResponse)
     expect(response?.headers.get("Access-Control-Allow-Origin")).toBe(origin)
     expect(response?.headers.get("Access-Control-Allow-Credentials")).toBe(
@@ -41,7 +41,7 @@ describe("middleware logic", () => {
       },
     })
 
-    const response = middleware(request)
+    const response = proxy(request)
     expect(response?.status).toBe(403)
   })
 
@@ -54,7 +54,7 @@ describe("middleware logic", () => {
       },
     })
 
-    const response = middleware(request)
+    const response = proxy(request)
     expect(response?.status).toBe(204)
     expect(response?.headers.get("Access-Control-Allow-Origin")).toBe(origin)
     expect(response?.headers.get("Access-Control-Allow-Methods")).toContain(
@@ -65,7 +65,7 @@ describe("middleware logic", () => {
   it("should allow requests without origin header (e.g. server-to-server or direct browser)", () => {
     const request = new NextRequest(nextUrl)
 
-    const response = middleware(request)
+    const response = proxy(request)
     expect(response).toBeInstanceOf(NextResponse)
     expect(response?.headers.get("Access-Control-Allow-Origin")).toBeNull()
   })

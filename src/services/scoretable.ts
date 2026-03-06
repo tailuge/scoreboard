@@ -2,10 +2,11 @@ import type { VercelKV } from "@vercel/kv"
 import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
 import { isValidGameType } from "@/utils/gameTypes"
+import { GAME_BASE_URL } from "@/config"
 
 export class ScoreTable {
   readonly prefix = "hiscore"
-  readonly replayUrl = "https://tailuge.github.io/billiards/dist/"
+  readonly replayUrl = GAME_BASE_URL
   readonly notFound = "https://scoreboard-tailuge.vercel.app/notfound.html"
 
   constructor(private readonly store: VercelKV | Partial<VercelKV>) {}
