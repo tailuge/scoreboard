@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Upload your new billiards high score and share your replay."
+      content="Upload your new free open source billiards high score and share your replay."
     />
-    <title>New high score</title>
+    <title>New high score - Free Open Source Billiards</title>
     <link rel="icon" type="image/png" href="golden-cup.png" />
     <style>
       * {
@@ -232,30 +232,30 @@
           redirect: "follow",
           referrerPolicy: "no-referrer",
           body: data,
-        })
-        return response
+        });
+        return response;
       }
 
       async function hiscore() {
-        const input = document.getElementById("initials")
-        const params = new URLSearchParams(globalThis.location.search)
-        const url = new URL("/api/hiscore", globalThis.location.origin)
-        const details = new URLSearchParams()
-        details.append("ruletype", params.get("ruletype"))
-        details.append("id", input.value)
-        url.search = details.toString()
-        await postData(url, globalThis.location.search)
-        globalThis.location.href = "/leaderboard"
+        const input = document.getElementById("initials");
+        const params = new URLSearchParams(globalThis.location.search);
+        const url = new URL("/api/hiscore", globalThis.location.origin);
+        const details = new URLSearchParams();
+        details.append("ruletype", params.get("ruletype"));
+        details.append("id", input.value);
+        url.search = details.toString();
+        await postData(url, globalThis.location.search);
+        globalThis.location.href = "/leaderboard";
       }
 
-      const button = document.getElementById("submit")
-      button.onclick = hiscore
+      const button = document.getElementById("submit");
+      button.onclick = hiscore;
 
-      const replayurl = new URL("https://tailuge.github.io/billiards/dist/")
-      const params = new URLSearchParams(globalThis.location.search)
-      replayurl.search = params.toString()
-      const iframe = document.getElementById("embed")
-      iframe.src = replayurl.toString()
+      const replayurl = new URL("https://tailuge.github.io/billiards/dist/");
+      const params = new URLSearchParams(globalThis.location.search);
+      replayurl.search = params.toString();
+      const iframe = document.getElementById("embed");
+      iframe.src = replayurl.toString();
     </script>
   </body>
 </html>

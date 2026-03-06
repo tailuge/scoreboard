@@ -17,7 +17,9 @@ export function HighscoreGrid({
   ]
 
   return (
-    <div className={`grid grid-cols-3 gap-3 w-full justify-items-center ${className}`}>
+    <div
+      className={`grid grid-cols-3 gap-3 w-full justify-items-center ${className}`}
+    >
       {games.map((game) => (
         <div key={game.ruleType} className="flex flex-col gap-0">
           <div className="text-[10px] text-gray-400 uppercase tracking-widest text-center mb-0">

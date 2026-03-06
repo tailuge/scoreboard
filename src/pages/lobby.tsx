@@ -154,8 +154,8 @@ export default function Lobby() {
   return (
     <>
       <Seo
-        title="Multiplayer Billiards Lobby - Play Pool & Snooker Online"
-        description="Find opponents for online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
+        title="Free Open Source Multiplayer Billiards Lobby - Play Pool & Snooker Online"
+        description="Find opponents for free open source online billiards matches. Join Snooker, 9-Ball, or Three-Cushion tables and compete in real-time multiplayer games."
         canonical="https://scoreboard-tailuge.vercel.app/lobby"
         ogUrl="https://scoreboard-tailuge.vercel.app/lobby"
       />

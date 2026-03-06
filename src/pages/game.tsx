@@ -39,7 +39,7 @@ export default function Game() {
     <div className="relative min-h-screen p-4 flex flex-col items-center">
       <Seo
         title="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
-        description="Experience realistic physics in our free online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
+        description="Experience realistic physics in our free open source online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide or practice your skills."
         canonical="https://scoreboard-tailuge.vercel.app/game"
         ogUrl="https://scoreboard-tailuge.vercel.app/game"
       />
