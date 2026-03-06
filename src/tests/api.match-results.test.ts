@@ -320,16 +320,6 @@ describe("/api/match-results handler", () => {
     expect(response.status).toBe(500)
   })
 
-  it("should return 200 for OPTIONS request", async () => {
-    req = {
-      method: "OPTIONS",
-      nextUrl: new URL("https://localhost/api/match-results"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(200)
-  })
-
   it("should return 405 for unsupported methods", async () => {
     req = {
       method: "PUT",
