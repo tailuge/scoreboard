@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ["127.0.0.1"],
   transpilePackages: ["framer-motion", "jsoncrush"],
   async redirects() {
     return [
@@ -24,15 +23,11 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://cdn.plot.ly https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: wss://*.onrender.com; frame-src 'self' https://tailuge.github.io; frame-ancestors 'self' https://tailuge.github.io; object-src 'none'; upgrade-insecure-requests;",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://cdn.plot.ly; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.onrender.com wss://*.onrender.com; frame-src 'self' https://tailuge.github.io; frame-ancestors 'self' https://tailuge.github.io; object-src 'none'; upgrade-insecure-requests;",
           },
           {
             key: "X-XSS-Protection",
             value: "0",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
           },
           {
             key: "Strict-Transport-Security",
@@ -45,6 +40,14 @@ const nextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-origin",
           },
         ],
       },
