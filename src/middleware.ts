@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
   const origin = request.headers.get("origin")
 
   // Same-origin and non-browser requests often have no Origin header.
-  if (!origin) {
+  if (!origin || origin === request.nextUrl.origin) {
     return NextResponse.next()
   }
 
