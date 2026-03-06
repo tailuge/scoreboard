@@ -42,4 +42,22 @@ describe("/api/rank handler", () => {
     expect(response.status).toBe(200)
     expect(responseText).toBe(JSON.stringify(topTenData))
   })
+
+  it("should return 400 for invalid ruletype", async () => {
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockImplementationOnce(() => {
+        throw new Error("Invalid ruletype")
+      })
+
+    const url = "https://localhost/api/rank?ruletype=invalid"
+    req = {
+      method: "GET",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(400)
+  })
 })

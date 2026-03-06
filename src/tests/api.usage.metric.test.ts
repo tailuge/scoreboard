@@ -67,4 +67,21 @@ describe("/api/usage/[metric] handler", () => {
     expect(mockUsageService).toHaveBeenCalledWith(metric)
     expect(response.status).toBe(200)
   })
+
+  it("should return 400 for invalid metric name", async () => {
+    mockUsageService.mockImplementationOnce(() => {
+      throw new Error("Invalid metric name")
+    })
+
+    const metric = "invalid metric!"
+    const url = `https://localhost/api/usage/${metric}?metric=${metric}`
+    req = {
+      method: "PUT",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(400)
+  })
 })

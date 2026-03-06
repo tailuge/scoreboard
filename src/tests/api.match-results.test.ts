@@ -339,4 +339,14 @@ describe("/api/match-results handler", () => {
     const response = await handler(req)
     expect(response.status).toBe(405)
   })
+
+  it("should return 400 for invalid ruleType on GET request", async () => {
+    req = {
+      method: "GET",
+      nextUrl: new URL("https://localhost/api/match-results?ruleType=invalid"),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    expect(response.status).toBe(400)
+  })
 })

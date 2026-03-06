@@ -21,4 +21,23 @@ describe("ScoreTable", () => {
     const likedItem = await scoreTable.getById("nineball", item.id)
     expect(likedItem.likes).toEqual(1)
   })
+
+  it("should throw error for invalid ruletype", async () => {
+    const scoreTable = new ScoreTable(mockKv)
+    await expect(
+      scoreTable.add("invalid" as any, 100, "user", {})
+    ).rejects.toThrow("Invalid ruletype")
+    await expect(scoreTable.topTen("invalid" as any)).rejects.toThrow(
+      "Invalid ruletype"
+    )
+    await expect(scoreTable.getById("invalid" as any, "id")).rejects.toThrow(
+      "Invalid ruletype"
+    )
+    await expect(scoreTable.like("invalid" as any, "id")).rejects.toThrow(
+      "Invalid ruletype"
+    )
+    await expect(scoreTable.get("invalid" as any, "id")).rejects.toThrow(
+      "Invalid ruletype"
+    )
+  })
 })

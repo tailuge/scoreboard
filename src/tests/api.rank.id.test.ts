@@ -57,4 +57,36 @@ describe("/api/rank/[id] handler", () => {
     expect(likeSpy).toHaveBeenCalledWith(ruletype, id)
     expect(response.status).toBe(200)
   })
+
+  it("should return 400 for invalid ruletype on GET", async () => {
+    jest.spyOn(mockScoreTable.prototype, "get").mockImplementationOnce(() => {
+      throw new Error("Invalid ruletype")
+    })
+
+    const url = "https://localhost/api/rank/123?ruletype=invalid&id=123"
+    req = {
+      method: "GET",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(400)
+  })
+
+  it("should return 400 for invalid ruletype on PUT", async () => {
+    jest.spyOn(mockScoreTable.prototype, "like").mockImplementationOnce(() => {
+      throw new Error("Invalid ruletype")
+    })
+
+    const url = "https://localhost/api/rank/123?ruletype=invalid&id=123"
+    req = {
+      method: "PUT",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(400)
+  })
 })
