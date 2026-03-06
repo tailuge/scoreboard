@@ -117,7 +117,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       <td className={`text-right ${cellClass} text-gray-400 ${hideReplay}`}>
         <a href={`/api/rank/${item.id}?ruletype=${ruleType}`}>replay</a>
       </td>
-      <td className={`text-right ${cellClass}`}>
+      <td className={`text-left ${cellClass}`}>
         <button
           onClick={(e) => handleLike(e, item.id)}
           className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-[4px] py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
