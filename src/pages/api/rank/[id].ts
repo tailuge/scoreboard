@@ -53,10 +53,6 @@ const scoretable = new ScoreTable(kv)
  *         description: Liked successfully
  */
 export default async function handler(request: NextRequest) {
-  if (request.method === "OPTIONS") {
-    return corsResponse(null, { status: 200 })
-  }
-
   const searchParams = request.nextUrl.searchParams
   const ruletype = searchParams.get("ruletype")
   const id = searchParams.get("id")

@@ -86,13 +86,6 @@ describe("Delete Table API [tableId]", () => {
     })
   })
 
-  it("returns 200 on OPTIONS preflight", async () => {
-    requestObj.method = "OPTIONS"
-    await handler(requestObj, responseObj)
-    expect(responseObj.status).toHaveBeenCalledWith(200)
-    expect(responseObj.end).toHaveBeenCalled()
-  })
-
   it("returns 405 for forbidden methods like GET", async () => {
     requestObj.method = "GET"
     await handler(requestObj, responseObj)

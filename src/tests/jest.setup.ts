@@ -31,7 +31,11 @@ globalThis.Request ??= function Request(
   init?: { method?: string; headers?: any; body?: any }
 ) {
   // Basic mock properties
-  this.url = input
+  Object.defineProperty(this, "url", {
+    value: input,
+    writable: true,
+    configurable: true,
+  })
   this.method = init?.method || "GET"
   this.headers = new (globalThis.Headers as any)(init?.headers)
   this.body = init?.body

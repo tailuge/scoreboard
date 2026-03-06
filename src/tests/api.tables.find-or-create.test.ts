@@ -31,13 +31,7 @@ describe("/api/tables/find-or-create handler", () => {
     req.method = "GET"
     await handler(req, res)
     expect(res.status).toHaveBeenCalledWith(405)
-    expect(res.setHeader).toHaveBeenCalledWith("Allow", ["POST", "OPTIONS"])
-  })
-
-  it("should return 200 for OPTIONS method", async () => {
-    req.method = "OPTIONS"
-    await handler(req, res)
-    expect(res.status).toHaveBeenCalledWith(200)
+    expect(res.setHeader).toHaveBeenCalledWith("Allow", ["POST"])
   })
 
   it("should return 400 if required fields are missing", async () => {

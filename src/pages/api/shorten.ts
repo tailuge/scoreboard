@@ -26,10 +26,6 @@ const shortener = new Shortener(kv)
  *         description: Shortened data
  */
 export default async function handler(request: NextRequest) {
-  if (request.method === "OPTIONS") {
-    return corsResponse(null, { status: 200 })
-  }
-
   try {
     const json = await request.json()
     logger.log(json)

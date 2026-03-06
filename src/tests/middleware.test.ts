@@ -1,5 +1,75 @@
-// Test that ALLOWED_ORIGINS is correctly configured
-import { ALLOWED_ORIGINS } from "../middleware"
+import { NextRequest, NextResponse } from "next/server"
+import { middleware, ALLOWED_ORIGINS } from "../middleware"
+
+describe("middleware logic", () => {
+  const nextUrl = new URL("http://localhost:3000/api/rank")
+
+  it("should allow same-origin requests without extra headers", () => {
+    const request = new NextRequest(nextUrl, {
+      headers: {
+        origin: "http://localhost:3000",
+      },
+    })
+
+    const response = middleware(request)
+    expect(response).toBeInstanceOf(NextResponse)
+    // For same-origin, middleware(request) returns NextResponse.next()
+    // In this test environment, we check if it doesn't have CORS headers set by withCorsHeaders
+    expect(response?.headers.get("Access-Control-Allow-Origin")).toBeNull()
+  })
+
+  it("should allow requests from allowed origins with correct headers", () => {
+    const origin = "https://tailuge.github.io"
+    const request = new NextRequest(nextUrl, {
+      headers: {
+        origin,
+      },
+    })
+
+    const response = middleware(request)
+    expect(response).toBeInstanceOf(NextResponse)
+    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe(origin)
+    expect(response?.headers.get("Access-Control-Allow-Credentials")).toBe(
+      "true"
+    )
+  })
+
+  it("should return 403 for disallowed origins", () => {
+    const request = new NextRequest(nextUrl, {
+      headers: {
+        origin: "https://malicious.com",
+      },
+    })
+
+    const response = middleware(request)
+    expect(response?.status).toBe(403)
+  })
+
+  it("should return 204 for OPTIONS requests from allowed origins", () => {
+    const origin = "https://tailuge.github.io"
+    const request = new NextRequest(nextUrl, {
+      method: "OPTIONS",
+      headers: {
+        origin,
+      },
+    })
+
+    const response = middleware(request)
+    expect(response?.status).toBe(204)
+    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe(origin)
+    expect(response?.headers.get("Access-Control-Allow-Methods")).toContain(
+      "OPTIONS"
+    )
+  })
+
+  it("should allow requests without origin header (e.g. server-to-server or direct browser)", () => {
+    const request = new NextRequest(nextUrl)
+
+    const response = middleware(request)
+    expect(response).toBeInstanceOf(NextResponse)
+    expect(response?.headers.get("Access-Control-Allow-Origin")).toBeNull()
+  })
+})
 
 describe("ALLOWED_ORIGINS config", () => {
   it("contains tailuge.github.io", () => {
@@ -29,36 +99,5 @@ describe("ALLOWED_ORIGINS config", () => {
 
   it("has expected number of origins", () => {
     expect(ALLOWED_ORIGINS.size).toBe(5)
-  })
-})
-
-// Integration test - requires next/server runtime
-// These tests verify the middleware logic in a more isolated way
-describe("middleware logic (manual verification)", () => {
-  // This test documents expected behavior
-  // Full integration testing would require running the Next.js server
-  it("documents the CORS flow", () => {
-    const allowedOrigins = new Set([
-      "http://localhost:3000",
-      "http://localhost:8080",
-      "https://tailuge.github.io",
-      "https://billiards.tailuge.workers.dev",
-      "https://scoreboard-tailuge.vercel.app",
-    ])
-
-    // Test allowed origins
-    expect(allowedOrigins.has("https://tailuge.github.io")).toBe(true)
-    expect(allowedOrigins.has("https://billiards.tailuge.workers.dev")).toBe(
-      true
-    )
-    expect(allowedOrigins.has("http://localhost:3000")).toBe(true)
-
-    // Test blocked origins
-    expect(allowedOrigins.has("https://random.com")).toBe(false)
-    expect(allowedOrigins.has("https://billiards.other.workers.dev")).toBe(
-      false
-    )
-    expect(allowedOrigins.has("")).toBe(false)
-    expect(allowedOrigins.has(null as any)).toBe(false)
   })
 })
