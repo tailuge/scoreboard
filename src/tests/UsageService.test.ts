@@ -22,4 +22,14 @@ describe("UsageService", () => {
 
     expect(results).toHaveLength(4)
   })
+
+  it("should throw error for invalid metric name", () => {
+    expect(() => new UsageService("invalid metric!")).toThrow(
+      "Invalid metric name"
+    )
+    expect(() => new UsageService("metric;script")).toThrow(
+      "Invalid metric name"
+    )
+    expect(() => new UsageService(" ")).toThrow("Invalid metric name")
+  })
 })

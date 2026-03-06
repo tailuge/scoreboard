@@ -4,7 +4,11 @@ export class UsageService {
   constructor(
     private readonly key: string,
     private readonly store: VercelKV | Partial<VercelKV> = kv
-  ) {}
+  ) {
+    if (!/^[a-zA-Z0-9_-]+$/.test(key)) {
+      throw new Error("Invalid metric name")
+    }
+  }
 
   fullKey(): string {
     return this.key + "Usage"

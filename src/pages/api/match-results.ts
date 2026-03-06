@@ -3,6 +3,7 @@ import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
 import { getUID } from "@/utils/uid"
 import { logger } from "@/utils/logger"
+import { isValidGameType } from "@/utils/gameTypes"
 
 export const config = {
   runtime: "edge",
@@ -86,6 +87,11 @@ async function handleGet(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
     const ruleType = searchParams.get("ruleType") || undefined
+
+    if (ruleType && !isValidGameType(ruleType)) {
+      return new Response("Invalid ruleType", { status: 400 })
+    }
+
     const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
 
     const results = await matchResultService.getMatchResults(limit, ruleType)

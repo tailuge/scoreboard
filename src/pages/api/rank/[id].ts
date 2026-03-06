@@ -60,8 +60,18 @@ export default async function handler(request: NextRequest) {
   const ruletype = searchParams.get("ruletype")
   const id = searchParams.get("id")
 
+  if (!ruletype || !id) {
+    return new Response("ruletype and id are required", { status: 400 })
+  }
+
   if (request.method === "GET") {
-    const url = await scoretable.get(ruletype, id)
+    let url
+    try {
+      url = await scoretable.get(ruletype, id)
+    } catch (error) {
+      logger.error("Error fetching rank by id:", error)
+      return new Response("Invalid ruletype", { status: 400 })
+    }
     logger.log(`redirecting ${ruletype} id ${id} to ${url}`)
     return new Response(null, {
       status: 302,
@@ -72,7 +82,12 @@ export default async function handler(request: NextRequest) {
   }
 
   if (request.method === "PUT") {
-    await scoretable.like(ruletype, id)
+    try {
+      await scoretable.like(ruletype, id)
+    } catch (error) {
+      logger.error("Error liking rank entry:", error)
+      return new Response("Invalid ruletype", { status: 400 })
+    }
     logger.log(`liked ${ruletype} id ${id}`)
   }
 
