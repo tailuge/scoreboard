@@ -87,7 +87,8 @@ export function BallIcon({
       <circle cx="50" cy="50" r="48" fill={`url(#${gradId})`} />
       <circle cx="30" cy="30" r="10" fill="white" fillOpacity={0.2} />
 
-      {showNumber ? <>
+      {showNumber ? (
+        <>
           <circle cx="50" cy="50" r="19" fill="white" />
           <text
             x="50"
@@ -101,7 +102,8 @@ export function BallIcon({
           >
             {normalizedNumber}
           </text>
-        </> : null}
+        </>
+      ) : null}
     </svg>
   )
 }

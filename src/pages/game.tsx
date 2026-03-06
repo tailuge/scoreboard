@@ -67,7 +67,8 @@ export default function Game() {
           leftBadge={<User />}
           rightBadge={
             <div className="flex items-center gap-2">
-              {incomingChallenge ? <button
+              {incomingChallenge ? (
+                <button
                   onClick={() => {
                     router.push({
                       pathname: "/lobby",
@@ -84,7 +85,8 @@ export default function Game() {
                 >
                   <span className="text-sm">⚔️</span>
                   <span>Challenge from {incomingChallenge.userName}</span>
-                </button> : null}
+                </button>
+              ) : null}
               <OnlineUsersPopover
                 count={presenceCount}
                 users={presenceUsers}

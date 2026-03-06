@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useReducer, useState } from "react"
+import { useEffect, useRef, useReducer, useState } from "react"
 import { NchanPub } from "@/nchan/nchanpub"
 import { usePresenceMessages } from "@/contexts/LobbyContext"
 import type { PresenceMessage } from "@/nchan/types"
@@ -105,7 +105,7 @@ export function usePresenceList(
   const mapRef = useRef<Map<string, PresenceEntry>>(new Map())
   const pubRef = useRef<NchanPub | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-  const [updateCount, forceUpdate] = useReducer((x: number) => x + 1, 0)
+  const [, forceUpdate] = useReducer((x: number) => x + 1, 0)
   const [userAgent, setUserAgent] = useState<string | undefined>(
     globalThis.navigator?.userAgent
   )
@@ -179,13 +179,13 @@ export function usePresenceList(
     forceUpdate()
   }, [lastMessage])
 
-  const { users, count } = useMemo(() => {
+  const { users, count } = (() => {
     const onlineUsers = getOnlineUsers(mapRef.current)
     return {
       users: onlineUsers.slice(0, MAX_USERS),
       count: onlineUsers.length,
     }
-  }, [updateCount])
+  })()
 
   return { users, count }
 }

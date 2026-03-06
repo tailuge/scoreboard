@@ -94,7 +94,8 @@ export function OnlineUsersPopover({
         <span className="font-bold">{count}</span>
       </button>
 
-      {isOpen ? <div
+      {isOpen ? (
+        <div
           className="absolute top-8 right-0 z-0 m-0 p-0 bg-transparent overflow-visible animate-in block border-none"
           aria-label="Online users"
         >
@@ -167,7 +168,8 @@ export function OnlineUsersPopover({
               )}
             </div>
           </div>
-        </div> : null}
+        </div>
+      ) : null}
     </div>
   )
 }

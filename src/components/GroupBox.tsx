@@ -23,7 +23,8 @@ export function GroupBox({
       <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03),transparent)]" />
       <div className="groupbox-border" />
 
-      {title ? <h2 className="groupbox-title absolute top-0 left-1/2 px-4 py-1">
+      {title ? (
+        <h2 className="groupbox-title absolute top-0 left-1/2 px-4 py-1">
           {titleHref ? (
             <Link href={titleHref} className="no-underline">
               {title}
@@ -31,15 +32,20 @@ export function GroupBox({
           ) : (
             title
           )}
-        </h2> : null}
+        </h2>
+      ) : null}
 
-      {leftBadge ? <div className="absolute top-0 left-6 -translate-y-1/2 z-10">
+      {leftBadge ? (
+        <div className="absolute top-0 left-6 -translate-y-1/2 z-10">
           {leftBadge}
-        </div> : null}
+        </div>
+      ) : null}
 
-      {rightBadge ? <div className="absolute top-0 right-6 -translate-y-1/2 z-20">
+      {rightBadge ? (
+        <div className="absolute top-0 right-6 -translate-y-1/2 z-20">
           {rightBadge}
-        </div> : null}
+        </div>
+      ) : null}
 
       <div className="relative z-10">{children}</div>
     </div>

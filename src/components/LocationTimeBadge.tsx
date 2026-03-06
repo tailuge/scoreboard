@@ -51,7 +51,9 @@ export function LocationTimeBadge({
         {locationCountry ? <span title={flagTitle}>{countryFlag}</span> : null}
       </span>
       {isLive ? <MatchBadge variant="live" compact={compact} /> : null}
-      {!isLive && hasReplay ? <MatchBadge variant="replay" compact={compact} matchId={matchId} /> : null}
+      {!isLive && hasReplay ? (
+        <MatchBadge variant="replay" compact={compact} matchId={matchId} />
+      ) : null}
     </div>
   )
 }

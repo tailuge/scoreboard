@@ -124,9 +124,11 @@ export default function TableLogs() {
             )}
             {message.parsed.clientId} {message.parsed.type}
           </button>
-          {isExpanded ? <div className="text-black pl-4">
+          {isExpanded ? (
+            <div className="text-black pl-4">
               {JSON.stringify(message.parsed, null, 2)}
-            </div> : null}
+            </div>
+          ) : null}
         </div>
       )
     })
