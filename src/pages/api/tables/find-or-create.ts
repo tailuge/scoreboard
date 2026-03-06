@@ -55,10 +55,8 @@ export default async function handler(
       logger.error("Error in find-or-create:", error)
       res.status(500).json({ error: "Internal Server Error" })
     }
-  } else if (req.method === "OPTIONS") {
-    res.status(200).end()
   } else {
-    res.setHeader("Allow", ["POST", "OPTIONS"])
+    res.setHeader("Allow", ["POST"])
     res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

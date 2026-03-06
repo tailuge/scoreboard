@@ -26,10 +26,6 @@ export const config = {
  *         description: ID is required
  */
 export default async function handler(req: NextRequest) {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200 })
-  }
-
   const id = req.nextUrl.searchParams.get("id")
   if (!id) {
     return new Response("ID is required", { status: 400 })

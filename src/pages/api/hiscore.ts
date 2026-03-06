@@ -46,10 +46,6 @@ const scoretable = new ScoreTable(kv)
  *         description: Client version is outdated
  */
 export default async function handler(request: NextRequest) {
-  if (request.method === "OPTIONS") {
-    return corsResponse(null, { status: 200 })
-  }
-
   const url = request.nextUrl
   const body = await request.text()
   logger.log(`body = ${body}`)

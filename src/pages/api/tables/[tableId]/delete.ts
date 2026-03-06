@@ -89,8 +89,6 @@ export default async function handler(
       logger.error("Error deleting table:", error)
       res.status(500).json({ error: "Internal Server Error" })
     }
-  } else if (req.method === "OPTIONS") {
-    res.status(200).end()
   } else {
     res.status(405).json({ error: "Method not allowed" })
   }

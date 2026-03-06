@@ -1,5 +1,4 @@
 export const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 }
@@ -15,5 +14,8 @@ export function corsResponse(
 }
 
 export function corsJson(data: unknown, options?: ResponseInit): Response {
-  return Response.json(data, { headers: CORS_HEADERS, ...options })
+  return Response.json(data, {
+    ...options,
+    headers: { ...CORS_HEADERS, ...options?.headers },
+  })
 }

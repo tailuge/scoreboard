@@ -26,10 +26,6 @@ const scoretable = new ScoreTable(kv)
  *         description: A list of the top ten ranks
  */
 export default async function handler(request: NextRequest) {
-  if (request.method === "OPTIONS") {
-    return corsResponse(null, { status: 200 })
-  }
-
   const url = request.nextUrl
   const ruletype = url.searchParams.get("ruletype")
   if (!ruletype) {
