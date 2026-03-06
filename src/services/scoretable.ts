@@ -1,6 +1,7 @@
 import type { VercelKV } from "@vercel/kv"
 import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
+import { isValidGameType } from "@/utils/gameTypes"
 
 export class ScoreTable {
   readonly prefix = "hiscore"
@@ -10,6 +11,9 @@ export class ScoreTable {
   constructor(private readonly store: VercelKV | Partial<VercelKV>) {}
 
   dbKey(ruletype) {
+    if (!isValidGameType(ruletype)) {
+      throw new Error("Invalid ruletype")
+    }
     return `${this.prefix}${ruletype}`
   }
 

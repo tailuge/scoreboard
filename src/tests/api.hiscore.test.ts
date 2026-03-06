@@ -136,4 +136,27 @@ describe("/api/hiscore handler", () => {
     expect(topTenSpy).toHaveBeenCalledWith(ruletype)
     expect(addSpy).toHaveBeenCalled()
   })
+
+  it("should return 400 if ruletype is invalid", async () => {
+    const validData = { v: 1, score: 150 }
+    const body = `state=some-crushed-string`
+    mockJsonCrush.uncrush.mockReturnValue(JSON.stringify(validData))
+
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockImplementationOnce(() => {
+        throw new Error("Invalid ruletype")
+      })
+
+    const url = `https://localhost/api/hiscore?ruletype=invalid`
+    req = {
+      text: jest.fn().mockResolvedValue(body),
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(400)
+    expect(topTenSpy).toHaveBeenCalledWith("invalid")
+  })
 })

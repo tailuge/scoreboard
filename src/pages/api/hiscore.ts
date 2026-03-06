@@ -74,11 +74,21 @@ export default async function handler(request: NextRequest) {
   }
 
   const ruletype = url.searchParams.get("ruletype")
+  if (!ruletype) {
+    return new Response("ruletype is required", { status: 400 })
+  }
+
   const base = new Date("2024").valueOf()
   const score = json?.score + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
   logger.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
-  const data = await scoretable.topTen(url.searchParams.get("ruletype"))
+  let data
+  try {
+    data = await scoretable.topTen(ruletype)
+  } catch (error) {
+    logger.error("Error fetching top ten ranks:", error)
+    return new Response("Invalid ruletype", { status: 400 })
+  }
 
   if (
     !data.some((row) => {

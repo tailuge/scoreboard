@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server"
 import { UsageService } from "@/services/usageservice"
+import { logger } from "@/utils/logger"
 
 export const config = {
   runtime: "edge",
@@ -41,7 +42,17 @@ export default async function handler(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const metric = searchParams.get("metric")
 
-  const usageService = new UsageService(metric)
+  if (!metric) {
+    return new Response("Metric is required", { status: 400 })
+  }
+
+  let usageService: UsageService
+  try {
+    usageService = new UsageService(metric)
+  } catch (error) {
+    logger.error("Error creating UsageService:", error)
+    return new Response("Invalid metric name", { status: 400 })
+  }
 
   if (request.method === "GET") {
     return Response.json(await usageService.getAllCounts())
