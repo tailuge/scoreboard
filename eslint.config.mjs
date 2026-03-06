@@ -7,6 +7,8 @@ import sonarjs from 'eslint-plugin-sonarjs';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import importPlugin from 'eslint-plugin-import';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
@@ -48,11 +50,17 @@ export default tseslint.config(
     plugins: {
       react,
       'jsx-a11y': jsxA11y,
+      import: importPlugin,
+      'react-hooks': reactHooks,
     },
     rules: {
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...jsxA11y.configs.recommended.rules,
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react/jsx-no-leaked-render': 'error',
+      'import/no-cycle': 'error',
     },
   },
   {

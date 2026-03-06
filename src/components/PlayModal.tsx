@@ -97,7 +97,7 @@ export function PlayModal({
       <div className="play-modal-container">
         <h2 className="play-modal-title">Opponent Ready</h2>
         <p className="play-modal-text">Your table is ready to play</p>
-        {error && <p className="play-modal-error">{error}</p>}
+        {error ? <p className="play-modal-error">{error}</p> : null}
         <div className="play-modal-buttons">
           <button onClick={handleStartGame} className="play-modal-start-button">
             Start Game

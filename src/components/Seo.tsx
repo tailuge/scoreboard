@@ -36,13 +36,13 @@ export const Seo: React.FC<SeoProps> = ({
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
-      {refresh && <meta httpEquiv="refresh" content={refresh} />}
-      {canonical && <link rel="canonical" href={canonical} />}
+      {refresh ? <meta httpEquiv="refresh" content={refresh} /> : null}
+      {canonical ? <link rel="canonical" href={canonical} /> : null}
 
       <meta property="og:title" content={ogTitle || title} />
       <meta property="og:description" content={ogDescription || description} />
       <meta property="og:type" content={ogType} />
-      {ogUrl && <meta property="og:url" content={ogUrl} />}
+      {ogUrl ? <meta property="og:url" content={ogUrl} /> : null}
       <meta property="og:image" content={ogImage} />
 
       <meta name="twitter:card" content={twitterCard} />
