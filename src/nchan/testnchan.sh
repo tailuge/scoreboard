@@ -3,12 +3,12 @@
 set -e
 
 # Defaults
-DEFAULT_BASE_URL="http://localhost:8080"
+DEFAULT_BASE_URL="http://localhost:80"
 PROD_BASE_URL="https://billiards-network.onrender.com"
 BASE_URL="$DEFAULT_BASE_URL"
 PRODUCTION=false
 CONTAINER_NAME="nchan-test-local"
-PORT=8080
+PORT=80
 
 # Resolve project root relative to script location
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -47,7 +47,7 @@ setup_docker() {
 	# Stop existing container if it exists
 	docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-	docker run -d --rm -p $PORT:8080 --name "$CONTAINER_NAME" tailuge/billiards-network
+	docker run -d --rm -p $PORT:80 --name "$CONTAINER_NAME" tailuge/billiards-network
 
 	echo "--- Waiting for image to initialize ---"
 	sleep 2

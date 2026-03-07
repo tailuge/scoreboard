@@ -82,7 +82,9 @@ export function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
 
   const rows = useMemo<LeaderboardRowItem[]>(() => {
     const displayData = limit ? data.slice(0, limit) : data
-    const placeholdersCount = limit ? Math.max(0, limit - displayData.length) : 0
+    const placeholdersCount = limit
+      ? Math.max(0, limit - displayData.length)
+      : 0
 
     return [
       ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
