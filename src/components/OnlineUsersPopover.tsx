@@ -2,9 +2,8 @@
 import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
-import { localeToFlag } from "@/utils/locale"
-import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
 import type { PresenceUser } from "./hooks/usePresenceList"
+import { UserListItem } from "./UserListItem"
 
 type OnlineUsersPopoverProps = {
   readonly count: number
@@ -43,38 +42,6 @@ export function OnlineUsersPopover({
   const overflow = totalCount ? totalCount - users.length : 0
 
   const otherUsers = users.filter((user) => user.userId !== currentUserId)
-
-  const getUserBadge = (user: PresenceUser) => {
-    if (user.isBot) {
-      return (
-        <span className="text-[10px]" title="Bot">
-          🤖
-        </span>
-      )
-    }
-    if (user.userId === currentUserId) {
-      return (
-        <span className="text-[10px]" title="Identified">
-          ⭐
-        </span>
-      )
-    }
-    const isExternal = (() => {
-      if (!user.originUrl) return false
-      try {
-        const url = new URL(user.originUrl, globalThis.location.origin)
-        return url.hostname !== globalThis.location.hostname
-      } catch {
-        return false
-      }
-    })()
-
-    return isExternal ? (
-      <span className="text-[10px]" title="external">
-        🎮
-      </span>
-    ) : null
-  }
 
   return (
     <div ref={containerRef} className="relative">
@@ -117,47 +84,20 @@ export function OnlineUsersPopover({
 
               <ul className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
                 {otherUsers.map((user) => (
-                  <li
+                  <UserListItem
                     key={user.userId}
-                    className="flex items-center justify-between group stagger-item"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="h-1 w-1 rounded-full bg-green-accent shadow-[0_0_5px_var(--color-green-glow)]"
-                        aria-hidden="true"
-                      />
-                      <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-                        {localeToFlag(user.locale)?.replace("🇺🇸", "🇬🇧")}{" "}
-                        {user.userName}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      <span className="text-[9px]">
-                        {osIcon(detectOS(user.ua))}
-                      </span>
-                      <span className="text-[9px]">
-                        {browserIcon(detectBrowser(user.ua))}
-                      </span>
-                      {getUserBadge(user)}
-                      {user.userId !== currentUserId && !user.isBot && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const query = {
-                              ...router.query,
-                              opponentId: user.userId,
-                              opponentName: user.userName,
-                            }
-                            router.push({ pathname: "/lobby", query })
-                            setIsOpen(false)
-                          }}
-                          className="ml-2 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[9px] font-bold text-cyan-300 hover:bg-cyan-500/40 transition-colors"
-                        >
-                          Challenge
-                        </button>
-                      )}
-                    </div>
-                  </li>
+                    user={user}
+                    currentUserId={currentUserId}
+                    onChallenge={(u) => {
+                      const query = {
+                        ...router.query,
+                        opponentId: u.userId,
+                        opponentName: u.userName,
+                      }
+                      router.push({ pathname: "/lobby", query })
+                      setIsOpen(false)
+                    }}
+                  />
                 ))}
               </ul>
 

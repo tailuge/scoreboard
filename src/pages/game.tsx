@@ -11,6 +11,8 @@ import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { GameGrid } from "@/components/GameGrid"
 import { LogoSection } from "@/components/LogoSection"
 import { HighscoreGrid } from "@/components/HighscoreGrid"
+import { GameBackground } from "@/components/GameBackground"
+import { IncomingChallengeBanner } from "@/components/IncomingChallengeBanner"
 
 export default function Game() {
   const { userId, userName } = useUser()
@@ -44,20 +46,7 @@ export default function Game() {
         ogUrl="https://scoreboard-tailuge.vercel.app/game"
       />
 
-      {/* Static Background */}
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none"
-        style={{
-          // To adjust darkness, change the alpha value (0.5) in the rgba colors below.
-          // 0.0 is fully transparent (original image), 1.0 is fully black.
-          backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.6)), url(/assets/bg.jpg)",
-          backgroundSize: "100% auto",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-          backgroundPosition: "top center",
-        }}
-      />
+      <GameBackground />
 
       <LogoSection />
 
@@ -68,7 +57,8 @@ export default function Game() {
           rightBadge={
             <div className="flex items-center gap-2">
               {incomingChallenge ? (
-                <button
+                <IncomingChallengeBanner
+                  userName={incomingChallenge.userName}
                   onClick={() => {
                     router.push({
                       pathname: "/lobby",
@@ -80,12 +70,7 @@ export default function Game() {
                       },
                     })
                   }}
-                  className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-800/70 border border-red-500/40 text-[12px] font-bold text-white-400 hover:bg-red-500/40 transition-all animate-pulse"
-                  title={`Challenge from ${incomingChallenge.userName}`}
-                >
-                  <span className="text-sm">⚔️</span>
-                  <span>Challenge from {incomingChallenge.userName}</span>
-                </button>
+                />
               ) : null}
               <OnlineUsersPopover
                 count={presenceCount}

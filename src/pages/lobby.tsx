@@ -11,7 +11,8 @@ import { markUsage } from "@/utils/usage"
 import { useUser } from "@/contexts/UserContext"
 import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useAutoJoin } from "@/components/hooks/useAutoJoin"
-import { GAME_TYPES } from "@/config"
+import { ChallengeCard } from "@/components/ChallengeCard"
+import { SeekingCard } from "@/components/SeekingCard"
 
 export default function Lobby() {
   const { userId, userName } = useUser()
@@ -177,64 +178,26 @@ export default function Lobby() {
             >
               <div className="flex flex-col gap-6">
                 {activeOpponentId && !activeRuleType ? (
-                  <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300">
-                    <h3 className="text-xl font-bold text-white mb-4">
-                      Challenge {opponentName || "Player"}
-                    </h3>
-                    <p className="text-sm text-gray-300 mb-6">
-                      Select game rules:
-                    </p>
-                    <div className="grid grid-cols-1 gap-3">
-                      {GAME_TYPES.map((game) => (
-                        <button
-                          key={game.ruleType}
-                          onClick={() => {
-                            setActiveRuleType(game.ruleType)
-                            handleFindOrCreate(game.ruleType)
-                          }}
-                          className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95"
-                        >
-                          {game.name}
-                        </button>
-                      ))}
-                      <button
-                        onClick={() => {
-                          setActiveOpponentId(null)
-                          const newQuery = { ...router.query }
-                          delete newQuery.opponentId
-                          delete newQuery.opponentName
-                          router.push({ pathname: "/lobby", query: newQuery })
-                        }}
-                        className="mt-2 text-sm text-gray-400 hover:text-white"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                  <ChallengeCard
+                    opponentName={opponentName}
+                    onSelectRule={(ruleType) => {
+                      setActiveRuleType(ruleType)
+                      handleFindOrCreate(ruleType)
+                    }}
+                    onCancel={() => {
+                      setActiveOpponentId(null)
+                      const newQuery = { ...router.query }
+                      delete newQuery.opponentId
+                      delete newQuery.opponentName
+                      router.push({ pathname: "/lobby", query: newQuery })
+                    }}
+                  />
                 ) : null}
                 {seekingRuleType ? (
-                  <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300 motion-reduce:animate-none">
-                    <div className="relative mx-auto mb-5 h-14 w-14">
-                      <div className="absolute inset-0 rounded-full border-2 border-cyan-500/20"></div>
-                      <div className="absolute inset-0 rounded-full border-2 border-cyan-400/40 animate-glow-pulse motion-reduce:animate-none"></div>
-                      <div className="absolute inset-2 rounded-full border border-cyan-500/30 animate-pulse motion-reduce:animate-none"></div>
-                      <div className="absolute inset-4 rounded-full bg-cyan-400/20 animate-ping motion-reduce:animate-none"></div>
-                    </div>
-                    <h3 className="text-xl font-bold text-white text-balance">
-                      Finding a {seekingRuleType} opponent…
-                    </h3>
-                    <p className="mt-2 text-sm text-gray-300">
-                      Game will start when opponent is found.
-                    </p>
-                    <div className="mt-5 flex flex-wrap justify-center gap-3">
-                      <button
-                        onClick={handleCancelSeeking}
-                        className="rounded-lg border border-gray-600 px-6 py-2.5 text-sm font-semibold text-gray-200 transition-colors duration-200 hover:bg-gray-700/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400/60 active:scale-95"
-                      >
-                        Cancel Search
-                      </button>
-                    </div>
-                  </div>
+                  <SeekingCard
+                    ruleType={seekingRuleType}
+                    onCancel={handleCancelSeeking}
+                  />
                 ) : null}
               </div>
             </GroupBox>
