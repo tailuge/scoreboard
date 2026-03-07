@@ -81,8 +81,14 @@ run_curl_tests() {
 	echo ""
 
 	printf "\n--- Test: Publish to Lobby ---"
-	curl -s --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel"
-	echo ""
+	RESPONSE=$(curl -s -i --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel")
+	echo "$RESPONSE"
+	if echo "$RESPONSE" | grep -q "X-Server-Time:" && echo "$RESPONSE" | grep -q "X-User-Agent:"; then
+		echo "Custom headers verified: X-Server-Time and X-User-Agent are present."
+	else
+		echo "FAILED: Custom headers missing in publisher response."
+		exit 1
+	fi
 
 	printf "\n--- Test: Pub/Sub Demo (Lobby) ---"
 	echo "Starting subscriber in background..."

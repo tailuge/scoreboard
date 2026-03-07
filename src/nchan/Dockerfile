@@ -54,6 +54,7 @@ RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
     rm -rf /etc/nginx/conf.d/default.conf.orig
 
 # Healthcheck to ensure Nchan is responding
+# Note: we use wget (busybox) as it is native to alpine
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost/basic_status || exit 1
 
