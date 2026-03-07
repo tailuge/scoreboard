@@ -13,7 +13,7 @@
 1.  **Use pinned nginx:alpine**: Small, secure, and predictable. [DONE]
 2.  **Build Nchan as a dynamic module**: Allows using the official image without re-building all of Nginx. [DONE]
 3.  **Optimize startup**: Use `--chown` in Docker layers to avoid heavy runtime filesystem operations. [DONE]
-4.  **Native Nchan CORS**: Replaced manual `if` blocks with native `nchan_access_control_allow_origin "*"` and `nchan_access_control_allow_credentials on;` for better performance and reliability. [DONE]
+4.  **Native Nchan CORS**: Replaced manual `if` blocks with native `nchan_access_control_allow_origin "*"` and `nchan_access_control_allow_credentials off;` for better performance and reliability. [DONE]
 5.  **Data Enrichment**: Added `X-Server-Time`, `X-User-Agent`, and `X-Client-Country` headers to provide metadata to publishers and subscribers without message body overhead. [DONE]
 
 ## Implementation Details
