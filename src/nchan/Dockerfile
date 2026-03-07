@@ -1,11 +1,11 @@
 # ---------- build stage ----------
 # Use BuildKit for better performance: DOCKER_BUILDKIT=1 docker build .
-FROM nginx:alpine AS builder
+FROM nginx:1.27.4-alpine AS builder
 
 # Using a stable version of Nchan
-ARG NCHAN_VERSION=1.3.6
+ARG NCHAN_VERSION=1.3.8
 
-# Install build dependencies
+# Install build dependencies and tools
 RUN apk add --no-cache \
     build-base \
     pcre2-dev \
@@ -31,30 +31,37 @@ RUN ./configure --with-compat --add-dynamic-module=/nchan --with-cc-opt="-Wno-er
     make modules
 
 # ---------- runtime stage ----------
-FROM nginx:alpine
+FROM nginx:1.27.4-alpine
+
+# Set labels for OCI compatibility
+LABEL org.opencontainers.image.source="https://github.com/tailuge/scoreboard"
+LABEL org.opencontainers.image.description="Billiards Network Nchan Server"
 
 # Copy nchan module
 COPY --from=builder /nginx-src/objs/ngx_nchan_module.so /etc/nginx/modules/
 
-# Copy custom nginx.conf to load the module
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy configurations with correct ownership from the start
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
+COPY --chown=nginx:nginx nchan.conf /etc/nginx/conf.d/default.conf
+COPY --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
 
-# Copy site-specific configuration and assets
-# Note: we copy nchan.conf to default.conf to replace the default server block
-COPY nchan.conf /etc/nginx/conf.d/default.conf
-COPY index.html /usr/share/nginx/html/index.html
-
-# Security hardening: ensure nginx has permissions for its files without needing root
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /usr/share/nginx/html /etc/nginx
+# Security hardening: Prepare directories for non-root execution
+# Nginx Alpine image already has a 'nginx' user (UID 101)
+RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
+    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html /etc/nginx && \
+    chmod -R 755 /etc/nginx && \
+    # Remove default alpine nginx configs if they exist to avoid confusion
+    rm -rf /etc/nginx/conf.d/default.conf.orig
 
 # Healthcheck to ensure Nchan is responding
+# Note: we use wget (busybox) as it is native to alpine
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost/basic_status || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/basic_status || exit 1
 
-EXPOSE 80
+EXPOSE 8080
 
 # Run as non-root user
 USER nginx
 
+# Standard Nginx entrypoint will handle the daemon off if needed, but we keep the CMD for clarity
 CMD ["nginx", "-g", "daemon off;"]

@@ -47,7 +47,7 @@ setup_docker() {
 	# Stop existing container if it exists
 	docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-	docker run -d --rm -p $PORT:80 --name "$CONTAINER_NAME" tailuge/billiards-network
+	docker run -d --rm -p $PORT:8080 --name "$CONTAINER_NAME" tailuge/billiards-network
 
 	echo "--- Waiting for image to initialize ---"
 	sleep 2
@@ -81,8 +81,14 @@ run_curl_tests() {
 	echo ""
 
 	printf "\n--- Test: Publish to Lobby ---"
-	curl -s --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel"
-	echo ""
+	RESPONSE=$(curl -s -i --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel")
+	echo "$RESPONSE"
+	if echo "$RESPONSE" | grep -q "X-Server-Time:" && echo "$RESPONSE" | grep -q "X-User-Agent:" && echo "$RESPONSE" | grep -q "X-Origin:"; then
+		echo "Custom headers verified: X-Server-Time, X-User-Agent, and X-Origin are present."
+	else
+		echo "FAILED: Custom headers missing or incomplete in publisher response."
+		exit 1
+	fi
 
 	printf "\n--- Test: Pub/Sub Demo (Lobby) ---"
 	echo "Starting subscriber in background..."
