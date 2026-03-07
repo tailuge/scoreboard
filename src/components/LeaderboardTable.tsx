@@ -1,103 +1,50 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { navigateTo } from "@/utils/navigation"
+import { useLeaderboard } from "./hooks/useLeaderboard"
 
 interface LeaderboardTableProps {
   ruleType: string
   limit?: number
 }
 
-const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
-  ruleType,
-  limit,
-}) => {
-  const [data, setData] = useState<LeaderboardItem[]>([])
+type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
 
-  useEffect(() => {
-    const controller = new AbortController()
-    const fetchData = async () => {
-      try {
-        const params = new URLSearchParams({ ruletype: ruleType })
-        const url = `/api/rank?${params.toString()}`
-        const response = await fetch(url, { signal: controller.signal })
-        if (!response.ok) throw new Error("Failed to fetch leaderboard data")
-        const jsonData = await response.json()
-        setData(jsonData)
-      } catch (error) {
-        if (error instanceof Error && error.name === "AbortError") return
-        console.error("Error fetching leaderboard data:", error)
-      }
-    }
+const cellClass = "px-0 py-0.5"
+const hideReplay = "@max-[300px]:hidden"
 
-    fetchData()
-    return () => controller.abort()
-  }, [ruleType])
+function renderTrophy(index: number) {
+  const icons = ["🏆", "🥈", "🥉"]
+  const icon = icons[index]
+  if (!icon) return null
+  return <span className="text-[1.15rem]">{icon}</span>
+}
 
-  const handleLike = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation()
-    try {
-      const url = `/api/rank/${id}?ruletype=${ruleType}`
-      const response = await fetch(url, { method: "PUT" })
-      if (!response.ok) throw new Error("Failed to update likes")
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === id ? { ...item, likes: (item.likes || 0) + 1 } : item
-        )
-      )
-    } catch (error) {
-      console.error("Error updating likes:", error)
-    }
-  }
+const PlaceholderRow: React.FC<{ id: string }> = ({ id }) => (
+  <tr key={id}>
+    <td className={`text-left ${cellClass} pl-0 pr-0`}>&nbsp;</td>
+    <td className={`text-left ${cellClass} pl-0`}>&nbsp;</td>
+    <td className={`text-left ${cellClass}`}>&nbsp;</td>
+    <td className={hideReplay} />
+    <td />
+  </tr>
+)
 
-  const handleRowClick = (id: string) => {
-    const replayUrl = `/api/rank/${id}?ruletype=${ruleType}`
+const LeaderboardRow: React.FC<{
+  item: LeaderboardItem
+  index: number
+  ruleType: string
+  onLike: (e: React.MouseEvent, id: string) => void
+}> = ({ item, index, ruleType, onLike }) => {
+  const handleRowClick = () => {
+    const replayUrl = `/api/rank/${item.id}?ruletype=${ruleType}`
     navigateTo(replayUrl)
   }
 
-  const renderTrophy = (index: number) => {
-    const icons = ["🏆", "🥈", "🥉"]
-    const icon = icons[index]
-    if (!icon) return null
-    return <span className="text-[1.15rem]">{icon}</span>
-  }
-
-  type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
-
-  const rows = useMemo<LeaderboardRowItem[]>(() => {
-    const displayData = limit ? data.slice(0, limit) : data
-    const placeholdersCount = limit
-      ? Math.max(0, limit - displayData.length)
-      : 0
-    return [
-      ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
-      ...Array.from({ length: placeholdersCount }, (_, i) => ({
-        id: `placeholder-${ruleType}-${i}`,
-        name: "",
-        score: 0,
-        likes: 0,
-        isPlaceholder: true,
-      })),
-    ]
-  }, [data, limit, ruleType])
-
-  const cellClass = "px-0 py-0.5"
-  const hideReplay = "@max-[300px]:hidden"
-
-  const renderPlaceholderRow = (item: LeaderboardRowItem) => (
-    <tr key={item.id}>
-      <td className={`text-left ${cellClass} pl-0 pr-0`}>&nbsp;</td>
-      <td className={`text-left ${cellClass} pl-0`}>&nbsp;</td>
-      <td className={`text-left ${cellClass}`}>&nbsp;</td>
-      <td className={hideReplay} />
-      <td />
-    </tr>
-  )
-
-  const renderDataRow = (item: LeaderboardRowItem, index: number) => (
+  return (
     <tr
-      key={item.id}
       className={`group hover:bg-gray-800/30 transition-colors cursor-pointer stagger-item`}
-      onClick={() => handleRowClick(item.id)}
+      onClick={handleRowClick}
     >
       <td className={`text-left ${cellClass} pl-0 pr-0`}>
         <div className="flex items-center leading-none h-full">
@@ -119,7 +66,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       </td>
       <td className={`text-left ${cellClass}`}>
         <button
-          onClick={(e) => handleLike(e, item.id)}
+          onClick={(e) => onLike(e, item.id)}
           className="inline-flex items-center bg-gray-700/30 text-gray-500 border border-gray-600/30 rounded-full px-[4px] py-0 text-[10px] cursor-pointer hover:bg-gray-600 hover:text-white transition-all ml-1"
         >
           👍{"\u00A0"}
@@ -128,18 +75,50 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
       </td>
     </tr>
   )
+}
 
-  const renderRow = (item: LeaderboardRowItem, index: number) => {
-    if (item.isPlaceholder) {
-      return renderPlaceholderRow(item)
-    }
-    return renderDataRow(item, index)
+export function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
+  const { data, handleLike } = useLeaderboard(ruleType)
+
+  const rows = useMemo<LeaderboardRowItem[]>(() => {
+    const displayData = limit ? data.slice(0, limit) : data
+    const placeholdersCount = limit ? Math.max(0, limit - displayData.length) : 0
+
+    return [
+      ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
+      ...Array.from({ length: placeholdersCount }, (_, i) => ({
+        id: `placeholder-${ruleType}-${i}`,
+        name: "",
+        score: 0,
+        likes: 0,
+        isPlaceholder: true,
+      })),
+    ]
+  }, [data, limit, ruleType])
+
+  const onLike = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+    handleLike(id)
   }
 
   return (
     <div className="w-full overflow-x-auto @container">
       <table className="w-full table-fixed border-collapse text-sm">
-        <tbody>{rows.map(renderRow)}</tbody>
+        <tbody>
+          {rows.map((item, index) =>
+            item.isPlaceholder ? (
+              <PlaceholderRow key={item.id} id={item.id} />
+            ) : (
+              <LeaderboardRow
+                key={item.id}
+                item={item}
+                index={index}
+                ruleType={ruleType}
+                onLike={onLike}
+              />
+            )
+          )}
+        </tbody>
       </table>
     </div>
   )

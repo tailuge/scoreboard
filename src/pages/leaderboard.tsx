@@ -2,6 +2,7 @@ import React from "react"
 import { Seo } from "@/components/Seo"
 import LeaderboardTable from "../components/LeaderboardTable"
 import { GroupBox } from "../components/GroupBox"
+import { GAME_TYPES } from "@/config"
 
 const LeaderboardPage: React.FC = () => {
   return (
@@ -23,21 +24,16 @@ const LeaderboardPage: React.FC = () => {
       </h1>
 
       <div className="flex flex-wrap justify-center gap-6 items-start max-w-7xl mx-auto">
-        <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-          <GroupBox title="Snooker">
-            <LeaderboardTable ruleType="snooker" />
-          </GroupBox>
-        </div>
-        <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-          <GroupBox title="9-Ball">
-            <LeaderboardTable ruleType="nineball" />
-          </GroupBox>
-        </div>
-        <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]">
-          <GroupBox title="Three Cushion">
-            <LeaderboardTable ruleType="threecushion" />
-          </GroupBox>
-        </div>
+        {GAME_TYPES.map((game) => (
+          <div
+            key={game.ruleType}
+            className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] min-w-[320px]"
+          >
+            <GroupBox title={game.name}>
+              <LeaderboardTable ruleType={game.ruleType} />
+            </GroupBox>
+          </div>
+        ))}
       </div>
     </div>
   )
