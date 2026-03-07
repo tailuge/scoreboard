@@ -1,6 +1,6 @@
 #!/bin/bash
-# Minimal Nchan test script 
-set -e
+# Minimal Nchan test script
+set -uo pipefail
 
 # Defaults
 DEFAULT_BASE_URL="http://localhost:80"
@@ -9,6 +9,9 @@ BASE_URL="$DEFAULT_BASE_URL"
 PRODUCTION=false
 CONTAINER_NAME="nchan-test-local"
 PORT=80
+DOCKER_IMAGE="tailuge/billiards-network"
+TOTAL_TESTS=0
+FAILED_TESTS=0
 
 # Resolve project root relative to script location
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -44,13 +47,58 @@ setup_docker() {
 	(cd "$ROOT_DIR" && yarn docker:build)
 
 	echo "--- Starting Nchan container ---"
-	# Stop existing container if it exists
-	docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+	# Ensure no stale container blocks startup
+	docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-	docker run -d --rm -p $PORT:80 --name "$CONTAINER_NAME" tailuge/billiards-network
+	if ! docker run -d --user root -p "$PORT":80 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"; then
+		echo "Failed to start container $CONTAINER_NAME."
+		return 1
+	fi
 
 	echo "--- Waiting for image to initialize ---"
-	sleep 2
+	local attempt=1
+	local max_attempts=30
+	while [[ $attempt -le $max_attempts ]]; do
+		if curl -fsS --max-time 2 "$BASE_URL/basic_status" >/dev/null 2>&1; then
+			echo "Container is healthy."
+			return 0
+		fi
+		if ! docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+			echo "Container exited before becoming healthy. Last logs:"
+			docker logs "$CONTAINER_NAME" 2>&1 || true
+			return 1
+		fi
+		sleep 1
+		attempt=$((attempt + 1))
+	done
+
+	echo "Timed out waiting for healthy Nchan container. Last logs:"
+	docker logs "$CONTAINER_NAME" 2>&1 || true
+	return 1
+}
+
+record_result() {
+	local exit_code=$1
+	local test_name=$2
+	TOTAL_TESTS=$((TOTAL_TESTS + 1))
+	if [[ $exit_code -eq 0 ]]; then
+		echo "PASS: $test_name"
+	else
+		echo "FAIL: $test_name"
+		FAILED_TESTS=$((FAILED_TESTS + 1))
+	fi
+}
+
+run_test() {
+	local test_name=$1
+	shift
+	echo ""
+	echo "--- Test: $test_name ---"
+	if "$@"; then
+		record_result 0 "$test_name"
+	else
+		record_result 1 "$test_name"
+	fi
 	return 0
 }
 
@@ -58,6 +106,7 @@ cleanup() {
 	if [[ "$PRODUCTION" == "false" ]]; then
 		echo "--- Shutting down local container ---"
 		docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+		docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
 	fi
 	return 0
 }
@@ -69,69 +118,63 @@ run_curl_tests() {
 	echo "---------------------------------------"
 	echo ""
 
-	printf "\n--- Health Check: /basic_status ---\n"
-	curl -s --max-time 5 "$BASE_URL/basic_status"
+	run_test "Health Check (/basic_status)" curl -fsS --max-time 5 "$BASE_URL/basic_status"
 
-	printf "\n\n--- Stats: /nchan_stats ---"
-	curl -s --max-time 5 "$BASE_URL/nchan_stats"
+	run_test "Stats (/nchan_stats)" curl -fsS --max-time 5 "$BASE_URL/nchan_stats"
+
+	run_test "Index (/index.html)" curl -fsS --max-time 5 "$BASE_URL/index.html"
+
+	run_test "Publish to Lobby + custom headers" bash -c "
+		RESPONSE=\$(curl -sS -i --max-time 5 -X POST -H 'Origin: $BASE_URL' -d '{\"event\": \"test\"}' '$BASE_URL/publish/lobby/testchannel') || exit 1
+		echo \"\$RESPONSE\"
+		echo \"\$RESPONSE\" | grep -q 'X-Server-Time:' &&
+			echo \"\$RESPONSE\" | grep -q 'X-User-Agent:' &&
+			echo \"\$RESPONSE\" | grep -q 'X-Origin:'
+	"
+
+	run_test "Pub/Sub Demo (Lobby)" bash -c "
+		echo 'Starting subscriber in background...'
+		curl -fsS --max-time 8 '$BASE_URL/subscribe/lobby/demo' >/tmp/nchan-lobby-sub.out &
+		SUB_PID=\$!
+		sleep 1
+		echo 'Publishing message to demo channel...'
+		curl -fsS --max-time 5 -X POST -d 'Hello from Pub/Sub test' '$BASE_URL/publish/lobby/demo' >/dev/null
+		wait \$SUB_PID
+		grep -q 'Hello from Pub/Sub test' /tmp/nchan-lobby-sub.out
+	"
+
+	run_test "WebSocket Handshake (ws/wss)" bash -c "
+		HOST=\$(echo '$BASE_URL' | sed -E 's@^[[:space:]]*https?://([^/]+).*@\\1@')
+		curl -sS -i -N --http1.1 --max-time 5 \
+			-H 'Connection: Upgrade' \
+			-H 'Upgrade: websocket' \
+			-H \"Host: \$HOST\" \
+			-H 'Origin: $BASE_URL' \
+			-H 'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==' \
+			-H 'Sec-WebSocket-Version: 13' \
+			'$BASE_URL/subscribe/lobby/handshake' | grep -m 1 'HTTP/1.1 101'
+	"
+
+	run_test "Publish to Presence" curl -fsS --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/lobby"
+
+	run_test "Presence Pub/Sub (buffered messages)" bash -c "
+		echo 'Publishing 3 presence messages...'
+		curl -fsS --max-time 5 -X POST -d '{\"userId\":\"user1\",\"userName\":\"Alice\",\"type\":\"join\"}' '$BASE_URL/publish/presence/lobby' >/dev/null
+		curl -fsS --max-time 5 -X POST -d '{\"userId\":\"user2\",\"userName\":\"Bob\",\"type\":\"join\"}' '$BASE_URL/publish/presence/lobby' >/dev/null
+		curl -fsS --max-time 5 -X POST -d '{\"userId\":\"user1\",\"userName\":\"Alice\",\"type\":\"heartbeat\"}' '$BASE_URL/publish/presence/lobby' >/dev/null
+		echo 'Starting subscriber (should receive buffered messages)...'
+		RESP=\$(curl -fsS --max-time 5 '$BASE_URL/subscribe/presence/lobby') || exit 1
+		echo \"\$RESP\"
+		echo \"\$RESP\" | grep -q 'userId'
+	"
+
 	echo ""
-
-	printf "\n\n--- Index: /index.html ---"
-	curl -s --max-time 5 "$BASE_URL/index.html"
-	echo ""
-
-	printf "\n--- Test: Publish to Lobby ---"
-	RESPONSE=$(curl -s -i --max-time 5 -X POST -d '{"event": "test"}' "$BASE_URL/publish/lobby/testchannel")
-	echo "$RESPONSE"
-	if echo "$RESPONSE" | grep -q "X-Server-Time:" && echo "$RESPONSE" | grep -q "X-User-Agent:" && echo "$RESPONSE" | grep -q "X-Origin:"; then
-		echo "Custom headers verified: X-Server-Time, X-User-Agent, and X-Origin are present."
-	else
-		echo "FAILED: Custom headers missing or incomplete in publisher response."
-		exit 1
+	echo "---------------------------------------"
+	echo "--- Result: $((TOTAL_TESTS - FAILED_TESTS))/$TOTAL_TESTS passed ---"
+	echo "---------------------------------------"
+	if [[ $FAILED_TESTS -gt 0 ]]; then
+		return 1
 	fi
-
-	printf "\n--- Test: Pub/Sub Demo (Lobby) ---"
-	echo "Starting subscriber in background..."
-	curl -s --max-time 5 "$BASE_URL/subscribe/lobby/demo" &
-	SUB_PID=$!
-	sleep 1
-	echo "Publishing message to demo channel..."
-	curl -s --max-time 5 -X POST -d "Hello from Pub/Sub test" "$BASE_URL/publish/lobby/demo"
-	wait $SUB_PID
-	printf "\nSubscriber received message and exited.\n"
-
-	printf "\n--- Test: WebSocket Handshake (ws/wss) ---"
-	# Extract host for the Host header
-	HOST=$(echo "$BASE_URL" | sed -E 's@^[[:space:]]*https?://([^/]+).*@\1@')
-
-	if curl -s -i -N --http1.1 --max-time 5 \
-		-H "Connection: Upgrade" \
-		-H "Upgrade: websocket" \
-		-H "Host: $HOST" \
-		-H "Origin: $BASE_URL" \
-		-H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
-		-H "Sec-WebSocket-Version: 13" \
-		"$BASE_URL/subscribe/lobby/handshake" | grep -m 1 "HTTP/1.1 101"; then
-		echo "Handshake successful (HTTP 101 received)"
-	else
-		echo "Handshake failed or timed out"
-		exit 1
-	fi
-
-	printf "\n--- Test: Publish to Presence ---"
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/lobby"
-	echo ""
-
-	printf "\n--- Test: Presence Pub/Sub (buffered messages) ---"
-	echo "Publishing 3 presence messages..."
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"join"}' "$BASE_URL/publish/presence/lobby"
-	curl -s --max-time 5 -X POST -d '{"userId":"user2","userName":"Bob","type":"join"}' "$BASE_URL/publish/presence/lobby"
-	curl -s --max-time 5 -X POST -d '{"userId":"user1","userName":"Alice","type":"heartbeat"}' "$BASE_URL/publish/presence/lobby"
-	echo "Starting subscriber (should receive buffered messages)..."
-	curl -s --max-time 5 "$BASE_URL/subscribe/presence/lobby"
-	printf "\nPresence subscriber received buffered messages.\n"
-
-	echo "--- Test Completed successfully ---"
 	return 0
 }
 
@@ -139,5 +182,8 @@ run_curl_tests() {
 trap cleanup EXIT
 
 # Execution flow
-setup_docker
+if ! setup_docker; then
+	exit 1
+fi
+
 run_curl_tests
