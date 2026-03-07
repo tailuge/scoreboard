@@ -1,0 +1,1738 @@
+{
+  "version": 8,
+  "created": "2026-03-07T15:59:05+00:00",
+  "updated": "2026-03-07T15:59:05+00:00",
+  "queue_order": [
+    "subjective::abstraction_fitness",
+    "subjective::ai_generated_debt",
+    "subjective::api_surface_coherence",
+    "subjective::authorization_consistency",
+    "subjective::contract_coherence",
+    "subjective::convention_outlier",
+    "subjective::cross_module_architecture",
+    "subjective::dependency_health",
+    "subjective::design_coherence",
+    "subjective::error_consistency",
+    "subjective::high_level_elegance",
+    "subjective::incomplete_migration",
+    "subjective::initialization_coupling",
+    "subjective::logic_clarity",
+    "subjective::low_level_elegance",
+    "subjective::mid_level_elegance",
+    "subjective::naming_quality",
+    "subjective::package_organization",
+    "subjective::test_strategy",
+    "subjective::type_safety"
+  ],
+  "deferred": [],
+  "skipped": {},
+  "active_cluster": null,
+  "overrides": {
+    "flat_dirs::src/tests": {
+      "issue_id": "flat_dirs::src/tests",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/flat_dirs-overload",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "flat_dirs::src": {
+      "issue_id": "flat_dirs::src",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/flat_dirs-overload",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "flat_dirs::src/components": {
+      "issue_id": "flat_dirs::src/components",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/flat_dirs-overload",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "single_use::src/components/hooks/useAutoJoin.ts": {
+      "issue_id": "single_use::src/components/hooks/useAutoJoin.ts",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "single_use::src/components/HighscoreGrid.tsx": {
+      "issue_id": "single_use::src/components/HighscoreGrid.tsx",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "single_use::src/components/LogoSection.tsx": {
+      "issue_id": "single_use::src/components/LogoSection.tsx",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "single_use::src/utils/timeago.ts": {
+      "issue_id": "single_use::src/utils/timeago.ts",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "orphaned::src/tests/jest.setup.ts": {
+      "issue_id": "orphaned::src/tests/jest.setup.ts",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "orphaned::playwright.config.ts": {
+      "issue_id": "orphaned::playwright.config.ts",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/utils/api.ts::transitive_only": {
+      "issue_id": "test_coverage::src/utils/api.ts::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/GameButtons.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/GameButtons.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/HighscoreGrid.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/HighscoreGrid.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/LiveMatchesPanel.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/LiveMatchesPanel.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/LiveTableItem.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/LiveTableItem.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/hooks/useLeaderboard.ts::transitive_only": {
+      "issue_id": "test_coverage::src/components/hooks/useLeaderboard.ts::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::playwright.config.ts::untested_module": {
+      "issue_id": "test_coverage::playwright.config.ts::untested_module",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/LogoSection.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/LogoSection.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/LocationTimeBadge.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/LocationTimeBadge.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/GameGrid.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/GameGrid.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/GameButtonOptions.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/GameButtonOptions.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/utils/timeago.ts::transitive_only": {
+      "issue_id": "test_coverage::src/utils/timeago.ts::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/Seo.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/Seo.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/GroupBox.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/GroupBox.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/PlayerMatchDisplay.tsx::transitive_only": {
+      "issue_id": "test_coverage::src/components/PlayerMatchDisplay.tsx::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/components/hooks/useAutoJoin.ts::transitive_only": {
+      "issue_id": "test_coverage::src/components/hooks/useAutoJoin.ts::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "test_coverage::src/utils/cors.ts::transitive_only": {
+      "issue_id": "test_coverage::src/utils/cors.ts::transitive_only",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::playwright.config.ts::hardcoded_url": {
+      "issue_id": "smells::playwright.config.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/BallIcon.tsx::hardcoded_url": {
+      "issue_id": "smells::src/components/BallIcon.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/LogoSection.tsx::hardcoded_url": {
+      "issue_id": "smells::src/components/LogoSection.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/Seo.tsx::hardcoded_url": {
+      "issue_id": "smells::src/components/Seo.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/game.tsx::hardcoded_url": {
+      "issue_id": "smells::src/pages/game.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/leaderboard.tsx::hardcoded_url": {
+      "issue_id": "smells::src/pages/leaderboard.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/lobby.tsx::hardcoded_url": {
+      "issue_id": "smells::src/pages/lobby.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/proxy.ts::hardcoded_url": {
+      "issue_id": "smells::src/proxy.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/scoretable.ts::hardcoded_url": {
+      "issue_id": "smells::src/services/scoretable.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/shortener.ts::hardcoded_url": {
+      "issue_id": "smells::src/services/shortener.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/IFrameOverlay.test.tsx::hardcoded_url": {
+      "issue_id": "smells::src/tests/IFrameOverlay.test.tsx::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.hiscore.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.hiscore.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.match-replay.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.match-replay.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.match-results.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.match-results.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.rank.id.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.rank.id.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.rank.index.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.rank.index.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.replay.id.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.replay.id.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.shorten.test.ts::hardcoded_url": {
+      "issue_id": "smells::src/tests/api.shorten.test.ts::hardcoded_url",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/usePresenceList.ts::as_any_cast": {
+      "issue_id": "smells::src/components/hooks/usePresenceList.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/MatchResultService.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/MatchResultService.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/TableService.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/TableService.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.doc.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.doc.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.hiscore.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.hiscore.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.match-replay.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.match-replay.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.match-results.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.match-results.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.rank.id.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.rank.id.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.rank.index.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.rank.index.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.replay.id.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.replay.id.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.shorten.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.shorten.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.tables.find-or-create.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.tables.find-or-create.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.tables.index.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.tables.index.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.tables.join.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.tables.join.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.tables.spectate.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.tables.spectate.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.usage.metric.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/api.usage.metric.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/contexts.test.tsx::as_any_cast": {
+      "issue_id": "smells::src/tests/contexts.test.tsx::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/jest.setup.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/jest.setup.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/mockkv.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/mockkv.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/nchan/nchanTestUtils.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/nchan/nchanTestUtils.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/nchan/nchansub.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/nchan/nchansub.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/pages._app.test.tsx::as_any_cast": {
+      "issue_id": "smells::src/tests/pages._app.test.tsx::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/scoretable.test.ts::as_any_cast": {
+      "issue_id": "smells::src/tests/scoretable.test.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/utils/ua.ts::as_any_cast": {
+      "issue_id": "smells::src/utils/ua.ts::as_any_cast",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/contexts/LobbyContext.tsx::any_type": {
+      "issue_id": "smells::src/contexts/LobbyContext.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/nchan/nchanpub.ts::any_type": {
+      "issue_id": "smells::src/nchan/nchanpub.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/nchan/types.ts::any_type": {
+      "issue_id": "smells::src/nchan/types.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/api-doc.tsx::any_type": {
+      "issue_id": "smells::src/pages/api-doc.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/api/hiscore.ts::any_type": {
+      "issue_id": "smells::src/pages/api/hiscore.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/tablelogs.tsx::any_type": {
+      "issue_id": "smells::src/pages/tablelogs.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/TableService.ts::any_type": {
+      "issue_id": "smells::src/services/TableService.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/scoretable.ts::any_type": {
+      "issue_id": "smells::src/services/scoretable.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/shortener.ts::any_type": {
+      "issue_id": "smells::src/services/shortener.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/RecentGamesList.test.tsx::any_type": {
+      "issue_id": "smells::src/tests/RecentGamesList.test.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.doc.test.ts::any_type": {
+      "issue_id": "smells::src/tests/api.doc.test.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/contexts.test.tsx::any_type": {
+      "issue_id": "smells::src/tests/contexts.test.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/jest.setup.ts::any_type": {
+      "issue_id": "smells::src/tests/jest.setup.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/mockkv.ts::any_type": {
+      "issue_id": "smells::src/tests/mockkv.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/pages.api-doc.test.tsx::any_type": {
+      "issue_id": "smells::src/tests/pages.api-doc.test.tsx::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/testUtils.ts::any_type": {
+      "issue_id": "smells::src/tests/testUtils.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/ua.test.ts::any_type": {
+      "issue_id": "smells::src/tests/ua.test.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/utils/api.ts::any_type": {
+      "issue_id": "smells::src/utils/api.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/utils/logger.ts::any_type": {
+      "issue_id": "smells::src/utils/logger.ts::any_type",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::console_error_no_throw": {
+      "issue_id": "smells::src/components/hooks/useLeaderboard.ts::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::console_error_no_throw": {
+      "issue_id": "smells::src/components/hooks/useLobbyTables.ts::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/nchan/nchansub.ts::console_error_no_throw": {
+      "issue_id": "smells::src/nchan/nchansub.ts::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/lobby.tsx::console_error_no_throw": {
+      "issue_id": "smells::src/pages/lobby.tsx::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/server-logs.tsx::console_error_no_throw": {
+      "issue_id": "smells::src/pages/server-logs.tsx::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/contexts.test.tsx::console_error_no_throw": {
+      "issue_id": "smells::src/tests/contexts.test.tsx::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/mockkv.ts::console_error_no_throw": {
+      "issue_id": "smells::src/tests/mockkv.ts::console_error_no_throw",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::nested_closure": {
+      "issue_id": "smells::src/components/hooks/useLeaderboard.ts::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::nested_closure": {
+      "issue_id": "smells::src/components/hooks/useLobbyTables.ts::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/game.tsx::nested_closure": {
+      "issue_id": "smells::src/pages/game.tsx::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/lobby.tsx::nested_closure": {
+      "issue_id": "smells::src/pages/lobby.tsx::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/server-logs.tsx::nested_closure": {
+      "issue_id": "smells::src/pages/server-logs.tsx::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/tablelogs.tsx::nested_closure": {
+      "issue_id": "smells::src/pages/tablelogs.tsx::nested_closure",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/lib/swagger.ts::async_no_await": {
+      "issue_id": "smells::src/lib/swagger.ts::async_no_await",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-async_no_await",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/api/doc.ts::async_no_await": {
+      "issue_id": "smells::src/pages/api/doc.ts::async_no_await",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-async_no_await",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/api/match-results.ts::async_no_await": {
+      "issue_id": "smells::src/pages/api/match-results.ts::async_no_await",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-async_no_await",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/api/tables/[tableId]/index.ts::async_no_await": {
+      "issue_id": "smells::src/pages/api/tables/[tableId]/index.ts::async_no_await",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-async_no_await",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/TableService.test.ts::ts_ignore": {
+      "issue_id": "smells::src/tests/TableService.test.ts::ts_ignore",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-ts_ignore",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/api.doc.test.ts::ts_ignore": {
+      "issue_id": "smells::src/tests/api.doc.test.ts::ts_ignore",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-ts_ignore",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::swallowed_error": {
+      "issue_id": "smells::src/components/hooks/useLeaderboard.ts::swallowed_error",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::swallowed_error": {
+      "issue_id": "smells::src/components/hooks/useLobbyTables.ts::swallowed_error",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/mockkv.ts::swallowed_error": {
+      "issue_id": "smells::src/tests/mockkv.ts::swallowed_error",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/BallIcon.tsx::hardcoded_color": {
+      "issue_id": "smells::src/components/BallIcon.tsx::hardcoded_color",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/LogoSection.tsx::hardcoded_color": {
+      "issue_id": "smells::src/components/LogoSection.tsx::hardcoded_color",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::high_cyclomatic_complexity": {
+      "issue_id": "smells::src/components/hooks/useLobbyTables.ts::high_cyclomatic_complexity",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/lobby.tsx::high_cyclomatic_complexity": {
+      "issue_id": "smells::src/pages/lobby.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/TableService.ts::magic_number": {
+      "issue_id": "smells::src/services/TableService.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/services/scoretable.ts::magic_number": {
+      "issue_id": "smells::src/services/scoretable.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/MatchResultCard.test.tsx::magic_number": {
+      "issue_id": "smells::src/tests/MatchResultCard.test.tsx::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/MatchResultService.test.ts::magic_number": {
+      "issue_id": "smells::src/tests/MatchResultService.test.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/TableService.test.ts::magic_number": {
+      "issue_id": "smells::src/tests/TableService.test.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/UsageService.test.ts::magic_number": {
+      "issue_id": "smells::src/tests/UsageService.test.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/usePresenceList.test.ts::magic_number": {
+      "issue_id": "smells::src/tests/usePresenceList.test.ts::magic_number",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/pages/index.tsx::stub_function": {
+      "issue_id": "smells::src/pages/index.tsx::stub_function",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-stub_function",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "smells::src/tests/RecentGamesList.test.tsx::stub_function": {
+      "issue_id": "smells::src/tests/RecentGamesList.test.tsx::stub_function",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/smells-stub_function",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::playwright.config.ts::unreviewed": {
+      "issue_id": "subjective_review::playwright.config.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/BallIcon.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/BallIcon.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/GameButtonOptions.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/GameButtonOptions.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/GameButtons.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/GameButtons.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/GameGrid.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/GameGrid.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/GroupBox.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/GroupBox.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/HighscoreGrid.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/HighscoreGrid.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/IFrameOverlay.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/IFrameOverlay.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/LeaderboardTable.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/LeaderboardTable.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/LiveMatchesList.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/LiveMatchesList.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/LiveTableItem.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/LiveTableItem.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/LocationTimeBadge.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/LocationTimeBadge.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/LogoSection.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/LogoSection.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/MatchHistoryList.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/MatchHistoryList.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/MatchResultCard.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/MatchResultCard.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/OnlineUsersPopover.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/OnlineUsersPopover.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/PlayModal.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/PlayModal.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/PlayerMatchDisplay.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/PlayerMatchDisplay.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/RecentGamesList.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/RecentGamesList.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/Seo.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/Seo.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/User.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/components/User.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/hooks/useAutoJoin.ts::unreviewed": {
+      "issue_id": "subjective_review::src/components/hooks/useAutoJoin.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/hooks/useLeaderboard.ts::unreviewed": {
+      "issue_id": "subjective_review::src/components/hooks/useLeaderboard.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/hooks/useLobbyTables.ts::unreviewed": {
+      "issue_id": "subjective_review::src/components/hooks/useLobbyTables.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/hooks/useMatchHistory.ts::unreviewed": {
+      "issue_id": "subjective_review::src/components/hooks/useMatchHistory.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/components/hooks/usePresenceList.ts::unreviewed": {
+      "issue_id": "subjective_review::src/components/hooks/usePresenceList.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/contexts/LobbyContext.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/contexts/LobbyContext.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/contexts/UserContext.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/contexts/UserContext.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/nchan/nchanpub.ts::unreviewed": {
+      "issue_id": "subjective_review::src/nchan/nchanpub.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/nchan/nchansub.ts::unreviewed": {
+      "issue_id": "subjective_review::src/nchan/nchansub.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/_app.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/_app.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api-doc.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api-doc.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/hiscore.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/hiscore.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/match-replay.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/match-replay.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/match-results.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/match-results.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/rank/[id].ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/rank/[id].ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/replay/[id].ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/replay/[id].ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/shorten.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/shorten.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/complete.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/tables/[tableId]/complete.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/delete.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/tables/[tableId]/delete.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/join.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/tables/[tableId]/join.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/spectate.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/tables/[tableId]/spectate.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/tables/find-or-create.ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/tables/find-or-create.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/api/usage/[metric].ts::unreviewed": {
+      "issue_id": "subjective_review::src/pages/api/usage/[metric].ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/game.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/game.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/leaderboard.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/leaderboard.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/lobby.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/lobby.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/server-logs.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/server-logs.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/pages/tablelogs.tsx::unreviewed": {
+      "issue_id": "subjective_review::src/pages/tablelogs.tsx::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/proxy.ts::unreviewed": {
+      "issue_id": "subjective_review::src/proxy.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/services/MatchResultService.ts::unreviewed": {
+      "issue_id": "subjective_review::src/services/MatchResultService.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/services/TableService.ts::unreviewed": {
+      "issue_id": "subjective_review::src/services/TableService.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/services/scoretable.ts::unreviewed": {
+      "issue_id": "subjective_review::src/services/scoretable.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/services/shortener.ts::unreviewed": {
+      "issue_id": "subjective_review::src/services/shortener.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/services/usageservice.ts::unreviewed": {
+      "issue_id": "subjective_review::src/services/usageservice.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/types/match.ts::unreviewed": {
+      "issue_id": "subjective_review::src/types/match.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/GameUrl.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/GameUrl.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/api.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/api.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/cors.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/cors.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/locale.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/locale.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/logger.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/logger.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/timeago.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/timeago.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::src/utils/ua.ts::unreviewed": {
+      "issue_id": "subjective_review::src/utils/ua.ts::unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective_review::.::holistic_unreviewed": {
+      "issue_id": "subjective_review::.::holistic_unreviewed",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::abstraction_fitness": {
+      "issue_id": "subjective::abstraction_fitness",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::ai_generated_debt": {
+      "issue_id": "subjective::ai_generated_debt",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::api_surface_coherence": {
+      "issue_id": "subjective::api_surface_coherence",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::authorization_consistency": {
+      "issue_id": "subjective::authorization_consistency",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::contract_coherence": {
+      "issue_id": "subjective::contract_coherence",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::convention_outlier": {
+      "issue_id": "subjective::convention_outlier",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::cross_module_architecture": {
+      "issue_id": "subjective::cross_module_architecture",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::dependency_health": {
+      "issue_id": "subjective::dependency_health",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::design_coherence": {
+      "issue_id": "subjective::design_coherence",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::error_consistency": {
+      "issue_id": "subjective::error_consistency",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::high_level_elegance": {
+      "issue_id": "subjective::high_level_elegance",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::incomplete_migration": {
+      "issue_id": "subjective::incomplete_migration",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::initialization_coupling": {
+      "issue_id": "subjective::initialization_coupling",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::logic_clarity": {
+      "issue_id": "subjective::logic_clarity",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::low_level_elegance": {
+      "issue_id": "subjective::low_level_elegance",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::mid_level_elegance": {
+      "issue_id": "subjective::mid_level_elegance",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::naming_quality": {
+      "issue_id": "subjective::naming_quality",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::package_organization": {
+      "issue_id": "subjective::package_organization",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::test_strategy": {
+      "issue_id": "subjective::test_strategy",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    },
+    "subjective::type_safety": {
+      "issue_id": "subjective::type_safety",
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    }
+  },
+  "clusters": {
+    "auto/flat_dirs-overload": {
+      "name": "auto/flat_dirs-overload",
+      "description": "Fix 3 overload issues",
+      "issue_ids": [
+        "flat_dirs::src/tests",
+        "flat_dirs::src",
+        "flat_dirs::src/components"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::flat_dirs::overload",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/single_use": {
+      "name": "auto/single_use",
+      "description": "Fix 4 single_use issues",
+      "issue_ids": [
+        "single_use::src/components/hooks/useAutoJoin.ts",
+        "single_use::src/components/HighscoreGrid.tsx",
+        "single_use::src/components/LogoSection.tsx",
+        "single_use::src/utils/timeago.ts"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "detector::single_use",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/orphaned": {
+      "name": "auto/orphaned",
+      "description": "Fix 2 orphaned issues",
+      "issue_ids": [
+        "orphaned::src/tests/jest.setup.ts",
+        "orphaned::playwright.config.ts"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "detector::orphaned",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/test_coverage": {
+      "name": "auto/test_coverage",
+      "description": "Fix 17 test coverage issues",
+      "issue_ids": [
+        "test_coverage::src/utils/api.ts::transitive_only",
+        "test_coverage::src/components/GameButtons.tsx::transitive_only",
+        "test_coverage::src/components/HighscoreGrid.tsx::transitive_only",
+        "test_coverage::src/components/LiveMatchesPanel.tsx::transitive_only",
+        "test_coverage::src/components/LiveTableItem.tsx::transitive_only",
+        "test_coverage::src/components/hooks/useLeaderboard.ts::transitive_only",
+        "test_coverage::playwright.config.ts::untested_module",
+        "test_coverage::src/components/LogoSection.tsx::transitive_only",
+        "test_coverage::src/components/LocationTimeBadge.tsx::transitive_only",
+        "test_coverage::src/components/GameGrid.tsx::transitive_only",
+        "test_coverage::src/components/GameButtonOptions.tsx::transitive_only",
+        "test_coverage::src/utils/timeago.ts::transitive_only",
+        "test_coverage::src/components/Seo.tsx::transitive_only",
+        "test_coverage::src/components/GroupBox.tsx::transitive_only",
+        "test_coverage::src/components/PlayerMatchDisplay.tsx::transitive_only",
+        "test_coverage::src/components/hooks/useAutoJoin.ts::transitive_only",
+        "test_coverage::src/utils/cors.ts::transitive_only"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage",
+      "action": "add tests for untested production modules \u2014 prioritize by import count",
+      "user_modified": false
+    },
+    "auto/smells-hardcoded_url": {
+      "name": "auto/smells-hardcoded_url",
+      "description": "Fix 18 hardcoded url issues",
+      "issue_ids": [
+        "smells::playwright.config.ts::hardcoded_url",
+        "smells::src/components/BallIcon.tsx::hardcoded_url",
+        "smells::src/components/LogoSection.tsx::hardcoded_url",
+        "smells::src/components/Seo.tsx::hardcoded_url",
+        "smells::src/pages/game.tsx::hardcoded_url",
+        "smells::src/pages/leaderboard.tsx::hardcoded_url",
+        "smells::src/pages/lobby.tsx::hardcoded_url",
+        "smells::src/proxy.ts::hardcoded_url",
+        "smells::src/services/scoretable.ts::hardcoded_url",
+        "smells::src/services/shortener.ts::hardcoded_url",
+        "smells::src/tests/IFrameOverlay.test.tsx::hardcoded_url",
+        "smells::src/tests/api.hiscore.test.ts::hardcoded_url",
+        "smells::src/tests/api.match-replay.test.ts::hardcoded_url",
+        "smells::src/tests/api.match-results.test.ts::hardcoded_url",
+        "smells::src/tests/api.rank.id.test.ts::hardcoded_url",
+        "smells::src/tests/api.rank.index.test.ts::hardcoded_url",
+        "smells::src/tests/api.replay.id.test.ts::hardcoded_url",
+        "smells::src/tests/api.shorten.test.ts::hardcoded_url"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::hardcoded_url",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-as_any_cast": {
+      "name": "auto/smells-as_any_cast",
+      "description": "Fix 24 as any cast issues",
+      "issue_ids": [
+        "smells::src/components/hooks/usePresenceList.ts::as_any_cast",
+        "smells::src/tests/MatchResultService.test.ts::as_any_cast",
+        "smells::src/tests/TableService.test.ts::as_any_cast",
+        "smells::src/tests/api.doc.test.ts::as_any_cast",
+        "smells::src/tests/api.hiscore.test.ts::as_any_cast",
+        "smells::src/tests/api.match-replay.test.ts::as_any_cast",
+        "smells::src/tests/api.match-results.test.ts::as_any_cast",
+        "smells::src/tests/api.rank.id.test.ts::as_any_cast",
+        "smells::src/tests/api.rank.index.test.ts::as_any_cast",
+        "smells::src/tests/api.replay.id.test.ts::as_any_cast",
+        "smells::src/tests/api.shorten.test.ts::as_any_cast",
+        "smells::src/tests/api.tables.find-or-create.test.ts::as_any_cast",
+        "smells::src/tests/api.tables.index.test.ts::as_any_cast",
+        "smells::src/tests/api.tables.join.test.ts::as_any_cast",
+        "smells::src/tests/api.tables.spectate.test.ts::as_any_cast",
+        "smells::src/tests/api.usage.metric.test.ts::as_any_cast",
+        "smells::src/tests/contexts.test.tsx::as_any_cast",
+        "smells::src/tests/jest.setup.ts::as_any_cast",
+        "smells::src/tests/mockkv.ts::as_any_cast",
+        "smells::src/tests/nchan/nchanTestUtils.ts::as_any_cast",
+        "smells::src/tests/nchan/nchansub.test.ts::as_any_cast",
+        "smells::src/tests/pages._app.test.tsx::as_any_cast",
+        "smells::src/tests/scoretable.test.ts::as_any_cast",
+        "smells::src/utils/ua.ts::as_any_cast"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::as_any_cast",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-any_type": {
+      "name": "auto/smells-any_type",
+      "description": "Fix 19 any type issues",
+      "issue_ids": [
+        "smells::src/contexts/LobbyContext.tsx::any_type",
+        "smells::src/nchan/nchanpub.ts::any_type",
+        "smells::src/nchan/types.ts::any_type",
+        "smells::src/pages/api-doc.tsx::any_type",
+        "smells::src/pages/api/hiscore.ts::any_type",
+        "smells::src/pages/tablelogs.tsx::any_type",
+        "smells::src/services/TableService.ts::any_type",
+        "smells::src/services/scoretable.ts::any_type",
+        "smells::src/services/shortener.ts::any_type",
+        "smells::src/tests/RecentGamesList.test.tsx::any_type",
+        "smells::src/tests/api.doc.test.ts::any_type",
+        "smells::src/tests/contexts.test.tsx::any_type",
+        "smells::src/tests/jest.setup.ts::any_type",
+        "smells::src/tests/mockkv.ts::any_type",
+        "smells::src/tests/pages.api-doc.test.tsx::any_type",
+        "smells::src/tests/testUtils.ts::any_type",
+        "smells::src/tests/ua.test.ts::any_type",
+        "smells::src/utils/api.ts::any_type",
+        "smells::src/utils/logger.ts::any_type"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::any_type",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-console_error_no_throw": {
+      "name": "auto/smells-console_error_no_throw",
+      "description": "Fix 7 console error no throw issues",
+      "issue_ids": [
+        "smells::src/components/hooks/useLeaderboard.ts::console_error_no_throw",
+        "smells::src/components/hooks/useLobbyTables.ts::console_error_no_throw",
+        "smells::src/nchan/nchansub.ts::console_error_no_throw",
+        "smells::src/pages/lobby.tsx::console_error_no_throw",
+        "smells::src/pages/server-logs.tsx::console_error_no_throw",
+        "smells::src/tests/contexts.test.tsx::console_error_no_throw",
+        "smells::src/tests/mockkv.ts::console_error_no_throw"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::console_error_no_throw",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-nested_closure": {
+      "name": "auto/smells-nested_closure",
+      "description": "Fix 6 nested closure issues",
+      "issue_ids": [
+        "smells::src/components/hooks/useLeaderboard.ts::nested_closure",
+        "smells::src/components/hooks/useLobbyTables.ts::nested_closure",
+        "smells::src/pages/game.tsx::nested_closure",
+        "smells::src/pages/lobby.tsx::nested_closure",
+        "smells::src/pages/server-logs.tsx::nested_closure",
+        "smells::src/pages/tablelogs.tsx::nested_closure"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::nested_closure",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-async_no_await": {
+      "name": "auto/smells-async_no_await",
+      "description": "Fix 4 async no await issues",
+      "issue_ids": [
+        "smells::src/lib/swagger.ts::async_no_await",
+        "smells::src/pages/api/doc.ts::async_no_await",
+        "smells::src/pages/api/match-results.ts::async_no_await",
+        "smells::src/pages/api/tables/[tableId]/index.ts::async_no_await"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::async_no_await",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-ts_ignore": {
+      "name": "auto/smells-ts_ignore",
+      "description": "Fix 2 ts ignore issues",
+      "issue_ids": [
+        "smells::src/tests/TableService.test.ts::ts_ignore",
+        "smells::src/tests/api.doc.test.ts::ts_ignore"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::ts_ignore",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-swallowed_error": {
+      "name": "auto/smells-swallowed_error",
+      "description": "Fix 3 swallowed error issues",
+      "issue_ids": [
+        "smells::src/components/hooks/useLeaderboard.ts::swallowed_error",
+        "smells::src/components/hooks/useLobbyTables.ts::swallowed_error",
+        "smells::src/tests/mockkv.ts::swallowed_error"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::swallowed_error",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-hardcoded_color": {
+      "name": "auto/smells-hardcoded_color",
+      "description": "Fix 2 hardcoded color issues",
+      "issue_ids": [
+        "smells::src/components/BallIcon.tsx::hardcoded_color",
+        "smells::src/components/LogoSection.tsx::hardcoded_color"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::hardcoded_color",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-high_cyclomatic_complexity": {
+      "name": "auto/smells-high_cyclomatic_complexity",
+      "description": "Fix 2 high cyclomatic complexity issues",
+      "issue_ids": [
+        "smells::src/components/hooks/useLobbyTables.ts::high_cyclomatic_complexity",
+        "smells::src/pages/lobby.tsx::high_cyclomatic_complexity"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::high_cyclomatic_complexity",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-magic_number": {
+      "name": "auto/smells-magic_number",
+      "description": "Fix 7 magic number issues",
+      "issue_ids": [
+        "smells::src/services/TableService.ts::magic_number",
+        "smells::src/services/scoretable.ts::magic_number",
+        "smells::src/tests/MatchResultCard.test.tsx::magic_number",
+        "smells::src/tests/MatchResultService.test.ts::magic_number",
+        "smells::src/tests/TableService.test.ts::magic_number",
+        "smells::src/tests/UsageService.test.ts::magic_number",
+        "smells::src/tests/usePresenceList.test.ts::magic_number"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::magic_number",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-stub_function": {
+      "name": "auto/smells-stub_function",
+      "description": "Fix 2 stub function issues",
+      "issue_ids": [
+        "smells::src/pages/index.tsx::stub_function",
+        "smells::src/tests/RecentGamesList.test.tsx::stub_function"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::stub_function",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/subjective_review": {
+      "name": "auto/subjective_review",
+      "description": "Address 64 subjective_review review issues",
+      "issue_ids": [
+        "subjective_review::playwright.config.ts::unreviewed",
+        "subjective_review::src/components/BallIcon.tsx::unreviewed",
+        "subjective_review::src/components/GameButtonOptions.tsx::unreviewed",
+        "subjective_review::src/components/GameButtons.tsx::unreviewed",
+        "subjective_review::src/components/GameGrid.tsx::unreviewed",
+        "subjective_review::src/components/GroupBox.tsx::unreviewed",
+        "subjective_review::src/components/HighscoreGrid.tsx::unreviewed",
+        "subjective_review::src/components/IFrameOverlay.tsx::unreviewed",
+        "subjective_review::src/components/LeaderboardTable.tsx::unreviewed",
+        "subjective_review::src/components/LiveMatchesList.tsx::unreviewed",
+        "subjective_review::src/components/LiveTableItem.tsx::unreviewed",
+        "subjective_review::src/components/LocationTimeBadge.tsx::unreviewed",
+        "subjective_review::src/components/LogoSection.tsx::unreviewed",
+        "subjective_review::src/components/MatchHistoryList.tsx::unreviewed",
+        "subjective_review::src/components/MatchResultCard.tsx::unreviewed",
+        "subjective_review::src/components/OnlineUsersPopover.tsx::unreviewed",
+        "subjective_review::src/components/PlayModal.tsx::unreviewed",
+        "subjective_review::src/components/PlayerMatchDisplay.tsx::unreviewed",
+        "subjective_review::src/components/RecentGamesList.tsx::unreviewed",
+        "subjective_review::src/components/Seo.tsx::unreviewed",
+        "subjective_review::src/components/User.tsx::unreviewed",
+        "subjective_review::src/components/hooks/useAutoJoin.ts::unreviewed",
+        "subjective_review::src/components/hooks/useLeaderboard.ts::unreviewed",
+        "subjective_review::src/components/hooks/useLobbyTables.ts::unreviewed",
+        "subjective_review::src/components/hooks/useMatchHistory.ts::unreviewed",
+        "subjective_review::src/components/hooks/usePresenceList.ts::unreviewed",
+        "subjective_review::src/contexts/LobbyContext.tsx::unreviewed",
+        "subjective_review::src/contexts/UserContext.tsx::unreviewed",
+        "subjective_review::src/nchan/nchanpub.ts::unreviewed",
+        "subjective_review::src/nchan/nchansub.ts::unreviewed",
+        "subjective_review::src/pages/_app.tsx::unreviewed",
+        "subjective_review::src/pages/api-doc.tsx::unreviewed",
+        "subjective_review::src/pages/api/hiscore.ts::unreviewed",
+        "subjective_review::src/pages/api/match-replay.ts::unreviewed",
+        "subjective_review::src/pages/api/match-results.ts::unreviewed",
+        "subjective_review::src/pages/api/rank/[id].ts::unreviewed",
+        "subjective_review::src/pages/api/replay/[id].ts::unreviewed",
+        "subjective_review::src/pages/api/shorten.ts::unreviewed",
+        "subjective_review::src/pages/api/tables/[tableId]/complete.ts::unreviewed",
+        "subjective_review::src/pages/api/tables/[tableId]/delete.ts::unreviewed",
+        "subjective_review::src/pages/api/tables/[tableId]/join.ts::unreviewed",
+        "subjective_review::src/pages/api/tables/[tableId]/spectate.ts::unreviewed",
+        "subjective_review::src/pages/api/tables/find-or-create.ts::unreviewed",
+        "subjective_review::src/pages/api/usage/[metric].ts::unreviewed",
+        "subjective_review::src/pages/game.tsx::unreviewed",
+        "subjective_review::src/pages/leaderboard.tsx::unreviewed",
+        "subjective_review::src/pages/lobby.tsx::unreviewed",
+        "subjective_review::src/pages/server-logs.tsx::unreviewed",
+        "subjective_review::src/pages/tablelogs.tsx::unreviewed",
+        "subjective_review::src/proxy.ts::unreviewed",
+        "subjective_review::src/services/MatchResultService.ts::unreviewed",
+        "subjective_review::src/services/TableService.ts::unreviewed",
+        "subjective_review::src/services/scoretable.ts::unreviewed",
+        "subjective_review::src/services/shortener.ts::unreviewed",
+        "subjective_review::src/services/usageservice.ts::unreviewed",
+        "subjective_review::src/types/match.ts::unreviewed",
+        "subjective_review::src/utils/GameUrl.ts::unreviewed",
+        "subjective_review::src/utils/api.ts::unreviewed",
+        "subjective_review::src/utils/cors.ts::unreviewed",
+        "subjective_review::src/utils/locale.ts::unreviewed",
+        "subjective_review::src/utils/logger.ts::unreviewed",
+        "subjective_review::src/utils/timeago.ts::unreviewed",
+        "subjective_review::src/utils/ua.ts::unreviewed",
+        "subjective_review::.::holistic_unreviewed"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "detector::subjective_review",
+      "action": "run `desloppify review --prepare` to evaluate files against quality dimensions",
+      "user_modified": false
+    },
+    "auto/initial-review": {
+      "name": "auto/initial-review",
+      "description": "Initial review of 20 unscored subjective dimensions",
+      "issue_ids": [
+        "subjective::abstraction_fitness",
+        "subjective::ai_generated_debt",
+        "subjective::api_surface_coherence",
+        "subjective::authorization_consistency",
+        "subjective::contract_coherence",
+        "subjective::convention_outlier",
+        "subjective::cross_module_architecture",
+        "subjective::dependency_health",
+        "subjective::design_coherence",
+        "subjective::error_consistency",
+        "subjective::high_level_elegance",
+        "subjective::incomplete_migration",
+        "subjective::initialization_coupling",
+        "subjective::logic_clarity",
+        "subjective::low_level_elegance",
+        "subjective::mid_level_elegance",
+        "subjective::naming_quality",
+        "subjective::package_organization",
+        "subjective::test_strategy",
+        "subjective::type_safety"
+      ],
+      "created_at": "2026-03-07T15:59:05+00:00",
+      "updated_at": "2026-03-07T15:59:05+00:00",
+      "auto": true,
+      "cluster_key": "subjective::unscored",
+      "action": "desloppify review --prepare --dimensions abstraction_fitness,ai_generated_debt,api_surface_coherence,authorization_consistency,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,logic_clarity,low_level_elegance,mid_level_elegance,naming_quality,package_organization,test_strategy,type_safety",
+      "user_modified": false
+    }
+  },
+  "superseded": {},
+  "promoted_ids": [],
+  "plan_start_scores": {
+    "strict": 37.3,
+    "overall": 37.3,
+    "objective": 93.2,
+    "verified": 93.2
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-03-07T15:59:05+00:00",
+      "action": "sync_unscored",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-07T15:59:05+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-07T15:59:05+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    }
+  ],
+  "epic_triage_meta": {},
+  "commit_log": [],
+  "uncommitted_issues": [],
+  "commit_tracking_branch": null,
+  "scan_count_at_plan_start": 1
+}

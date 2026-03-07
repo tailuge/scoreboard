@@ -1,0 +1,5844 @@
+{
+  "version": 1,
+  "created": "2026-03-07T15:58:36+00:00",
+  "last_scan": "2026-03-07T15:59:05+00:00",
+  "scan_count": 1,
+  "overall_score": 37.3,
+  "objective_score": 93.2,
+  "strict_score": 37.3,
+  "verified_strict_score": 93.2,
+  "stats": {
+    "total": 193,
+    "auto_resolved": 0,
+    "false_positive": 0,
+    "fixed": 0,
+    "open": 193,
+    "wontfix": 0,
+    "by_tier": {
+      "2": {
+        "auto_resolved": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 1,
+        "wontfix": 0
+      },
+      "3": {
+        "auto_resolved": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 128,
+        "wontfix": 0
+      },
+      "4": {
+        "auto_resolved": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 64,
+        "wontfix": 0
+      }
+    }
+  },
+  "issues": {
+    "structural::src/pages/lobby.tsx": {
+      "id": "structural::src/pages/lobby.tsx",
+      "detector": "structural",
+      "file": "src/pages/lobby.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: 14 hooks (6 useEffects, 5 useStates)",
+      "detail": {
+        "hook_total": 14,
+        "hook_reasons": [
+          "6 useEffects",
+          "5 useStates",
+          "14 total hooks"
+        ],
+        "loc": 255
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "flat_dirs::src/tests": {
+      "id": "flat_dirs::src/tests",
+      "detector": "flat_dirs",
+      "file": "src/tests",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Directory overload: 58 files, 1 child dirs (combined 61) \u2014 consider grouping by domain",
+      "detail": {
+        "file_count": 58,
+        "child_dir_count": 1,
+        "combined_score": 61,
+        "kind": "overload",
+        "parent_sibling_count": 0,
+        "wrapper_item_count": 0,
+        "sparse_child_count": 0,
+        "sparse_child_ratio": 0.0,
+        "sparse_child_file_threshold": 0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "flat_dirs::src": {
+      "id": "flat_dirs::src",
+      "detector": "flat_dirs",
+      "file": "src",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Directory overload: 2 files, 10 child dirs (combined 32) \u2014 consider grouping by domain",
+      "detail": {
+        "file_count": 2,
+        "child_dir_count": 10,
+        "combined_score": 32,
+        "kind": "overload",
+        "parent_sibling_count": 0,
+        "wrapper_item_count": 0,
+        "sparse_child_count": 0,
+        "sparse_child_ratio": 0.0,
+        "sparse_child_file_threshold": 0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "flat_dirs::src/components": {
+      "id": "flat_dirs::src/components",
+      "detector": "flat_dirs",
+      "file": "src/components",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Directory overload: 21 files, 1 child dirs (combined 24) \u2014 consider grouping by domain",
+      "detail": {
+        "file_count": 21,
+        "child_dir_count": 1,
+        "combined_score": 24,
+        "kind": "overload",
+        "parent_sibling_count": 0,
+        "wrapper_item_count": 0,
+        "sparse_child_count": 0,
+        "sparse_child_ratio": 0.0,
+        "sparse_child_file_threshold": 0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "single_use::src/components/hooks/useAutoJoin.ts": {
+      "id": "single_use::src/components/hooks/useAutoJoin.ts",
+      "detector": "single_use",
+      "file": "src/components/hooks/useAutoJoin.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Single-use (38 LOC): only imported by src/pages/lobby.tsx",
+      "detail": {
+        "loc": 38,
+        "sole_importer": "src/pages/lobby.tsx"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "single_use::src/components/HighscoreGrid.tsx": {
+      "id": "single_use::src/components/HighscoreGrid.tsx",
+      "detector": "single_use",
+      "file": "src/components/HighscoreGrid.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Single-use (30 LOC): only imported by src/pages/game.tsx",
+      "detail": {
+        "loc": 30,
+        "sole_importer": "src/pages/game.tsx"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "single_use::src/components/LogoSection.tsx": {
+      "id": "single_use::src/components/LogoSection.tsx",
+      "detector": "single_use",
+      "file": "src/components/LogoSection.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Single-use (30 LOC): only imported by src/pages/game.tsx",
+      "detail": {
+        "loc": 30,
+        "sole_importer": "src/pages/game.tsx"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "single_use::src/utils/timeago.ts": {
+      "id": "single_use::src/utils/timeago.ts",
+      "detector": "single_use",
+      "file": "src/utils/timeago.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Single-use (26 LOC): only imported by src/components/MatchResultCard.tsx",
+      "detail": {
+        "loc": 26,
+        "sole_importer": "src/components/MatchResultCard.tsx"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/tests/jest.setup.ts": {
+      "id": "orphaned::src/tests/jest.setup.ts",
+      "detector": "orphaned",
+      "file": "src/tests/jest.setup.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (118 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 118
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::playwright.config.ts": {
+      "id": "orphaned::playwright.config.ts",
+      "detector": "orphaned",
+      "file": "playwright.config.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (36 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "naming::src/tests::PascalCase": {
+      "id": "naming::src/tests::PascalCase",
+      "detector": "naming",
+      "file": "src/tests",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "Naming inconsistency: 15 PascalCase files in flat_lower-majority dir (58 total)",
+      "detail": {
+        "majority": "flat_lower",
+        "majority_count": 27,
+        "minority": "PascalCase",
+        "minority_count": 15,
+        "outliers": [
+          "BallIcon.test.tsx",
+          "GameUrl.test.ts",
+          "IFrameOverlay.test.tsx",
+          "LeaderboardTable.test.tsx",
+          "LiveMatchesList.test.tsx",
+          "MatchHistoryList.test.tsx",
+          "MatchResultCard.test.tsx",
+          "MatchResultService.test.ts",
+          "OnlineUsersPopover.test.tsx",
+          "PlayModal.test.tsx"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "naming::src/tests::camelCase": {
+      "id": "naming::src/tests::camelCase",
+      "detector": "naming",
+      "file": "src/tests",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "Naming inconsistency: 9 camelCase files in flat_lower-majority dir (58 total)",
+      "detail": {
+        "majority": "flat_lower",
+        "majority_count": 27,
+        "minority": "camelCase",
+        "minority_count": 9,
+        "outliers": [
+          "api.tables.tableId.complete.test.ts",
+          "api.tables.tableId.delete.test.ts",
+          "api.tables.tableId.index.test.ts",
+          "apiTestUtils.ts",
+          "gameTypes.test.ts",
+          "mockData.ts",
+          "testUtils.ts",
+          "useLobbyTables.test.ts",
+          "usePresenceList.test.ts"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:54+00:00",
+      "last_seen": "2026-03-07T15:58:54+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/utils/api.ts::transitive_only": {
+      "id": "test_coverage::src/utils/api.ts::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/utils/api.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (20 LOC, 3 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 20,
+        "importer_count": 3,
+        "loc_weight": 4.47213595499958
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/GameButtons.tsx::transitive_only": {
+      "id": "test_coverage::src/components/GameButtons.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/GameButtons.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (105 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 105,
+        "importer_count": 1,
+        "loc_weight": 10.246950765959598
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/HighscoreGrid.tsx::transitive_only": {
+      "id": "test_coverage::src/components/HighscoreGrid.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/HighscoreGrid.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (30 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 30,
+        "importer_count": 1,
+        "loc_weight": 5.477225575051661
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/LiveMatchesPanel.tsx::transitive_only": {
+      "id": "test_coverage::src/components/LiveMatchesPanel.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/LiveMatchesPanel.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (15 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 15,
+        "importer_count": 1,
+        "loc_weight": 3.872983346207417
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/LiveTableItem.tsx::transitive_only": {
+      "id": "test_coverage::src/components/LiveTableItem.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/LiveTableItem.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (48 LOC, 3 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 48,
+        "importer_count": 3,
+        "loc_weight": 6.928203230275509
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/hooks/useLeaderboard.ts::transitive_only": {
+      "id": "test_coverage::src/components/hooks/useLeaderboard.ts::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/hooks/useLeaderboard.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (56 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 56,
+        "importer_count": 1,
+        "loc_weight": 7.483314773547883
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::playwright.config.ts::untested_module": {
+      "id": "test_coverage::playwright.config.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "playwright.config.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (36 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 36,
+        "importer_count": 0,
+        "loc_weight": 6.0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/LogoSection.tsx::transitive_only": {
+      "id": "test_coverage::src/components/LogoSection.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/LogoSection.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (30 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 30,
+        "importer_count": 1,
+        "loc_weight": 5.477225575051661
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/LocationTimeBadge.tsx::transitive_only": {
+      "id": "test_coverage::src/components/LocationTimeBadge.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/LocationTimeBadge.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (95 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 95,
+        "importer_count": 1,
+        "loc_weight": 9.746794344808963
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/GameGrid.tsx::transitive_only": {
+      "id": "test_coverage::src/components/GameGrid.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/GameGrid.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (123 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 123,
+        "importer_count": 1,
+        "loc_weight": 11.090536506409418
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/GameButtonOptions.tsx::transitive_only": {
+      "id": "test_coverage::src/components/GameButtonOptions.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/GameButtonOptions.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (79 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 79,
+        "importer_count": 1,
+        "loc_weight": 8.888194417315589
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/utils/timeago.ts::transitive_only": {
+      "id": "test_coverage::src/utils/timeago.ts::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/utils/timeago.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (26 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 26,
+        "importer_count": 1,
+        "loc_weight": 5.0990195135927845
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/Seo.tsx::transitive_only": {
+      "id": "test_coverage::src/components/Seo.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/Seo.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (57 LOC, 3 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 57,
+        "importer_count": 3,
+        "loc_weight": 7.54983443527075
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/GroupBox.tsx::transitive_only": {
+      "id": "test_coverage::src/components/GroupBox.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/GroupBox.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (53 LOC, 6 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 53,
+        "importer_count": 6,
+        "loc_weight": 7.280109889280518
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/PlayerMatchDisplay.tsx::transitive_only": {
+      "id": "test_coverage::src/components/PlayerMatchDisplay.tsx::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/PlayerMatchDisplay.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (43 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 43,
+        "importer_count": 1,
+        "loc_weight": 6.557438524302
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/components/hooks/useAutoJoin.ts::transitive_only": {
+      "id": "test_coverage::src/components/hooks/useAutoJoin.ts::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/components/hooks/useAutoJoin.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (38 LOC, 1 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 38,
+        "importer_count": 1,
+        "loc_weight": 6.164414002968976
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/utils/cors.ts::transitive_only": {
+      "id": "test_coverage::src/utils/cors.ts::transitive_only",
+      "detector": "test_coverage",
+      "file": "src/utils/cors.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "No direct tests (21 LOC, 6 importers) \u2014 covered only via imports from tested modules",
+      "detail": {
+        "kind": "transitive_only",
+        "loc": 21,
+        "importer_count": 6,
+        "loc_weight": 4.58257569495584
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:55+00:00",
+      "last_seen": "2026-03-07T15:58:55+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/lobby.tsx::monster_function": {
+      "id": "smells::src/pages/lobby.tsx::monster_function",
+      "detector": "smells",
+      "file": "src/pages/lobby.tsx",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "1x Monster function (>150 LOC)",
+      "detail": {
+        "smell_id": "monster_function",
+        "severity": "high",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::playwright.config.ts::hardcoded_url": {
+      "id": "smells::playwright.config.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "playwright.config.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          3
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/BallIcon.tsx::hardcoded_url": {
+      "id": "smells::src/components/BallIcon.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/components/BallIcon.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          58
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/LogoSection.tsx::hardcoded_url": {
+      "id": "smells::src/components/LogoSection.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/components/LogoSection.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          20
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/Seo.tsx::hardcoded_url": {
+      "id": "smells::src/components/Seo.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/components/Seo.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          28,
+          32
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/game.tsx::hardcoded_url": {
+      "id": "smells::src/pages/game.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/pages/game.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          43,
+          44
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/leaderboard.tsx::hardcoded_url": {
+      "id": "smells::src/pages/leaderboard.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/pages/leaderboard.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          13,
+          14,
+          19
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/lobby.tsx::hardcoded_url": {
+      "id": "smells::src/pages/lobby.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/pages/lobby.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          160,
+          161
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/proxy.ts::hardcoded_url": {
+      "id": "smells::src/proxy.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/proxy.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "5x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 5,
+        "lines": [
+          6,
+          7,
+          8,
+          10,
+          11
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/scoretable.ts::hardcoded_url": {
+      "id": "smells::src/services/scoretable.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/services/scoretable.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          10
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/shortener.ts::hardcoded_url": {
+      "id": "smells::src/services/shortener.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/services/shortener.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          8,
+          9
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/IFrameOverlay.test.tsx::hardcoded_url": {
+      "id": "smells::src/tests/IFrameOverlay.test.tsx::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/IFrameOverlay.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          7
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.hiscore.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.hiscore.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.hiscore.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          20,
+          47
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.match-replay.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.match-replay.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.match-replay.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "7x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 7,
+        "lines": [
+          51,
+          82,
+          95,
+          109,
+          126,
+          140,
+          150
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.match-results.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.match-results.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.match-results.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "13x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 13,
+        "lines": [
+          50,
+          67,
+          90,
+          130,
+          163,
+          190,
+          221,
+          258,
+          281,
+          296
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.rank.id.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.rank.id.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.rank.id.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "4x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 4,
+        "lines": [
+          25,
+          39,
+          66,
+          82
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.rank.index.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.rank.index.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.rank.index.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          53
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.replay.id.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.replay.id.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.replay.id.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          24
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.shorten.test.ts::hardcoded_url": {
+      "id": "smells::src/tests/api.shorten.test.ts::hardcoded_url",
+      "detector": "smells",
+      "file": "src/tests/api.shorten.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Hardcoded URL in source code",
+      "detail": {
+        "smell_id": "hardcoded_url",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          38
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/usePresenceList.ts::as_any_cast": {
+      "id": "smells::src/components/hooks/usePresenceList.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/components/hooks/usePresenceList.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          125
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/MatchResultService.test.ts::as_any_cast": {
+      "id": "smells::src/tests/MatchResultService.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/MatchResultService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "4x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 4,
+        "lines": [
+          13,
+          52,
+          87,
+          105
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/TableService.test.ts::as_any_cast": {
+      "id": "smells::src/tests/TableService.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/TableService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          69
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.doc.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.doc.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.doc.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          30,
+          46
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.hiscore.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.hiscore.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.hiscore.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "3x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          30,
+          97,
+          125
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.match-replay.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.match-replay.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.match-replay.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          21
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.match-results.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.match-results.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.match-results.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          21
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.rank.id.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.rank.id.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.rank.id.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          18
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.rank.index.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.rank.index.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.rank.index.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          18
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.replay.id.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.replay.id.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.replay.id.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          15
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.shorten.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.shorten.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.shorten.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          29
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.tables.find-or-create.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.tables.find-or-create.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.tables.find-or-create.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          49
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.tables.index.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.tables.index.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.tables.index.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          32,
+          56
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.tables.join.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.tables.join.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.tables.join.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          38
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.tables.spectate.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.tables.spectate.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.tables.spectate.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          36
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.usage.metric.test.ts::as_any_cast": {
+      "id": "smells::src/tests/api.usage.metric.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/api.usage.metric.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          17
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/contexts.test.tsx::as_any_cast": {
+      "id": "smells::src/tests/contexts.test.tsx::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/contexts.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          28
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/jest.setup.ts::as_any_cast": {
+      "id": "smells::src/tests/jest.setup.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/jest.setup.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "7x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 7,
+        "lines": [
+          40,
+          42,
+          57,
+          70,
+          72,
+          74,
+          107
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/mockkv.ts::as_any_cast": {
+      "id": "smells::src/tests/mockkv.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/mockkv.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          263
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/nchan/nchanTestUtils.ts::as_any_cast": {
+      "id": "smells::src/tests/nchan/nchanTestUtils.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/nchan/nchanTestUtils.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          18
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/nchan/nchansub.test.ts::as_any_cast": {
+      "id": "smells::src/tests/nchan/nchansub.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/nchan/nchansub.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "6x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 6,
+        "lines": [
+          69,
+          113,
+          120,
+          125,
+          135,
+          140
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/pages._app.test.tsx::as_any_cast": {
+      "id": "smells::src/tests/pages._app.test.tsx::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/pages._app.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "3x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          74,
+          96,
+          122
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/scoretable.test.ts::as_any_cast": {
+      "id": "smells::src/tests/scoretable.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/tests/scoretable.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "5x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 5,
+        "lines": [
+          28,
+          30,
+          33,
+          36,
+          39
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/utils/ua.ts::as_any_cast": {
+      "id": "smells::src/utils/ua.ts::as_any_cast",
+      "detector": "smells",
+      "file": "src/utils/ua.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          9
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/contexts/LobbyContext.tsx::any_type": {
+      "id": "smells::src/contexts/LobbyContext.tsx::any_type",
+      "detector": "smells",
+      "file": "src/contexts/LobbyContext.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          18,
+          34
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/nchan/nchanpub.ts::any_type": {
+      "id": "smells::src/nchan/nchanpub.ts::any_type",
+      "detector": "smells",
+      "file": "src/nchan/nchanpub.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          18
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/nchan/types.ts::any_type": {
+      "id": "smells::src/nchan/types.ts::any_type",
+      "detector": "smells",
+      "file": "src/nchan/types.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          27,
+          55,
+          62
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/api-doc.tsx::any_type": {
+      "id": "smells::src/pages/api-doc.tsx::any_type",
+      "detector": "smells",
+      "file": "src/pages/api-doc.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          6
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/api/hiscore.ts::any_type": {
+      "id": "smells::src/pages/api/hiscore.ts::any_type",
+      "detector": "smells",
+      "file": "src/pages/api/hiscore.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          55
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/tablelogs.tsx::any_type": {
+      "id": "smells::src/pages/tablelogs.tsx::any_type",
+      "detector": "smells",
+      "file": "src/pages/tablelogs.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          9
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/TableService.ts::any_type": {
+      "id": "smells::src/services/TableService.ts::any_type",
+      "detector": "smells",
+      "file": "src/services/TableService.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          19
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/scoretable.ts::any_type": {
+      "id": "smells::src/services/scoretable.ts::any_type",
+      "detector": "smells",
+      "file": "src/services/scoretable.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          21,
+          57
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/shortener.ts::any_type": {
+      "id": "smells::src/services/shortener.ts::any_type",
+      "detector": "smells",
+      "file": "src/services/shortener.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          24,
+          37
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/RecentGamesList.test.tsx::any_type": {
+      "id": "smells::src/tests/RecentGamesList.test.tsx::any_type",
+      "detector": "smells",
+      "file": "src/tests/RecentGamesList.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          47
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.doc.test.ts::any_type": {
+      "id": "smells::src/tests/api.doc.test.ts::any_type",
+      "detector": "smells",
+      "file": "src/tests/api.doc.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          5
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/contexts.test.tsx::any_type": {
+      "id": "smells::src/tests/contexts.test.tsx::any_type",
+      "detector": "smells",
+      "file": "src/tests/contexts.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          24,
+          29
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/jest.setup.ts::any_type": {
+      "id": "smells::src/tests/jest.setup.ts::any_type",
+      "detector": "smells",
+      "file": "src/tests/jest.setup.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "12x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 12,
+        "lines": [
+          29,
+          30,
+          31,
+          45,
+          51,
+          52,
+          68,
+          85,
+          87,
+          93
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/mockkv.ts::any_type": {
+      "id": "smells::src/tests/mockkv.ts::any_type",
+      "detector": "smells",
+      "file": "src/tests/mockkv.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "5x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 5,
+        "lines": [
+          28,
+          63,
+          106,
+          145,
+          248
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/pages.api-doc.test.tsx::any_type": {
+      "id": "smells::src/tests/pages.api-doc.test.tsx::any_type",
+      "detector": "smells",
+      "file": "src/tests/pages.api-doc.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          8
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/testUtils.ts::any_type": {
+      "id": "smells::src/tests/testUtils.ts::any_type",
+      "detector": "smells",
+      "file": "src/tests/testUtils.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          34,
+          43
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/ua.test.ts::any_type": {
+      "id": "smells::src/tests/ua.test.ts::any_type",
+      "detector": "smells",
+      "file": "src/tests/ua.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          6
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/utils/api.ts::any_type": {
+      "id": "smells::src/utils/api.ts::any_type",
+      "detector": "smells",
+      "file": "src/utils/api.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          6
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/utils/logger.ts::any_type": {
+      "id": "smells::src/utils/logger.ts::any_type",
+      "detector": "smells",
+      "file": "src/utils/logger.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "4x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 4,
+        "lines": [
+          5,
+          10,
+          15,
+          20
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::console_error_no_throw": {
+      "id": "smells::src/components/hooks/useLeaderboard.ts::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/components/hooks/useLeaderboard.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          23,
+          49
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::console_error_no_throw": {
+      "id": "smells::src/components/hooks/useLobbyTables.ts::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/components/hooks/useLobbyTables.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          21
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/nchan/nchansub.ts::console_error_no_throw": {
+      "id": "smells::src/nchan/nchansub.ts::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/nchan/nchansub.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          82
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/lobby.tsx::console_error_no_throw": {
+      "id": "smells::src/pages/lobby.tsx::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/pages/lobby.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          149
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/server-logs.tsx::console_error_no_throw": {
+      "id": "smells::src/pages/server-logs.tsx::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/pages/server-logs.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          19
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/contexts.test.tsx::console_error_no_throw": {
+      "id": "smells::src/tests/contexts.test.tsx::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/tests/contexts.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          180
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/mockkv.ts::console_error_no_throw": {
+      "id": "smells::src/tests/mockkv.ts::console_error_no_throw",
+      "detector": "smells",
+      "file": "src/tests/mockkv.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x console.error without throw/return",
+      "detail": {
+        "smell_id": "console_error_no_throw",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          237
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::nested_closure": {
+      "id": "smells::src/components/hooks/useLeaderboard.ts::nested_closure",
+      "detector": "smells",
+      "file": "src/components/hooks/useLeaderboard.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          4
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::nested_closure": {
+      "id": "smells::src/components/hooks/useLobbyTables.ts::nested_closure",
+      "detector": "smells",
+      "file": "src/components/hooks/useLobbyTables.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          5
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/game.tsx::nested_closure": {
+      "id": "smells::src/pages/game.tsx::nested_closure",
+      "detector": "smells",
+      "file": "src/pages/game.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          15
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/lobby.tsx::nested_closure": {
+      "id": "smells::src/pages/lobby.tsx::nested_closure",
+      "detector": "smells",
+      "file": "src/pages/lobby.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/server-logs.tsx::nested_closure": {
+      "id": "smells::src/pages/server-logs.tsx::nested_closure",
+      "detector": "smells",
+      "file": "src/pages/server-logs.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          5
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/tablelogs.tsx::nested_closure": {
+      "id": "smells::src/pages/tablelogs.tsx::nested_closure",
+      "detector": "smells",
+      "file": "src/pages/tablelogs.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "2x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          22,
+          69
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/lib/swagger.ts::async_no_await": {
+      "id": "smells::src/lib/swagger.ts::async_no_await",
+      "detector": "smells",
+      "file": "src/lib/swagger.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Async functions without await",
+      "detail": {
+        "smell_id": "async_no_await",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/api/doc.ts::async_no_await": {
+      "id": "smells::src/pages/api/doc.ts::async_no_await",
+      "detector": "smells",
+      "file": "src/pages/api/doc.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Async functions without await",
+      "detail": {
+        "smell_id": "async_no_await",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          7
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/api/match-results.ts::async_no_await": {
+      "id": "smells::src/pages/api/match-results.ts::async_no_await",
+      "detector": "smells",
+      "file": "src/pages/api/match-results.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Async functions without await",
+      "detail": {
+        "smell_id": "async_no_await",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          68
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/api/tables/[tableId]/index.ts::async_no_await": {
+      "id": "smells::src/pages/api/tables/[tableId]/index.ts::async_no_await",
+      "detector": "smells",
+      "file": "src/pages/api/tables/[tableId]/index.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "3x Async functions without await",
+      "detail": {
+        "smell_id": "async_no_await",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          11,
+          27,
+          100
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/TableService.test.ts::ts_ignore": {
+      "id": "smells::src/tests/TableService.test.ts::ts_ignore",
+      "detector": "smells",
+      "file": "src/tests/TableService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x @ts-ignore / @ts-expect-error",
+      "detail": {
+        "smell_id": "ts_ignore",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          163
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/api.doc.test.ts::ts_ignore": {
+      "id": "smells::src/tests/api.doc.test.ts::ts_ignore",
+      "detector": "smells",
+      "file": "src/tests/api.doc.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "3x @ts-ignore / @ts-expect-error",
+      "detail": {
+        "smell_id": "ts_ignore",
+        "severity": "medium",
+        "count": 3,
+        "lines": [
+          15,
+          21,
+          37
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLeaderboard.ts::swallowed_error": {
+      "id": "smells::src/components/hooks/useLeaderboard.ts::swallowed_error",
+      "detector": "smells",
+      "file": "src/components/hooks/useLeaderboard.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Catch blocks that only log (swallowed errors)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          48
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::swallowed_error": {
+      "id": "smells::src/components/hooks/useLobbyTables.ts::swallowed_error",
+      "detector": "smells",
+      "file": "src/components/hooks/useLobbyTables.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Catch blocks that only log (swallowed errors)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          20
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/mockkv.ts::swallowed_error": {
+      "id": "smells::src/tests/mockkv.ts::swallowed_error",
+      "detector": "smells",
+      "file": "src/tests/mockkv.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Catch blocks that only log (swallowed errors)",
+      "detail": {
+        "smell_id": "swallowed_error",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          236
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/BallIcon.tsx::hardcoded_color": {
+      "id": "smells::src/components/BallIcon.tsx::hardcoded_color",
+      "detector": "smells",
+      "file": "src/components/BallIcon.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded color values",
+      "detail": {
+        "smell_id": "hardcoded_color",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          75
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/LogoSection.tsx::hardcoded_color": {
+      "id": "smells::src/components/LogoSection.tsx::hardcoded_color",
+      "detector": "smells",
+      "file": "src/components/LogoSection.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded color values",
+      "detail": {
+        "smell_id": "hardcoded_color",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          12
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/components/hooks/useLobbyTables.ts::high_cyclomatic_complexity": {
+      "id": "smells::src/components/hooks/useLobbyTables.ts::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "src/components/hooks/useLobbyTables.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>15 branches)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          5
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/lobby.tsx::high_cyclomatic_complexity": {
+      "id": "smells::src/pages/lobby.tsx::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "src/pages/lobby.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>15 branches)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          16
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/styles/globals.css::css_monolith": {
+      "id": "smells::src/styles/globals.css::css_monolith",
+      "detector": "smells",
+      "file": "src/styles/globals.css",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Large stylesheet file (300+ LOC)",
+      "detail": {
+        "smell_id": "css_monolith",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          1
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/TableService.ts::magic_number": {
+      "id": "smells::src/services/TableService.ts::magic_number",
+      "detector": "smells",
+      "file": "src/services/TableService.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          12
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/services/scoretable.ts::magic_number": {
+      "id": "smells::src/services/scoretable.ts::magic_number",
+      "detector": "smells",
+      "file": "src/services/scoretable.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 2,
+        "lines": [
+          89,
+          90
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/MatchResultCard.test.tsx::magic_number": {
+      "id": "smells::src/tests/MatchResultCard.test.tsx::magic_number",
+      "detector": "smells",
+      "file": "src/tests/MatchResultCard.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          138
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/MatchResultService.test.ts::magic_number": {
+      "id": "smells::src/tests/MatchResultService.test.ts::magic_number",
+      "detector": "smells",
+      "file": "src/tests/MatchResultService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          97
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/TableService.test.ts::magic_number": {
+      "id": "smells::src/tests/TableService.test.ts::magic_number",
+      "detector": "smells",
+      "file": "src/tests/TableService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "3x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 3,
+        "lines": [
+          47,
+          57,
+          81
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/UsageService.test.ts::magic_number": {
+      "id": "smells::src/tests/UsageService.test.ts::magic_number",
+      "detector": "smells",
+      "file": "src/tests/UsageService.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          19
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/usePresenceList.test.ts::magic_number": {
+      "id": "smells::src/tests/usePresenceList.test.ts::magic_number",
+      "detector": "smells",
+      "file": "src/tests/usePresenceList.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "4x Magic numbers (>1000 in logic)",
+      "detail": {
+        "smell_id": "magic_number",
+        "severity": "low",
+        "count": 4,
+        "lines": [
+          245,
+          328,
+          344,
+          420
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/pages/index.tsx::stub_function": {
+      "id": "smells::src/pages/index.tsx::stub_function",
+      "detector": "smells",
+      "file": "src/pages/index.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Stub function (body is empty/return-only)",
+      "detail": {
+        "smell_id": "stub_function",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          6
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/RecentGamesList.test.tsx::stub_function": {
+      "id": "smells::src/tests/RecentGamesList.test.tsx::stub_function",
+      "detector": "smells",
+      "file": "src/tests/RecentGamesList.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Stub function (body is empty/return-only)",
+      "detail": {
+        "smell_id": "stub_function",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          47
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/tests/contexts.test.tsx::non_null_assert": {
+      "id": "smells::src/tests/contexts.test.tsx::non_null_assert",
+      "detector": "smells",
+      "file": "src/tests/contexts.test.tsx",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Non-null assertions (!.)",
+      "detail": {
+        "smell_id": "non_null_assert",
+        "severity": "low",
+        "count": 1,
+        "lines": [
+          436
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "react::src/components/MatchResultCard.tsx::setFormattedTime": {
+      "id": "react::src/components/MatchResultCard.tsx::setFormattedTime",
+      "detector": "react",
+      "file": "src/components/MatchResultCard.tsx",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "State sync anti-pattern: useEffect only calls setFormattedTime",
+      "detail": {
+        "line": 55,
+        "setters": [
+          "setFormattedTime"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::playwright.config.ts::unreviewed": {
+      "id": "subjective_review::playwright.config.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "playwright.config.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/BallIcon.tsx::unreviewed": {
+      "id": "subjective_review::src/components/BallIcon.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/BallIcon.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 109
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/GameButtonOptions.tsx::unreviewed": {
+      "id": "subjective_review::src/components/GameButtonOptions.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/GameButtonOptions.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 79
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/GameButtons.tsx::unreviewed": {
+      "id": "subjective_review::src/components/GameButtons.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/GameButtons.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 105
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/GameGrid.tsx::unreviewed": {
+      "id": "subjective_review::src/components/GameGrid.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/GameGrid.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 123
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/GroupBox.tsx::unreviewed": {
+      "id": "subjective_review::src/components/GroupBox.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/GroupBox.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 53
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/HighscoreGrid.tsx::unreviewed": {
+      "id": "subjective_review::src/components/HighscoreGrid.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/HighscoreGrid.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 30
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/IFrameOverlay.tsx::unreviewed": {
+      "id": "subjective_review::src/components/IFrameOverlay.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/IFrameOverlay.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 25
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/LeaderboardTable.tsx::unreviewed": {
+      "id": "subjective_review::src/components/LeaderboardTable.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/LeaderboardTable.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 129
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/LiveMatchesList.tsx::unreviewed": {
+      "id": "subjective_review::src/components/LiveMatchesList.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/LiveMatchesList.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 35
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/LiveTableItem.tsx::unreviewed": {
+      "id": "subjective_review::src/components/LiveTableItem.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/LiveTableItem.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 48
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/LocationTimeBadge.tsx::unreviewed": {
+      "id": "subjective_review::src/components/LocationTimeBadge.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/LocationTimeBadge.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 95
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/LogoSection.tsx::unreviewed": {
+      "id": "subjective_review::src/components/LogoSection.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/LogoSection.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 30
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/MatchHistoryList.tsx::unreviewed": {
+      "id": "subjective_review::src/components/MatchHistoryList.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/MatchHistoryList.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 62
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/MatchResultCard.tsx::unreviewed": {
+      "id": "subjective_review::src/components/MatchResultCard.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/MatchResultCard.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 146
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/OnlineUsersPopover.tsx::unreviewed": {
+      "id": "subjective_review::src/components/OnlineUsersPopover.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/OnlineUsersPopover.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 175
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/PlayModal.tsx::unreviewed": {
+      "id": "subjective_review::src/components/PlayModal.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/PlayModal.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 113
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/PlayerMatchDisplay.tsx::unreviewed": {
+      "id": "subjective_review::src/components/PlayerMatchDisplay.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/PlayerMatchDisplay.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 43
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/RecentGamesList.tsx::unreviewed": {
+      "id": "subjective_review::src/components/RecentGamesList.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/RecentGamesList.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 63
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/Seo.tsx::unreviewed": {
+      "id": "subjective_review::src/components/Seo.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/Seo.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 57
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/User.tsx::unreviewed": {
+      "id": "subjective_review::src/components/User.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/User.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 59
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/hooks/useAutoJoin.ts::unreviewed": {
+      "id": "subjective_review::src/components/hooks/useAutoJoin.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/hooks/useAutoJoin.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 38
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/hooks/useLeaderboard.ts::unreviewed": {
+      "id": "subjective_review::src/components/hooks/useLeaderboard.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/hooks/useLeaderboard.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 56
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/hooks/useLobbyTables.ts::unreviewed": {
+      "id": "subjective_review::src/components/hooks/useLobbyTables.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/hooks/useLobbyTables.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 117
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/hooks/useMatchHistory.ts::unreviewed": {
+      "id": "subjective_review::src/components/hooks/useMatchHistory.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/hooks/useMatchHistory.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 29
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/components/hooks/usePresenceList.ts::unreviewed": {
+      "id": "subjective_review::src/components/hooks/usePresenceList.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/components/hooks/usePresenceList.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 191
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/contexts/LobbyContext.tsx::unreviewed": {
+      "id": "subjective_review::src/contexts/LobbyContext.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/contexts/LobbyContext.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 132
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/contexts/UserContext.tsx::unreviewed": {
+      "id": "subjective_review::src/contexts/UserContext.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/contexts/UserContext.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 108
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/nchan/nchanpub.ts::unreviewed": {
+      "id": "subjective_review::src/nchan/nchanpub.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/nchan/nchanpub.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 51
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/nchan/nchansub.ts::unreviewed": {
+      "id": "subjective_review::src/nchan/nchansub.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/nchan/nchansub.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 128
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/_app.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/_app.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/_app.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 32
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api-doc.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/api-doc.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api-doc.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 30
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/hiscore.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/hiscore.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/hiscore.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 110
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/match-replay.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/match-replay.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/match-replay.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 74
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/match-results.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/match-results.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/match-results.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 153
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/rank/[id].ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/rank/[id].ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/rank/[id].ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 93
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/replay/[id].ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/replay/[id].ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/replay/[id].ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/shorten.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/shorten.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/shorten.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 38
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/complete.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/tables/[tableId]/complete.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/tables/[tableId]/complete.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 34
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/delete.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/tables/[tableId]/delete.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/tables/[tableId]/delete.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 95
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/join.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/tables/[tableId]/join.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/tables/[tableId]/join.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 56
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/tables/[tableId]/spectate.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/tables/[tableId]/spectate.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/tables/[tableId]/spectate.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 49
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/tables/find-or-create.ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/tables/find-or-create.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/tables/find-or-create.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 62
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/api/usage/[metric].ts::unreviewed": {
+      "id": "subjective_review::src/pages/api/usage/[metric].ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/api/usage/[metric].ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 63
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/game.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/game.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/game.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 124
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/leaderboard.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/leaderboard.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/leaderboard.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 42
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/lobby.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/lobby.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/lobby.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 255
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/server-logs.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/server-logs.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/server-logs.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 82
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/pages/tablelogs.tsx::unreviewed": {
+      "id": "subjective_review::src/pages/tablelogs.tsx::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/pages/tablelogs.tsx",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 149
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/proxy.ts::unreviewed": {
+      "id": "subjective_review::src/proxy.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/proxy.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 51
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/services/MatchResultService.ts::unreviewed": {
+      "id": "subjective_review::src/services/MatchResultService.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/services/MatchResultService.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 84
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/services/TableService.ts::unreviewed": {
+      "id": "subjective_review::src/services/TableService.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/services/TableService.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 191
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/services/scoretable.ts::unreviewed": {
+      "id": "subjective_review::src/services/scoretable.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/services/scoretable.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 95
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/services/shortener.ts::unreviewed": {
+      "id": "subjective_review::src/services/shortener.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/services/shortener.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 44
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/services/usageservice.ts::unreviewed": {
+      "id": "subjective_review::src/services/usageservice.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/services/usageservice.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 32
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/types/match.ts::unreviewed": {
+      "id": "subjective_review::src/types/match.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/types/match.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 23
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/GameUrl.ts::unreviewed": {
+      "id": "subjective_review::src/utils/GameUrl.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/GameUrl.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/api.ts::unreviewed": {
+      "id": "subjective_review::src/utils/api.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/api.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 20
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/cors.ts::unreviewed": {
+      "id": "subjective_review::src/utils/cors.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/cors.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 21
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/locale.ts::unreviewed": {
+      "id": "subjective_review::src/utils/locale.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/locale.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 99
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/logger.ts::unreviewed": {
+      "id": "subjective_review::src/utils/logger.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/logger.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 24
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/timeago.ts::unreviewed": {
+      "id": "subjective_review::src/utils/timeago.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/timeago.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 26
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::src/utils/ua.ts::unreviewed": {
+      "id": "subjective_review::src/utils/ua.ts::unreviewed",
+      "detector": "subjective_review",
+      "file": "src/utils/ua.ts",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No design review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed",
+        "loc": 79
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "subjective_review::.::holistic_unreviewed": {
+      "id": "subjective_review::.::holistic_unreviewed",
+      "detector": "subjective_review",
+      "file": ".",
+      "tier": 4,
+      "confidence": "low",
+      "summary": "No holistic codebase review on record \u2014 run `desloppify review --prepare`",
+      "detail": {
+        "reason": "unreviewed"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-07T15:58:56+00:00",
+      "last_seen": "2026-03-07T15:58:56+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    }
+  },
+  "scan_coverage": {
+    "typescript": {
+      "status": "full",
+      "confidence": 1.0,
+      "detectors": {
+        "security": {
+          "detector": "security",
+          "status": "full",
+          "confidence": 1.0,
+          "summary": "Security coverage complete for enabled detectors.",
+          "impact": "",
+          "remediation": "",
+          "tool": "",
+          "reason": ""
+        }
+      },
+      "warnings": [],
+      "updated_at": "2026-03-07T15:59:05+00:00"
+    }
+  },
+  "score_confidence": {
+    "status": "full",
+    "confidence": 1.0,
+    "detectors": [],
+    "dimensions": []
+  },
+  "subjective_integrity": {
+    "status": "pass",
+    "target_score": 95.0,
+    "matched_count": 0,
+    "matched_dimensions": [],
+    "reset_dimensions": []
+  },
+  "subjective_assessments": {},
+  "scan_history": [
+    {
+      "timestamp": "2026-03-07T15:59:05+00:00",
+      "lang": "typescript",
+      "strict_score": 37.3,
+      "verified_strict_score": 93.2,
+      "objective_score": 93.2,
+      "overall_score": 37.3,
+      "open": 193,
+      "diff_new": 193,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 193,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 95.0
+      },
+      "score_confidence": {
+        "status": "full",
+        "confidence": 1.0,
+        "detector_count": 0,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 93.9,
+          "strict": 93.9
+        },
+        "Security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "File health": {
+          "score": 99.2,
+          "strict": 99.2
+        },
+        "Duplication": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Test health": {
+          "score": 79.1,
+          "strict": 79.1
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    }
+  ],
+  "lang_capabilities": {
+    "typescript": {
+      "fixers": [
+        "dead-useeffect",
+        "debug-logs",
+        "empty-if-chain",
+        "unused-imports",
+        "unused-params",
+        "unused-vars"
+      ],
+      "typecheck_cmd": "npx tsc --noEmit"
+    }
+  },
+  "zone_distribution": {
+    "production": 84,
+    "test": 64
+  },
+  "tool_hash": "eb6de7c2b5fe",
+  "scan_path": ".",
+  "scan_completeness": {
+    "typescript": "full"
+  },
+  "potentials": {
+    "typescript": {
+      "logs": 84,
+      "unused": 84,
+      "exports": 0,
+      "deprecated": 0,
+      "structural": 84,
+      "flat_dirs": 20,
+      "props": 20,
+      "single_use": 0,
+      "coupling": 0,
+      "cycles": 85,
+      "orphaned": 85,
+      "patterns": 5,
+      "naming": 20,
+      "facade": 85,
+      "test_coverage": 588,
+      "smells": 87,
+      "react": 16,
+      "security": 84,
+      "subjective_review": 63,
+      "boilerplate_duplication": 0,
+      "dupes": 79,
+      "stale_wontfix": 0
+    }
+  },
+  "codebase_metrics": {
+    "typescript": {
+      "total_files": 148,
+      "total_loc": 11988,
+      "total_directories": 20
+    }
+  },
+  "dimension_scores": {
+    "Code quality": {
+      "score": 93.9,
+      "strict": 93.9,
+      "verified_strict_score": 93.9,
+      "checks": 506,
+      "failing": 56,
+      "tier": 3,
+      "detectors": {
+        "unused": {
+          "potential": 84,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "logs": {
+          "potential": 84,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "smells": {
+          "potential": 87,
+          "pass_rate": 0.6942528735632184,
+          "failing": 49,
+          "weighted_failures": 26.599999999999998
+        },
+        "orphaned": {
+          "potential": 85,
+          "pass_rate": 0.9917647058823529,
+          "failing": 1,
+          "weighted_failures": 0.7
+        },
+        "flat_dirs": {
+          "potential": 20,
+          "pass_rate": 0.8949999999999999,
+          "failing": 3,
+          "weighted_failures": 2.0999999999999996
+        },
+        "naming": {
+          "potential": 20,
+          "pass_rate": 0.97,
+          "failing": 2,
+          "weighted_failures": 0.6
+        },
+        "facade": {
+          "potential": 85,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "props": {
+          "potential": 20,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "react": {
+          "potential": 16,
+          "pass_rate": 0.95625,
+          "failing": 1,
+          "weighted_failures": 0.7
+        },
+        "patterns": {
+          "potential": 5,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Security": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 169,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "cycles": {
+          "potential": 85,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "security": {
+          "potential": 84,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "File health": {
+      "score": 99.2,
+      "strict": 99.2,
+      "verified_strict_score": 99.2,
+      "checks": 84,
+      "failing": 1,
+      "tier": 3,
+      "detectors": {
+        "structural": {
+          "potential": 84,
+          "pass_rate": 0.9916666666666666,
+          "failing": 1,
+          "weighted_failures": 0.7
+        }
+      }
+    },
+    "Duplication": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 79,
+      "failing": 0,
+      "tier": 3,
+      "detectors": {
+        "dupes": {
+          "potential": 79,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Test health": {
+      "score": 79.1,
+      "strict": 79.1,
+      "verified_strict_score": 79.1,
+      "checks": 651,
+      "failing": 81,
+      "tier": 4,
+      "detectors": {
+        "test_coverage": {
+          "potential": 588,
+          "pass_rate": 0.8011616385204113,
+          "failing": 17,
+          "weighted_failures": 116.91695654999815
+        },
+        "subjective_review": {
+          "potential": 63,
+          "pass_rate": 0.6952380952380952,
+          "failing": 64,
+          "weighted_failures": 19.2
+        }
+      }
+    },
+    "Naming quality": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "naming_quality",
+          "configured_weight": 2.0,
+          "components": []
+        }
+      }
+    },
+    "Logic clarity": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "logic_clarity",
+          "configured_weight": 6.0,
+          "components": []
+        }
+      }
+    },
+    "Type safety": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "type_safety",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Contracts": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "contract_coherence",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Error consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "error_consistency",
+          "configured_weight": 3.0,
+          "components": []
+        }
+      }
+    },
+    "Abstraction fit": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "abstraction_fitness",
+          "configured_weight": 8.0,
+          "components": []
+        }
+      }
+    },
+    "AI generated debt": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "ai_generated_debt",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "High elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "high_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Mid elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "mid_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Low elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "low_level_elegance",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Cross-module arch": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "cross_module_architecture",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Init coupling": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "initialization_coupling",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Convention drift": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "convention_outlier",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Dep health": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "dependency_health",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Test strategy": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "test_strategy",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "API coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "api_surface_coherence",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Auth consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "authorization_consistency",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Stale migration": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "incomplete_migration",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Structure nav": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "package_organization",
+          "configured_weight": 5.0,
+          "components": []
+        }
+      }
+    },
+    "Design coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "design_coherence",
+          "configured_weight": 10.0,
+          "components": []
+        }
+      }
+    }
+  },
+  "reminder_history": {
+    "zone_classification": 1,
+    "report_scores": 1
+  }
+}
