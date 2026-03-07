@@ -4,8 +4,8 @@ import { navigateTo } from "@/utils/navigation"
 import { useLeaderboard } from "./hooks/useLeaderboard"
 
 interface LeaderboardTableProps {
-  ruleType: string
-  limit?: number
+  readonly ruleType: string
+  readonly limit?: number
 }
 
 type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
