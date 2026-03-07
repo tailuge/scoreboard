@@ -30,9 +30,9 @@ body {
   width: 100%;
   max-width: 1200px;
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
 }
 
 .title {
@@ -41,28 +41,28 @@ body {
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--text-color);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .server-stats-links a {
   font-family: var(--font-family-mono);
   color: var(--accent-color);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   margin: 0 1rem;
-  transition: background-color 0.2s ease;
-  padding: 0.25rem 0.5rem;
+  transition: all 0.2s ease;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
 }
 
 .server-stats-links a:hover {
   background-color: var(--border-color);
-  text-decoration: none;
 }
 
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 2.5rem;
   width: 100%;
   max-width: 1200px;
 }
@@ -70,8 +70,10 @@ body {
 .chart-container {
   background-color: #ffffff;
   border: 1px solid var(--border-color);
-  padding: 0.5rem;
-  min-height: 380px;
+  padding: 2.5rem;
+  min-height: 420px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .plotly-graph-div {
@@ -80,13 +82,23 @@ body {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .chart-grid {
-    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+  .chart-container {
+    padding: 1.5rem;
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 480px) {
   body {
     padding: 1rem;
   }
@@ -96,7 +108,12 @@ body {
   .title {
     font-size: 1rem;
   }
+  .server-stats-links a {
+    margin: 0.5rem;
+    display: inline-block;
+  }
   .chart-container {
-    padding: 0.25rem;
+    padding: 1rem;
+    min-height: 320px;
   }
 }

@@ -26,12 +26,7 @@
         >
       </div>
     </header>
-    <main class="chart-grid">
-      <div id="lobby" class="chart-container"></div>
-      <div id="createTable" class="chart-container"></div>
-      <div id="joinTable" class="chart-container"></div>
-      <div id="game" class="chart-container"></div>
-    </main>
+    <main id="chart-grid" class="chart-grid"></main>
 
     <script
       src="https://cdn.plot.ly/plotly-cartesian-3.0.0-rc.0.min.js"
@@ -40,93 +35,97 @@
     ></script>
 
     <script type="module">
-      Promise.all([
-        plotMetric("lobby"),
-        plotMetric("createTable"),
-        plotMetric("joinTable"),
-        plotMetric("game"),
-      ])
+      const METRICS = [
+        { id: "lobby", label: "LOBBY TRAFFIC", color: "#0055ff" },
+        { id: "createTable", label: "TABLE CREATION", color: "#ff3e00" },
+        { id: "joinTable", label: "TABLE JOINS", color: "#4caf50" },
+        { id: "game", label: "GAME ACTIVITY", color: "#9c27b0" },
+      ]
+
+      const chartGrid = document.getElementById("chart-grid")
+
+      METRICS.forEach((metric) => {
+        const container = document.createElement("div")
+        container.id = metric.id
+        container.className = "chart-container"
+        chartGrid.appendChild(container)
+        plotMetric(metric)
+      })
 
       async function getData(url) {
         const response = await fetch(url)
         return response.json()
       }
 
-      async function plotMetric(metric) {
-        const url = `/api/usage/${metric}`
+      async function plotMetric(metricConfig) {
+        const url = `/api/usage/${metricConfig.id}`
         const rawData = await getData(url)
-        // e.g rawData = [ { "date": "2024-12-30" }, 1, { "date": "2024-12-31" }, 3 ]
         const data = []
 
-        // Convert raw data into a usable format for Plotly
         for (let i = 0; i < rawData.length; i += 2) {
           data.push({ date: rawData[i].date, clicks: rawData[i + 1] })
         }
 
         data.sort((a, b) => new Date(a.date) - new Date(b.date))
 
-        // Prepare data for Plotly
-        const dates = data.map((item) => item.date)
-        const clicks = data.map((item) => item.clicks)
-
         const plotData = [
           {
-            x: dates,
-            y: clicks,
+            x: data.map((d) => d.date),
+            y: data.map((d) => d.clicks),
             type: "scatter",
             mode: "lines",
-            line: { color: "#0055ff", width: 2 },
-            hoverinfo: "x+y",
-            hovertemplate: "<b>%{x}</b><br>CLICKS: %{y}<extra></extra>",
+            line: { color: metricConfig.color, width: 2 },
           },
         ]
 
         const layout = {
           title: {
-            text: metric.toUpperCase(),
+            text: metricConfig.label,
             font: {
               family: "'IBM Plex Mono', monospace",
-              size: 12,
-              color: "#1a1a1a",
+              size: 11,
+              color: "#666",
             },
-            x: 0.05,
+            x: 0,
             xanchor: "left",
           },
           xaxis: {
-            type: "category",
+            type: "date",
             tickangle: 0,
-            gridcolor: "#eaeaea",
-            linecolor: "#eaeaea",
+            dtick: "M3",
+            tickformat: "%b %Y",
+            gridcolor: "#f0f0f0",
+            linecolor: "#f0f0f0",
             tickfont: {
               family: "'DM Sans', sans-serif",
-              size: 10,
-              color: "#1a1a1a",
+              size: 9,
+              color: "#999",
             },
             zeroline: false,
           },
           yaxis: {
-            gridcolor: "#eaeaea",
-            linecolor: "#eaeaea",
+            gridcolor: "#f0f0f0",
+            linecolor: "#f0f0f0",
             tickfont: {
               family: "'DM Sans', sans-serif",
-              size: 10,
-              color: "#1a1a1a",
+              size: 9,
+              color: "#999",
             },
             zeroline: false,
           },
           plot_bgcolor: "rgba(0,0,0,0)",
           paper_bgcolor: "rgba(0,0,0,0)",
-          hovermode: "x unified",
-          margin: { t: 40, r: 20, b: 50, l: 30 },
+          margin: { t: 50, r: 20, b: 40, l: 30 },
           autosize: true,
         }
 
         const config = {
           responsive: true,
           displayModeBar: false,
+          staticPlot: true,
         }
 
-        Plotly.newPlot(metric, plotData, layout, config)
+        Plotly.newPlot(metricConfig.id, plotData, layout, config)
       }
     </script>
   </body>
