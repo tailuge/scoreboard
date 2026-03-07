@@ -12,6 +12,7 @@ PORT=80
 DOCKER_IMAGE="tailuge/billiards-network"
 TOTAL_TESTS=0
 FAILED_TESTS=0
+SEPARATOR="---------------------------------------"
 
 # Resolve project root relative to script location
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -87,6 +88,7 @@ record_result() {
 		echo "FAIL: $test_name"
 		FAILED_TESTS=$((FAILED_TESTS + 1))
 	fi
+	return 0
 }
 
 run_test() {
@@ -112,10 +114,10 @@ cleanup() {
 }
 
 run_curl_tests() {
-	echo "---------------------------------------"
+	echo "$SEPARATOR"
 	echo "---             TESTING             ---"
 	echo "--- Base URL: $BASE_URL ---"
-	echo "---------------------------------------"
+	echo "$SEPARATOR"
 	echo ""
 
 	run_test "Health Check (/basic_status)" curl -fsS --max-time 5 "$BASE_URL/basic_status"
@@ -169,9 +171,9 @@ run_curl_tests() {
 	"
 
 	echo ""
-	echo "---------------------------------------"
+	echo "$SEPARATOR"
 	echo "--- Result: $((TOTAL_TESTS - FAILED_TESTS))/$TOTAL_TESTS passed ---"
-	echo "---------------------------------------"
+	echo "$SEPARATOR"
 	if [[ $FAILED_TESTS -gt 0 ]]; then
 		return 1
 	fi
