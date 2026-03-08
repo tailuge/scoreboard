@@ -1,110 +1,122 @@
-import { useState, useCallback, useEffect } from "react"
-import { Table } from "@/types/table"
-import { useLobbyMessages } from "@/contexts/LobbyContext"
+import { useState, useCallback, useEffect } from "react";
+import { Table } from "@/types/table";
+import { useLobbyMessages } from "@/contexts/LobbyContext";
 
 export function useLobbyTables(
   userId: string | null,
   userName: string | null,
-  enableSubscription: boolean = true
+  enableSubscription: boolean = true,
 ) {
-  const { lastMessage } = useLobbyMessages()
-  const [tables, setTables] = useState<Table[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { lastMessage } = useLobbyMessages();
+  const [tables, setTables] = useState<Table[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchTables = useCallback(async () => {
     try {
-      const res = await fetch("/api/tables")
-      if (!res.ok) throw new Error("Failed to fetch tables")
-      const data = await res.json()
-      setTables(data)
+      const res = await fetch("/api/tables");
+      if (!res.ok) throw new Error("Failed to fetch tables");
+      const data = await res.json();
+      console.warn("[useLobbyTables] fetchTables result", {
+        tablesCount: data.length,
+      });
+      setTables(data);
     } catch (error) {
-      console.error("Error fetching tables:", error)
+      console.error("Error fetching tables:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    fetchTables()
-  }, [fetchTables])
+    fetchTables();
+  }, [fetchTables]);
 
   useEffect(() => {
-    if (!enableSubscription || !lastMessage) return
+    if (!enableSubscription || !lastMessage) return;
 
     if (lastMessage.action === "connected") {
-      return
+      return;
     }
-    fetchTables()
-  }, [fetchTables, enableSubscription, lastMessage])
+    fetchTables();
+  }, [fetchTables, enableSubscription, lastMessage]);
 
   const tableAction = useCallback(
     async (
       tableId: string,
-      action: "join" | "spectate"
+      action: "join" | "spectate",
     ): Promise<Table | null> => {
-      if (!userId || !userName) return null
+      if (!userId || !userName) return null;
       try {
         const response = await fetch(`/api/tables/${tableId}/${action}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, userName }),
-        })
+        });
         if (response.ok) {
-          const updatedTable = await response.json()
-          fetchTables()
-          return updatedTable
+          const updatedTable = await response.json();
+          fetchTables();
+          return updatedTable;
         }
-        return null
+        return null;
       } catch (error) {
-        console.error(`Error performing ${action} on table:`, error)
-        return null
+        console.error(`Error performing ${action} on table:`, error);
+        return null;
       }
     },
-    [userId, userName, fetchTables]
-  )
+    [userId, userName, fetchTables],
+  );
 
   const findOrCreateTable = useCallback(
     async (ruleType: string): Promise<Table | null> => {
-      if (!userId || !userName) return null
+      if (!userId || !userName) return null;
       try {
+        console.warn("[useLobbyTables] findOrCreateTable request", {
+          ruleType,
+          userId,
+        });
         const response = await fetch("/api/tables/find-or-create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, userName, ruleType }),
-        })
-        if (!response.ok) throw new Error("Failed to find or create table")
-        const table = await response.json()
-        fetchTables()
-        return table
+        });
+        if (!response.ok) throw new Error("Failed to find or create table");
+        const table = await response.json();
+        console.warn("[useLobbyTables] findOrCreateTable response", {
+          tableId: table.id,
+          completed: table.completed,
+          playersLength: table.players?.length,
+        });
+        fetchTables();
+        return table;
       } catch (error) {
-        console.error("Error finding or creating table:", error)
-        return null
+        console.error("Error finding or creating table:", error);
+        return null;
       }
     },
-    [userId, userName, fetchTables]
-  )
+    [userId, userName, fetchTables],
+  );
 
   const deleteTable = useCallback(
     async (tableId: string) => {
-      if (!userId) return false
+      if (!userId) return false;
       try {
         const response = await fetch(`/api/tables/${tableId}/delete`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId }),
-        })
+        });
         if (response.ok) {
-          fetchTables()
-          return true
+          fetchTables();
+          return true;
         }
-        return false
+        return false;
       } catch (error) {
-        console.error("Error deleting table:", error)
-        return false
+        console.error("Error deleting table:", error);
+        return false;
       }
     },
-    [userId, fetchTables]
-  )
+    [userId, fetchTables],
+  );
 
   return {
     tables,
@@ -113,5 +125,5 @@ export function useLobbyTables(
     tableAction,
     findOrCreateTable,
     deleteTable,
-  }
+  };
 }
