@@ -37,7 +37,7 @@ describe("ClientErrorReporter", () => {
 
   describe("start", () => {
     it("should set up error handlers", () => {
-      const addEventListenerSpy = jest.spyOn(window, "addEventListener")
+      const addEventListenerSpy = jest.spyOn(globalThis, "addEventListener")
 
       reporter.start()
 
@@ -172,7 +172,7 @@ describe("ClientErrorReporter", () => {
       console.error("Error before unload")
 
       const event = new Event("pagehide")
-      window.dispatchEvent(event)
+      globalThis.dispatchEvent(event)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",

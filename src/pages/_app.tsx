@@ -15,7 +15,7 @@ import { UserProvider } from "@/contexts/UserContext"
 import { LobbyProvider } from "@/contexts/LobbyContext"
 import { ClientErrorReporter } from "@/errors/ClientErrorReporter"
 
-if (typeof window !== "undefined") {
+if (typeof globalThis.window !== "undefined") {
   new ClientErrorReporter("/api/client-error").start()
 }
 
