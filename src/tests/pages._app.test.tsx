@@ -33,6 +33,13 @@ jest.mock("@vercel/analytics/next", () => ({
   Analytics: () => <div>Analytics</div>,
 }))
 
+// Mock ClientErrorReporter to prevent side effects in tests
+jest.mock("@/errors/ClientErrorReporter", () => ({
+  ClientErrorReporter: jest.fn().mockImplementation(() => ({
+    start: jest.fn(),
+  })),
+}))
+
 describe("App", () => {
   beforeEach(() => {
     ;(useRouter as jest.Mock).mockReturnValue({
