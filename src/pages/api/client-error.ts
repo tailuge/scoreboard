@@ -21,12 +21,14 @@ async function handlePost(req: NextRequest) {
     const logs: ClientLog[] = body
     const ua = req.headers.get("user-agent") || "Unknown"
     const region = req.headers.get("x-vercel-id")?.split("::")[0] || "unknown"
+    const city = req.headers.get("x-vercel-ip-city") || undefined
+    const country = req.headers.get("x-vercel-ip-country") || undefined
 
     const grouped = new Map<string, ClientLog[]>()
     for (const log of logs) {
       if (!log.sid) continue
       const existing = grouped.get(log.sid) || []
-      existing.push({ ...log, ua, region })
+      existing.push({ ...log, ua, region, city, country })
       grouped.set(log.sid, existing)
     }
 
@@ -39,12 +41,18 @@ async function handlePost(req: NextRequest) {
         existing.logs.push(...sessionLogs)
         existing.ts = Math.max(existing.ts, ...sessionLogs.map((l) => l.ts))
         existing.ua = ua
+        existing.city = city
+        existing.country = country
+        existing.region = region
       } else {
         collectionMap.set(sid, {
           sid,
           ua,
           ts: Math.max(...sessionLogs.map((l) => l.ts)),
           logs: sessionLogs,
+          city,
+          country,
+          region,
         })
       }
     }

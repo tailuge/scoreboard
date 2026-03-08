@@ -7,6 +7,8 @@ export type ClientLog = {
   sid: string
   ua?: string
   region?: string
+  city?: string
+  country?: string
 }
 
 export type SessionEntry = {
@@ -14,4 +16,7 @@ export type SessionEntry = {
   ua: string
   ts: number
   logs: ClientLog[]
+  city?: string
+  country?: string
+  region?: string
 }

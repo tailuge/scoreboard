@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { detectOS, detectBrowser } from "@/utils/ua"
+import { detectOS, detectBrowser, osIcon, browserIcon } from "@/utils/ua"
+import { localeToFlag } from "@/utils/locale"
 import type { SessionEntry } from "@/types/client-log"
 
 const TYPE_COLORS: Record<string, string> = {
@@ -26,7 +27,9 @@ function SessionItem({
 }) {
   const os = detectOS(session.ua)
   const browser = detectBrowser(session.ua)
-  const region = session.logs[0]?.region
+  const region = session.region || session.logs[0]?.region
+  const city = session.city
+  const country = session.country
 
   return (
     <li>
@@ -35,24 +38,71 @@ function SessionItem({
         style={{
           width: "100%",
           textAlign: "left",
-          padding: "6px",
+          padding: "8px 6px",
           background: selected ? "#e0e0e0" : "transparent",
           border: "none",
+          borderBottom: "1px solid #eee",
           cursor: "pointer",
         }}
       >
-        <div style={{ fontSize: "11px", fontWeight: "bold" }}>
-          {session.sid.slice(0, 8)}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ fontSize: "11px", fontWeight: "bold" }}>
+            {session.sid}
+          </div>
+          <div style={{ fontSize: "10px", color: "#aaa" }}>
+            {new Date(session.ts).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
         </div>
-        <div style={{ fontSize: "10px", color: "#888" }}>
-          {os} · {browser}
+        <div
+          style={{
+            fontSize: "10px",
+            color: "#666",
+            display: "flex",
+            gap: "4px",
+            marginTop: "2px",
+          }}
+        >
+          <span>
+            {osIcon(os)} {os}
+          </span>
+          <span>
+            {browserIcon(browser)} {browser}
+          </span>
         </div>
-        <div style={{ fontSize: "10px", color: "#aaa" }}>
-          {new Date(session.ts).toLocaleString()}
+        <div
+          style={{
+            fontSize: "9px",
+            color: "#999",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            marginTop: "2px",
+          }}
+        >
+          {session.ua}
         </div>
-        {region ? (
-          <div style={{ fontSize: "10px", color: "#888" }}>{region}</div>
-        ) : null}
+        <div
+          style={{
+            fontSize: "10px",
+            color: "#888",
+            marginTop: "2px",
+            display: "flex",
+            gap: "4px",
+          }}
+        >
+          {country ? <span>{localeToFlag(country)}</span> : null}
+          {city ? <span>{city}</span> : null}
+          {region ? <span style={{ color: "#bbb" }}>({region})</span> : null}
+        </div>
       </button>
     </li>
   )
