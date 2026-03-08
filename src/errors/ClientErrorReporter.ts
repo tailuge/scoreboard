@@ -149,15 +149,23 @@ export class ClientErrorReporter {
 
   private capture(type: string, args: unknown[]) {
     try {
-      let message = args
-        .map((a) => (typeof a === "object" ? JSON.stringify(a) : String(a)))
-        .join(" ")
       let stack: string | undefined
-
-      if (args[0] instanceof Error) {
-        message = args[0].message
-        stack = args[0].stack
-      }
+      const message = args
+        .map((a) => {
+          if (a instanceof Error) {
+            stack = stack || a.stack
+            return a.message
+          }
+          if (typeof a === "object" && a !== null) {
+            try {
+              return JSON.stringify(a)
+            } catch {
+              return String(a)
+            }
+          }
+          return String(a)
+        })
+        .join(" ")
 
       const key = type + ":" + message
       const count = (this.seen.get(key) ?? 0) + 1

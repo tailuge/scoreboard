@@ -20,9 +20,9 @@ function SessionItem({
   selected,
   onSelect,
 }: {
-  session: SessionEntry
-  selected: boolean
-  onSelect: () => void
+  readonly session: SessionEntry
+  readonly selected: boolean
+  readonly onSelect: () => void
 }) {
   const os = detectOS(session.ua)
   const browser = detectBrowser(session.ua)
