@@ -1,3 +1,5 @@
 export function getUID() {
-  return globalThis.crypto.randomUUID().split("-")[0]
+  return "xxxxxxxx".replace(/x/g, () =>
+    Math.floor(Math.random() * 16).toString(16)
+  )
 }

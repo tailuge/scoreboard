@@ -51,6 +51,8 @@ interface ErrorReport {
   sid: string
 }
 
+import { getUID } from "@/utils/uid"
+
 export class ClientErrorReporter {
   private readonly endpoint: string
   private readonly sid: string
@@ -75,16 +77,12 @@ export class ClientErrorReporter {
     }
   ) {
     this.endpoint = endpoint
-    this.sid = this.generateSid()
+    this.sid = getUID()
     this.maxPerKey = options?.maxPerKey ?? 3
     this.flushIntervalMs = options?.flushIntervalMs ?? 5000
     this.maxQueueSize = options?.maxQueueSize ?? 20
 
     this.boundFlush = this.flush.bind(this)
-  }
-
-  private generateSid(): string {
-    return Date.now().toString(36)
   }
 
   start() {

@@ -3,6 +3,7 @@ import { ScoreData } from "@/types/score"
 import { logger } from "@/utils/logger"
 import { isValidGameType } from "@/utils/gameTypes"
 import { GAME_BASE_URL } from "@/config"
+import { getUID } from "@/utils/uid"
 
 export class ScoreTable {
   readonly prefix = "hiscore"
@@ -24,7 +25,7 @@ export class ScoreTable {
       score: score,
       data: data,
       likes: 0,
-      id: this.generateUID(),
+      id: getUID(),
     }
     await this.store.zadd(this.dbKey(ruletype), {
       score: score,
@@ -83,13 +84,5 @@ export class ScoreTable {
   async get(ruletype: string, id: string) {
     const item = await this.getById(ruletype, id)
     return this.formatReplayUrl(item.data)
-  }
-
-  generateUID() {
-    const a = Math.trunc(Math.random() * 46656)
-    const b = Math.trunc(Math.random() * 46656)
-    return (
-      ("000" + a.toString(36)).slice(-3) + ("000" + b.toString(36)).slice(-3)
-    )
   }
 }

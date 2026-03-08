@@ -19,10 +19,6 @@ jest.mock("@vercel/kv", () => ({
   kv: mockKv,
 }))
 
-jest.mock("uncrypto", () => ({
-  randomUUID: () => "test-uuid-1234",
-}))
-
 // Mocking Edge runtime globals
 // Using a function instead of a class to avoid "class with only a constructor" error
 globalThis.Request ??= function Request(
