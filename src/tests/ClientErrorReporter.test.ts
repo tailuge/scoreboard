@@ -60,7 +60,7 @@ describe("ClientErrorReporter", () => {
       // Advance time to trigger flush
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).toHaveBeenCalled()
+      expect(sendBeaconSpy).toHaveBeenCalled()
     })
   })
 
@@ -72,12 +72,9 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
-        expect.objectContaining({
-          method: "POST",
-          body: expect.stringContaining("Test error message"),
-        })
+        expect.stringContaining("Test error message")
       )
     })
 
@@ -88,11 +85,9 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
-        expect.objectContaining({
-          body: expect.stringContaining("warn"),
-        })
+        expect.stringContaining("warn")
       )
     })
 
@@ -104,11 +99,9 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
-        expect.objectContaining({
-          body: expect.stringContaining("Test error"),
-        })
+        expect.stringContaining("Test error")
       )
     })
 
@@ -122,8 +115,8 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      const call = fetchSpy.mock.calls[0]
-      const body = JSON.parse(call[1].body as string)
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
       expect(body.filter((l: any) => l.message === "Same error").length).toBe(3)
     })
 
@@ -134,8 +127,8 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      const call = fetchSpy.mock.calls[0]
-      const body = JSON.parse(call[1].body as string)
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
       expect(body[0].url).toBe("http://localhost/")
       expect(body[0].ts).toBeDefined()
     })
@@ -147,8 +140,8 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      const call = fetchSpy.mock.calls[0]
-      const body = JSON.parse(call[1].body as string)
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
       expect(body[0].sid).toBeDefined()
       expect(body[0].sid.length).toBeGreaterThan(0)
     })
@@ -160,7 +153,7 @@ describe("ClientErrorReporter", () => {
 
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).not.toHaveBeenCalled()
+      expect(sendBeaconSpy).not.toHaveBeenCalled()
     })
 
     it("should flush on queue overflow", () => {
@@ -170,7 +163,7 @@ describe("ClientErrorReporter", () => {
         console.error(`Error ${i}`)
       }
 
-      expect(fetchSpy).toHaveBeenCalled()
+      expect(sendBeaconSpy).toHaveBeenCalled()
     })
 
     it("should use sendBeacon on pagehide", () => {
@@ -195,7 +188,7 @@ describe("ClientErrorReporter", () => {
       jest.advanceTimersByTime(5001)
       jest.advanceTimersByTime(5001)
 
-      expect(fetchSpy).toHaveBeenCalledTimes(1)
+      expect(sendBeaconSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

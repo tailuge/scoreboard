@@ -1,36 +1,139 @@
+/**
+ * ClientErrorReporter - Captures client-side errors and reports them to a server endpoint.
+ *
+ * USAGE:
+ * 1. Import and instantiate with your error collection endpoint URL:
+ *    const reporter = new ClientErrorReporter("https://your-server.com/api/errors")
+ * 2. Call start() to begin capturing errors:
+ *    reporter.start()
+ * 3. Call stop() when done (e.g., on page unload or component unmount):
+ *    reporter.stop()
+ *
+ * ENDPOINT:
+ * The default endpoint for this project is hosted at:
+ *   https://scoreboard-tailuge.vercel.app/api/client-error
+ *
+ * CORS:
+ * The endpoint must include appropriate CORS headers (Access-Control-Allow-Origin)
+ * to allow cross-origin requests from client applications.
+ *
+ * CAPTURED SOURCES:
+ * - console.error and console.warn calls
+ * - window.onerror (uncaught JavaScript errors)
+ * - window.onunhandledrejection (unhandled Promise rejections)
+ *
+ * RATE LIMITING:
+ * - Maximum of maxPerKey (default: 3) reports per unique error message
+ * - Maximum queue size of maxQueueSize (default: 20) before forced flush
+ * - Automatic flush every flushIntervalMs (default: 5000ms)
+ *
+ * @example
+ * // Basic usage with default settings
+ * const reporter = new ClientErrorReporter("https://example.com/api/errors")
+ * reporter.start()
+ *
+ * @example
+ * // Custom configuration
+ * const reporter = new ClientErrorReporter("https://example.com/api/errors", {
+ *   maxPerKey: 5,
+ *   flushIntervalMs: 10000,
+ *   maxQueueSize: 50
+ * })
+ * reporter.start()
+ */
+
+interface ErrorReport {
+  type: string
+  message: string
+  stack?: string
+  url: string
+  ts: number
+  sid: string
+}
+
 export class ClientErrorReporter {
   private endpoint: string
-  private sid = crypto.randomUUID()
-  private queue: any[] = []
+  private sid: string
+  private queue: ErrorReport[] = []
   private seen = new Map<string, number>()
-  private maxPerKey = 3
-  private flushInterval = 5000
 
-  constructor(endpoint: string) {
+  private readonly maxPerKey: number
+  private readonly flushIntervalMs: number
+  private readonly maxQueueSize: number
+
+  private intervalId?: ReturnType<typeof setInterval>
+  private boundFlush: () => void
+  private originalConsoleError?: typeof console.error
+  private originalConsoleWarn?: typeof console.warn
+
+  constructor(
+    endpoint: string,
+    options?: {
+      maxPerKey?: number
+      flushIntervalMs?: number
+      maxQueueSize?: number
+    }
+  ) {
     this.endpoint = endpoint
+    this.sid = this.generateSid()
+    this.maxPerKey = options?.maxPerKey ?? 3
+    this.flushIntervalMs = options?.flushIntervalMs ?? 5000
+    this.maxQueueSize = options?.maxQueueSize ?? 20
+
+    this.boundFlush = this.flush.bind(this)
+  }
+
+  private generateSid(): string {
+    try {
+      return crypto.randomUUID()
+    } catch {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0
+        const v = c === "x" ? r : (r & 0x3) | 0x8
+        return v.toString(16)
+      })
+    }
   }
 
   start() {
     this.patchConsole()
     this.patchGlobalErrors()
 
-    setInterval(() => this.flush(), this.flushInterval)
+    this.intervalId = setInterval(this.boundFlush, this.flushIntervalMs)
 
-    window.addEventListener("pagehide", () => this.flush(true))
+    window.addEventListener("pagehide", this.boundFlush)
+  }
+
+  stop() {
+    this.flush(true)
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId)
+      this.intervalId = undefined
+    }
+
+    window.removeEventListener("pagehide", this.boundFlush)
+
+    if (this.originalConsoleError) {
+      console.error = this.originalConsoleError
+    }
+    if (this.originalConsoleWarn) {
+      console.warn = this.originalConsoleWarn
+    }
   }
 
   private patchConsole() {
-    const origError = console.error
-    const origWarn = console.warn
+    this.originalConsoleError = console.error
+    this.originalConsoleWarn = console.warn
 
     console.error = (...args: unknown[]) => {
       this.capture("error", args)
-      origError.apply(console, args)
+      this.originalConsoleError!.apply(console, args)
     }
 
     console.warn = (...args: unknown[]) => {
       this.capture("warn", args)
-      origWarn.apply(console, args)
+      this.originalConsoleWarn!.apply(console, args)
     }
   }
 
@@ -64,18 +167,18 @@ export class ClientErrorReporter {
         type,
         message,
         stack,
-        url: location.href,
+        url: globalThis.location?.href ?? "",
         ts: Date.now(),
         sid: this.sid,
       })
 
-      if (this.queue.length > 20) this.flush()
+      if (this.queue.length > this.maxQueueSize) this.flush()
     } catch {
       // do nothing
     }
   }
 
-  private flush(useBeacon = false) {
+  private flush(useBeacon = true) {
     try {
       if (!this.queue.length) return
 
@@ -92,7 +195,9 @@ export class ClientErrorReporter {
         body: payload,
         keepalive: true,
         headers: { "content-type": "application/json" },
-      }).catch(() => {})
+      }).catch(() => {
+        // do nothing
+      })
     } catch {
       // do nothing
     }
