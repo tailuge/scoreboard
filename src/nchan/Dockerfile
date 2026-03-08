@@ -5,7 +5,7 @@ FROM nginx:1.27.4-alpine AS builder
 # Using a stable version of Nchan
 ARG NCHAN_VERSION=1.3.8
 
-# Install build dependencies and tools
+# Install build dependencies and tools in one layer to minimize intermediate images
 RUN apk add --no-cache \
     build-base \
     pcre2-dev \
@@ -13,16 +13,13 @@ RUN apk add --no-cache \
     openssl-dev \
     linux-headers \
     git \
-    wget
-
-# Get nginx source that MATCHES the binary version exactly
-RUN VERSION=$(nginx -v 2>&1 | cut -d '/' -f 2) && \
-    wget http://nginx.org/download/nginx-${VERSION}.tar.gz && \
-    tar zxvf nginx-${VERSION}.tar.gz && \
-    mv nginx-${VERSION} /nginx-src
-
-# Get nchan source
-RUN git clone --branch v${NCHAN_VERSION} https://github.com/slact/nchan.git /nchan
+    wget && \
+    # Get nginx source that MATCHES the binary version exactly
+    VERSION=$(nginx -v 2>&1 | cut -d '/' -f 2) && \
+    mkdir -p /nginx-src && \
+    wget -qO- http://nginx.org/download/nginx-${VERSION}.tar.gz | tar zxvf - -C /nginx-src --strip-components=1 && \
+    # Get nchan source
+    git clone --depth 1 --branch v${NCHAN_VERSION} https://github.com/slact/nchan.git /nchan
 
 WORKDIR /nginx-src
 
@@ -34,13 +31,13 @@ RUN ./configure --with-compat --add-dynamic-module=/nchan --with-cc-opt="-Wno-er
 FROM nginx:1.27.4-alpine
 
 # Set labels for OCI compatibility
-LABEL org.opencontainers.image.source="https://github.com/tailuge/scoreboard"
-LABEL org.opencontainers.image.description="Billiards Network Nchan Server"
+LABEL org.opencontainers.image.source="https://github.com/tailuge/scoreboard" \
+      org.opencontainers.image.description="Billiards Network Nchan Server"
 
 # Copy nchan module
 COPY --from=builder /nginx-src/objs/ngx_nchan_module.so /etc/nginx/modules/
 
-# Copy configurations with correct ownership from the start
+# Copy configurations with correct ownership
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 COPY --chown=nginx:nginx nchan.conf /etc/nginx/conf.d/default.conf
 COPY --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
@@ -51,19 +48,21 @@ RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
     chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html /etc/nginx && \
     chmod -R 755 /etc/nginx && \
     # Set read-only permissions for config files after directory permissions
+    # Addresses the Sonar warning: "Make sure no write permissions are assigned to the copied resource."
     chmod 444 /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /usr/share/nginx/html/index.html && \
     # Remove default alpine nginx configs if they exist to avoid confusion
-    rm -rf /etc/nginx/conf.d/default.conf.orig
+    rm -f /etc/nginx/conf.d/default.conf.orig
 
 # Healthcheck to ensure Nchan is responding
 # Note: we use wget (busybox) as it is native to alpine
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8080/basic_status || exit 1
 
-EXPOSE 80
+# Render.com will use the port from EXPOSE. Nginx is configured to listen on 8080 in nchan.conf.
+EXPOSE 8080
 
 # Run as non-root user
 USER nginx
 
-# Standard Nginx entrypoint will handle the daemon off if needed, but we keep the CMD for clarity
+# Standard Nginx entrypoint will handle the daemon off if needed
 CMD ["nginx", "-g", "daemon off;"]
