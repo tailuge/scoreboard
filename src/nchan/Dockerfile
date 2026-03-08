@@ -50,13 +50,15 @@ COPY --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
 RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
     chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html /etc/nginx && \
     chmod -R 755 /etc/nginx && \
+    # Set read-only permissions for config files after directory permissions
+    chmod 444 /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf /usr/share/nginx/html/index.html && \
     # Remove default alpine nginx configs if they exist to avoid confusion
     rm -rf /etc/nginx/conf.d/default.conf.orig
 
 # Healthcheck to ensure Nchan is responding
 # Note: we use wget (busybox) as it is native to alpine
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:80/basic_status || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/basic_status || exit 1
 
 EXPOSE 80
 
