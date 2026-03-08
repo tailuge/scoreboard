@@ -3,7 +3,7 @@ import type { LobbyMessage, PresenceMessage } from "./types"
 export class NchanPub {
   private readonly publishUrl: string
   private readonly presencePublishUrl: string
-  private readonly base = "billiards-network.onrender.com"
+  private readonly base: string = "billiards-network.onrender.com"
   private readonly channel: string
 
   constructor(channel: string) {
@@ -15,7 +15,7 @@ export class NchanPub {
   /**
    * Publish a message to a URL endpoint
    */
-  private async postTo(url: string, event: any) {
+  private async postTo(url: string, event: unknown): Promise<unknown> {
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -30,7 +30,7 @@ export class NchanPub {
   /**
    * Publish a typed lobby message (match events, table updates)
    */
-  async publishLobby(event: Omit<LobbyMessage, "messageType">) {
+  async publishLobby(event: Omit<LobbyMessage, "messageType">): Promise<unknown> {
     const message: LobbyMessage = {
       ...event,
       messageType: "lobby",
@@ -41,7 +41,7 @@ export class NchanPub {
   /**
    * Publish a typed presence message (user join/leave/heartbeat)
    */
-  async publishPresence(event: Omit<PresenceMessage, "messageType">) {
+  async publishPresence(event: Omit<PresenceMessage, "messageType">): Promise<unknown> {
     const message: PresenceMessage = {
       ...event,
       messageType: "presence",

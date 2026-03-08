@@ -3,10 +3,10 @@ import { logger } from "@/utils/logger"
 export class NchanSub {
   private socket: WebSocket | null = null
   private readonly subscribeUrl: string
-  private readonly notify: (event: string) => void = () => {}
+  private readonly notify: (event: string) => void
   private shouldReconnect: boolean = false
   private reconnectTimeout: NodeJS.Timeout | null = null
-  private readonly base =
+  private readonly base: string =
     process.env.NEXT_PUBLIC_WEBSOCKET_HOST || "billiards-network.onrender.com"
   private readonly channel: string
   private isPageHidden: boolean = false
@@ -21,7 +21,7 @@ export class NchanSub {
     this.notify = notify
   }
 
-  private readonly handlePageHide = () => {
+  private readonly handlePageHide = (): void => {
     this.isPageHidden = true
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout)
@@ -33,7 +33,7 @@ export class NchanSub {
     }
   }
 
-  private readonly handlePageShow = (event: PageTransitionEvent) => {
+  private readonly handlePageShow = (event: PageTransitionEvent): void => {
     this.isPageHidden = false
     if (event.persisted && this.shouldReconnect) {
       logger.log(`Restoring connection from bfcache: ${this.subscribeUrl}`)
@@ -41,7 +41,7 @@ export class NchanSub {
     }
   }
 
-  start() {
+  public start(): void {
     this.shouldReconnect = true
     this.connect()
     if (globalThis.window !== undefined) {
@@ -50,14 +50,14 @@ export class NchanSub {
     }
   }
 
-  private connect() {
+  private connect(): void {
     this.socket = new WebSocket(this.subscribeUrl)
 
-    this.socket.onopen = () => {
+    this.socket.onopen = (): void => {
       logger.log(`Connected to ${this.subscribeUrl}`)
     }
 
-    this.socket.onmessage = (event: MessageEvent) => {
+    this.socket.onmessage = (event: MessageEvent): void => {
       const now = new Date()
       const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
       const data = event.data
@@ -78,12 +78,12 @@ export class NchanSub {
       this.notify(data)
     }
 
-    this.socket.onerror = (error: Event) => {
+    this.socket.onerror = (error: Event): void => {
       console.error(`WebSocket error:`, error)
     }
 
     const currentSocket = this.socket
-    this.socket.onclose = (event: CloseEvent) => {
+    this.socket.onclose = (event: CloseEvent): void => {
       logger.log("Disconnected from %s:", this.subscribeUrl, event.reason)
       if (this.socket === currentSocket) {
         this.socket = null
@@ -109,7 +109,7 @@ export class NchanSub {
     }
   }
 
-  stop() {
+  public stop(): void {
     this.shouldReconnect = false
     if (globalThis.window !== undefined) {
       globalThis.window.removeEventListener("pagehide", this.handlePageHide)
