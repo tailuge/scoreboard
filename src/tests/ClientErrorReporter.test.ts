@@ -18,21 +18,29 @@ describe("ClientErrorReporter", () => {
       sendBeacon: sendBeaconSpy,
     }
 
+    jest.spyOn(globalThis, "addEventListener")
+
     originalError = console.error
     originalWarn = console.warn
+    // Don't use spyOn here because it replaces the method and we want to test if
+    // ClientErrorReporter restores the ORIGINAL method it found when start() was called.
     console.error = jest.fn()
     console.warn = jest.fn()
+    // Re-capture what we just set as the "original" for the reporter
+    originalError = console.error
+    originalWarn = console.warn
 
     reporter = new ClientErrorReporter("/api/client-error")
   })
 
   afterEach(() => {
     jest.useRealTimers()
-    console.error = originalError
-    console.warn = originalWarn
     delete (globalThis as any).fetch
     delete (globalThis as any).navigator
     jest.restoreAllMocks()
+    // Restore console methods manually just in case
+    console.error = originalError
+    console.warn = originalWarn
   })
 
   describe("start", () => {
@@ -189,6 +197,94 @@ describe("ClientErrorReporter", () => {
       jest.advanceTimersByTime(5001)
 
       expect(sendBeaconSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it("should use fetch when sendBeacon is not available", () => {
+      delete (globalThis as any).navigator.sendBeacon
+      reporter.start()
+
+      console.error("Test error")
+
+      // Trigger flush through timer
+      jest.advanceTimersByTime(5001)
+
+      expect(fetchSpy).toHaveBeenCalledWith(
+        "/api/client-error",
+        expect.objectContaining({
+          method: "POST",
+          keepalive: true,
+        })
+      )
+    })
+  })
+
+  describe("stop", () => {
+    it("should stop interval and remove event listeners", () => {
+      const removeEventListenerSpy = jest.spyOn(globalThis, "removeEventListener")
+      const clearIntervalSpy = jest.spyOn(globalThis, "clearInterval")
+
+      reporter.start()
+      reporter.stop()
+
+      expect(clearIntervalSpy).toHaveBeenCalled()
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        "pagehide",
+        expect.any(Function)
+      )
+    })
+
+    it("should restore original console methods", () => {
+      const initialError = console.error
+      reporter.start()
+      const patchedError = console.error
+      expect(patchedError).not.toBe(initialError)
+
+      reporter.stop()
+
+      expect(console.error).toBe(initialError)
+      expect(console.warn).toBe(originalWarn)
+    })
+  })
+
+  describe("global error events", () => {
+    it("should capture uncaught errors", () => {
+      reporter.start()
+
+      const errorEvent = new ErrorEvent("error", {
+        message: "Uncaught error",
+        error: new Error("Uncaught error"),
+      })
+      globalThis.dispatchEvent(errorEvent)
+
+      jest.advanceTimersByTime(5001)
+
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
+        "/api/client-error",
+        expect.stringContaining("Uncaught error")
+      )
+    })
+
+    it("should capture unhandled promise rejections", () => {
+      reporter.start()
+
+      // Manually trigger the listener since PromiseRejectionEvent might not be in jsdom
+      const listeners = (globalThis.addEventListener as jest.Mock).mock.calls
+      const rejectionListener = listeners.find(
+        (call) => call[0] === "unhandledrejection"
+      )?.[1]
+
+      if (rejectionListener) {
+        rejectionListener({
+          reason: "Promise rejected",
+        })
+      }
+
+      jest.advanceTimersByTime(5001)
+
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
+        "/api/client-error",
+        expect.stringContaining("Promise rejected")
+      )
     })
   })
 })
