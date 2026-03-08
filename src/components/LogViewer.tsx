@@ -32,7 +32,11 @@ function getTypeColor(type: string) {
   return TYPE_COLORS[type] || "blue"
 }
 
-export default function LogViewer({ sessions }: { sessions: SessionEntry[] }) {
+interface LogViewerProps {
+  readonly sessions: readonly SessionEntry[]
+}
+
+export default function LogViewer({ sessions }: LogViewerProps) {
   const [selected, setSelected] = useState<string | null>(null)
 
   const session = sessions.find((s) => s.sid === selected)
@@ -81,16 +85,14 @@ export default function LogViewer({ sessions }: { sessions: SessionEntry[] }) {
         )}
       </div>
       <div style={{ flex: 1, padding: "10px", overflowY: "auto" }}>
-        {!session ? (
-          <p>Select a session to view logs</p>
-        ) : (
+        {session ? (
           <>
             <h3 style={{ margin: "0 0 10px 0" }}>
               Logs for {shortSid(session.sid)}
             </h3>
             <pre style={{ fontSize: "12px", whiteSpace: "pre-wrap" }}>
               {session.logs.map((log, i) => (
-                <div key={i} style={{ marginBottom: "12px" }}>
+                <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>
                     <span style={{ color: "#666" }}>
                       [{new Date(log.ts).toLocaleTimeString()}]
@@ -120,6 +122,8 @@ export default function LogViewer({ sessions }: { sessions: SessionEntry[] }) {
               ))}
             </pre>
           </>
+        ) : (
+          <p>Select a session to view logs</p>
         )}
       </div>
     </>
