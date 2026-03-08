@@ -14,6 +14,8 @@ import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 import { ChallengeCard } from "@/components/ChallengeCard"
 import { SeekingCard } from "@/components/SeekingCard"
 
+const log = (...args: unknown[]) => console.warn("[lobby]", ...args)
+
 export default function Lobby() {
   const { userId, userName } = useUser()
   const router = useRouter()
@@ -35,8 +37,11 @@ export default function Lobby() {
   const [activeRuleType, setActiveRuleType] = useState<string | null>(null)
 
   useEffect(() => {
+    log("router.isReady", router.isReady)
     if (router.isReady) {
+      log("opponentId", opponentId)
       if (opponentId) setActiveOpponentId(opponentId)
+      log("queryRuleType", queryRuleType)
       if (queryRuleType) setActiveRuleType(queryRuleType)
     }
   }, [router.isReady, opponentId, queryRuleType])
@@ -58,6 +63,7 @@ export default function Lobby() {
   }, [seekingTableId])
 
   const handleCancelSeeking = useCallback(async () => {
+    log("handleCancelSeeking called", { seekingTableId })
     if (seekingTableId) {
       await deleteTable(seekingTableId)
     }
@@ -65,21 +71,36 @@ export default function Lobby() {
     setSeekingTableId(null)
     setActiveOpponentId(null)
     setActiveRuleType(null)
+    log("timeoutRef.current", timeoutRef.current)
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
   }, [seekingTableId, deleteTable])
 
   useEffect(() => {
+    log("router.isReady check", router.isReady)
     if (!router.isReady) return
     markUsage("lobby")
   }, [router.isReady])
 
   const handleFindOrCreate = useCallback(
     async (ruleType: string) => {
+      log("handleFindOrCreate called", { ruleType })
       setSeekingRuleType(ruleType)
       const updatedTable = await findOrCreateTable(ruleType)
+      log("handleFindOrCreate result", {
+        updatedTable: updatedTable
+          ? {
+              id: updatedTable.id,
+              players: updatedTable.players,
+              completed: updatedTable.completed,
+              ruleType: updatedTable.ruleType,
+            }
+          : null,
+      })
       if (updatedTable) {
+        log("players.length", updatedTable.players.length)
         if (updatedTable.players.length === 2) {
           setSeekingRuleType(null)
+          log("updatedTable.completed", updatedTable.completed)
           if (!updatedTable.completed) {
             setModalTable({
               id: updatedTable.id,
@@ -100,15 +121,25 @@ export default function Lobby() {
   useAutoJoin(router, isLoading, userId, userName, handleFindOrCreate)
 
   useEffect(() => {
+    log("tables effect", { tablesCount: tables.length, userId })
     tables.forEach((table) => {
+      log("checking table", {
+        tableId: table.id,
+        creatorId: table.creator.id,
+        playersLength: table.players.length,
+        completed: table.completed,
+        shownModals: Array.from(shownModals.current),
+      })
       if (
         table.creator.id === userId &&
         table.players.length === 2 &&
         !table.completed &&
         !shownModals.current.has(table.id)
       ) {
+        log("table condition met, setting modal", { tableId: table.id })
         setSeekingRuleType(null)
         setSeekingTableId(null)
+        log("timeoutRef.current before clear", timeoutRef.current)
         if (timeoutRef.current) clearTimeout(timeoutRef.current)
         setModalTable({ id: table.id, ruleType: table.ruleType })
         // Clear challenge from presence to remove it from recipient's screen
@@ -120,9 +151,12 @@ export default function Lobby() {
 
   // Timeout logic
   useEffect(() => {
+    log("timeout effect", { seekingRuleType })
     if (seekingRuleType) {
+      log("timeoutRef.current before clear", timeoutRef.current)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
       timeoutRef.current = setTimeout(async () => {
+        log("timeout fired", { seekingTableIdRef: seekingTableIdRef.current })
         if (seekingTableIdRef.current) {
           await deleteTable(seekingTableIdRef.current)
         }
@@ -132,6 +166,7 @@ export default function Lobby() {
       }, 60000)
     }
     return () => {
+      log("timeout cleanup", { timeoutRef: timeoutRef.current })
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [seekingRuleType, deleteTable, router])
@@ -139,6 +174,7 @@ export default function Lobby() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      log("unmount cleanup", { seekingTableIdRef: seekingTableIdRef.current })
       if (seekingTableIdRef.current) {
         // Use keepalive for the delete request on unmount to ensure it completes
         fetch(`/api/tables/${seekingTableIdRef.current}/delete`, {
@@ -161,6 +197,18 @@ export default function Lobby() {
         canonical="https://scoreboard-tailuge.vercel.app/lobby"
         ogUrl="https://scoreboard-tailuge.vercel.app/lobby"
       />
+      {log("render state", {
+        activeOpponentId,
+        activeRuleType,
+        seekingRuleType,
+        seekingTableId,
+        modalTable,
+        userId,
+        userName,
+        isLoading,
+        tablesCount: tables.length,
+        presenceCount,
+      })}
       <div className="min-h-screen bg-gray-900 flex flex-col items-center p-4">
         <div className="w-full max-w-6xl mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2">
@@ -177,28 +225,39 @@ export default function Lobby() {
               }
             >
               <div className="flex flex-col gap-6">
-                {activeOpponentId && !activeRuleType ? (
-                  <ChallengeCard
-                    opponentName={opponentName}
-                    onSelectRule={(ruleType) => {
-                      setActiveRuleType(ruleType)
-                      handleFindOrCreate(ruleType)
-                    }}
-                    onCancel={() => {
-                      setActiveOpponentId(null)
-                      const newQuery = { ...router.query }
-                      delete newQuery.opponentId
-                      delete newQuery.opponentName
-                      router.push({ pathname: "/lobby", query: newQuery })
-                    }}
-                  />
-                ) : null}
-                {seekingRuleType ? (
-                  <SeekingCard
-                    ruleType={seekingRuleType}
-                    onCancel={handleCancelSeeking}
-                  />
-                ) : null}
+                {
+                  (log("render ChallengeCard condition", {
+                    activeOpponentId,
+                    activeRuleType,
+                  }),
+                  activeOpponentId && !activeRuleType ? (
+                    <ChallengeCard
+                      opponentName={opponentName}
+                      onSelectRule={(ruleType) => {
+                        log("onSelectRule", { ruleType })
+                        setActiveRuleType(ruleType)
+                        handleFindOrCreate(ruleType)
+                      }}
+                      onCancel={() => {
+                        log("ChallengeCard onCancel")
+                        setActiveOpponentId(null)
+                        const newQuery = { ...router.query }
+                        delete newQuery.opponentId
+                        delete newQuery.opponentName
+                        router.push({ pathname: "/lobby", query: newQuery })
+                      }}
+                    />
+                  ) : null)
+                }
+                {
+                  (log("render SeekingCard condition", { seekingRuleType }),
+                  seekingRuleType ? (
+                    <SeekingCard
+                      ruleType={seekingRuleType}
+                      onCancel={handleCancelSeeking}
+                    />
+                  ) : null)
+                }
               </div>
             </GroupBox>
           </div>
