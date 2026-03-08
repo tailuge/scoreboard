@@ -39,10 +39,11 @@ function SessionItem({
           width: "100%",
           textAlign: "left",
           padding: "8px 6px",
-          background: selected ? "#e0e0e0" : "transparent",
+          background: selected ? "#222" : "transparent",
           border: "none",
-          borderBottom: "1px solid #eee",
+          borderBottom: "1px solid #333",
           cursor: "pointer",
+          color: "white",
         }}
       >
         <div
@@ -55,7 +56,7 @@ function SessionItem({
           <div style={{ fontSize: "11px", fontWeight: "bold" }}>
             {session.sid}
           </div>
-          <div style={{ fontSize: "10px", color: "#aaa" }}>
+          <div style={{ fontSize: "10px", color: "white" }}>
             {new Date(session.ts).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -65,7 +66,7 @@ function SessionItem({
         <div
           style={{
             fontSize: "10px",
-            color: "#666",
+            color: "white",
             display: "flex",
             gap: "4px",
             marginTop: "2px",
@@ -81,7 +82,7 @@ function SessionItem({
         <div
           style={{
             fontSize: "9px",
-            color: "#999",
+            color: "white",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -93,7 +94,7 @@ function SessionItem({
         <div
           style={{
             fontSize: "10px",
-            color: "#888",
+            color: "white",
             marginTop: "2px",
             display: "flex",
             gap: "4px",
@@ -101,7 +102,7 @@ function SessionItem({
         >
           {country ? <span>{localeToFlag(country)}</span> : null}
           {city ? <span>{city}</span> : null}
-          {region ? <span style={{ color: "#bbb" }}>({region})</span> : null}
+          {region ? <span style={{ color: "white" }}>({region})</span> : null}
         </div>
       </button>
     </li>
@@ -122,9 +123,10 @@ export default function LogViewer({ sessions }: LogViewerProps) {
       <div
         style={{
           width: "300px",
-          borderRight: "1px solid #ccc",
+          borderRight: "1px solid #333",
           overflowY: "auto",
           padding: "10px",
+          color: "white",
         }}
       >
         <h3 style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
@@ -155,7 +157,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
               {session.logs.map((log, i) => (
                 <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>
-                    <span style={{ color: "#666" }}>
+                    <span style={{ color: "#eee" }}>
                       [{new Date(log.ts).toLocaleTimeString()}]
                     </span>{" "}
                     <span
@@ -171,7 +173,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
                   {log.stack ? (
                     <div
                       style={{
-                        color: "#666",
+                        color: "#eee",
                         fontSize: "11px",
                         marginTop: "4px",
                       }}
