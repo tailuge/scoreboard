@@ -51,7 +51,7 @@ setup_docker() {
 	# Ensure no stale container blocks startup
 	docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-	if ! docker run -d --user root -p "$PORT":80 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"; then
+	if ! docker run -d --user root -p 80:8080 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"; then
 		echo "Failed to start container $CONTAINER_NAME."
 		return 1
 	fi
