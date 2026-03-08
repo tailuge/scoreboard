@@ -28,7 +28,9 @@ export function UserListItem({
       </div>
       <div className="flex items-center gap-0.5">
         <span className="text-[9px]">{osIcon(detectOS(user.ua))}</span>
-        <span className="text-[9px]">{browserIcon(detectBrowser(user.ua))}</span>
+        <span className="text-[9px]">
+          {browserIcon(detectBrowser(user.ua))}
+        </span>
         <UserBadge user={user} currentUserId={currentUserId} />
         {user.userId !== currentUserId && !user.isBot && (
           <button

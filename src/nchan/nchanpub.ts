@@ -30,7 +30,9 @@ export class NchanPub {
   /**
    * Publish a typed lobby message (match events, table updates)
    */
-  async publishLobby(event: Omit<LobbyMessage, "messageType">): Promise<unknown> {
+  async publishLobby(
+    event: Omit<LobbyMessage, "messageType">
+  ): Promise<unknown> {
     const message: LobbyMessage = {
       ...event,
       messageType: "lobby",
@@ -41,7 +43,9 @@ export class NchanPub {
   /**
    * Publish a typed presence message (user join/leave/heartbeat)
    */
-  async publishPresence(event: Omit<PresenceMessage, "messageType">): Promise<unknown> {
+  async publishPresence(
+    event: Omit<PresenceMessage, "messageType">
+  ): Promise<unknown> {
     const message: PresenceMessage = {
       ...event,
       messageType: "presence",
