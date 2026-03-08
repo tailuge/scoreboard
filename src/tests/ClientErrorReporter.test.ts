@@ -99,6 +99,39 @@ describe("ClientErrorReporter", () => {
       )
     })
 
+    it("should handle objects and circular references", () => {
+      reporter.start()
+
+      const circular: any = { name: "circular" }
+      circular.self = circular
+
+      console.error("Data:", { a: 1 }, circular)
+
+      jest.advanceTimersByTime(5001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      const message = body[0].message
+
+      // Improved behavior: plain objects are JSON stringified, circulars show constructor name
+      expect(message).toContain('{"a":1}')
+      expect(message).toContain("[Object Object]")
+    })
+
+    it("should handle null and undefined", () => {
+      reporter.start()
+
+      console.error("Values:", null, undefined)
+
+      jest.advanceTimersByTime(5001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      const message = body[0].message
+
+      expect(message).toBe("Values: null undefined")
+    })
+
     it("should capture Error objects with stack traces", () => {
       reporter.start()
 
@@ -220,7 +253,10 @@ describe("ClientErrorReporter", () => {
 
   describe("stop", () => {
     it("should stop interval and remove event listeners", () => {
-      const removeEventListenerSpy = jest.spyOn(globalThis, "removeEventListener")
+      const removeEventListenerSpy = jest.spyOn(
+        globalThis,
+        "removeEventListener"
+      )
       const clearIntervalSpy = jest.spyOn(globalThis, "clearInterval")
 
       reporter.start()
