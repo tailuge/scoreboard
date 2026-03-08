@@ -144,15 +144,19 @@ export class ClientErrorReporter {
       let stack: string | undefined
       const message = args
         .map((a) => {
+          if (a === null) return "null"
+          if (a === undefined) return "undefined"
           if (a instanceof Error) {
             stack = stack || a.stack
             return a.message
           }
-          if (typeof a === "object" && a !== null) {
+          if (typeof a === "object") {
             try {
               return JSON.stringify(a)
             } catch {
-              return String(a)
+              const constructorName =
+                (a as object).constructor?.name ?? "Object"
+              return `[Object ${constructorName}]`
             }
           }
           return String(a)

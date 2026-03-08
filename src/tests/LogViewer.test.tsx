@@ -94,7 +94,14 @@ describe("LogViewer", () => {
     const sessionWithUnknownType: SessionEntry = {
       ...mockSessions[0],
       sid: "session3",
-      logs: [{ type: "unknown", message: "unknown message", ts: Date.now(), sid: "session3" }]
+      logs: [
+        {
+          type: "unknown",
+          message: "unknown message",
+          ts: Date.now(),
+          sid: "session3",
+        },
+      ],
     }
     render(<LogViewer sessions={[sessionWithUnknownType]} />)
     fireEvent.click(screen.getByText("session3"))
@@ -107,7 +114,7 @@ describe("LogViewer", () => {
       ...mockSessions[0],
       sid: "session4",
       region: undefined,
-      logs: [{ ...mockSessions[0].logs[0], region: "fallback-region" }]
+      logs: [{ ...mockSessions[0].logs[0], region: "fallback-region" }],
     }
     render(<LogViewer sessions={[sessionWithNoRegion]} />)
     expect(screen.getByText("(fallback-region)")).toBeInTheDocument()
@@ -115,6 +122,8 @@ describe("LogViewer", () => {
 
   it("shows 'Select a session' message when no session is selected", () => {
     render(<LogViewer sessions={mockSessions} />)
-    expect(screen.getByText(/Select a session to view logs/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Select a session to view logs/i)
+    ).toBeInTheDocument()
   })
 })
