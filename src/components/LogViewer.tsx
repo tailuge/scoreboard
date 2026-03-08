@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { detectOS, detectBrowser } from "@/utils/ua"
 import type { SessionEntry } from "@/types/client-log"
 
 const TYPE_COLORS: Record<string, string> = {
@@ -10,26 +11,51 @@ const TYPE_COLORS: Record<string, string> = {
   promise: "red",
 }
 
-function parseUa(ua: string) {
-  if (!ua) return "Unknown"
-  const uaLower = ua.toLowerCase()
-  if (uaLower.includes("chrome")) return "Chrome"
-  if (uaLower.includes("firefox")) return "Firefox"
-  if (uaLower.includes("safari")) return "Safari"
-  if (uaLower.includes("mobile")) return "Mobile"
-  return ua.split(" ")[0]
-}
-
-function formatTime(ts: number) {
-  return new Date(ts).toLocaleString()
-}
-
-function shortSid(sid: string) {
-  return sid.slice(0, 8)
-}
-
 function getTypeColor(type: string) {
   return TYPE_COLORS[type] || "blue"
+}
+
+function SessionItem({
+  session,
+  selected,
+  onSelect,
+}: {
+  session: SessionEntry
+  selected: boolean
+  onSelect: () => void
+}) {
+  const os = detectOS(session.ua)
+  const browser = detectBrowser(session.ua)
+  const region = session.logs[0]?.region
+
+  return (
+    <li>
+      <button
+        onClick={onSelect}
+        style={{
+          width: "100%",
+          textAlign: "left",
+          padding: "6px",
+          background: selected ? "#e0e0e0" : "transparent",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        <div style={{ fontSize: "11px", fontWeight: "bold" }}>
+          {session.sid.slice(0, 8)}
+        </div>
+        <div style={{ fontSize: "10px", color: "#888" }}>
+          {os} · {browser}
+        </div>
+        <div style={{ fontSize: "10px", color: "#aaa" }}>
+          {new Date(session.ts).toLocaleString()}
+        </div>
+        {region ? (
+          <div style={{ fontSize: "10px", color: "#888" }}>{region}</div>
+        ) : null}
+      </button>
+    </li>
+  )
 }
 
 interface LogViewerProps {
@@ -51,35 +77,20 @@ export default function LogViewer({ sessions }: LogViewerProps) {
           padding: "10px",
         }}
       >
-        <h3 style={{ margin: "0 0 10px 0" }}>Sessions ({sessions.length})</h3>
+        <h3 style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
+          Sessions ({sessions.length})
+        </h3>
         {sessions.length === 0 ? (
           <p>No logs yet</p>
         ) : (
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {sessions.map((s) => (
-              <li key={s.sid}>
-                <button
-                  onClick={() => setSelected(s.sid)}
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    padding: "8px",
-                    background: selected === s.sid ? "#e0e0e0" : "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div>
-                    <strong>{shortSid(s.sid)}</strong>
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#666" }}>
-                    {parseUa(s.ua)}
-                  </div>
-                  <div style={{ fontSize: "11px", color: "#999" }}>
-                    {formatTime(s.ts)}
-                  </div>
-                </button>
-              </li>
+              <SessionItem
+                key={s.sid}
+                session={s}
+                selected={selected === s.sid}
+                onSelect={() => setSelected(s.sid)}
+              />
             ))}
           </ul>
         )}
@@ -87,10 +98,10 @@ export default function LogViewer({ sessions }: LogViewerProps) {
       <div style={{ flex: 1, padding: "10px", overflowY: "auto" }}>
         {session ? (
           <>
-            <h3 style={{ margin: "0 0 10px 0" }}>
-              Logs for {shortSid(session.sid)}
+            <h3 style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
+              Logs for {session.sid.slice(0, 8)}
             </h3>
-            <pre style={{ fontSize: "12px", whiteSpace: "pre-wrap" }}>
+            <pre style={{ fontSize: "11px", whiteSpace: "pre-wrap" }}>
               {session.logs.map((log, i) => (
                 <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>
