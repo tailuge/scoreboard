@@ -8,7 +8,7 @@ interface HighscoreGridProps {
 }
 
 export function HighscoreGrid({
-  heightClass = "h-[72px] w-[142px]",
+  heightClass = "h-[78px] w-[142px]",
   className = "",
 }: Readonly<HighscoreGridProps>) {
   return (
