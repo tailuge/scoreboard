@@ -46,7 +46,7 @@ interface MessagingClient {
 
 ### `Lobby`
 
-Represents the global presence state.
+Represents the global presence state and matchmaking.
 
 ```typescript
 interface Lobby {
@@ -57,9 +57,31 @@ interface Lobby {
   onUsersChange(callback: (users: PresenceMessage[]) => void): void;
 
   /**
+   * Stream of active tables in the lobby.
+   */
+  onTablesChange(callback: (tables: TableInfo[]) => void): void;
+
+  /**
    * Broadcast a metadata update for the current user.
    */
   updateProfile(metadata: Record<string, any>): void;
+
+  /**
+   * Challenge another user to a game.
+   * Returns the ID of the table created for the challenge.
+   */
+  challenge(userId: string, ruleType: string): Promise<string>;
+
+  /**
+   * Accept an incoming challenge.
+   * Returns the Table instance for the accepted game.
+   */
+  acceptChallenge(userId: string, ruleType: string): Promise<Table>;
+
+  /**
+   * Subscribe to incoming challenges directed at the current user.
+   */
+  onChallenge(callback: (challenge: ChallengeMessage) => void): void;
 
   /**
    * Leave the lobby.
@@ -83,6 +105,11 @@ interface Table {
    * Subscribe to events published by other participants.
    */
   onMessage(callback: (event: MessagePayload) => void): void;
+
+  /**
+   * Subscribe to changes in the spectator list.
+   */
+  onSpectatorChange(callback: (spectators: PresenceMessage[]) => void): void;
 
   /**
    * Leave the table.
@@ -113,6 +140,36 @@ interface PresenceMessage {
   opponentId?: string | null;
   seek?: Seek;
   lastSeen?: number; // Managed internally for pruning
+}
+```
+
+### `ChallengeMessage`
+Represents a peer-to-peer challenge request.
+
+```typescript
+interface ChallengeMessage {
+  messageType: "challenge";
+  type: "offer" | "accept" | "decline" | "cancel";
+  challengerId: string;
+  challengerName: string;
+  recipientId: string;
+  ruleType: string;
+  tableId?: string; // Optional: table created by challenger
+  timestamp: number;
+}
+```
+
+### `TableInfo`
+Lobby-level information about an active game table.
+
+```typescript
+interface TableInfo {
+  tableId: string;
+  ruleType: string;
+  players: { id: string; name: string }[];
+  spectatorCount: number;
+  status: "waiting" | "playing" | "finished";
+  createdAt: number;
 }
 ```
 
@@ -148,6 +205,30 @@ interface MessagePayload {
 - The library should ensure that when a user joins a lobby, they receive the current "state of the world" or quickly populate it via incoming heartbeats.
 - For tables, it should provide a reliable pipe for sequence-sensitive events (optionally implementing sequence numbering if required by the transport).
 
+---
+
+## Concerns and Implementation Notes
+
+### 1. Race Conditions in Matchmaking
+The current implementation of "find-or-create" is susceptible to race conditions where two players might create separate tables simultaneously instead of being matched. The new library should aim for:
+- **Idempotency**: Clients should use unique request IDs when seeking a match to avoid duplicate table creation.
+- **Atomic Operations**: Backend calls (via Nchan or a separate API) must ensure atomicity when claiming a pending table.
+
+### 2. Presence Scaling ($O(N^2)$)
+As the number of users in the lobby increases, the frequency of heartbeat messages grows quadratically for the server and linearly for each client.
+- **Optimization**: Consider delta-updates or grouped presence messages if the lobby grows beyond 100+ concurrent users.
+- **Throttling**: The library must strictly adhere to heartbeat intervals to avoid DDoS-ing the transport layer.
+
+### 3. State Reconstruction
+Since the transport is primarily pub/sub, a new client joining the lobby won't immediately know about existing tables or users until the next heartbeat.
+- **Requirement**: The library must provide a mechanism (e.g., a "sync" request or initial state fetch from a KV store) to populate the lobby state immediately upon connection.
+
+### 4. Direct Messaging vs. Presence Signaling
+Challenges currently use presence messages (`opponentId` field). This is inefficient as it broadcasts the challenge to everyone in the lobby.
+- **Concern**: Moving to a direct messaging model for challenges would improve privacy and reduce bandwidth, but requires Nchan to support private channels or the library to filter messages client-side.
+
+---
+
 ## Usage Example (Conceptual)
 
 ```typescript
@@ -168,6 +249,12 @@ const lobby = await client.joinLobby({
 
 lobby.onUsersChange((users) => {
   console.log("Online users:", users.length);
+});
+
+lobby.onChallenge((challenge) => {
+  if (confirm(`Accept challenge from ${challenge.challengerName}?`)) {
+    lobby.acceptChallenge(challenge.challengerId, challenge.ruleType);
+  }
 });
 
 // Table interaction
