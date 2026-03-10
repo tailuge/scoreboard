@@ -33,6 +33,7 @@ async function publish(r) {
       parsed = JSON.parse(r.requestText);
       isJson = true;
     } catch (e) {
+      console.error("JSON parse error:", e);
       isJson = false;
     }
   }
