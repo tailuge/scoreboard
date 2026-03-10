@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messaging Client</title>
+    <script defer src="dist/client.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 1rem; background: #f9f9f9; color: #333; }
+        .card { background: #fff; padding: 1rem; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 1rem; }
+        .user-list { list-style: none; padding: 0; }
+        .user-item { padding: 0.5rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .user-item.me { font-weight: bold; color: #007bff; }
+        .status { font-size: 0.8rem; color: #666; }
+        .form { margin-top: 1rem; display: flex; gap: 0.5rem; }
+        .challenge-box { background: #fff3cd; border: 1px solid #ffeeba; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        .game-box { background: #d4edda; border: 1px solid #c3e6cb; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        .seek-box { background: #e2e3e5; border: 1px solid #d6d8db; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        button { cursor: pointer; padding: 0.25rem 0.5rem; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
+        button:hover { background: #eee; }
+        .btn-challenge { background: #007bff; color: white; border: none; }
+        .btn-join { background: #17a2b8; color: white; border: none; }
+        .btn-accept { background: #28a745; color: white; border: none; }
+        .btn-decline { background: #dc3545; color: white; border: none; }
+        .btn-seek { background: #6f42c1; color: white; border: none; }
+        .btn-connect { background: #28a745; color: white; border: none; }
+        .btn-disconnect { background: #6c757d; color: white; border: none; }
+        .connection-status { margin-bottom: 1rem; font-weight: bold; }
+        .connection-status.online { color: #28a745; }
+        .connection-status.offline { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div id="conn-status" class="connection-status offline">OFFLINE</div>
+    <div class="form" style="margin-bottom: 1rem;">
+        <button id="btn-connect" class="btn-connect" onclick="connect()">Connect</button>
+        <button id="btn-disconnect" class="btn-disconnect" onclick="disconnect()" style="display:none;">Disconnect</button>
+    </div>
+
+    <div id="seek-container" class="seek-box">
+        <strong>Currently Seeking...</strong>
+        <div>Looking for an opponent to join your table.</div>
+        <button onclick="cancelSeek()">Cancel Seek</button>
+    </div>
+
+    <div id="challenge-container" class="challenge-box">
+        <strong>Incoming Challenge!</strong>
+        <div id="challenge-text"></div>
+        <div class="form">
+            <button class="btn-accept" id="btn-accept">Accept</button>
+            <button class="btn-decline" id="btn-decline">Decline</button>
+        </div>
+    </div>
+
+    <div id="game-container" class="game-box">
+        <strong>In Game</strong>
+        <div id="game-text"></div>
+        <button onclick="leaveGame()">Leave Game</button>
+    </div>
+
+    <div class="card">
+        <h3 id="my-name">Connecting...</h3>
+        <div id="count" class="status">Online Users: 0</div>
+        <hr>
+        <div class="form" style="margin-bottom: 1rem;">
+            <button id="btn-find-game" class="btn-seek" onclick="findGame()">Find Game (Seek)</button>
+        </div>
+        <ul id="user-list" class="user-list"></ul>
+        
+        <div class="form">
+            <input type="text" id="name-input" placeholder="New Name">
+            <button onclick="updateName()">Update Name</button>
+        </div>
+    </div>
+</body>
+</html>

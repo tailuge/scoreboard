@@ -1,0 +1,48 @@
+{
+  "name": "@scoreboard/messaging-client",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A stateful messaging library for Nchan-powered real-time applications.",
+  "scripts": {
+    "test": "jest --config test/jest.config.cjs",
+    "playwright": "npx playwright test playwright/debug-connection.spec.ts",
+    "test:debug": "npm run playwright",
+    "lint": "tsc --noEmit && npx oxlint src test",
+    "prettify": "npx oxfmt src test",
+    "build": "bash scripts/docker-nchan.sh build",
+    "build:example": "npx esbuild example/src/client.ts --bundle --outfile=example/dist/client.js",
+    "example": "npm run build:example && npx http-server example -p 3000",
+    "docker:nchan": "bash scripts/docker-nchan.sh",
+    "docker:stop": "bash scripts/docker-nchan.sh stop",
+    "docker:build": "npm run build",
+    "docker:restart": "npm run docker:nchan restart",
+    "deps": "npx npm-check"
+  },
+  "keywords": [
+    "messaging",
+    "nchan",
+    "real-time",
+    "presence",
+    "lobby"
+  ],
+  "author": "tailuge",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/jest": "30.0.0",
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.27.3",
+    "http-server": "^14.1.1",
+    "jest": "30.3.0",
+    "oxlint": "^1.52.0",
+    "testcontainers": "^11.12.0",
+    "ts-jest": "^29.4.6",
+    "typescript": "5.9.3",
+    "ws": "^8.19.0"
+  },
+  "browserslist": [
+    "defaults",
+    "ios >= 12",
+    "safari >= 12"
+  ]
+}
