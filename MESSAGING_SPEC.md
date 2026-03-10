@@ -68,13 +68,15 @@ interface Lobby {
 
   /**
    * Challenge another user to a game.
+   * Returns the ID of the table created for the challenge.
    */
-  challenge(userId: string, ruleType: string): Promise<void>;
+  challenge(userId: string, ruleType: string): Promise<string>;
 
   /**
    * Accept an incoming challenge.
+   * Returns the Table instance for the accepted game.
    */
-  acceptChallenge(userId: string, ruleType: string): Promise<void>;
+  acceptChallenge(userId: string, ruleType: string): Promise<Table>;
 
   /**
    * Subscribe to incoming challenges directed at the current user.
@@ -152,6 +154,7 @@ interface ChallengeMessage {
   challengerName: string;
   recipientId: string;
   ruleType: string;
+  tableId?: string; // Optional: table created by challenger
   timestamp: number;
 }
 ```
@@ -163,7 +166,7 @@ Lobby-level information about an active game table.
 interface TableInfo {
   tableId: string;
   ruleType: string;
-  players: string[]; // User IDs
+  players: { id: string; name: string }[];
   spectatorCount: number;
   status: "waiting" | "playing" | "finished";
   createdAt: number;
