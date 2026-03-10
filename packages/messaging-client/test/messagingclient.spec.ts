@@ -77,8 +77,8 @@ describe("MessagingClient - Phase 1", () => {
       expect(usersA.length).toBe(2);
       expect(usersB.length).toBe(2);
 
-      const userIdsA = usersA.map((u) => u.userId).sort();
-      const userIdsB = usersB.map((u) => u.userId).sort();
+      const userIdsA = usersA.map((u) => u.userId).sort((a, b) => a.localeCompare(b));
+      const userIdsB = usersB.map((u) => u.userId).sort((a, b) => a.localeCompare(b));
       expect(userIdsA).toEqual(["user-a", "user-b"]);
       expect(userIdsB).toEqual(["user-a", "user-b"]);
 

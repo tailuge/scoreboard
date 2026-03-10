@@ -8,7 +8,7 @@ import { PresenceMessage } from "./types";
  * Encapsulates transport logic and provides access to lobby and table functionality.
  */
 export class MessagingClient {
-  private nchan: NchanClient;
+  private readonly nchan: NchanClient;
   private activeLobbies: Lobby[] = [];
   private activeTables: Table[] = [];
   private lastLobbyConfig?: { user: PresenceMessage; options?: LobbyOptions };
@@ -22,10 +22,10 @@ export class MessagingClient {
    * In browser environments, attaches lifecycle event listeners.
    */
   async start(): Promise<void> {
-    if (typeof window !== "undefined") {
-      window.addEventListener("pagehide", this.handlePageHide);
-      window.addEventListener("pageshow", this.handlePageShow);
-      document.addEventListener("visibilitychange", this.handleVisibilityChange);
+    if (typeof globalThis.window !== "undefined") {
+      globalThis.window.addEventListener("pagehide", this.handlePageHide);
+      globalThis.window.addEventListener("pageshow", this.handlePageShow);
+      globalThis.document.addEventListener("visibilitychange", this.handleVisibilityChange);
     }
   }
 
@@ -33,10 +33,10 @@ export class MessagingClient {
    * Stops all active connections and cleans up.
    */
   async stop(): Promise<void> {
-    if (typeof window !== "undefined") {
-      window.removeEventListener("pagehide", this.handlePageHide);
-      window.removeEventListener("pageshow", this.handlePageShow);
-      document.removeEventListener("visibilitychange", this.handleVisibilityChange);
+    if (typeof globalThis.window !== "undefined") {
+      globalThis.window.removeEventListener("pagehide", this.handlePageHide);
+      globalThis.window.removeEventListener("pageshow", this.handlePageShow);
+      globalThis.document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     }
 
     await Promise.all(this.activeLobbies.map((lobby) => lobby.leave()));
@@ -66,7 +66,9 @@ export class MessagingClient {
   async joinTable<T = any>(tableId: string, userId: string): Promise<Table<T>> {
     let table = this.activeTables.find((t) => t.tableId === tableId) as Table<T>;
 
-    if (!table) {
+    if (table) {
+      console.log(`MessagingClient [${userId}] reusing existing Table ${tableId}`);
+    } else {
       const lobby = this.activeLobbies.find((l) => l.currentUser.userId === userId);
       console.log(`MessagingClient [${userId}] creating new Table ${tableId}`);
       table = new Table<T>(this.nchan, tableId, userId, lobby);
@@ -75,8 +77,6 @@ export class MessagingClient {
       if (lobby) {
         await lobby.updatePresence({ tableId });
       }
-    } else {
-      console.log(`MessagingClient [${userId}] reusing existing Table ${tableId}`);
     }
 
     await table.join();
@@ -85,20 +85,20 @@ export class MessagingClient {
     return table;
   }
 
-  private handlePageHide = (): void => {
+  private readonly handlePageHide = (): void => {
     // Stop all connections on page hide (prevent ghosting)
     this.stop();
   };
 
-  private handlePageShow = (event: PageTransitionEvent): void => {
+  private readonly handlePageShow = (event: PageTransitionEvent): void => {
     // If returning via bfcache, restore connections
     if (event.persisted && this.lastLobbyConfig) {
       this.joinLobby(this.lastLobbyConfig.user, this.lastLobbyConfig.options);
     }
   };
 
-  private handleVisibilityChange = (): void => {
-    if (document.hidden) {
+  private readonly handleVisibilityChange = (): void => {
+    if (globalThis.document.hidden) {
       this.activeLobbies.forEach((l) => l.pauseHeartbeat());
     } else {
       this.activeLobbies.forEach((l) => l.resumeHeartbeat());

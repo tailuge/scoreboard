@@ -13,9 +13,9 @@ export interface LobbyOptions {
  * Manages the global lobby state, including real-time presence tracking and challenge flows.
  */
 export class Lobby {
-  private users = new Map<string, PresenceMessage>();
-  private listeners: ((users: PresenceMessage[]) => void)[] = [];
-  private challengeListeners: ((challenge: ChallengeMessage) => void)[] = [];
+  private readonly users = new Map<string, PresenceMessage>();
+  private readonly listeners: ((users: PresenceMessage[]) => void)[] = [];
+  private readonly challengeListeners: ((challenge: ChallengeMessage) => void)[] = [];
   private subscription: Subscription | null = null;
 
   private heartbeatTimer?: any;
@@ -26,7 +26,7 @@ export class Lobby {
   private readonly staleTtl: number;
 
   constructor(
-    private nchan: NchanClient,
+    private readonly nchan: NchanClient,
     public currentUser: PresenceMessage,
     options: LobbyOptions = {},
   ) {
@@ -128,7 +128,10 @@ export class Lobby {
    * Stop listening to user changes.
    */
   offUsersChange(callback: (users: PresenceMessage[]) => void): void {
-    this.listeners = this.listeners.filter((l) => l !== callback);
+    const index = this.listeners.indexOf(callback);
+    if (index !== -1) {
+      this.listeners.splice(index, 1);
+    }
   }
 
   /**

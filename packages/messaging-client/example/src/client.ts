@@ -3,7 +3,7 @@ import { Table } from "../../src/table";
 import { getUID } from "../../src/utils/uid";
 
 const params = new URLSearchParams(globalThis.location.search);
-const userId = params.get('id') || getUID('user-');
+const userId = params.get('id') || getUID();
 const userName = params.get('name') || 'User';
 
 // Initialize the client on port 80 (default for hostname)
@@ -161,13 +161,15 @@ async function joinGame(tableId: string, opponentId: string) {
     if (!lobby) return;
     const tableId = getUID();
     await lobby.updatePresence({ seek: { tableId, ruleType: 'standard' } });
-    document.getElementById('seek-container')!.style.display = 'block';
+    const seekContainer = document.getElementById('seek-container');
+    if (seekContainer) seekContainer.style.display = 'block';
 };
 
 (globalThis as any).cancelSeek = async () => {
     if (!lobby) return;
     await lobby.updatePresence({ seek: undefined });
-    document.getElementById('seek-container')!.style.display = 'none';
+    const seekContainer = document.getElementById('seek-container');
+    if (seekContainer) seekContainer.style.display = 'none';
 };
 
 (globalThis as any).joinSeek = async (targetUserId: string, tableId: string) => {

@@ -12,7 +12,7 @@ function expectMeta(parsed: Record<string, unknown>, pathPrefix: string) {
   const meta = parsed._meta as Record<string, unknown>;
   expect(meta.ts).toBeDefined();
   expect(typeof meta.ts).toBe("string");
-  expect(Date.parse(meta.ts as string)).not.toBeNaN();
+  expect(Date.parse(meta.ts as any)).not.toBeNaN();
   expect(meta.method).toBe("POST");
   expect(meta.path).toContain(pathPrefix);
 }
@@ -109,7 +109,7 @@ describe("NchanClient", () => {
       subscription.stop();
 
       expect(messages.length).toBeGreaterThan(0);
-      const recentMessage = messages.reverse().find((m) => {
+      const recentMessage = [...messages].reverse().find((m) => {
         const parsed = JSON.parse(m);
         return parsed.userId === targetUserId;
       });
@@ -145,7 +145,7 @@ describe("NchanClient", () => {
 
       subscription.stop();
 
-      const recentMessage = messages.reverse().find((m) => {
+      const recentMessage = [...messages].reverse().find((m) => {
         const parsed = JSON.parse(m);
         return parsed.recipientId === recipientId;
       });

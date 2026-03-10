@@ -47,6 +47,7 @@ stop() {
     docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
     docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
     echo "Nchan stopped"
+    return 0
 }
 
 status() {
@@ -72,6 +73,7 @@ build() {
     echo "Building nchan image..."
     docker build -t "$DOCKER_IMAGE" "$NCHAN_DIR"
     echo "Build complete."
+    return 0
 }
 
 case "${1:-start}" in

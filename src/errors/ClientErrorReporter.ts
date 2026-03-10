@@ -152,8 +152,7 @@ export class ClientErrorReporter {
             try {
               return JSON.stringify(a)
             } catch {
-              const constructorName =
-                (a as object).constructor?.name ?? "Object"
+              const constructorName = (a as { constructor?: { name?: string } }).constructor?.name ?? "Object"
               return `[Object ${constructorName}]`
             }
           }
