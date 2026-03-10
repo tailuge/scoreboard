@@ -13,29 +13,30 @@
 <body>
     <div class="pane">
         <div class="header">Client A (Alice)</div>
-        <iframe src="client.html?id=alice&name=Alice"></iframe>
+        <iframe title="Client A (Alice)" src="client.html?id=alice&name=Alice"></iframe>
     </div>
     <div class="pane">
         <div class="header">Client B (Bob)</div>
-        <iframe src="client.html?id=bob&name=Bob"></iframe>
+        <iframe title="Client B (Bob)" src="client.html?id=bob&name=Bob"></iframe>
     </div>
     <div class="pane">
         <div class="header">Client C (Cline)</div>
-        <iframe src="client.html?id=cline&name=Cline"></iframe>
+        <iframe title="Client C (Cline)" src="client.html?id=cline&name=Cline"></iframe>
     </div>
 
-    <script>
+    <script type="module">
         // Check if Nchan is reachable
         async function checkNchan() {
             try {
                 // Check both health and presence paths
-                const res = await fetch("http://" + window.location.hostname + "/health");
-                if (!res.ok) throw new Error();
+                const res = await fetch("http://" + globalThis.location.hostname + "/health");
+                if (!res.ok) throw new Error("Nchan health check failed");
             } catch (e) {
+                console.error(e);
                 alert("Nchan server not detected on port 80. Please ensure 'npm run docker:nchan start' is running.");
             }
         }
-        checkNchan();
+        await checkNchan();
     </script>
 </body>
 </html>

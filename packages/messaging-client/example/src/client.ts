@@ -2,13 +2,13 @@ import { MessagingClient, PresenceMessage, Lobby, ChallengeMessage } from "../..
 import { Table } from "../../src/table";
 import { getUID } from "../../src/utils/uid";
 
-const params = new URLSearchParams(window.location.search);
-const userId = params.get('id') || 'user-' + Math.random().toString(36).substr(2, 5);
+const params = new URLSearchParams(globalThis.location.search);
+const userId = params.get('id') || getUID('user-');
 const userName = params.get('name') || 'User';
 
 // Initialize the client on port 80 (default for hostname)
 const client = new MessagingClient({
-    baseUrl: window.location.hostname
+    baseUrl: globalThis.location.hostname
 });
 
 let lobby: Lobby | null = null;
@@ -69,7 +69,7 @@ async function initLobby(lobbyInstance: Lobby) {
     });
 }
 
-(window as any).connect = async () => {
+(globalThis as any).connect = async () => {
     try {
         await client.start();
         lobby = await client.joinLobby({
@@ -90,7 +90,7 @@ async function initLobby(lobbyInstance: Lobby) {
     }
 };
 
-(window as any).disconnect = async () => {
+(globalThis as any).disconnect = async () => {
     await client.stop();
     lobby = null;
     currentTable = null;
@@ -157,32 +157,32 @@ async function joinGame(tableId: string, opponentId: string) {
     });
 }
 
-(window as any).findGame = async () => {
+(globalThis as any).findGame = async () => {
     if (!lobby) return;
     const tableId = getUID();
     await lobby.updatePresence({ seek: { tableId, ruleType: 'standard' } });
     document.getElementById('seek-container')!.style.display = 'block';
 };
 
-(window as any).cancelSeek = async () => {
+(globalThis as any).cancelSeek = async () => {
     if (!lobby) return;
     await lobby.updatePresence({ seek: undefined });
     document.getElementById('seek-container')!.style.display = 'none';
 };
 
-(window as any).joinSeek = async (targetUserId: string, tableId: string) => {
+(globalThis as any).joinSeek = async (targetUserId: string, tableId: string) => {
     console.log('Joining seek from:', targetUserId, 'at table:', tableId);
     await joinGame(tableId, targetUserId);
 };
 
-(window as any).challengeUser = async (targetUserId: string) => {
+(globalThis as any).challengeUser = async (targetUserId: string) => {
     if (!lobby) return;
     console.log('Challenging user:', targetUserId);
     await lobby.challenge(targetUserId, 'standard');
     // Alert removed
 };
 
-(window as any).leaveGame = async () => {
+(globalThis as any).leaveGame = async () => {
     if (currentTable) {
         await currentTable.leave();
         currentTable = null;
@@ -221,8 +221,8 @@ document.getElementById('btn-decline')?.addEventListener('click', async () => {
     }
 });
 
-// Attach the update function to the window so the HTML button can find it
-(window as any).updateName = async () => {
+// Attach the update function to globalThis so the HTML button can find it
+(globalThis as any).updateName = async () => {
     const input = document.getElementById('name-input') as HTMLInputElement;
     const newName = input?.value;
     if (newName && lobby) {
@@ -235,4 +235,4 @@ document.getElementById('btn-decline')?.addEventListener('click', async () => {
 // Initial state
 updateConnectionUI(false);
 // Auto-connect for convenience in the workbench
-(window as any).connect();
+(globalThis as any).connect();
