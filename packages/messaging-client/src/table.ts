@@ -10,16 +10,16 @@ export class Table<T = any> {
   private messageListeners: ((event: TableMessage<T>) => void)[] = [];
   private spectatorListeners: ((spectators: PresenceMessage[]) => void)[] = [];
   private opponentLeftListeners: (() => void)[] = [];
-  private lobbyUnsubscribe?: () => void;
+  private readonly lobbyUnsubscribe?: () => void;
 
   public opponentLeft = false;
   private opponentSeen = false;
 
   constructor(
-    private nchan: NchanClient,
+    private readonly nchan: NchanClient,
     public readonly tableId: string,
-    private userId: string,
-    private lobby?: Lobby,
+    private readonly userId: string,
+    private readonly lobby?: Lobby,
   ) {
     if (this.lobby) {
       const handler = (users: PresenceMessage[]) => this.handleLobbyUsersChange(users);
@@ -85,9 +85,7 @@ export class Table<T = any> {
     }
 
     // Clear lobby presence if we have one
-    if (this.lobby) {
-      await this.lobby.updatePresence({ tableId: undefined });
-    }
+    await this.lobby?.updatePresence({ tableId: undefined });
 
     this.subscription?.stop();
     this.messageListeners = [];

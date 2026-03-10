@@ -3,14 +3,15 @@ import type { PresenceMessage, ChallengeMessage, TableMessage } from "./types";
 export type Subscription = { stop: () => void };
 
 export class NchanClient {
-  private server: string;
+  private readonly server: string;
 
   constructor(server: string) {
     // Ensure server string doesn't end with a slash and starts with protocol if missing
-    this.server = server.replace(/\/$/, "");
-    if (!this.server.startsWith("http")) {
-      this.server = `http://${this.server}`;
+    let formattedServer = server.replace(/\/$/, "");
+    if (!formattedServer.startsWith("http")) {
+      formattedServer = `http://${formattedServer}`;
     }
+    this.server = formattedServer;
   }
 
   private getWsUrl(path: string): string {

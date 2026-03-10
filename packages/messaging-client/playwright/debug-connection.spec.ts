@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('debug connection', async ({ page }) => {
   // Catch console logs from the page
@@ -13,7 +13,7 @@ test('debug connection', async ({ page }) => {
   try {
     await page.goto('http://localhost');
   } catch (e) {
-    console.log('Could not connect to Nchan server on port 80.');
+    console.error('Could not connect to Nchan server on port 80:', e);
     return;
   }
 
