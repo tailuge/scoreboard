@@ -3,7 +3,7 @@ import { Table } from "../../src/table";
 import { getUID } from "../../src/utils/uid";
 
 const params = new URLSearchParams(globalThis.location.search);
-const userId = params.get('id') || 'user-' + Math.random().toString(36).slice(2, 7);
+const userId = params.get('id') || getUID('user-');
 const userName = params.get('name') || 'User';
 
 // Initialize the client on port 80 (default for hostname)
