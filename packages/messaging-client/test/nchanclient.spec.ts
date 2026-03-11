@@ -114,7 +114,8 @@ describe("NchanClient", () => {
         return parsed.userId === targetUserId;
       });
       expect(recentMessage).toBeDefined();
-      const parsed = JSON.parse(recentMessage!);
+      if (recentMessage === undefined) throw new Error("recentMessage is undefined");
+      const parsed = JSON.parse(recentMessage);
       expect(parsed.messageType).toBe("presence");
       expect(parsed.type).toBe("join");
       expect(parsed.userId).toBe(targetUserId);
@@ -150,7 +151,8 @@ describe("NchanClient", () => {
         return parsed.recipientId === recipientId;
       });
       expect(recentMessage).toBeDefined();
-      const parsed = JSON.parse(recentMessage!);
+      if (recentMessage === undefined) throw new Error("recentMessage is undefined");
+      const parsed = JSON.parse(recentMessage);
       expect(parsed.messageType).toBe("challenge");
       expect(parsed.type).toBe("offer");
     });

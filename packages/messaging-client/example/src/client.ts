@@ -57,8 +57,8 @@ async function initLobby(lobbyInstance: Lobby) {
         if (challenge.type === 'offer') {
             activeChallenge = challenge;
             showChallenge(challenge);
-        } else if (challenge.type === 'accept') {
-            joinGame(challenge.tableId!, challenge.challengerId);
+        } else if (challenge.type === 'accept' && challenge.tableId) {
+            joinGame(challenge.tableId, challenge.challengerId);
         } else if (challenge.type === 'decline' || challenge.type === 'cancel') {
             if (activeChallenge?.challengerId === challenge.challengerId) {
                 hideChallenge();
@@ -197,12 +197,12 @@ async function joinGame(tableId: string, opponentId: string) {
 };
 
 document.getElementById('btn-accept')?.addEventListener('click', async () => {
-    if (activeChallenge && lobby) {
+    if (activeChallenge?.tableId && lobby) {
         // acceptChallenge now handles presence update internally
         const table = await lobby.acceptChallenge(
             activeChallenge.challengerId,
             activeChallenge.ruleType,
-            activeChallenge.tableId!
+            activeChallenge.tableId
         );
         currentTable = table;
         hideChallenge();

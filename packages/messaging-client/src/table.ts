@@ -96,7 +96,7 @@ export class Table<T = any> {
 
   private handleIncomingMessage(data: string): void {
     const msg = parseMessage<TableMessage<T>>(data);
-    if (!msg || !msg.type) return;
+    if (!msg?.type) return;
 
     // Handle system messages internally
     if (msg.type === "SYSTEM_DISCONNECT" && msg.senderId !== this.userId) {

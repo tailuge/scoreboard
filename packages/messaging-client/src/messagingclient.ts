@@ -22,7 +22,7 @@ export class MessagingClient {
    * In browser environments, attaches lifecycle event listeners.
    */
   async start(): Promise<void> {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.addEventListener("pagehide", this.handlePageHide);
       globalThis.window.addEventListener("pageshow", this.handlePageShow);
       globalThis.document.addEventListener("visibilitychange", this.handleVisibilityChange);
@@ -33,7 +33,7 @@ export class MessagingClient {
    * Stops all active connections and cleans up.
    */
   async stop(): Promise<void> {
-    if (typeof globalThis.window !== "undefined") {
+    if (globalThis.window !== undefined) {
       globalThis.window.removeEventListener("pagehide", this.handlePageHide);
       globalThis.window.removeEventListener("pageshow", this.handlePageShow);
       globalThis.document.removeEventListener("visibilitychange", this.handleVisibilityChange);
