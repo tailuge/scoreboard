@@ -31,7 +31,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "4.2.1",
-    "@vercel/analytics": "2.0.0",
+    "@vercel/analytics": "2.0.1",
     "@vercel/kv": "3.0.0",
     "@vercel/speed-insights": "2.0.0",
     "jsoncrush": "^1.1.8",
@@ -69,7 +69,7 @@
     "jest-mock-extended": "^4.0.0",
     "jest-transform-stub": "^2.0.0",
     "jscpd": "4.0.8",
-    "oxlint": "1.53.0",
+    "oxlint": "1.55.0",
     "prettier": "3.8.1",
     "tailwindcss": "4.2.1",
     "ts-jest": "^29.4.6",
