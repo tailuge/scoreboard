@@ -66,6 +66,7 @@ All challenge UI lives on `/game`:
   - `challenge()` sends an offer
   - On accept, challenger updates presence with `tableId` and opens the game **in a new tab**
 - Rule type selection moved to `game.tsx` via the challenge card
+- Accept handling uses incoming `accept` as the signal (library swaps challenger/recipient IDs in accept payloads)
 
 ### Debugging Note
 
