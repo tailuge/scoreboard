@@ -15,7 +15,7 @@ import { ChallengeCard } from "@/components/ChallengeCard"
 import { SeekingCard } from "@/components/SeekingCard"
 
 const log = (...args: unknown[]) =>
-  console.warn(`[${new Date().toISOString()}] [lobby]`, ...args)
+  console.log(`[${new Date().toISOString()}] [lobby]`, ...args)
 
 export default function Lobby() {
   const { userId, userName } = useUser()

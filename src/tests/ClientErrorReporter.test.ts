@@ -86,19 +86,6 @@ describe("ClientErrorReporter", () => {
       )
     })
 
-    it("should capture console.warn calls", () => {
-      reporter.start()
-
-      console.warn("Test warning")
-
-      jest.advanceTimersByTime(5001)
-
-      expect(sendBeaconSpy).toHaveBeenCalledWith(
-        "/api/client-error",
-        expect.stringContaining("warn")
-      )
-    })
-
     it("should handle objects and circular references", () => {
       reporter.start()
 

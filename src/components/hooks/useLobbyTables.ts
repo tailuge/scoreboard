@@ -16,9 +16,6 @@ export function useLobbyTables(
       const res = await fetch("/api/tables")
       if (!res.ok) throw new Error("Failed to fetch tables")
       const data = await res.json()
-      console.warn("[useLobbyTables] fetchTables result", {
-        tablesCount: data.length,
-      })
       setTables(data)
     } catch (error) {
       console.error("Error fetching tables:", error)
@@ -70,10 +67,6 @@ export function useLobbyTables(
     async (ruleType: string): Promise<Table | null> => {
       if (!userId || !userName) return null
       try {
-        console.warn("[useLobbyTables] findOrCreateTable request", {
-          ruleType,
-          userId,
-        })
         const response = await fetch("/api/tables/find-or-create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -81,11 +74,6 @@ export function useLobbyTables(
         })
         if (!response.ok) throw new Error("Failed to find or create table")
         const table = await response.json()
-        console.warn("[useLobbyTables] findOrCreateTable response", {
-          tableId: table.id,
-          completed: table.completed,
-          playersLength: table.players?.length,
-        })
         fetchTables()
         return table
       } catch (error) {

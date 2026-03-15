@@ -26,7 +26,7 @@ The current system uses:
 
 ## Phase 1: Core Integration (No Lobby Page)
 
-### 1.1 Create Messaging Context/Service
+### 1.1 Create Messaging Context/Service (Done)
 
 Create a new messaging context (or service + context) that:
 
