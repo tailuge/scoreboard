@@ -5,28 +5,25 @@ import {
   RedBallButtons,
 } from "./GameButtonOptions"
 import { GameButton, ActionButton } from "./GameButtons"
-import { GAME_BASE_URL } from "@/config"
+import { GameUrl } from "@/utils/GameUrl"
 
 const GAMES = [
   {
     name: "Snooker",
     icon: "/snooker_icon.png",
     alt: "Play classic Snooker billiards online with 22 balls on a full-size table",
-    highscoreUrl: `${GAME_BASE_URL}?ruletype=snooker`,
     ruleType: "snooker",
   },
   {
     name: "Nine Ball",
     icon: "/nineball_icon.png",
     alt: "Play 9-Ball pool online - fast-paced pocket billiards game",
-    highscoreUrl: `${GAME_BASE_URL}?ruletype=nineball`,
     ruleType: "nineball",
   },
   {
     name: "Three Cushion",
     icon: "/threecushion_icon.png",
     alt: "Play Three Cushion carom billiards online - no pockets, hit three rails",
-    highscoreUrl: `${GAME_BASE_URL}?ruletype=threecushion`,
     ruleType: "threecushion",
   },
 ]
@@ -49,19 +46,27 @@ export function GameGrid({
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => {
-        let onlineUrl = `/lobby?action=join&ruletype=${game.ruleType}`
+        const extras: Record<string, string> = {}
         if (game.ruleType === "snooker") {
-          onlineUrl += `&reds=${snookerReds}`
+          extras.reds = String(snookerReds)
         } else if (game.ruleType === "threecushion") {
-          onlineUrl += `&raceTo=${threecushionRaceTo}`
+          extras.raceTo = String(threecushionRaceTo)
         }
 
-        let highscoreUrl = `${game.highscoreUrl}&playername=${encodeURIComponent(userName)}&clientId=${encodeURIComponent(userId)}`
-        if (game.ruleType === "snooker") {
-          highscoreUrl += `&reds=${snookerReds}`
-        } else if (game.ruleType === "threecushion") {
-          highscoreUrl += `&raceTo=${threecushionRaceTo}`
-        }
+        const practiceUrl = GameUrl.createSinglePlayer({
+          userName,
+          userId,
+          ruleType: game.ruleType,
+          extras,
+        })
+
+        const botUrl = GameUrl.createSinglePlayer({
+          userName,
+          userId,
+          ruleType: game.ruleType,
+          isBot: true,
+          extras,
+        })
 
         let gameButtonChildren: React.ReactNode = null
         if (game.ruleType === "snooker") {
@@ -87,28 +92,21 @@ export function GameGrid({
             <GameButton
               icon={game.icon}
               alt={game.alt}
-              href={highscoreUrl}
+              href={practiceUrl.toString()}
               ariaLabel={`Play ${game.name}`}
             >
               {gameButtonChildren}
             </GameButton>
             <ActionButton
-              href={highscoreUrl}
+              href={practiceUrl.toString()}
               hoverBorderColor="hover:border-blue-500"
               hoverTextColor="hover:text-blue-400"
             >
               Practice
             </ActionButton>
-            <ActionButton
-              href={onlineUrl}
-              hoverBorderColor="hover:border-green-500"
-              hoverTextColor="hover:text-green-400"
-            >
-              Online
-            </ActionButton>
             {game.ruleType === "nineball" && (
               <ActionButton
-                href={`${highscoreUrl}&bot=true`}
+                href={botUrl.toString()}
                 hoverBorderColor="hover:border-purple-500"
                 hoverTextColor="hover:text-purple-400"
               >

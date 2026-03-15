@@ -62,7 +62,6 @@ describe("Game Page", () => {
     ).toBeInTheDocument()
 
     expect(screen.getAllByText("Practice")).toHaveLength(3)
-    expect(screen.getAllByText("Online")).toHaveLength(3)
 
     expect(
       screen.getByAltText(
