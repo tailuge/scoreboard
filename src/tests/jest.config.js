@@ -11,18 +11,18 @@ module.exports = {
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy",
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^@tailuge/messaging$":
+      "<rootDir>/src/tests/__mocks__/@tailuge/messaging.ts",
   },
   transform: {
     "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.json" }],
   },
-  transformIgnorePatterns: [
-    "/node_modules/(?!jsoncrush/)",
-  ],
+  transformIgnorePatterns: ["/node_modules/(?!jsoncrush/)"],
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/tests/**", // Exclude test files and mocks in tests dir
     "!src/**/*.d.ts", // Exclude type definitions
     "!**/node_modules/**",
-    "!src/playwrite/**" // explicitly exclude playwright folder from coverage too
+    "!src/playwrite/**", // explicitly exclude playwright folder from coverage too
   ],
 };

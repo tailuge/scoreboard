@@ -2,6 +2,7 @@ import React from "react"
 import { localeToFlag } from "@/utils/locale"
 import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
 import type { PresenceMessage } from "@tailuge/messaging"
+import { canChallenge } from "@tailuge/messaging"
 import { UserBadge } from "./UserBadge"
 
 type UserListItemProps = {
@@ -35,7 +36,7 @@ export function UserListItem({
           {browserIcon(detectBrowser(userAgent))}
         </span>
         <UserBadge user={user} currentUserId={currentUserId} />
-        {user.userId !== currentUserId && (
+        {Boolean(currentUserId) && canChallenge(user, currentUserId) && (
           <button
             onClick={(e) => {
               e.stopPropagation()

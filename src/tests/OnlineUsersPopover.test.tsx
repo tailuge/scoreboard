@@ -180,4 +180,96 @@ describe("OnlineUsersPopover", () => {
     fireEvent.click(screen.getByLabelText("2 users online"))
     expect(screen.queryByText("🎮")).not.toBeInTheDocument()
   })
+
+  it("filters out users in games (with tableId)", () => {
+    const usersWithGame = [
+      {
+        messageType: "presence" as const,
+        type: "join" as const,
+        userId: "user-1",
+        userName: "User 1",
+        meta: {
+          country: "US",
+          ua: "ua-1",
+          origin: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
+      },
+      {
+        messageType: "presence" as const,
+        type: "join" as const,
+        userId: "user-2",
+        userName: "User 2",
+        tableId: "table-123",
+        meta: {
+          country: "GB",
+          ua: "ua-2",
+          origin: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
+      },
+    ]
+
+    render(
+      <OnlineUsersPopover
+        count={2}
+        users={usersWithGame}
+        currentUserId="user-1"
+      />
+    )
+
+    fireEvent.click(screen.getByLabelText("2 users online"))
+    expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
+    expect(screen.queryByText("Challenge")).not.toBeInTheDocument()
+  })
+
+  it("filters out users seeking games", () => {
+    const usersSeeking = [
+      {
+        messageType: "presence" as const,
+        type: "join" as const,
+        userId: "user-1",
+        userName: "User 1",
+        meta: {
+          country: "US",
+          ua: "ua-1",
+          origin: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
+      },
+      {
+        messageType: "presence" as const,
+        type: "join" as const,
+        userId: "user-2",
+        userName: "User 2",
+        seek: { tableId: "seek-123", ruleType: "standard" },
+        meta: {
+          country: "GB",
+          ua: "ua-2",
+          origin: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
+      },
+    ]
+
+    render(
+      <OnlineUsersPopover
+        count={2}
+        users={usersSeeking}
+        currentUserId="user-1"
+      />
+    )
+
+    fireEvent.click(screen.getByLabelText("2 users online"))
+    expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
+    expect(screen.queryByText("Challenge")).not.toBeInTheDocument()
+  })
 })
