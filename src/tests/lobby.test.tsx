@@ -33,8 +33,8 @@ jest.mock("@/contexts/LobbyContext", () => ({
   useLobbyMessages: jest.fn(),
   usePresenceMessages: jest.fn(),
 }))
-jest.mock("@/components/hooks/usePresenceList", () => ({
-  usePresenceList: jest.fn(() => ({ users: [], count: 0 })),
+jest.mock("@/contexts/MessagingContext", () => ({
+  useMessaging: jest.fn(),
 }))
 
 const TABLES_API_ENDPOINT = "/api/tables"
@@ -45,6 +45,21 @@ describe("Lobby Component Functional Tests", () => {
     setupRouterMock({ username: "TestUser" })
     setupUserMock()
     setupLobbyMocks()
+    const { useMessaging } = jest.requireMock(
+      "@/contexts/MessagingContext"
+    ) as {
+      useMessaging: jest.Mock
+    }
+    useMessaging.mockReturnValue({
+      users: [],
+      activeGames: [],
+      pendingChallenge: null,
+      incomingChallenge: null,
+      challenge: jest.fn(),
+      acceptChallenge: jest.fn(),
+      declineChallenge: jest.fn(),
+      cancelChallenge: jest.fn(),
+    })
 
     globalThis.fetch = createFetchMock({
       "/api/tables/find-or-create": () => mockFetchResponse(mockTables[0]),
@@ -177,11 +192,14 @@ describe("Lobby Timeout and Cleanup Tests", () => {
   })
 
   it("should show PlayModal when creator sees table is full in background", async () => {
-    let tableData = [
+    const tableData = [
       {
         id: "table-full-check",
         creator: { id: "test-user-id", name: "TestUser" },
-        players: [{ id: "test-user-id", name: "TestUser" }],
+        players: [
+          { id: "test-user-id", name: "TestUser" },
+          { id: "other-user", name: "Other" },
+        ],
         ruleType: "nineball",
         completed: false,
       },
@@ -192,25 +210,7 @@ describe("Lobby Timeout and Cleanup Tests", () => {
       return mockFetchResponse({})
     })
 
-    const { rerender } = render(
-      <LobbyProvider>
-        <Lobby />
-      </LobbyProvider>
-    )
-    tableData = [
-      {
-        ...tableData[0],
-        players: [
-          { id: "test-user-id", name: "TestUser" },
-          { id: "other-user", name: "Other" },
-        ],
-      },
-    ]
-    ;(useLobbyMessages as jest.Mock).mockReturnValue({
-      lastMessage: { action: "table_updated" },
-    })
-
-    rerender(
+    render(
       <LobbyProvider>
         <Lobby />
       </LobbyProvider>

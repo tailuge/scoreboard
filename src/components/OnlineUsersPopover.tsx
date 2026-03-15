@@ -2,12 +2,12 @@
 import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
-import type { PresenceUser } from "./hooks/usePresenceList"
+import type { PresenceMessage } from "@tailuge/messaging"
 import { UserListItem } from "./UserListItem"
 
 type OnlineUsersPopoverProps = {
   readonly count: number
-  readonly users: PresenceUser[]
+  readonly users: PresenceMessage[]
   readonly totalCount?: number
   readonly currentUserId?: string
 }

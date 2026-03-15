@@ -1,15 +1,14 @@
 import React from "react"
-import { Table } from "@/types/table"
 import { GroupBox } from "./GroupBox"
 import { LiveTableItem } from "./LiveTableItem"
+import type { ActiveGame } from "@tailuge/messaging"
 
 interface LiveMatchesListProps {
-  readonly tables: Table[]
-  readonly onSpectate: (tableId: string) => void
+  readonly games: ActiveGame[]
 }
 
-export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
-  const activeGames = tables.filter((t) => t.players.length === 2)
+export function LiveMatchesList({ games }: LiveMatchesListProps) {
+  const activeGames = games.filter((game) => game.players.length === 2)
 
   return (
     <div className="mb-4">
@@ -20,12 +19,8 @@ export function LiveMatchesList({ tables, onSpectate }: LiveMatchesListProps) {
               No live games at the moment.
             </div>
           ) : (
-            activeGames.map((table) => (
-              <LiveTableItem
-                key={table.id}
-                table={table}
-                onSpectate={onSpectate}
-              />
+            activeGames.map((game) => (
+              <LiveTableItem key={game.tableId} game={game} />
             ))
           )}
         </div>

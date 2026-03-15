@@ -1,13 +1,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { Table } from "@/types/table"
-import { useLobbyMessages } from "@/contexts/LobbyContext"
 
-export function useLobbyTables(
-  userId: string | null,
-  userName: string | null,
-  enableSubscription: boolean = true
-) {
-  const { lastMessage } = useLobbyMessages()
+export function useLobbyTables(userId: string | null, userName: string | null) {
   const [tables, setTables] = useState<Table[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -27,15 +21,6 @@ export function useLobbyTables(
   useEffect(() => {
     fetchTables()
   }, [fetchTables])
-
-  useEffect(() => {
-    if (!enableSubscription || !lastMessage) return
-
-    if (lastMessage.action === "connected") {
-      return
-    }
-    fetchTables()
-  }, [fetchTables, enableSubscription, lastMessage])
 
   const tableAction = useCallback(
     async (

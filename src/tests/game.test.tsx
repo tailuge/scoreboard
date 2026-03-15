@@ -1,60 +1,32 @@
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import Game from "../pages/game"
-import { LobbyProvider } from "@/contexts/LobbyContext"
-import {
-  setupUserMock,
-  setupLobbyMocks,
-  createFetchMock,
-  mockFetchResponse,
-} from "./testUtils"
-
-jest.mock("../nchan/nchansub", () => ({
-  NchanSub: jest.fn().mockImplementation(() => ({
-    start: jest.fn(),
-    stop: jest.fn(),
-  })),
-}))
-
-jest.mock("../nchan/nchanpub", () => ({
-  NchanPub: jest.fn().mockImplementation(() => ({
-    get: jest.fn().mockResolvedValue(0),
-    post: jest.fn().mockResolvedValue(undefined),
-    publishLobby: jest.fn().mockResolvedValue(undefined),
-    publishPresence: jest.fn().mockResolvedValue(undefined),
-  })),
-}))
-
-// Mock LobbyContext hooks
-jest.mock("@/contexts/LobbyContext", () => ({
-  LobbyProvider: jest.fn(({ children }) => <>{children}</>),
-  useLobbyMessages: jest.fn(),
-  usePresenceMessages: jest.fn(),
-}))
+import { setupUserMock, createFetchMock, mockFetchResponse } from "./testUtils"
 
 jest.mock("@/contexts/UserContext", () => ({ useUser: jest.fn() }))
-
-// Mock usePresenceList hook
-jest.mock("@/components/hooks/usePresenceList", () => ({
-  usePresenceList: jest.fn(() => ({
-    users: [],
-    count: 0,
-  })),
-}))
-
-// Mock useLobbyTables hook
-jest.mock("@/components/hooks/useLobbyTables", () => ({
-  useLobbyTables: jest.fn(() => ({
-    tables: [],
-    tableAction: jest.fn(),
-  })),
+jest.mock("@/contexts/MessagingContext", () => ({
+  useMessaging: jest.fn(),
 }))
 
 describe("Game Page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     setupUserMock()
-    setupLobbyMocks()
+    const { useMessaging } = jest.requireMock(
+      "@/contexts/MessagingContext"
+    ) as {
+      useMessaging: jest.Mock
+    }
+    useMessaging.mockReturnValue({
+      users: [],
+      activeGames: [],
+      pendingChallenge: null,
+      incomingChallenge: null,
+      challenge: jest.fn(),
+      acceptChallenge: jest.fn(),
+      declineChallenge: jest.fn(),
+      cancelChallenge: jest.fn(),
+    })
     globalThis.fetch = createFetchMock({
       "/api/rank": () =>
         mockFetchResponse([
@@ -74,11 +46,7 @@ describe("Game Page", () => {
   })
 
   it("renders the game selection page with 3 buttons", async () => {
-    render(
-      <LobbyProvider>
-        <Game />
-      </LobbyProvider>
-    )
+    render(<Game />)
 
     expect(
       screen.getByRole("link", { name: /^Play Snooker$/i })

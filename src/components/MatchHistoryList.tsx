@@ -1,24 +1,22 @@
 import React from "react"
-import { Table } from "@/types/table"
 import { MatchResultCard } from "./MatchResultCard"
 import { GroupBox } from "./GroupBox"
 import { LiveTableItem } from "./LiveTableItem"
 import { useMatchHistory } from "./hooks/useMatchHistory"
+import type { ActiveGame } from "@tailuge/messaging"
 
 interface MatchHistoryListProps {
-  readonly liveTables?: Table[]
+  readonly liveGames?: ActiveGame[]
   readonly tablesLoading?: boolean
-  readonly onSpectate?: (tableId: string) => void
 }
 
 export function MatchHistoryList({
-  liveTables = [],
+  liveGames = [],
   tablesLoading,
-  onSpectate,
 }: MatchHistoryListProps) {
   const { results, isLoading } = useMatchHistory()
 
-  const activeGames = liveTables.filter((t) => t.players.length === 2)
+  const activeGames = liveGames.filter((game) => game.players.length === 2)
 
   const renderContent = () => {
     const hasLiveGames = activeGames.length > 0
@@ -42,8 +40,8 @@ export function MatchHistoryList({
 
     return (
       <>
-        {activeGames.map((table) => (
-          <LiveTableItem key={table.id} table={table} onSpectate={onSpectate} />
+        {activeGames.map((game) => (
+          <LiveTableItem key={game.tableId} game={game} />
         ))}
         {results.map((result) => (
           <MatchResultCard key={result.id} result={result} />

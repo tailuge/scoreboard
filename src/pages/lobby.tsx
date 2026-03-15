@@ -5,7 +5,6 @@ import { PlayModal } from "@/components/PlayModal"
 import { User } from "@/components/User"
 import { GroupBox } from "@/components/GroupBox"
 import { OnlineUsersPopover } from "@/components/OnlineUsersPopover"
-import { usePresenceList } from "@/components/hooks/usePresenceList"
 import { Seo } from "@/components/Seo"
 import { markUsage } from "@/utils/usage"
 import { useUser } from "@/contexts/UserContext"
@@ -13,6 +12,7 @@ import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useAutoJoin } from "@/components/hooks/useAutoJoin"
 import { ChallengeCard } from "@/components/ChallengeCard"
 import { SeekingCard } from "@/components/SeekingCard"
+import { useMessaging } from "@/contexts/MessagingContext"
 
 const log = (...args: unknown[]) =>
   console.log(`[${new Date().toISOString()}] [lobby]`, ...args)
@@ -49,12 +49,8 @@ export default function Lobby() {
     }
   }, [router.isReady, router.query, opponentId, queryRuleType])
 
-  const { users: presenceUsers, count: presenceCount } = usePresenceList(
-    userId,
-    userName,
-    activeRuleType ? activeOpponentId : null,
-    activeRuleType
-  )
+  const { users } = useMessaging()
+  const presenceCount = users.length
 
   const [seekingRuleType, setSeekingRuleType] = useState<string | null>(null)
   const [seekingTableId, setSeekingTableId] = useState<string | null>(null)
@@ -200,7 +196,7 @@ export default function Lobby() {
               rightBadge={
                 <OnlineUsersPopover
                   count={presenceCount}
-                  users={presenceUsers}
+                  users={users}
                   totalCount={presenceCount}
                   currentUserId={userId}
                 />

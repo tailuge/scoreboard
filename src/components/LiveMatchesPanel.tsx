@@ -1,15 +1,9 @@
 import React from "react"
 import { LiveMatchesList } from "./LiveMatchesList"
-import { useUser } from "@/contexts/UserContext"
-import { useLobbyTables } from "./hooks/useLobbyTables"
+import { useMessaging } from "@/contexts/MessagingContext"
 
 export function LiveMatchesPanel() {
-  const { userId, userName } = useUser()
-  const { tables, tableAction } = useLobbyTables(userId, userName)
+  const { activeGames } = useMessaging()
 
-  const handleSpectate = async (tableId: string) => {
-    await tableAction(tableId, "spectate")
-  }
-
-  return <LiveMatchesList tables={tables} onSpectate={handleSpectate} />
+  return <LiveMatchesList games={activeGames} />
 }

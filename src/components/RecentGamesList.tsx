@@ -1,22 +1,16 @@
 import React from "react"
 import { MatchResultCard } from "./MatchResultCard"
 import { GroupBox } from "./GroupBox"
-import { useUser } from "@/contexts/UserContext"
-import { useLobbyTables } from "./hooks/useLobbyTables"
 import { LiveTableItem } from "./LiveTableItem"
 import { useMatchHistory } from "./hooks/useMatchHistory"
+import { useMessaging } from "@/contexts/MessagingContext"
 
 export function RecentGamesList() {
-  const { userId, userName } = useUser()
-  const { tables, tableAction } = useLobbyTables(userId, userName)
   const { results: historyResults, isLoading: loadingHistory } =
     useMatchHistory()
+  const { activeGames } = useMessaging()
 
-  const handleSpectate = async (tableId: string) => {
-    await tableAction(tableId, "spectate")
-  }
-
-  const liveMatches = tables.filter((t) => t.players.length === 2)
+  const liveMatches = activeGames.filter((game) => game.players.length === 2)
 
   const renderContent = () => {
     if (
@@ -39,12 +33,8 @@ export function RecentGamesList() {
     }
     return (
       <>
-        {liveMatches.map((table) => (
-          <LiveTableItem
-            key={`live-${table.id}`}
-            table={table}
-            onSpectate={handleSpectate}
-          />
+        {liveMatches.map((game) => (
+          <LiveTableItem key={`live-${game.tableId}`} game={game} />
         ))}
         {historyResults.map((result) => (
           <MatchResultCard key={`hist-${result.id}`} result={result} />

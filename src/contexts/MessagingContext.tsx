@@ -37,7 +37,8 @@ const MessagingContext = createContext<MessagingContextType | undefined>(
 )
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_WEBSOCKET_HOST || "billiards-network.onrender.com"
+  process.env.NEXT_PUBLIC_WEBSOCKET_HOST ||
+  "https://billiards-network.onrender.com"
 
 export function MessagingProvider({
   children,
@@ -118,20 +119,28 @@ export function MessagingProvider({
     let detachListeners: (() => void) | null = null
 
     const joinLobby = async () => {
-      const lobby = await client.joinLobby({
-        messageType: "presence",
-        type: "join",
-        userId,
-        userName,
-      })
+      try {
+        const lobby = await client.joinLobby({
+          messageType: "presence",
+          type: "join",
+          userId,
+          userName,
+        })
 
-      if (!isActive) {
-        await lobby.leave()
-        return
+        if (!isActive) {
+          await lobby.leave()
+          return
+        }
+
+        lobbyRef.current = lobby
+        detachListeners = attachLobbyListeners(lobby)
+      } catch (error) {
+        console.error("Failed to join lobby", {
+          baseUrl,
+          userId,
+          error,
+        })
       }
-
-      lobbyRef.current = lobby
-      detachListeners = attachLobbyListeners(lobby)
     }
 
     void joinLobby()

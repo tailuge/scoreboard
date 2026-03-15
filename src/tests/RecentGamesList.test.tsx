@@ -2,16 +2,18 @@ import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { RecentGamesList } from "../components/RecentGamesList"
 import { useUser } from "@/contexts/UserContext"
-import { useLobbyTables } from "@/components/hooks/useLobbyTables"
 import { useMatchHistory } from "@/components/hooks/useMatchHistory"
 
 jest.mock("@/contexts/UserContext")
-jest.mock("@/components/hooks/useLobbyTables")
 jest.mock("@/components/hooks/useMatchHistory")
+jest.mock("@/contexts/MessagingContext", () => ({
+  useMessaging: jest.fn(),
+}))
 
 const useUserSpy = useUser as jest.Mock
-const useLobbyTablesSpy = useLobbyTables as jest.Mock
 const useMatchHistorySpy = useMatchHistory as jest.Mock
+const useMessagingSpy = jest.requireMock("@/contexts/MessagingContext")
+  .useMessaging as jest.Mock
 
 describe("RecentGamesList Component", () => {
   const dummyUser = {
@@ -19,19 +21,13 @@ describe("RecentGamesList Component", () => {
     userName: "Unique Player",
   }
 
-  const dummyLiveTable = {
-    id: "table-unique-123",
-    creator: { id: "u-999", name: "Unique Player" },
+  const dummyLiveGame = {
+    tableId: "table-unique-123",
     players: [
       { id: "u-999", name: "Unique Player" },
       { id: "u-888", name: "Other Player" },
     ],
-    spectators: [],
-    createdAt: Date.now(),
-    lastUsedAt: Date.now(),
-    isActive: true,
     ruleType: "snooker",
-    completed: false,
   }
 
   const dummyHistory = {
@@ -45,13 +41,19 @@ describe("RecentGamesList Component", () => {
   }
 
   const configureMocks = (config: any = {}) => {
-    useLobbyTablesSpy.mockReturnValue({
-      tables: config.tables || [],
-      tableAction: config.tableAction || jest.fn(),
-    })
     useMatchHistorySpy.mockReturnValue({
       results: config.results || [],
       isLoading: config.loading === undefined ? false : config.loading,
+    })
+    useMessagingSpy.mockReturnValue({
+      users: [],
+      activeGames: config.liveGames || [],
+      pendingChallenge: null,
+      incomingChallenge: null,
+      challenge: jest.fn(),
+      acceptChallenge: jest.fn(),
+      declineChallenge: jest.fn(),
+      cancelChallenge: jest.fn(),
     })
   }
 
@@ -78,7 +80,7 @@ describe("RecentGamesList Component", () => {
 
   it("renders both live and past match entries", () => {
     configureMocks({
-      tables: [dummyLiveTable],
+      liveGames: [dummyLiveGame],
       results: [dummyHistory],
     })
     render(<RecentGamesList />)
@@ -89,14 +91,11 @@ describe("RecentGamesList Component", () => {
   })
 
   it("handles spectating interaction for active tables", () => {
-    const actionMock = jest.fn()
     configureMocks({
-      tables: [dummyLiveTable],
-      tableAction: actionMock,
+      liveGames: [dummyLiveGame],
     })
     render(<RecentGamesList />)
     fireEvent.click(screen.getByText("Live"))
-    expect(actionMock).toHaveBeenCalledWith("table-unique-123", "spectate")
     expect(globalThis.open).toHaveBeenCalled()
   })
 })

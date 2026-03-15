@@ -1,11 +1,6 @@
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { useLobbyTables } from "../components/hooks/useLobbyTables"
-import { useLobbyMessages } from "@/contexts/LobbyContext"
 import { mockTable, mockTables } from "./mockData"
-
-jest.mock("@/contexts/LobbyContext", () => ({
-  useLobbyMessages: jest.fn(),
-}))
 
 describe("useLobbyTables", () => {
   const userId = "user-1"
@@ -14,7 +9,6 @@ describe("useLobbyTables", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     globalThis.fetch = jest.fn()
-    ;(useLobbyMessages as jest.Mock).mockReturnValue({ lastMessage: null })
   })
 
   it("should fetch tables on mount", async () => {
@@ -185,41 +179,5 @@ describe("useLobbyTables", () => {
     expect(updatedTable).toBeNull()
     expect(consoleSpy).toHaveBeenCalled()
     consoleSpy.mockRestore()
-  })
-
-  it("should refetch tables on message", async () => {
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve([]),
-    })
-
-    const { rerender } = renderHook(() => useLobbyTables(userId, userName))
-
-    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-    ;(useLobbyMessages as jest.Mock).mockReturnValue({
-      lastMessage: { action: "create" },
-    })
-
-    rerender()
-
-    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(2))
-  })
-
-  it("should not refetch tables when action is 'connected'", async () => {
-    ;(globalThis.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve([]),
-    })
-
-    const { rerender } = renderHook(() => useLobbyTables(userId, userName))
-
-    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
-    ;(useLobbyMessages as jest.Mock).mockReturnValue({
-      lastMessage: { action: "connected" },
-    })
-
-    rerender()
-
-    expect(globalThis.fetch).toHaveBeenCalledTimes(1)
   })
 })

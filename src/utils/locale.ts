@@ -84,7 +84,14 @@ const languageToRegion: Record<string, string> = {
 export function localeToFlag(locale?: string): string {
   if (!locale) return "🌐"
 
-  const [lang, regionPart] = locale.split("-")
+  const trimmed = locale.trim()
+  if (!trimmed.includes("-") && trimmed.length === 2) {
+    return trimmed
+      .toUpperCase()
+      .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)))
+  }
+
+  const [lang, regionPart] = trimmed.split("-")
 
   const region =
     regionPart?.length === 2

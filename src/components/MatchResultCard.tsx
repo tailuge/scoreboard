@@ -56,11 +56,12 @@ function MatchResultCardComponent({
     setFormattedTime(formatTimeAgo(result.timestamp))
   }, [result.timestamp])
 
-  const displayTime =
-    formattedTime ||
-    new Date(result.timestamp).toLocaleTimeString([], {
-      hour: "numeric",
-    })
+  const displayTime = isLive
+    ? ""
+    : formattedTime ||
+      new Date(result.timestamp).toLocaleTimeString([], {
+        hour: "numeric",
+      })
 
   const padding = compact ? "px-1 py-0.5" : "py-1 px-2"
   const iconSize = compact ? 16 : 20

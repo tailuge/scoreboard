@@ -2,6 +2,7 @@ import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import { MatchHistoryList } from "../components/MatchHistoryList"
 import { useUser } from "@/contexts/UserContext"
+import type { ActiveGame } from "@tailuge/messaging"
 
 jest.mock("@/contexts/UserContext", () => ({
   useUser: jest.fn(),
@@ -77,19 +78,13 @@ describe("MatchHistoryList", () => {
   })
 
   it("renders live games in the recent matches list", async () => {
-    const mockLiveTable = {
-      id: "table-123",
-      creator: { id: "u1", name: "PlayerOne" },
+    const mockLiveGame: ActiveGame = {
+      tableId: "table-123",
       players: [
         { id: "u1", name: "PlayerOne" },
         { id: "u2", name: "PlayerTwo" },
       ],
-      spectators: [],
-      createdAt: Date.now(),
-      lastUsedAt: Date.now(),
-      isActive: true,
-      ruleType: "snooker" as const,
-      completed: false,
+      ruleType: "snooker",
     }
 
     ;(globalThis.fetch as jest.Mock).mockResolvedValue({
@@ -98,7 +93,7 @@ describe("MatchHistoryList", () => {
     })
 
     render(
-      <MatchHistoryList liveTables={[mockLiveTable]} tablesLoading={false} />
+      <MatchHistoryList liveGames={[mockLiveGame]} tablesLoading={false} />
     )
     await waitFor(() => {
       expect(screen.getByText("PlayerOne")).toBeInTheDocument()

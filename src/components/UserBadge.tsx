@@ -1,19 +1,12 @@
 import React from "react"
-import type { PresenceUser } from "./hooks/usePresenceList"
+import type { PresenceMessage } from "@tailuge/messaging"
 
 type UserBadgeProps = {
-  readonly user: PresenceUser
+  readonly user: PresenceMessage
   readonly currentUserId?: string
 }
 
 export function UserBadge({ user, currentUserId }: UserBadgeProps) {
-  if (user.isBot) {
-    return (
-      <span className="text-[10px]" title="Bot">
-        🤖
-      </span>
-    )
-  }
   if (user.userId === currentUserId) {
     return (
       <span className="text-[10px]" title="Identified">
@@ -21,15 +14,10 @@ export function UserBadge({ user, currentUserId }: UserBadgeProps) {
       </span>
     )
   }
-  const isExternal = (() => {
-    if (!user.originUrl) return false
-    try {
-      const url = new URL(user.originUrl, globalThis.location.origin)
-      return url.hostname !== globalThis.location.hostname
-    } catch {
-      return false
-    }
-  })()
+  const host = user.meta?.host
+  const currentHost = globalThis.location?.host
+  const isExternal =
+    !!host && !!currentHost && host !== currentHost && host !== "localhost"
 
   return isExternal ? (
     <span className="text-[10px]" title="external">

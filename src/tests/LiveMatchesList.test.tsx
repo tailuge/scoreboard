@@ -1,8 +1,8 @@
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { LiveMatchesList } from "../components/LiveMatchesList"
-import { Table } from "@/types/table"
 import { useUser } from "@/contexts/UserContext"
+import type { ActiveGame } from "@tailuge/messaging"
 
 jest.mock("@/contexts/UserContext", () => ({
   useUser: jest.fn(),
@@ -11,30 +11,23 @@ jest.mock("@/contexts/UserContext", () => ({
 const mockedUseUser = useUser as jest.Mock
 
 describe("LiveMatchesList", () => {
-  const activeTable: Table = {
-    id: "table-1",
-    creator: { id: "creator-1", name: "Creator 1" },
+  const activeGame: ActiveGame = {
+    tableId: "table-1",
     players: [
       { id: "player-1", name: "Player One" },
       { id: "player-2", name: "Player Two" },
     ],
-    spectators: [],
-    createdAt: Date.now(),
-    lastUsedAt: Date.now(),
-    isActive: true,
     ruleType: "nineball",
-    completed: false,
   }
 
   it("renders active games and triggers spectate", () => {
-    const onSpectate = jest.fn()
     mockedUseUser.mockReturnValue({
       userId: "user-1",
       userName: "Spectator",
     })
     globalThis.open = jest.fn()
 
-    render(<LiveMatchesList tables={[activeTable]} onSpectate={onSpectate} />)
+    render(<LiveMatchesList games={[activeGame]} />)
 
     expect(screen.getByText("Live Games")).toBeInTheDocument()
     expect(screen.getByText("Player One")).toBeInTheDocument()
@@ -44,12 +37,10 @@ describe("LiveMatchesList", () => {
     expect(screen.queryByText(/nineball/i)).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Live"))
-    expect(onSpectate).toHaveBeenCalledWith("table-1")
     expect(globalThis.open).toHaveBeenCalled()
   })
 
   it("renders empty state when there are no active games", () => {
-    const onSpectate = jest.fn()
     mockedUseUser.mockReturnValue({
       userId: "user-1",
       userName: "Spectator",
@@ -57,10 +48,9 @@ describe("LiveMatchesList", () => {
 
     render(
       <LiveMatchesList
-        tables={[
-          { ...activeTable, players: [{ id: "player-1", name: "Player One" }] },
+        games={[
+          { ...activeGame, players: [{ id: "player-1", name: "Player One" }] },
         ]}
-        onSpectate={onSpectate}
       />
     )
 

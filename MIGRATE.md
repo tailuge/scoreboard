@@ -39,7 +39,7 @@ Create a new messaging context (or service + context) that:
   - `pendingChallenge` and `incomingChallenge` state
   - `challenge()`, `acceptChallenge()`, `declineChallenge()`, `cancelChallenge()`
 
-### 1.2 Update Presence Mapping + Online Users UI
+### 1.2 Update Presence Mapping + Online Users UI (Done)
 
 Stop publishing `locale`, `ua`, and `originUrl` from the client. Use `meta` from the server:
 

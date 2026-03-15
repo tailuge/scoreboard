@@ -45,8 +45,8 @@ export function LocationTimeBadge({
       className={`flex items-center justify-end gap-1.5 ${textSize} ${textColor} tracking-tight`}
     >
       <span className="truncate flex items-center gap-1">
-        <span>{formattedTime}</span>
-        {hasLocation ? <span>•</span> : null}
+        {formattedTime ? <span>{formattedTime}</span> : null}
+        {formattedTime && hasLocation ? <span>•</span> : null}
         {locationCity ? <span>{locationCity}</span> : null}
         {locationCountry ? <span title={flagTitle}>{countryFlag}</span> : null}
       </span>

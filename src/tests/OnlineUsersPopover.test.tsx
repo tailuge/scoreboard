@@ -4,8 +4,20 @@ import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 
 describe("OnlineUsersPopover", () => {
   const mockUsers = [
-    { userId: "user-1", userName: "User 1", locale: "en-US" },
-    { userId: "user-2", userName: "User 2", locale: "en-GB" },
+    {
+      messageType: "presence",
+      type: "join",
+      userId: "user-1",
+      userName: "User 1",
+      meta: { country: "US", ua: "ua-1", host: "localhost" },
+    },
+    {
+      messageType: "presence",
+      type: "join",
+      userId: "user-2",
+      userName: "User 2",
+      meta: { country: "GB", ua: "ua-2", host: "localhost" },
+    },
   ]
 
   it("renders correctly and toggles visibility", () => {
@@ -74,12 +86,19 @@ describe("OnlineUsersPopover", () => {
 
   it("shows game icon for external sites (non-github.io)", () => {
     const externalUsers = [
-      { userId: "user-1", userName: "User 1", locale: "en-US" },
       {
+        messageType: "presence",
+        type: "join",
+        userId: "user-1",
+        userName: "User 1",
+        meta: { country: "US", ua: "ua-1", host: "localhost" },
+      },
+      {
+        messageType: "presence",
+        type: "join",
         userId: "user-2",
         userName: "User 2",
-        locale: "en-GB",
-        originUrl: "origin:example.com",
+        meta: { country: "GB", ua: "ua-2", host: "example.com" },
       },
     ]
 
@@ -97,11 +116,19 @@ describe("OnlineUsersPopover", () => {
 
   it("does not show game icon for same-origin users", () => {
     const sameOriginUsers = [
-      { userId: "user-1", userName: "User 1", locale: "en-US" },
       {
+        messageType: "presence",
+        type: "join",
+        userId: "user-1",
+        userName: "User 1",
+        meta: { country: "US", ua: "ua-1", host: "localhost" },
+      },
+      {
+        messageType: "presence",
+        type: "join",
         userId: "user-2",
         userName: "User 2",
-        locale: "en-GB",
+        meta: { country: "GB", ua: "ua-2", host: "localhost" },
       },
     ]
 
