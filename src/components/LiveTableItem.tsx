@@ -4,6 +4,7 @@ import { MatchResultCard } from "./MatchResultCard"
 import { GameUrl } from "@/utils/GameUrl"
 import { useUser } from "@/contexts/UserContext"
 import type { ActiveGame } from "@tailuge/messaging"
+import type { RuleType } from "@/utils/gameTypes"
 
 interface LiveTableItemProps {
   readonly game: ActiveGame
@@ -12,7 +13,7 @@ interface LiveTableItemProps {
 
 export function LiveTableItem({ game, onSpectate }: LiveTableItemProps) {
   const { userId, userName } = useUser()
-  const ruleType = game.ruleType || "nineball"
+  const ruleType = (game.ruleType || "nineball") as RuleType
 
   const handleSpectateClick = () => {
     onSpectate?.(game.tableId)

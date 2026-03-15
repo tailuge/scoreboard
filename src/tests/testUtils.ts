@@ -1,6 +1,5 @@
 import { useRouter } from "next/router"
 import { useUser } from "@/contexts/UserContext"
-import { useLobbyMessages, usePresenceMessages } from "@/contexts/LobbyContext"
 
 export const setupRouterMock = (
   query = {},
@@ -24,11 +23,6 @@ export const setupUserMock = (
     userName,
     setUserName,
   })
-}
-
-export const setupLobbyMocks = () => {
-  ;(useLobbyMessages as jest.Mock).mockReturnValue({ lastMessage: null })
-  ;(usePresenceMessages as jest.Mock).mockReturnValue({ lastMessage: null })
 }
 
 export const mockFetchResponse = (data: any, ok = true, status = 200) => {

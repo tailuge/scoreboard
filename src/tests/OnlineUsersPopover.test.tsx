@@ -5,18 +5,32 @@ import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 describe("OnlineUsersPopover", () => {
   const mockUsers = [
     {
-      messageType: "presence",
-      type: "join",
+      messageType: "presence" as const,
+      type: "join" as const,
       userId: "user-1",
       userName: "User 1",
-      meta: { country: "US", ua: "ua-1", host: "localhost" },
+      meta: {
+        country: "US",
+        ua: "ua-1",
+        host: "localhost",
+        ts: "0",
+        ip: "127.0.0.1",
+        method: "GET",
+      },
     },
     {
-      messageType: "presence",
-      type: "join",
+      messageType: "presence" as const,
+      type: "join" as const,
       userId: "user-2",
       userName: "User 2",
-      meta: { country: "GB", ua: "ua-2", host: "localhost" },
+      meta: {
+        country: "GB",
+        ua: "ua-2",
+        host: "localhost",
+        ts: "0",
+        ip: "127.0.0.1",
+        method: "GET",
+      },
     },
   ]
 
@@ -31,15 +45,12 @@ describe("OnlineUsersPopover", () => {
     )
 
     const button = screen.getByLabelText("2 users online")
-    // Initially closed
     expect(screen.queryByLabelText("Online users")).not.toBeInTheDocument()
 
-    // Open
     fireEvent.click(button)
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
     expect(screen.getByText(/🇬🇧 User 2/)).toBeInTheDocument()
 
-    // Close
     fireEvent.click(button)
     expect(screen.queryByLabelText("Online users")).not.toBeInTheDocument()
   })
@@ -54,7 +65,6 @@ describe("OnlineUsersPopover", () => {
     fireEvent.click(screen.getByLabelText("2 users online"))
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
 
-    // Click outside
     fireEvent.mouseDown(screen.getByTestId("outside"))
     expect(screen.queryByLabelText("Online users")).not.toBeInTheDocument()
   })
@@ -65,7 +75,6 @@ describe("OnlineUsersPopover", () => {
     fireEvent.click(screen.getByLabelText("2 users online"))
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
 
-    // Click inside
     fireEvent.mouseDown(screen.getByLabelText("Online users"))
     expect(screen.getByLabelText("Online users")).toBeInTheDocument()
   })
@@ -87,18 +96,32 @@ describe("OnlineUsersPopover", () => {
   it("shows game icon for external sites (non-github.io)", () => {
     const externalUsers = [
       {
-        messageType: "presence",
-        type: "join",
+        messageType: "presence" as const,
+        type: "join" as const,
         userId: "user-1",
         userName: "User 1",
-        meta: { country: "US", ua: "ua-1", host: "localhost" },
+        meta: {
+          country: "US",
+          ua: "ua-1",
+          host: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
       },
       {
-        messageType: "presence",
-        type: "join",
+        messageType: "presence" as const,
+        type: "join" as const,
         userId: "user-2",
         userName: "User 2",
-        meta: { country: "GB", ua: "ua-2", host: "example.com" },
+        meta: {
+          country: "GB",
+          ua: "ua-2",
+          host: "example.com",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
       },
     ]
 
@@ -117,18 +140,32 @@ describe("OnlineUsersPopover", () => {
   it("does not show game icon for same-origin users", () => {
     const sameOriginUsers = [
       {
-        messageType: "presence",
-        type: "join",
+        messageType: "presence" as const,
+        type: "join" as const,
         userId: "user-1",
         userName: "User 1",
-        meta: { country: "US", ua: "ua-1", host: "localhost" },
+        meta: {
+          country: "US",
+          ua: "ua-1",
+          host: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
       },
       {
-        messageType: "presence",
-        type: "join",
+        messageType: "presence" as const,
+        type: "join" as const,
         userId: "user-2",
         userName: "User 2",
-        meta: { country: "GB", ua: "ua-2", host: "localhost" },
+        meta: {
+          country: "GB",
+          ua: "ua-2",
+          host: "localhost",
+          ts: "0",
+          ip: "127.0.0.1",
+          method: "GET",
+        },
       },
     ]
 
