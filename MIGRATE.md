@@ -39,13 +39,19 @@ Create a new messaging context (or service + context) that:
   - `pendingChallenge` and `incomingChallenge` state
   - `challenge()`, `acceptChallenge()`, `declineChallenge()`, `cancelChallenge()`
 
-### 1.2 Update Presence Mapping
+### 1.2 Update Presence Mapping + Online Users UI
 
 Stop publishing `locale`, `ua`, and `originUrl` from the client. Use `meta` from the server:
 
 - `locale` ← `meta.country` for flags `meta.city` for city UI components (like `UserListItem` and `LogViewer`) should display flags based on ISO country codes rather than BCP 47 locales
 - `ua` ← `meta.ua`
 - `originUrl` ← `meta.host`
+
+Replace presence sources across UI (no client WebSocket usage):
+
+- Online user count: switch to `users.length` from the new messaging context (remove `usePresenceList` usage)
+- Online user popover/list: render from messaging `users` (remove `usePresenceList`)
+- Any user badges or list items that depend on presence data should read from messaging `users` and `meta`
 
 Alphabetical user sorting is acceptable (library default).
 
