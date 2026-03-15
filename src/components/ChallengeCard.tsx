@@ -23,6 +23,7 @@ export function ChallengeCard({
           <button
             key={game.ruleType}
             onClick={() => onSelectRule(game.ruleType)}
+            aria-label={`Play ${game.ruleType}`}
             className="w-full rounded-lg bg-cyan-600 px-4 py-3 font-bold text-white transition hover:bg-cyan-500 active:scale-95"
           >
             {game.name}
@@ -30,6 +31,7 @@ export function ChallengeCard({
         ))}
         <button
           onClick={onCancel}
+          aria-label="Cancel challenge"
           className="mt-2 text-sm text-gray-400 hover:text-white"
         >
           Cancel

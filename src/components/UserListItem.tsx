@@ -41,6 +41,7 @@ export function UserListItem({
               e.stopPropagation()
               onChallenge(user)
             }}
+            aria-label={`Challenge ${user.userName}`}
             className="ml-2 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[9px] font-bold text-cyan-300 hover:bg-cyan-500/40 transition-colors"
           >
             Challenge
