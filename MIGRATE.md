@@ -65,8 +65,9 @@ All challenge UI lives on `/game`:
 - Outgoing challenge triggered from the online users list (same CTA)
   - `challenge()` sends an offer
   - On accept, challenger sets `tableId` in presence and opens the game **in a new tab**
+- Rule type selection previously handled in `lobby.tsx` must move into `game.tsx` (or its components) once the lobby page is removed.
 
-### 1.4 Active Games List
+### 1.4 Active Games List (Done)
 
 Replace KV table list with `activeGames(users)`:
 
