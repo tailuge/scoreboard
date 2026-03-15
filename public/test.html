@@ -237,120 +237,115 @@
       }
     </style>
     <script type="module">
-      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm"
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
 
-      const DEFAULT_LOBBY_ORIGIN = "https://scoreboard-tailuge.vercel.app"
-
-      function getLobbyUrl() {
-        if (globalThis.location.protocol === "file:") {
-          return new URL("/lobby", DEFAULT_LOBBY_ORIGIN)
-        }
-        return new URL("/lobby", globalThis.location.origin)
+      function getGameUrl() {
+        return new URL("/game", globalThis.location.origin);
       }
 
       // Function to create an iframe
       function createIframe(options = {}) {
-        const username = options.username || faker.person.firstName()
+        const userName = options.userName || faker.person.firstName();
         const playerId =
-          options.playerId || faker.string.alphanumeric(8).toLowerCase()
-        const iframe = document.createElement("iframe")
-        const src = getLobbyUrl()
-        src.searchParams.set("username", username)
-        src.searchParams.set("playerId", playerId)
+          options.playerId || faker.string.alphanumeric(8).toLowerCase();
+        const iframe = document.createElement("iframe");
+        const src = getGameUrl();
+        src.searchParams.set("userName", userName);
+        src.searchParams.set("playerId", playerId);
 
         if (options.action) {
-          src.searchParams.set("action", options.action)
+          src.searchParams.set("action", options.action);
         }
         if (options.ruleType) {
-          src.searchParams.set("ruletype", options.ruleType)
+          src.searchParams.set("ruletype", options.ruleType);
           if (options.ruleType === "snooker") {
-            src.searchParams.set("reds", "3")
+            src.searchParams.set("reds", "3");
           }
         }
 
-        iframe.src = src.toString()
-        iframe.width = "100%"
-        iframe.height = "100%"
-        iframe.frameBorder = "0"
-        return iframe
+        iframe.src = src.toString();
+        iframe.width = "100%";
+        iframe.height = "100%";
+        iframe.frameBorder = "0";
+        return iframe;
       }
 
-      const panel1 = document.getElementById("panel1")
-      const panel2 = document.getElementById("panel2")
-      const panel3 = document.getElementById("panel3")
-      const controls = document.getElementById("controls")
-      const stats = document.getElementById("stats")
-      const spectatorToggle = document.getElementById("spectator-toggle")
-      const buttonNineball = document.getElementById("button-nineball")
-      const buttonSnooker = document.getElementById("button-snooker")
-      const buttonThreecushion = document.getElementById("button-threecushion")
+      const panel1 = document.getElementById("panel1");
+      const panel2 = document.getElementById("panel2");
+      const panel3 = document.getElementById("panel3");
+      const controls = document.getElementById("controls");
+      const stats = document.getElementById("stats");
+      const spectatorToggle = document.getElementById("spectator-toggle");
+      const buttonNineball = document.getElementById("button-nineball");
+      const buttonSnooker = document.getElementById("button-snooker");
+      const buttonThreecushion = document.getElementById("button-threecushion");
 
       const createPanels = (ruleType, includeSpectator) => {
         // Panel 1: action=join
-        panel1.appendChild(createIframe({ action: "join", ruleType }))
+        panel1.appendChild(createIframe({ action: "join", ruleType }));
 
         // Panel 2: action=join
-        panel2.appendChild(createIframe({ action: "join", ruleType }))
+        panel2.appendChild(createIframe({ action: "join", ruleType }));
 
         // Panel 3: just a random name
         if (panel3 && includeSpectator) {
-          panel3.appendChild(createIframe())
-          const closeButton = document.createElement("button")
-          closeButton.type = "button"
-          closeButton.className = "panel-close"
-          closeButton.setAttribute("aria-label", "Close panel")
-          closeButton.textContent = "x"
+          panel3.appendChild(createIframe());
+          const closeButton = document.createElement("button");
+          closeButton.type = "button";
+          closeButton.className = "panel-close";
+          closeButton.setAttribute("aria-label", "Close panel");
+          closeButton.textContent = "x";
           closeButton.addEventListener("click", () => {
-            panel3.remove()
-          })
-          panel3.appendChild(closeButton)
-          panel3.classList.remove("hidden")
+            panel3.remove();
+          });
+          panel3.appendChild(closeButton);
+          panel3.classList.remove("hidden");
         } else if (panel3) {
-          panel3.classList.add("hidden")
+          panel3.classList.add("hidden");
         }
-      }
+      };
 
       const hidePreGameUi = () => {
-        controls?.classList.add("hidden")
-        stats?.classList.add("hidden")
-      }
+        controls?.classList.add("hidden");
+        stats?.classList.add("hidden");
+      };
 
       const enableStartButtons = () => {
-        if (buttonNineball) buttonNineball.disabled = false
-        if (buttonSnooker) buttonSnooker.disabled = false
-        if (buttonThreecushion) buttonThreecushion.disabled = false
-      }
+        if (buttonNineball) buttonNineball.disabled = false;
+        if (buttonSnooker) buttonSnooker.disabled = false;
+        if (buttonThreecushion) buttonThreecushion.disabled = false;
+      };
 
       const warmNchanStats = async () => {
-        const url = "https://billiards-network.onrender.com/basic_status"
+        const url = "https://billiards-network.onrender.com/basic_status";
         try {
-          const response = await fetch(url, { mode: "cors" })
+          const response = await fetch(url, { mode: "cors" });
           if (response.ok || response.type === "opaque") {
-            enableStartButtons()
-            stats?.classList.add("hidden")
+            enableStartButtons();
+            stats?.classList.add("hidden");
           }
         } catch (error) {
           // Ignore fetch failures; iframe load can still unlock buttons.
-          console.warn("Failed to warm nchan stats:", error)
+          console.warn("Failed to warm nchan stats:", error);
         }
-      }
+      };
 
       const startGame = (ruleType) => {
-        hidePreGameUi()
-        createPanels(ruleType, spectatorToggle?.checked)
-      }
+        hidePreGameUi();
+        createPanels(ruleType, spectatorToggle?.checked);
+      };
 
       document
         .getElementById("button-nineball")
-        ?.addEventListener("click", () => startGame("nineball"))
+        ?.addEventListener("click", () => startGame("nineball"));
       document
         .getElementById("button-snooker")
-        ?.addEventListener("click", () => startGame("snooker"))
+        ?.addEventListener("click", () => startGame("snooker"));
       document
         .getElementById("button-threecushion")
-        ?.addEventListener("click", () => startGame("threecushion"))
+        ?.addEventListener("click", () => startGame("threecushion"));
 
-      warmNchanStats()
+      warmNchanStats();
     </script>
   </head>
 

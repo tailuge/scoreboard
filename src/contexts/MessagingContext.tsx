@@ -72,7 +72,7 @@ export function MessagingProvider({
 
     client.start()
     return () => {
-      void client.stop({ isTeardown: true })
+      client.stop({ isTeardown: true })
     }
   }, [])
 
@@ -115,7 +115,7 @@ export function MessagingProvider({
     if (!client) return
     const existingLobby = lobbyRef.current
     if (existingLobby && existingLobby.currentUser.userId !== userId) {
-      void existingLobby.leave({ isTeardown: true })
+      existingLobby.leave({ isTeardown: true })
       lobbyRef.current = null
       setUsers([])
       setPendingChallenge(null)
