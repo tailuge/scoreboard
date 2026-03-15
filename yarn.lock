@@ -1780,10 +1780,10 @@
   dependencies:
     tslib "^2.8.0"
 
-"@tailuge/messaging@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@tailuge/messaging/-/messaging-1.5.0.tgz#b35bdd08d47bd00cca0657b6c219dee2639fd86d"
-  integrity sha512-HvYfiZ5oa06RfetRckbAfOnJoiAGmkLPV5DhuG84GNdQW1kW4yc1kbcOsXho2VnFNRAh9mwGod+WfGUNPMKdNg==
+"@tailuge/messaging@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@tailuge/messaging/-/messaging-1.7.0.tgz#556773af631a4ad543d5310bc7ace34ed5a12d1a"
+  integrity sha512-NcUkeQWWo+yQSCRFAXhp63Zrxao8LzimLiSq8JDMxHVq9RG3nqpiPnt2xZaWT8KBINed6epsnD+1kmHJFIiPKw==
 
 "@tailwindcss/node@4.2.1":
   version "4.2.1"

@@ -12,7 +12,7 @@ describe("OnlineUsersPopover", () => {
       meta: {
         country: "US",
         ua: "ua-1",
-        host: "localhost",
+        origin: "localhost",
         ts: "0",
         ip: "127.0.0.1",
         method: "GET",
@@ -26,7 +26,7 @@ describe("OnlineUsersPopover", () => {
       meta: {
         country: "GB",
         ua: "ua-2",
-        host: "localhost",
+        origin: "localhost",
         ts: "0",
         ip: "127.0.0.1",
         method: "GET",
@@ -103,7 +103,7 @@ describe("OnlineUsersPopover", () => {
         meta: {
           country: "US",
           ua: "ua-1",
-          host: "localhost",
+          origin: "localhost",
           ts: "0",
           ip: "127.0.0.1",
           method: "GET",
@@ -117,7 +117,7 @@ describe("OnlineUsersPopover", () => {
         meta: {
           country: "GB",
           ua: "ua-2",
-          host: "example.com",
+          origin: "example.com",
           ts: "0",
           ip: "127.0.0.1",
           method: "GET",
@@ -147,7 +147,7 @@ describe("OnlineUsersPopover", () => {
         meta: {
           country: "US",
           ua: "ua-1",
-          host: "localhost",
+          origin: "localhost",
           ts: "0",
           ip: "127.0.0.1",
           method: "GET",
@@ -161,7 +161,7 @@ describe("OnlineUsersPopover", () => {
         meta: {
           country: "GB",
           ua: "ua-2",
-          host: "localhost",
+          origin: "localhost",
           ts: "0",
           ip: "127.0.0.1",
           method: "GET",
