@@ -10,6 +10,7 @@ type OnlineUsersPopoverProps = {
   readonly users: PresenceMessage[]
   readonly totalCount?: number
   readonly currentUserId?: string
+  readonly onChallenge?: (user: PresenceMessage) => void
 }
 
 export function OnlineUsersPopover({
@@ -17,6 +18,7 @@ export function OnlineUsersPopover({
   users,
   totalCount,
   currentUserId,
+  onChallenge,
 }: OnlineUsersPopoverProps) {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -89,12 +91,16 @@ export function OnlineUsersPopover({
                     user={user}
                     currentUserId={currentUserId}
                     onChallenge={(u) => {
-                      const query = {
-                        ...router.query,
-                        opponentId: u.userId,
-                        opponentName: u.userName,
+                      if (onChallenge) {
+                        onChallenge(u)
+                      } else {
+                        const query = {
+                          ...router.query,
+                          opponentId: u.userId,
+                          opponentName: u.userName,
+                        }
+                        router.push({ pathname: "/lobby", query })
                       }
-                      router.push({ pathname: "/lobby", query })
                       setIsOpen(false)
                     }}
                   />

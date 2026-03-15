@@ -55,17 +55,21 @@ Replace presence sources across UI (no client WebSocket usage):
 
 Alphabetical user sorting is acceptable (library default).
 
-### 1.3 Implement Challenge Flow in `game.tsx`
+### 1.3 Implement Challenge Flow in `game.tsx` (Done)
 
 All challenge UI lives on `/game`:
 
-- Incoming challenge banner with **Accept** / **Decline**
-- Accept calls `acceptChallenge()` and opens the game **in a new tab**
+- Incoming challenge banner with **Accept** / **Decline** on `/game`
+- Accept calls `acceptChallenge()`, updates presence with `tableId`, and opens the game **in a new tab**
 - Decline calls `declineChallenge()` and clears the banner
 - Outgoing challenge triggered from the online users list (same CTA)
   - `challenge()` sends an offer
-  - On accept, challenger sets `tableId` in presence and opens the game **in a new tab**
-- Rule type selection previously handled in `lobby.tsx` must move into `game.tsx` (or its components) once the lobby page is removed.
+  - On accept, challenger updates presence with `tableId` and opens the game **in a new tab**
+- Rule type selection moved to `game.tsx` via the challenge card
+
+### Debugging Note
+
+- Local dev override: `/game?userName=YourName` sets the display name for a window.
 
 ### 1.4 Active Games List (Done)
 

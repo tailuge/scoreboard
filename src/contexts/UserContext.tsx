@@ -63,7 +63,7 @@ export function UserProvider({
       globalThis.localStorage.setItem("userId", urlUserId)
     }
 
-    const urlUserName = getQueryValue(router.query.username)
+    const urlUserName = getQueryValue(router.query.userName)
     if (urlUserName) {
       setUserName(urlUserName)
       globalThis.localStorage.setItem("userName", urlUserName)
@@ -72,7 +72,7 @@ export function UserProvider({
     router.isReady,
     router.query.playerId,
     router.query.userId,
-    router.query.username,
+    router.query.userName,
   ])
 
   const handleSetUserName = useCallback((name: string) => {

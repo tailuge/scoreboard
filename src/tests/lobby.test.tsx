@@ -42,7 +42,7 @@ const TABLES_API_ENDPOINT = "/api/tables"
 describe("Lobby Component Functional Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    setupRouterMock({ username: "TestUser" })
+    setupRouterMock({ userName: "TestUser" })
     setupUserMock()
     setupLobbyMocks()
     const { useMessaging } = jest.requireMock(
@@ -55,10 +55,13 @@ describe("Lobby Component Functional Tests", () => {
       activeGames: [],
       pendingChallenge: null,
       incomingChallenge: null,
+      acceptedChallenge: null,
       challenge: jest.fn(),
       acceptChallenge: jest.fn(),
       declineChallenge: jest.fn(),
       cancelChallenge: jest.fn(),
+      updatePresence: jest.fn(),
+      clearAcceptedChallenge: jest.fn(),
     })
 
     globalThis.fetch = createFetchMock({
@@ -276,7 +279,7 @@ describe("Lobby Redirection Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks()
     setupRouterMock({
-      username: "TestUser",
+      userName: "TestUser",
       action: "join",
       ruletype: "nineball",
     })

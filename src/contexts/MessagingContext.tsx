@@ -22,6 +22,7 @@ interface MessagingContextType {
   activeGames: ActiveGame[]
   pendingChallenge: ChallengeMessage | null
   incomingChallenge: ChallengeMessage | null
+  acceptedChallenge: ChallengeMessage | null
   challenge: (userId: string, ruleType: string) => Promise<string>
   acceptChallenge: (
     userId: string,
@@ -30,6 +31,8 @@ interface MessagingContextType {
   ) => Promise<void>
   declineChallenge: (userId: string, ruleType: string) => Promise<void>
   cancelChallenge: (userId: string, ruleType: string) => Promise<void>
+  updatePresence: (update: Partial<PresenceMessage>) => Promise<void>
+  clearAcceptedChallenge: () => void
 }
 
 const MessagingContext = createContext<MessagingContextType | undefined>(
@@ -58,6 +61,8 @@ export function MessagingProvider({
     useState<ChallengeMessage | null>(null)
   const [incomingChallenge, setIncomingChallenge] =
     useState<ChallengeMessage | null>(null)
+  const [acceptedChallenge, setAcceptedChallenge] =
+    useState<ChallengeMessage | null>(null)
 
   const activeGames = useMemo(() => deriveActiveGames(users), [users])
 
@@ -83,11 +88,13 @@ export function MessagingProvider({
           break
         case "accept":
           setPendingChallenge(null)
+          setAcceptedChallenge(challenge)
           break
         case "decline":
         case "cancel":
           setPendingChallenge(null)
           setIncomingChallenge(null)
+          setAcceptedChallenge(null)
           break
         default:
           break
@@ -208,26 +215,47 @@ export function MessagingProvider({
     []
   )
 
+  const updatePresence = useCallback(
+    async (update: Partial<PresenceMessage>) => {
+      const lobby = lobbyRef.current
+      if (!lobby) {
+        throw new Error("Lobby not initialized")
+      }
+      await lobby.updatePresence(update)
+    },
+    []
+  )
+
+  const clearAcceptedChallenge = useCallback(() => {
+    setAcceptedChallenge(null)
+  }, [])
+
   const value = useMemo(
     () => ({
       users,
       activeGames,
       pendingChallenge,
       incomingChallenge,
+      acceptedChallenge,
       challenge,
       acceptChallenge,
       declineChallenge,
       cancelChallenge,
+      updatePresence,
+      clearAcceptedChallenge,
     }),
     [
       users,
       activeGames,
       pendingChallenge,
       incomingChallenge,
+      acceptedChallenge,
       challenge,
       acceptChallenge,
       declineChallenge,
       cancelChallenge,
+      updatePresence,
+      clearAcceptedChallenge,
     ]
   )
 

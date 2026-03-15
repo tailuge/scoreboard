@@ -50,10 +50,13 @@ describe("RecentGamesList Component", () => {
       activeGames: config.liveGames || [],
       pendingChallenge: null,
       incomingChallenge: null,
+      acceptedChallenge: null,
       challenge: jest.fn(),
       acceptChallenge: jest.fn(),
       declineChallenge: jest.fn(),
       cancelChallenge: jest.fn(),
+      updatePresence: jest.fn(),
+      clearAcceptedChallenge: jest.fn(),
     })
   }
 

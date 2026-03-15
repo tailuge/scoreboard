@@ -300,7 +300,7 @@ describe("UserContext", () => {
   })
 
   it("updates user name from router query when ready", () => {
-    setupRouterMock({ username: "RouterUser" })
+    setupRouterMock({ userName: "RouterUser" })
 
     const TestComponent = () => {
       const { userName } = useUser()
