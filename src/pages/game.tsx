@@ -37,6 +37,11 @@ export default function Game() {
     useState<PresenceMessage | null>(null)
   const [challengeError, setChallengeError] = useState<string | null>(null)
   const [challengeBusy, setChallengeBusy] = useState(false)
+  const lastOutgoingChallengeRef = React.useRef<{
+    tableId: string
+    recipientId: string
+    ruleType: string
+  } | null>(null)
 
   const ruleTypeLabels = useMemo(
     () =>
@@ -55,7 +60,13 @@ export default function Game() {
 
   const openGameWindow = useCallback(
     (tableId: string, ruleType: string, isCreator: boolean) => {
-      if (!userId || !userName) return
+      if (!userId || !userName) {
+        console.log("[challenge] open blocked: missing user identity", {
+          userId,
+          userName,
+        })
+        return
+      }
       const target = GameUrl.create({
         tableId,
         userName,
@@ -92,7 +103,17 @@ export default function Game() {
       setChallengeBusy(true)
       setChallengeError(null)
       try {
-        await challenge(selectedOpponent.userId, ruleType)
+        const tableId = await challenge(selectedOpponent.userId, ruleType)
+        lastOutgoingChallengeRef.current = {
+          tableId,
+          recipientId: selectedOpponent.userId,
+          ruleType,
+        }
+        console.log("[challenge] offer sent", {
+          tableId,
+          recipientId: selectedOpponent.userId,
+          ruleType,
+        })
         setSelectedOpponent(null)
       } catch (error) {
         console.error("Failed to send challenge", error)
@@ -167,6 +188,7 @@ export default function Game() {
         pendingChallenge.recipientId,
         pendingChallenge.ruleType
       )
+      lastOutgoingChallengeRef.current = null
     } catch (error) {
       console.error("Failed to cancel challenge", error)
       setChallengeError("Failed to cancel challenge. Please try again.")
@@ -181,11 +203,24 @@ export default function Game() {
       acceptedChallenge,
       userId,
     })
-    if (acceptedChallenge.challengerId !== userId) {
+    const outgoing = lastOutgoingChallengeRef.current
+    const matchesOutgoing =
+      outgoing?.tableId === acceptedChallenge.tableId ||
+      outgoing?.recipientId === acceptedChallenge.recipientId
+
+    if (!matchesOutgoing && !pendingChallenge) {
+      console.log("[challenge] accept ignored (no outgoing match)", {
+        acceptedChallenge,
+        outgoing,
+        pendingChallenge,
+      })
       clearAcceptedChallenge()
       return
     }
     if (!acceptedChallenge.tableId) {
+      console.log("[challenge] accept missing tableId", {
+        acceptedChallenge,
+      })
       clearAcceptedChallenge()
       return
     }
@@ -201,6 +236,7 @@ export default function Game() {
         acceptedChallenge.ruleType,
         true
       )
+      lastOutgoingChallengeRef.current = null
       clearAcceptedChallenge()
     }
 
@@ -210,6 +246,7 @@ export default function Game() {
     userId,
     clearAcceptedChallenge,
     openGameWindow,
+    pendingChallenge,
     updatePresenceForTable,
   ])
 

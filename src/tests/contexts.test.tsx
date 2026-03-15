@@ -202,6 +202,7 @@ describe("LobbyContext", () => {
 describe("UserContext", () => {
   beforeEach(() => {
     localStorage.clear()
+    sessionStorage.clear()
     jest.clearAllMocks()
     setupRouterMock({}, false)
   })
@@ -300,6 +301,7 @@ describe("UserContext", () => {
   })
 
   it("updates user name from router query when ready", () => {
+    localStorage.setItem("userId", "stored-id")
     setupRouterMock({ userName: "RouterUser" })
 
     const TestComponent = () => {
@@ -314,7 +316,10 @@ describe("UserContext", () => {
     )
 
     expect(screen.getByText("RouterUser")).toBeInTheDocument()
-    expect(localStorage.getItem("userName")).toBe("RouterUser")
+    expect(localStorage.getItem("userName")).toBeNull()
+    expect(localStorage.getItem("userId")).toBe("stored-id")
+    expect(sessionStorage.getItem("userName")).toBe("RouterUser")
+    expect(sessionStorage.getItem("userId")).not.toBe("stored-id")
   })
 
   it("manually sets user name", async () => {
@@ -393,7 +398,8 @@ describe("UserContext", () => {
     await waitFor(() => {
       expect(screen.getByTestId("user-id").textContent).toBe("router-id")
     })
-    expect(globalThis.localStorage.getItem("userId")).toBe("router-id")
+    expect(globalThis.localStorage.getItem("userId")).toBe("stored-id")
+    expect(globalThis.sessionStorage.getItem("userId")).toBe("router-id")
   })
 
   it("accepts router query param userId as alias", async () => {
@@ -413,7 +419,8 @@ describe("UserContext", () => {
     await waitFor(() => {
       expect(screen.getByTestId("user-id").textContent).toBe("alias-id")
     })
-    expect(globalThis.localStorage.getItem("userId")).toBe("alias-id")
+    expect(globalThis.localStorage.getItem("userId")).toBeTruthy()
+    expect(globalThis.sessionStorage.getItem("userId")).toBe("alias-id")
   })
 
   it("generates and saves new player ID if not in localStorage", async () => {

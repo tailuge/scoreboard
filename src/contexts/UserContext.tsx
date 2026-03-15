@@ -30,16 +30,25 @@ export function UserProvider({
   const router = useRouter()
 
   useEffect(() => {
-    const storedId = globalThis.localStorage.getItem("userId")
+    const storedSessionId = globalThis.sessionStorage.getItem("userId")
+    const storedSessionUserName = globalThis.sessionStorage.getItem("userName")
+    const storedId =
+      storedSessionId || globalThis.localStorage.getItem("userId")
+    const useSessionStorage = Boolean(storedSessionId || storedSessionUserName)
     if (storedId) {
       setUserId(storedId)
     } else {
       const newId = getUID()
       setUserId(newId)
-      globalThis.localStorage.setItem("userId", newId)
+      if (useSessionStorage) {
+        globalThis.sessionStorage.setItem("userId", newId)
+      } else {
+        globalThis.localStorage.setItem("userId", newId)
+      }
     }
 
-    const storedUserName = globalThis.localStorage.getItem("userName")
+    const storedUserName =
+      storedSessionUserName || globalThis.localStorage.getItem("userName")
     const anonymousNames = Object.values(anonByLang)
     if (storedUserName && !anonymousNames.includes(storedUserName)) {
       setUserName(storedUserName)
@@ -58,15 +67,21 @@ export function UserProvider({
     const urlUserId = getQueryValue(
       router.query.playerId ?? router.query.userId
     )
-    if (urlUserId) {
-      setUserId(urlUserId)
-      globalThis.localStorage.setItem("userId", urlUserId)
-    }
-
     const urlUserName = getQueryValue(router.query.userName)
-    if (urlUserName) {
-      setUserName(urlUserName)
-      globalThis.localStorage.setItem("userName", urlUserName)
+    if (urlUserId || urlUserName) {
+      if (urlUserId) {
+        setUserId(urlUserId)
+        globalThis.sessionStorage.setItem("userId", urlUserId)
+      }
+      if (urlUserName) {
+        setUserName(urlUserName)
+        globalThis.sessionStorage.setItem("userName", urlUserName)
+        if (!urlUserId) {
+          const newId = getUID()
+          setUserId(newId)
+          globalThis.sessionStorage.setItem("userId", newId)
+        }
+      }
     }
   }, [
     router.isReady,
