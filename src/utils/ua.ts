@@ -1,79 +1,79 @@
 export function detectOS(uaString?: string): string {
-  let ua = uaString
+  let ua = uaString;
 
   if (!ua) {
-    const nav = globalThis.navigator
-    if (!nav) return "Unknown"
+    const nav = globalThis.navigator;
+    if (!nav) return "Unknown";
 
     // Modern API (Chromium) - only available for local environment
-    const uaData = (nav as any).userAgentData
+    const uaData = (nav as any).userAgentData;
     if (uaData?.platform) {
-      return uaData.platform
+      return uaData.platform;
     }
 
-    ua = nav.userAgent
+    ua = nav.userAgent;
   }
 
-  if (ua.includes("Windows")) return "Windows"
-  if (ua.includes("Android")) return "Android"
-  if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS"
-  if (ua.includes("Mac")) return "macOS"
-  if (ua.includes("Linux")) return "Linux"
+  if (ua.includes("Windows")) return "Windows";
+  if (ua.includes("Android")) return "Android";
+  if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
+  if (ua.includes("Mac")) return "macOS";
+  if (ua.includes("Linux")) return "Linux";
 
-  return "Unknown"
+  return "Unknown";
 }
 
 export function detectBrowser(uaString?: string): string {
-  let ua = uaString
+  let ua = uaString;
 
   if (!ua) {
-    const nav = globalThis.navigator
-    if (!nav) return "Unknown"
-    ua = nav.userAgent
+    const nav = globalThis.navigator;
+    if (!nav) return "Unknown";
+    ua = nav.userAgent;
   }
 
-  if (ua.includes("Edg")) return "Edge"
-  if (ua.includes("OPR")) return "Opera"
-  if (ua.includes("Brave")) return "Brave"
-  if (ua.includes("Chrome")) return "Chrome"
-  if (ua.includes("Firefox")) return "Firefox"
-  if (ua.includes("Safari")) return "Safari"
+  if (ua.includes("Edg")) return "Edge";
+  if (ua.includes("OPR")) return "Opera";
+  if (ua.includes("Brave")) return "Brave";
+  if (ua.includes("Chrome")) return "Chrome";
+  if (ua.includes("Firefox")) return "Firefox";
+  if (ua.includes("Safari")) return "Safari";
 
-  return "Unknown"
+  return "Unknown";
 }
 
 export function browserIcon(browser?: string): string {
   switch (browser) {
     case "Chrome":
-      return "🌐"
+      return "Ⓖ";
     case "Firefox":
-      return "🦊"
+      return "🦊";
     case "Safari":
-      return "🧭"
+      return "🧭";
     case "Edge":
-      return "🔵"
+      return "🔵";
     case "Opera":
-      return "🅾️"
+      return "🅾️";
     case "Brave":
-      return "🦁"
+      return "🦁";
     default:
-      return "🌍"
+      return "🌍";
   }
 }
 
 export function osIcon(os?: string): string {
   switch (os) {
     case "Windows":
-      return "🪟"
+      return "🪟";
     case "macOS":
-      return "🍎"
+      return "🍎";
     case "Linux":
-      return "🐧"
+      return "🐧";
     case "Android":
-      return "📱"
+      return "📱";
     case "iOS":
-      return "📱"
+      return "📟";
     default:
-      return "💻"
+      return "💻";
   }
 }
