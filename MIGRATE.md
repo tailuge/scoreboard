@@ -22,7 +22,7 @@ The current system uses:
 - `Lobby` - presence + matchmaking via `challenge()`/`acceptChallenge()`/`onUsersChange()`
 - `Table` - game messaging via `publish()`/`onMessage()`
 - Helpers: `activeGames()`, `canChallenge()`, `canSpectate()`
-- **Server-enriched metadata** in `_meta` (locale, UA, origin, timestamp, etc.)
+- **Server-enriched metadata** in `meta` (locale, UA, origin, timestamp, etc.)
 
 ## Phase 1: Core Integration (No Lobby Page)
 
@@ -41,11 +41,11 @@ Create a new messaging context (or service + context) that:
 
 ### 1.2 Update Presence Mapping
 
-Stop publishing `locale`, `ua`, and `originUrl` from the client. Use `_meta` from the server:
+Stop publishing `locale`, `ua`, and `originUrl` from the client. Use `meta` from the server:
 
-- `locale` ← `_meta.locale`
-- `ua` ← `_meta.ua`
-- `originUrl` ← `_meta.origin` or `_meta.host`
+- `locale` ← `meta.country` for flags `meta.city` for city UI components (like `UserListItem` and `LogViewer`) should display flags based on ISO country codes rather than BCP 47 locales
+- `ua` ← `meta.ua`
+- `originUrl` ← `meta.host`
 
 Alphabetical user sorting is acceptable (library default).
 
@@ -138,9 +138,9 @@ Do not change `/api/match-results` or `/api/match-replay`. The game project cont
 | Current System                                                 | New System                                            |
 | -------------------------------------------------------------- | ----------------------------------------------------- |
 | userId, userName, locale, originUrl, ua, opponentId, ruletype  | userId, userName, ruleType, opponentId, tableId, seek |
-| client sends locale/ua                                         | server sends `_meta`                                  |
+| client sends locale/ua                                         | server sends `meta`                                  |
 
-**Risk - LOW**: UI must use `_meta` for flags and UA instead of client-sent fields.
+**Risk - LOW**: UI must use `meta` for flags and UA instead of client-sent fields.
 
 ## Testing Strategy
 
@@ -149,7 +149,7 @@ Do not change `/api/match-results` or `/api/match-replay`. The game project cont
 - Add tests for:
   - `game.tsx` challenge banner accept/decline flow
   - `activeGames(users)` usage in live lists
-  - `_meta` mapping for locale/ua/origin
+  - `meta` mapping for locale/ua/origin
 
 ## Implementation Order
 
