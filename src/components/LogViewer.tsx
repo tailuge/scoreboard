@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { detectOS, detectBrowser, osIcon, browserIcon } from "@/utils/ua"
-import { localeToFlag } from "@/utils/locale"
-import type { SessionEntry } from "@/types/client-log"
+import { useState } from "react";
+import { detectOS, detectBrowser, osIcon, browserIcon } from "@/utils/ua";
+import { localeToFlag } from "@/utils/locale";
+import type { SessionEntry } from "@/types/client-log";
 
 const TYPE_COLORS: Record<string, string> = {
   error: "red",
   warn: "orange",
   uncaught: "red",
   promise: "red",
-}
+};
 
 function getTypeColor(type: string) {
-  return TYPE_COLORS[type] || "blue"
+  return TYPE_COLORS[type] || "blue";
 }
 
 function SessionItem({
@@ -21,19 +21,20 @@ function SessionItem({
   selected,
   onSelect,
 }: {
-  readonly session: SessionEntry
-  readonly selected: boolean
-  readonly onSelect: () => void
+  readonly session: SessionEntry;
+  readonly selected: boolean;
+  readonly onSelect: () => void;
 }) {
-  const os = detectOS(session.ua)
-  const browser = detectBrowser(session.ua)
-  const region = session.region || session.logs[0]?.region
-  const city = session.city
-  const country = session.country
+  const os = detectOS(session.ua);
+  const browser = detectBrowser(session.ua);
+  const region = session.region || session.logs[0]?.region;
+  const city = session.city;
+  const country = session.country;
 
   return (
     <li>
       <button
+        type="button"
         onClick={onSelect}
         style={{
           width: "100%",
@@ -44,6 +45,7 @@ function SessionItem({
           borderBottom: "1px solid #333",
           cursor: "pointer",
           color: "white",
+          pointerEvents: "auto",
         }}
       >
         <div
@@ -70,6 +72,7 @@ function SessionItem({
             display: "flex",
             gap: "4px",
             marginTop: "2px",
+            flexWrap: "wrap",
           }}
         >
           <span>
@@ -78,11 +81,14 @@ function SessionItem({
           <span>
             {browserIcon(browser)} {browser}
           </span>
+          {country ? <span>{localeToFlag(country)}</span> : null}
+          {city ? <span>{decodeURIComponent(city)}</span> : null}
+          {region ? <span style={{ color: "white" }}>({region})</span> : null}
         </div>
         <div
           style={{
             fontSize: "9px",
-            color: "white",
+            color: "#888",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -91,38 +97,25 @@ function SessionItem({
         >
           {session.ua}
         </div>
-        <div
-          style={{
-            fontSize: "10px",
-            color: "white",
-            marginTop: "2px",
-            display: "flex",
-            gap: "4px",
-          }}
-        >
-          {country ? <span>{localeToFlag(country)}</span> : null}
-          {city ? <span>{city}</span> : null}
-          {region ? <span style={{ color: "white" }}>({region})</span> : null}
-        </div>
       </button>
     </li>
-  )
+  );
 }
 
 interface LogViewerProps {
-  readonly sessions: readonly SessionEntry[]
+  readonly sessions: readonly SessionEntry[];
 }
 
 export default function LogViewer({ sessions }: LogViewerProps) {
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(null);
 
-  const session = sessions.find((s) => s.sid === selected)
+  const session = sessions.find((s) => s.sid === selected);
 
   return (
     <>
       <div
         style={{
-          width: "300px",
+          width: "450px",
           borderRight: "1px solid #333",
           overflowY: "auto",
           padding: "10px",
@@ -190,5 +183,5 @@ export default function LogViewer({ sessions }: LogViewerProps) {
         )}
       </div>
     </>
-  )
+  );
 }
