@@ -16,7 +16,8 @@ export function UserBadge({ user, currentUserId }: UserBadgeProps) {
     )
   }
   const origin = user.meta?.origin
-  const { emoji, title } = getOriginEmoji(origin, (user as any)?.ruletype)
+  const ruleType = user.ruleType ?? (user as any)?.ruletype
+  const { emoji, title } = getOriginEmoji(origin, ruleType)
 
   return (
     <span className="text-[10px]" title={title}>
