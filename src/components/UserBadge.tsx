@@ -22,5 +22,9 @@ export function UserBadge({ user, currentUserId }: UserBadgeProps) {
     <span className="text-[10px]" title="external">
       🎮
     </span>
-  ) : null
+  ) : (
+    <span className="text-[10px]" title="same origin">
+      👥
+    </span>
+  )
 }
