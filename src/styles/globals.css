@@ -252,3 +252,15 @@ body {
   color: var(--color-cyan-accent);
   text-shadow: 0 0 10px var(--color-cyan-glow);
 }
+
+@keyframes challenge-throb {
+  0%,
+  100% {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    border-color: rgba(16, 185, 129, 0.8);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+  }
+}

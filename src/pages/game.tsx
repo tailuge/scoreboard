@@ -283,7 +283,14 @@ export default function Game() {
         >
           <div className="flex flex-col gap-4 -mt-3">
             {incomingChallenge ? (
-              <div className="rounded-lg border border-cyan-500/40 bg-gray-800/80 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div
+                className="rounded-lg border bg-gray-800/80 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+                style={{
+                  animation: "challenge-throb 2s ease-in-out infinite",
+                  borderColor: "rgba(16, 185, 129, 0.3)",
+                  boxShadow: "0 0 8px rgba(16, 185, 129, 0.2)",
+                }}
+              >
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/70">
                     Incoming Challenge
@@ -316,7 +323,14 @@ export default function Game() {
             ) : null}
 
             {pendingChallenge ? (
-              <div className="rounded-lg border border-cyan-500/30 bg-gray-800/70 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div
+                className="rounded-lg border bg-gray-800/70 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+                style={{
+                  animation: "challenge-throb 2s ease-in-out infinite",
+                  borderColor: "rgba(16, 185, 129, 0.3)",
+                  boxShadow: "0 0 8px rgba(16, 185, 129, 0.2)",
+                }}
+              >
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/70">
                     Challenge Sent

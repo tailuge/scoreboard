@@ -1,5 +1,6 @@
 import React from "react"
 import type { PresenceMessage } from "@tailuge/messaging"
+import { getOriginEmoji } from "@/utils/presence"
 
 type UserBadgeProps = {
   readonly user: PresenceMessage
@@ -15,16 +16,11 @@ export function UserBadge({ user, currentUserId }: UserBadgeProps) {
     )
   }
   const origin = user.meta?.origin
-  const currentHost = globalThis.location?.host
-  const isExternal = !!origin && !!currentHost && origin !== currentHost
+  const { emoji, title } = getOriginEmoji(origin, (user as any)?.ruletype)
 
-  return isExternal ? (
-    <span className="text-[10px]" title="external">
-      🎮
-    </span>
-  ) : (
-    <span className="text-[10px]" title="same origin">
-      👥
+  return (
+    <span className="text-[10px]" title={title}>
+      {emoji}
     </span>
   )
 }
