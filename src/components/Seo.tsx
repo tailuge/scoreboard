@@ -15,6 +15,7 @@ interface SeoProps {
   twitterDescription?: string
   twitterImage?: string
   refresh?: string
+  keywords?: string
 }
 
 export const Seo: React.FC<SeoProps> = ({
@@ -31,11 +32,13 @@ export const Seo: React.FC<SeoProps> = ({
   twitterDescription,
   twitterImage = "https://scoreboard-tailuge.vercel.app/golden-cup.png",
   refresh,
+  keywords,
 }) => {
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
+      {keywords ? <meta name="keywords" content={keywords} /> : null}
       {refresh ? <meta httpEquiv="refresh" content={refresh} /> : null}
       {canonical ? <link rel="canonical" href={canonical} /> : null}
 
