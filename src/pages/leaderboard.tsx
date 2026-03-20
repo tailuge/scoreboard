@@ -9,7 +9,8 @@ const LeaderboardPage: React.FC = () => {
     <div className="min-h-screen bg-gray-900 p-4 md:p-8 font-sans text-gray-100">
       <Seo
         title="Free Open Source Billiards Leaderboard - Top Snooker & Pool Scores"
-        description="Check the latest rankings and high scores for free open source Snooker, 9-Ball, and Three-Cushion billiards. Watch replays of record-breaking breaks and shots."
+        description="Check the latest rankings and high scores for free open source Snooker, 9-Ball, and Three-Cushion billiards. ビリヤードのリーダーボード、スヌーカー、9ボール、3クッション。 당구 순위표, 스누커, 9볼, 3쿠션."
+        keywords="billiards, leaderboard, rankings, snooker, 9-ball, carom, three-cushion, ビリヤード, リーダーボード, ランキング, スヌーカー, 9ボール, 3クッション, 당구, 순위표, 랭킹, 스누커, 9볼, 3쿠션"
         canonical="https://scoreboard-tailuge.vercel.app/leaderboard"
         ogUrl="https://scoreboard-tailuge.vercel.app/leaderboard"
       />
