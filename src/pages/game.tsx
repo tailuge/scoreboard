@@ -11,37 +11,32 @@ import { HighscoreGrid } from "@/components/HighscoreGrid"
 import { GameBackground } from "@/components/GameBackground"
 import { useMessaging } from "@/contexts/MessagingContext"
 import { ChallengeCard } from "@/components/ChallengeCard"
-import { GameUrl } from "@/utils/GameUrl"
 import { GAME_TYPES } from "@/config"
 import type { PresenceMessage } from "@tailuge/messaging"
+import { useChallengeFlow } from "@/components/hooks/useChallengeFlow"
 
 export default function Game() {
   const { userId, userName } = useUser()
+  const { users, activeGames } = useMessaging()
   const {
-    users,
-    activeGames,
     pendingChallenge,
     incomingChallenge,
-    acceptedChallenge,
-    challenge,
+    rematchParam,
+    isChallengeBusy,
+    challengeError,
+    isAutoAccepting,
+    sendChallenge,
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
-    updatePresence,
-    clearAcceptedChallenge,
-  } = useMessaging()
+    clearError,
+  } = useChallengeFlow()
+
   const presenceCount = users.length
   const [snookerReds, setSnookerReds] = useState(3)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
   const [selectedOpponent, setSelectedOpponent] =
     useState<PresenceMessage | null>(null)
-  const [challengeError, setChallengeError] = useState<string | null>(null)
-  const [challengeBusy, setChallengeBusy] = useState(false)
-  const lastOutgoingChallengeRef = React.useRef<{
-    tableId: string
-    recipientId: string
-    ruleType: string
-  } | null>(null)
 
   const ruleTypeLabels = useMemo(
     () =>
@@ -57,197 +52,6 @@ export default function Game() {
     return users.find((user) => user.userId === pendingChallenge.recipientId)
       ?.userName
   }, [pendingChallenge, users])
-
-  const openGameWindow = useCallback(
-    (tableId: string, ruleType: string, isCreator: boolean) => {
-      if (!userId || !userName) {
-        console.log("[challenge] open blocked: missing user identity", {
-          userId,
-          userName,
-        })
-        return
-      }
-      const target = GameUrl.create({
-        tableId,
-        userName,
-        userId,
-        ruleType,
-        isCreator,
-      })
-      console.log("[challenge] redirecting to game", {
-        tableId,
-        ruleType,
-        isCreator,
-        target: target.toString(),
-      })
-      globalThis.location.href = target.toString()
-    },
-    [userId, userName]
-  )
-
-  const updatePresenceForTable = useCallback(
-    async (tableId: string, ruleType: string, opponentId: string) => {
-      try {
-        await updatePresence({ tableId, ruleType, opponentId })
-      } catch (error) {
-        console.error("Failed to update presence for table", error)
-      }
-    },
-    [updatePresence]
-  )
-
-  const handleSelectRuleType = useCallback(
-    async (ruleType: string) => {
-      if (!selectedOpponent) return
-      setChallengeBusy(true)
-      setChallengeError(null)
-      try {
-        const tableId = await challenge(selectedOpponent.userId, ruleType)
-        lastOutgoingChallengeRef.current = {
-          tableId,
-          recipientId: selectedOpponent.userId,
-          ruleType,
-        }
-        console.log("[challenge] offer sent", {
-          tableId,
-          recipientId: selectedOpponent.userId,
-          ruleType,
-        })
-        setSelectedOpponent(null)
-      } catch (error) {
-        console.error("Failed to send challenge", error)
-        setChallengeError("Failed to send challenge. Please try again.")
-      } finally {
-        setChallengeBusy(false)
-      }
-    },
-    [challenge, selectedOpponent]
-  )
-
-  const handleAcceptChallenge = useCallback(async () => {
-    if (!incomingChallenge) return
-    if (!incomingChallenge.tableId) {
-      setChallengeError("Challenge is missing table information.")
-      return
-    }
-    setChallengeBusy(true)
-    setChallengeError(null)
-    try {
-      await acceptChallenge(
-        incomingChallenge.challengerId,
-        incomingChallenge.ruleType,
-        incomingChallenge.tableId
-      )
-      await updatePresenceForTable(
-        incomingChallenge.tableId,
-        incomingChallenge.ruleType,
-        incomingChallenge.challengerId
-      )
-      openGameWindow(
-        incomingChallenge.tableId,
-        incomingChallenge.ruleType,
-        false
-      )
-    } catch (error) {
-      console.error("Failed to accept challenge", error)
-      setChallengeError("Failed to accept challenge. Please try again.")
-    } finally {
-      setChallengeBusy(false)
-    }
-  }, [
-    acceptChallenge,
-    incomingChallenge,
-    openGameWindow,
-    updatePresenceForTable,
-  ])
-
-  const handleDeclineChallenge = useCallback(async () => {
-    if (!incomingChallenge) return
-    setChallengeBusy(true)
-    setChallengeError(null)
-    try {
-      await declineChallenge(
-        incomingChallenge.challengerId,
-        incomingChallenge.ruleType
-      )
-    } catch (error) {
-      console.error("Failed to decline challenge", error)
-      setChallengeError("Failed to decline challenge. Please try again.")
-    } finally {
-      setChallengeBusy(false)
-    }
-  }, [declineChallenge, incomingChallenge])
-
-  const handleCancelChallenge = useCallback(async () => {
-    if (!pendingChallenge) return
-    setChallengeBusy(true)
-    setChallengeError(null)
-    try {
-      await cancelChallenge(
-        pendingChallenge.recipientId,
-        pendingChallenge.ruleType
-      )
-      lastOutgoingChallengeRef.current = null
-    } catch (error) {
-      console.error("Failed to cancel challenge", error)
-      setChallengeError("Failed to cancel challenge. Please try again.")
-    } finally {
-      setChallengeBusy(false)
-    }
-  }, [cancelChallenge, pendingChallenge])
-
-  useEffect(() => {
-    if (!acceptedChallenge || !userId) return
-    console.log("[challenge] accept received", {
-      acceptedChallenge,
-      userId,
-    })
-    const outgoing = lastOutgoingChallengeRef.current
-    const matchesOutgoing =
-      outgoing?.tableId === acceptedChallenge.tableId ||
-      outgoing?.recipientId === acceptedChallenge.recipientId
-
-    if (!matchesOutgoing && !pendingChallenge) {
-      console.log("[challenge] accept ignored (no outgoing match)", {
-        acceptedChallenge,
-        outgoing,
-        pendingChallenge,
-      })
-      clearAcceptedChallenge()
-      return
-    }
-    if (!acceptedChallenge.tableId) {
-      console.log("[challenge] accept missing tableId", {
-        acceptedChallenge,
-      })
-      clearAcceptedChallenge()
-      return
-    }
-
-    const openAcceptedGame = async () => {
-      await updatePresenceForTable(
-        acceptedChallenge.tableId,
-        acceptedChallenge.ruleType,
-        acceptedChallenge.recipientId
-      )
-      openGameWindow(
-        acceptedChallenge.tableId,
-        acceptedChallenge.ruleType,
-        true
-      )
-      lastOutgoingChallengeRef.current = null
-      clearAcceptedChallenge()
-    }
-
-    void openAcceptedGame()
-  }, [
-    acceptedChallenge,
-    userId,
-    clearAcceptedChallenge,
-    openGameWindow,
-    pendingChallenge,
-    updatePresenceForTable,
-  ])
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
@@ -275,7 +79,7 @@ export default function Game() {
                 totalCount={presenceCount}
                 currentUserId={userId}
                 onChallenge={(user) => {
-                  setChallengeError(null)
+                  clearError()
                   setSelectedOpponent(user)
                 }}
               />
@@ -283,7 +87,15 @@ export default function Game() {
           }
         >
           <div className="flex flex-col gap-4 -mt-3">
-            {incomingChallenge ? (
+            {isAutoAccepting && (
+              <div className="rounded-lg border border-emerald-500/30 bg-gray-800/80 px-4 py-3 text-center">
+                <p className="text-sm font-medium text-emerald-400">
+                  Reconnecting to rematch...
+                </p>
+              </div>
+            )}
+
+            {incomingChallenge && !isAutoAccepting ? (
               <div
                 className="rounded-lg border bg-gray-800/80 px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
                 style={{
@@ -294,7 +106,9 @@ export default function Game() {
               >
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/70">
-                    Incoming Challenge
+                    {incomingChallenge.rematch
+                      ? "Rematch Request"
+                      : "Incoming Challenge"}
                   </p>
                   <p className="text-sm text-gray-200">
                     {incomingChallenge.challengerName} wants to play{" "}
@@ -305,16 +119,16 @@ export default function Game() {
                 <div className="flex gap-2">
                   <button
                     aria-label="Accept challenge"
-                    onClick={handleAcceptChallenge}
-                    disabled={challengeBusy}
+                    onClick={acceptChallenge}
+                    disabled={isChallengeBusy}
                     className="rounded-md bg-emerald-500/80 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 disabled:opacity-60"
                   >
                     Accept
                   </button>
                   <button
                     aria-label="Decline challenge"
-                    onClick={handleDeclineChallenge}
-                    disabled={challengeBusy}
+                    onClick={declineChallenge}
+                    disabled={isChallengeBusy}
                     className="rounded-md border border-gray-500/60 px-3 py-1.5 text-xs font-semibold text-gray-200 hover:bg-gray-700/60 disabled:opacity-60"
                   >
                     Decline
@@ -345,8 +159,8 @@ export default function Game() {
                 <div className="flex gap-2">
                   <button
                     aria-label="Cancel challenge"
-                    onClick={handleCancelChallenge}
-                    disabled={challengeBusy}
+                    onClick={cancelChallenge}
+                    disabled={isChallengeBusy}
                     className="rounded-md border border-gray-500/60 px-3 py-1.5 text-xs font-semibold text-gray-200 hover:bg-gray-700/60 disabled:opacity-60"
                   >
                     Cancel
@@ -355,10 +169,24 @@ export default function Game() {
               </div>
             ) : null}
 
-            {selectedOpponent ? (
+            {selectedOpponent || rematchParam ? (
               <ChallengeCard
-                opponentName={selectedOpponent.userName}
-                onSelectRule={handleSelectRuleType}
+                opponentName={
+                  selectedOpponent?.userName || rematchParam?.opponentName
+                }
+                rematchParam={rematchParam}
+                onSelectRule={(ruleType) => {
+                  if (rematchParam) {
+                    sendChallenge(rematchParam.opponentId, ruleType, {
+                      lastScores: rematchParam.lastScores,
+                      isRematch: true,
+                      nextTurnId: rematchParam.nextTurnId,
+                    })
+                  } else if (selectedOpponent) {
+                    sendChallenge(selectedOpponent.userId, ruleType)
+                  }
+                  setSelectedOpponent(null)
+                }}
                 onCancel={() => setSelectedOpponent(null)}
               />
             ) : null}

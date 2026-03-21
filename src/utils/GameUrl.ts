@@ -1,6 +1,15 @@
+import JSONCrush from "jsoncrush"
 import { GAME_BASE_URL } from "@/config"
 
 const WEBSOCKET_SERVER = "wss://billiards.onrender.com/ws"
+
+export interface RematchParam {
+  readonly opponentId: string
+  readonly opponentName: string
+  readonly ruleType: string
+  readonly lastScores: { readonly userId: string; readonly score: number }[]
+  readonly nextTurnId: string
+}
 
 export class GameUrl {
   private static addUserParams(
@@ -19,6 +28,7 @@ export class GameUrl {
     ruleType,
     isSpectator = false,
     isCreator = false,
+    rematch,
   }: {
     tableId: string
     userName: string
@@ -26,6 +36,7 @@ export class GameUrl {
     ruleType: string
     isSpectator?: boolean
     isCreator?: boolean
+    rematch?: RematchParam
   }): URL {
     const target = new URL(GAME_BASE_URL)
     target.searchParams.append("websocketserver", WEBSOCKET_SERVER)
@@ -38,8 +49,26 @@ export class GameUrl {
     if (isCreator) {
       target.searchParams.append("first", "true")
     }
+    if (rematch) {
+      target.searchParams.append(
+        "rematch",
+        (JSONCrush as any).crush(JSON.stringify(rematch))
+      )
+    }
 
     return target
+  }
+
+  static parseRematch(search: string): RematchParam | null {
+    const params = new URLSearchParams(search)
+    const crushed = params.get("rematch")
+    if (!crushed) return null
+    try {
+      return JSON.parse((JSONCrush as any).uncrush(crushed)) as RematchParam
+    } catch (e) {
+      console.error("Failed to parse rematch param", e)
+      return null
+    }
   }
 
   static createSinglePlayer({

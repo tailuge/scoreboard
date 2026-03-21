@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rematch Flow Test Helper</title>
+    <link rel="icon" type="image/png" href="golden-cup.png" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100%; display: flex; flex-direction: column; background-color: #0f172a; color: white; font-family: sans-serif; }
+      .container { display: flex; flex: 1; padding: 10px; gap: 10px; }
+      .panel { flex: 1; border: 1px solid #334155; border-radius: 8px; overflow: hidden; background: #1e293b; }
+      .panel iframe { width: 100%; height: 100%; border: none; }
+      .controls { padding: 15px; border-bottom: 1px solid #334155; display: flex; gap: 10px; align-items: center; background: #1e293b; }
+      button { padding: 8px 16px; border-radius: 6px; border: none; background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
+      button:hover { background: #2563eb; }
+      .info { font-size: 14px; color: #94a3b8; }
+    </style>
+    <script type="module">
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
+      import JSONCrush from "https://cdn.jsdelivr.net/npm/jsoncrush@1.1.8/+esm";
+
+      const players = [
+        { id: 'user-' + faker.string.alphanumeric(5), name: faker.person.firstName() },
+        { id: 'user-' + faker.string.alphanumeric(5), name: faker.person.firstName() }
+      ];
+
+      function getUrl(playerIdx, rematch = null) {
+        const url = new URL("/game", globalThis.location.origin);
+        url.searchParams.set("userName", players[playerIdx].name);
+        url.searchParams.set("userId", players[playerIdx].id);
+        if (rematch) {
+          url.searchParams.set("rematch", JSONCrush.crush(JSON.stringify(rematch)));
+        }
+        return url.toString();
+      }
+
+      function loadPlayers(rematchIdx = -1) {
+        const p1Rematch = rematchIdx === 0 ? {
+          opponentId: players[1].id,
+          opponentName: players[1].name,
+          ruleType: 'snooker',
+          lastScores: [
+            { userId: players[0].id, score: 2 },
+            { userId: players[1].id, score: 1 }
+          ],
+          nextTurnId: players[1].id
+        } : null;
+
+        const p2Rematch = rematchIdx === 1 ? {
+          opponentId: players[0].id,
+          opponentName: players[0].name,
+          ruleType: 'snooker',
+          lastScores: [
+            { userId: players[0].id, score: 2 },
+            { userId: players[1].id, score: 1 }
+          ],
+          nextTurnId: players[1].id
+        } : null;
+
+        document.getElementById('iframe1').src = getUrl(0, p1Rematch);
+        document.getElementById('iframe2').src = getUrl(1, p2Rematch);
+      }
+
+      window.initNormal = () => loadPlayers();
+      window.initP1Rematch = () => loadPlayers(0);
+      window.initBothRematch = () => {
+        // To test auto-accept, we load both with rematch params.
+        // In a real scenario, they'd both be looking for each other.
+        loadPlayers(0);
+        setTimeout(() => {
+          const p2Rematch = {
+            opponentId: players[0].id,
+            opponentName: players[0].name,
+            ruleType: 'snooker',
+            lastScores: [
+              { userId: players[0].id, score: 2 },
+              { userId: players[1].id, score: 1 }
+            ],
+            nextTurnId: players[1].id
+          };
+          document.getElementById('iframe2').src = getUrl(1, p2Rematch);
+        }, 1000);
+      };
+
+      loadPlayers();
+    </script>
+  </head>
+  <body>
+    <div class="controls">
+      <button onclick="initNormal()">New Session</button>
+      <button onclick="initP1Rematch()">P1 Rematch URL</button>
+      <button onclick="initBothRematch()">Mutual Rematch</button>
+      <div class="info">Test rematch flows with pre-filled scores and auto-acceptance.</div>
+    </div>
+    <div class="container">
+      <div class="panel"><iframe id="iframe1"></iframe></div>
+      <div class="panel"><iframe id="iframe2"></iframe></div>
+    </div>
+  </body>
+</html>
