@@ -1,103 +1,90 @@
 # Improved Rematch Support Design (REMATCH2.md)
 
 ## 1. Overview
-This design improves upon `REMATCH.md` by focusing on statelessness, modularity, and enhanced messaging. It aims to keep `game.tsx` clean and `GameUrl.ts` maintainable while providing a superior user experience for returning players.
+This design focuses on statelessness, modularity, and enhanced messaging for a seamless rematch experience. It prioritizes explicit data structures, a clean hook-based architecture, and a phased rollout.
 
-## 2. URL Design & Param Handling
+## 2. Messaging Contract Update (`@tailuge/messaging`)
 
-### Compact Rematch Parameter
-Instead of multiple query parameters, use a single `r` (rematch) parameter containing a compressed JSON object.
-
-**Structure of `r` (uncompressed):**
-```json
-{
-  "oid": "opponent-id",
-  "onm": "Opponent Name",
-  "rt": "snooker",
-  "s": [2, 1], // [myScore, opponentScore]
-  "n": "me" // who goes next: "me" | "opp"
-}
-```
-**Implementation:** Use `JSONCrush` (already in dependencies) and `encodeURIComponent` to keep the URL short and readable by the app.
-
-### URL Builder in `GameUrl.ts`
-To prevent `GameUrl.ts` from growing with every new feature, refactor to a configuration-based approach:
-
-```typescript
-// src/utils/GameUrl.ts
-export interface GameUrlOptions {
-  tableId: string;
-  userName: string;
-  userId: string;
-  ruleType: string;
-  isSpectator?: boolean;
-  isCreator?: boolean;
-  rematch?: {
-    scores: [number, number];
-    next: 'me' | 'opp';
-  };
-}
-
-static create(options: GameUrlOptions): URL { ... }
-```
-
-## 3. Messaging Contract Updates (@tailuge/messaging)
-
-Update `ChallengeMessage` to include optional rematch metadata. This allows the recipient to see the context of the challenge immediately.
+**Phase 1** involves updating the `ChallengeMessage` to include context about the previous game.
 
 ```typescript
 // packages/messaging-client/src/types.ts
+export interface RematchInfo {
+  readonly lastScores: { readonly userId: string; readonly score: number }[];
+  readonly isRematch: boolean;
+  readonly nextTurnId: string; // The ID of the player who should break/go first
+}
+
 export interface ChallengeMessage {
   // ... existing fields
-  rematch?: {
-    lastScores: [number, number];
-    isRematch: true;
-  };
+  readonly rematch?: RematchInfo;
 }
 ```
 
-**Benefit:** The "Incoming Challenge" UI can change its text to "Rematch Request" and show the previous score, making it much more engaging.
+**Reasoning:** Explicitly listing scores by `userId` ensures that both the challenger and the recipient can render the scoreboard accurately without relying on positional assumptions.
 
-## 4. Architecture: `useChallenge` Hook
+## 3. URL Design & Param Handling
 
-Extract the challenge and rematch logic from `game.tsx` into a dedicated hook.
+### Readable Rematch Parameter
+Use a single `rematch` query parameter containing a compressed, but fully-named JSON object. Avoid short aliases like `oid` or `s` to maintain consistency with the rest of the application.
+
+**Structure of `rematch` (uncompressed):**
+```json
+{
+  "opponentId": "user-456",
+  "opponentName": "Alex",
+  "ruleType": "snooker",
+  "lastScores": [
+    { "userId": "user-123", "score": 2 },
+    { "userId": "user-456", "score": 1 }
+  ],
+  "nextTurnId": "user-456"
+}
+```
+**Implementation:** Use `JSONCrush` and `encodeURIComponent` to keep the URL manageable. The application logic should parse this into the `RematchInfo` interface.
+
+## 4. Architecture: `useChallengeFlow` Hook
+
+To keep `game.tsx` clean and "dumb," extract the complex challenge and rematch state machine into a dedicated hook.
 
 ```typescript
-// src/hooks/useChallenge.ts
-export function useChallenge() {
-  // Handles:
-  // 1. Parsing URL for rematch data on mount
-  // 2. State for pending/incoming challenges
-  // 3. Logic for auto-selecting opponent if 'r' is present
-  // 4. Wrapping messaging actions (challenge, accept, etc.)
+// src/hooks/useChallengeFlow.ts
+export function useChallengeFlow() {
+  // 1. Detect and parse 'rematch' URL param on mount.
+  // 2. Manage 'pendingChallenge', 'incomingChallenge', and 'acceptedChallenge' state.
+  // 3. Provide methods: sendRematch(), acceptRematch(), declineRematch().
+  // 4. Return UI-ready state: isRematchRequest, lastScores, opponentInfo.
 }
 ```
-
-This keeps `game.tsx` focused on layout and composition.
 
 ## 5. Visual Design & UX
 
-### Rematch Challenge Card
-When a rematch is initiated (either via URL or messaging), show a specialized `RematchCard`:
-- **Header**: "Rematch Request" (instead of "Incoming Challenge")
-- **Scoreboard**: Display `2 - 1` prominently.
-- **Context**: "Play again with [Opponent Name]?"
+### Rematch Notification UI
+When an incoming challenge contains `rematch` metadata, the UI should transform:
+- **Title**: "Rematch Request" (instead of "Incoming Challenge")
+- **Scoreboard**: Display the scores prominently, e.g., `You 2 - 1 Alex`.
+- **Action**: "Accept Rematch" (Emerald green button).
 
-### Auto-Challenge Flow
-If a user arrives at `/game?r=...`, the UI should:
-1. Immediately show the `ChallengeCard` for the opponent specified in the URL.
-2. If the opponent is online, the "Play" button should be a "Send Rematch" button.
-3. If the opponent is offline, show a "Waiting for opponent to return..." status.
+### Auto-Challenge Entry
+If a user arrives at `/game?rematch=...`, the `ChallengeCard` should be pre-populated with the opponent's data. If the opponent is currently online, a "Send Rematch" button should be shown.
 
-## 6. Implementation Steps
+## 6. Phased Implementation
 
-1.  **Refactor `GameUrl.ts`**: Switch to `GameUrlOptions` object pattern.
-2.  **Update `@tailuge/messaging`**: (If possible) add `rematch` field to `ChallengeMessage`. If not immediately possible, use the `tableId` as a key to look up local rematch state.
-3.  **Create `useChallenge` hook**: Migrate logic from `game.tsx`.
-4.  **Enhance `ChallengeCard.tsx`**: Add support for displaying scores and "Rematch" styling.
-5.  **URL Integration**: Add `JSONCrush` logic to parse the `r` parameter.
+1.  **Phase 1: Messaging Contract**: Update `@tailuge/messaging` to support the `rematch` field in `ChallengeMessage`.
+2.  **Phase 2: Hook & URL Logic**: Implement `useChallengeFlow.ts` and update `GameUrl.ts` to support the new parameter.
+3.  **Phase 3: UI Enhancement**: Update `ChallengeCard.tsx`, `RematchNotification` (new component), and `game.tsx` to handle the `RematchInfo` and display scores.
+4.  **Phase 4: Testing & Verification**: Use a dedicated test page.
 
-## 7. Clean & DRY Principles
-- **Stateless URL**: The URL is the source of truth for the rematch context.
-- **Hook-based Logic**: Components remain "dumb" and only handle display.
-- **Type Safety**: Use the `GameUrlOptions` interface to ensure all required parameters are passed without bloating function signatures.
+## 7. Testing Strategy
+
+### `public/rematch-test.html`
+Create a new test page based on `public/test.html` to simulate the full rematch flow between two virtual players in a single viewport.
+
+- **Feature**: Buttons to trigger "Send Rematch with scores [X, Y]".
+- **Verification**: Ensure that the "Incoming Challenge" UI on the recipient's side correctly displays the scores and the "Rematch Request" label.
+- **Verification**: Ensure that accepting the rematch preserves the `nextTurnId` and `tableId` context in the final redirect.
+
+## 8. Clean & DRY Principles
+- **Explicit over Implicit**: Use full field names and unambiguous score arrays.
+- **Hook-based Logic**: Components handle "what" to show; hooks handle "how" it works.
+- **Configuration-driven URLs**: `GameUrl.ts` uses an options object to avoid signature bloat.
