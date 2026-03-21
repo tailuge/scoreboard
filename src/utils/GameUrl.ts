@@ -77,11 +77,16 @@ export class GameUrl {
     return target
   }
 
+  static serializeRematch(param: RematchParam): string {
+    const json = JSON.stringify(param)
+    return encodeURIComponent(JSONCrush.crush(json))
+  }
+
   static parseRematch(url: URL): RematchParam | null {
     const rematch = url.searchParams.get("rematch")
     if (!rematch) return null
     try {
-      const decoded = JSONCrush.uncrush(decodeURIComponent(rematch))
+      const decoded = JSONCrush.uncrush(rematch)
       const parsed = JSON.parse(decoded) as RematchParam
       if (
         parsed.opponentId &&

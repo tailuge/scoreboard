@@ -34,6 +34,7 @@ export default function Game() {
   const [snookerReds, setSnookerReds] = useState(3)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
   const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
+  const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
   const [selectedOpponent, setSelectedOpponent] =
     useState<PresenceMessage | null>(null)
   const [challengeError, setChallengeError] = useState<string | null>(null)
@@ -209,6 +210,8 @@ export default function Game() {
     if (
       !rematchParam ||
       !userId ||
+      challengeBusy ||
+      hasAttemptedRematch ||
       pendingChallenge ||
       incomingChallenge ||
       acceptedChallenge
@@ -222,6 +225,7 @@ export default function Game() {
 
     const sendAutoRematch = async () => {
       setChallengeBusy(true)
+      setHasAttemptedRematch(true)
       try {
         const info: RematchInfo = {
           lastScores: rematchParam.lastScores,
@@ -265,6 +269,7 @@ export default function Game() {
       return
 
     const isMatch =
+      incomingChallenge.rematch &&
       incomingChallenge.challengerId === rematchParam.opponentId &&
       incomingChallenge.ruleType === rematchParam.ruleType
 
@@ -389,12 +394,18 @@ export default function Game() {
                   </p>
                   {incomingChallenge.rematch?.lastScores && (
                     <p className="text-xs text-emerald-400 mt-1">
-                      {incomingChallenge.rematch.lastScores.map((s, i) => (
-                        <span key={s.userId}>
-                          {s.userId === userId ? "You" : "Opponent"} {s.score}
-                          {i === 0 ? " — " : ""}
-                        </span>
-                      ))}
+                      {incomingChallenge.rematch.lastScores.map((s, i) => {
+                        const isMe = s.userId === userId
+                        const name = isMe
+                          ? "You"
+                          : incomingChallenge.challengerName
+                        return (
+                          <span key={s.userId}>
+                            {name} {s.score}
+                            {i === 0 ? " — " : ""}
+                          </span>
+                        )
+                      })}
                     </p>
                   )}
                 </div>
