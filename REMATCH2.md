@@ -53,7 +53,7 @@ export function useChallengeFlow() {
   // 1. Detect and parse 'rematch' URL param on mount.
   // 2. Manage 'pendingChallenge', 'incomingChallenge', and 'acceptedChallenge' state.
   // 3. Provide methods: sendRematch(), acceptRematch(), declineRematch().
-  // 4. Return UI-ready state: isRematchRequest, lastScores, opponentInfo.
+  // 4. Return UI-ready state: isRematchRequest, isAutoAccepting, lastScores, opponentInfo.
 }
 ```
 
