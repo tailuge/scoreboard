@@ -20,7 +20,7 @@ export function ChallengeCard({
   return (
     <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/80 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-300">
       <h3 className="text-xl font-bold text-white mb-4">
-        {isRematch ? "Rematch Request" : `Challenge ${opponentName || "Player"}`}
+        {isRematch ? "Send Rematch" : `Challenge ${opponentName || "Player"}`}
       </h3>
 
       {rematchParam && (
@@ -44,7 +44,7 @@ export function ChallengeCard({
       )}
 
       <p className="text-sm text-gray-300 mb-6">
-        {isRematch ? "Accept rematch with rules:" : "Select game rules:"}
+        {isRematch ? "Send rematch with rules:" : "Select game rules:"}
       </p>
       <div className="grid grid-cols-1 gap-3">
         {GAME_TYPES.filter(
@@ -53,14 +53,14 @@ export function ChallengeCard({
           <button
             key={game.ruleType}
             onClick={() => onSelectRule(game.ruleType)}
-            aria-label={isRematch ? "Accept Rematch" : `Play ${game.ruleType}`}
+            aria-label={isRematch ? "Send Rematch" : `Play ${game.ruleType}`}
             className={`w-full rounded-lg px-4 py-3 font-bold text-white transition active:scale-95 ${
               isRematch
                 ? "bg-emerald-600 hover:bg-emerald-500"
                 : "bg-cyan-600 hover:bg-cyan-500"
             }`}
           >
-            {isRematch ? "Accept Rematch" : game.name}
+            {isRematch ? "Send Rematch" : game.name}
           </button>
         ))}
         <button

@@ -11,6 +11,7 @@ import { useUser } from "@/contexts/UserContext"
 export function useChallengeFlow() {
   const { userId, userName } = useUser()
   const {
+    users,
     pendingChallenge,
     incomingChallenge,
     acceptedChallenge,
@@ -99,11 +100,23 @@ export function useChallengeFlow() {
       // If this was a rematch, we might want to propagate the rematch info
       // but usually the "rematch" param in the URL is what we care about for the NEXT game.
       // However, if we just accepted a rematch, we are now in the game.
+
+      let effectiveRematch = rematchParam
+      if (!effectiveRematch && incomingChallenge.rematch) {
+        effectiveRematch = {
+          opponentId: incomingChallenge.challengerId,
+          opponentName: incomingChallenge.challengerName,
+          ruleType: incomingChallenge.ruleType,
+          lastScores: incomingChallenge.rematch.lastScores,
+          nextTurnId: incomingChallenge.rematch.nextTurnId,
+        }
+      }
+
       openGameWindow(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
-        false,
-        rematchParam || undefined
+        effectiveRematch ? userId === effectiveRematch.nextTurnId : false,
+        effectiveRematch || undefined
       )
     } catch (error) {
       console.error("Failed to accept challenge", error)
@@ -178,11 +191,25 @@ export function useChallengeFlow() {
         opponentId: acceptedChallenge.recipientId,
       })
 
+      let effectiveRematch = rematchParam
+      if (!effectiveRematch && acceptedChallenge.rematch) {
+        const recipientName =
+          users.find((u) => u.userId === acceptedChallenge.recipientId)
+            ?.userName || "Opponent"
+        effectiveRematch = {
+          opponentId: acceptedChallenge.recipientId,
+          opponentName: recipientName,
+          ruleType: acceptedChallenge.ruleType,
+          lastScores: acceptedChallenge.rematch.lastScores,
+          nextTurnId: acceptedChallenge.rematch.nextTurnId,
+        }
+      }
+
       openGameWindow(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
-        true,
-        rematchParam || undefined
+        effectiveRematch ? userId === effectiveRematch.nextTurnId : true,
+        effectiveRematch || undefined
       )
       clearAcceptedChallenge()
     }

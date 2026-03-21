@@ -169,7 +169,9 @@ export default function Game() {
               </div>
             ) : null}
 
-            {selectedOpponent || rematchParam ? (
+            {(selectedOpponent || rematchParam) &&
+            !pendingChallenge &&
+            !incomingChallenge ? (
               <ChallengeCard
                 opponentName={
                   selectedOpponent?.userName || rematchParam?.opponentName

@@ -50,10 +50,7 @@ export class GameUrl {
       target.searchParams.append("first", "true")
     }
     if (rematch) {
-      target.searchParams.append(
-        "rematch",
-        (JSONCrush as any).crush(JSON.stringify(rematch))
-      )
+      target.searchParams.append("rematch", JSONCrush.crush(JSON.stringify(rematch)))
     }
 
     return target
@@ -64,7 +61,7 @@ export class GameUrl {
     const crushed = params.get("rematch")
     if (!crushed) return null
     try {
-      return JSON.parse((JSONCrush as any).uncrush(crushed)) as RematchParam
+      return JSON.parse(JSONCrush.uncrush(crushed)) as RematchParam
     } catch (e) {
       console.error("Failed to parse rematch param", e)
       return null
