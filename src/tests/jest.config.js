@@ -13,6 +13,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@tailuge/messaging$":
       "<rootDir>/src/tests/__mocks__/@tailuge/messaging.ts",
+    "^jsoncrush$": "<rootDir>/src/tests/__mocks__/jsoncrush.ts",
   },
   transform: {
     "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.json" }],
