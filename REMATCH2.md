@@ -65,8 +65,13 @@ When an incoming challenge contains `rematch` metadata, the UI should transform:
 - **Scoreboard**: Display the scores prominently, e.g., `You 2 - 1 Alex`.
 - **Action**: "Accept Rematch" (Emerald green button).
 
-### Auto-Challenge Entry
-If a user arrives at `/game?rematch=...`, the `ChallengeCard` should be pre-populated with the opponent's data. If the opponent is currently online, a "Send Rematch" button should be shown.
+### Auto-Challenge & Mutual Rematch Flow
+If a user arrives at `/game?rematch=...`, the `useChallengeFlow` hook should:
+1.  **Detect Incoming Match**: Check if an incoming challenge already exists from the specified `opponentId`.
+2.  **Auto-Accept**: If an incoming challenge exists (or arrives while the user is in the "rematch pending" state), automatically trigger `acceptChallenge` and redirect to the game without requiring a second click.
+3.  **Fallback**: If no incoming challenge exists, pre-populate the `ChallengeCard` for the opponent and show a "Send Rematch" button.
+
+This ensures that if both players click "Rematch" in the game client, they are immediately reconnected.
 
 ## 6. Phased Implementation
 
@@ -86,5 +91,6 @@ Create a new test page based on `public/test.html` to simulate the full rematch 
 
 ## 8. Clean & DRY Principles
 - **Explicit over Implicit**: Use full field names and unambiguous score arrays.
-- **Hook-based Logic**: Components handle "what" to show; hooks handle "how" it works.
+- **Hook-based Logic**: Components handle "what" to show; hooks handle "how" it works. This includes the auto-accept state machine logic.
 - **Configuration-driven URLs**: `GameUrl.ts` uses an options object to avoid signature bloat.
+- **Mutual Acceptance**: The "first one to send, second one to auto-accept" pattern resolves the race condition without additional messaging.
