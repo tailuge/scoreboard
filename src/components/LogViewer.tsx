@@ -115,7 +115,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
     <>
       <div
         style={{
-          width: "450px",
+          width: "300px",
           borderRight: "1px solid #333",
           overflowY: "auto",
           padding: "10px",
