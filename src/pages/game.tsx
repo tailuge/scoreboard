@@ -328,15 +328,8 @@ export default function Game() {
       )
       // Determine if the current user should be first
       // In a rematch, we use nextTurnId. Otherwise, the challenger is first.
-      const isRematch =
-        acceptedChallenge.rematch ||
-        (rematchParam &&
-          rematchParam.ruleType === acceptedChallenge.ruleType &&
-          rematchParam.opponentId === acceptedChallenge.recipientId)
-
-      const isFirst = isRematch
-        ? (acceptedChallenge.rematch?.nextTurnId ||
-            rematchParam?.nextTurnId) === userId
+      const isFirst = acceptedChallenge.rematch
+        ? acceptedChallenge.rematch.nextTurnId === userId
         : acceptedChallenge.challengerId === userId
 
       openGameWindow(
