@@ -1,23 +1,23 @@
-import React, { useMemo } from "react"
-import { LeaderboardItem } from "@/types/leaderboard"
-import { navigateTo } from "@/utils/navigation"
-import { useLeaderboard } from "./hooks/useLeaderboard"
+import React, { useMemo } from "react";
+import { LeaderboardItem } from "@/types/leaderboard";
+import { navigateTo } from "@/utils/navigation";
+import { useLeaderboard } from "./hooks/useLeaderboard";
 
 interface LeaderboardTableProps {
-  readonly ruleType: string
-  readonly limit?: number
+  readonly ruleType: string;
+  readonly limit?: number;
 }
 
-type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
+type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean };
 
-const cellClass = "px-0 py-0.5"
-const hideReplay = "@max-[300px]:hidden"
+const cellClass = "px-0 py-0.5";
+const hideReplay = "@max-[300px]:hidden";
 
 function renderTrophy(index: number) {
-  const icons = ["🏆", "🥈", "🥉"]
-  const icon = icons[index]
-  if (!icon) return null
-  return <span className="text-[1.15rem]">{icon}</span>
+  const icons = ["🏆", "🥈", "🥉"];
+  const icon = icons[index];
+  if (!icon) return null;
+  return <span className="text-[1.15rem]">{icon}</span>;
 }
 
 const PlaceholderRow: React.FC<{ id: string }> = ({ id }) => (
@@ -28,18 +28,18 @@ const PlaceholderRow: React.FC<{ id: string }> = ({ id }) => (
     <td className={hideReplay} />
     <td />
   </tr>
-)
+);
 
 const LeaderboardRow: React.FC<{
-  item: LeaderboardItem
-  index: number
-  ruleType: string
-  onLike: (e: React.MouseEvent, id: string) => void
+  item: LeaderboardItem;
+  index: number;
+  ruleType: string;
+  onLike: (e: React.MouseEvent, id: string) => void;
 }> = ({ item, index, ruleType, onLike }) => {
   const handleRowClick = () => {
-    const replayUrl = `/api/rank/${item.id}?ruletype=${ruleType}`
-    navigateTo(replayUrl)
-  }
+    const replayUrl = `/api/rank/${item.id}?ruletype=${ruleType}`;
+    navigateTo(replayUrl);
+  };
 
   return (
     <tr
@@ -74,17 +74,17 @@ const LeaderboardRow: React.FC<{
         </button>
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
-  const { data, handleLike } = useLeaderboard(ruleType)
+function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
+  const { data, handleLike } = useLeaderboard(ruleType);
 
   const rows = useMemo<LeaderboardRowItem[]>(() => {
-    const displayData = limit ? data.slice(0, limit) : data
+    const displayData = limit ? data.slice(0, limit) : data;
     const placeholdersCount = limit
       ? Math.max(0, limit - displayData.length)
-      : 0
+      : 0;
 
     return [
       ...displayData.map((item) => ({ ...item, isPlaceholder: false })),
@@ -95,13 +95,13 @@ export function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
         likes: 0,
         isPlaceholder: true,
       })),
-    ]
-  }, [data, limit, ruleType])
+    ];
+  }, [data, limit, ruleType]);
 
   const onLike = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation()
-    handleLike(id)
-  }
+    e.stopPropagation();
+    handleLike(id);
+  };
 
   return (
     <div className="w-full overflow-x-auto @container">
@@ -118,12 +118,12 @@ export function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
                 ruleType={ruleType}
                 onLike={onLike}
               />
-            )
+            ),
           )}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default LeaderboardTable
+export default LeaderboardTable;
