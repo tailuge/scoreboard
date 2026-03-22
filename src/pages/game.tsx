@@ -11,6 +11,7 @@ import { HighscoreGrid } from "@/components/HighscoreGrid"
 import { GameBackground } from "@/components/GameBackground"
 import { useMessaging } from "@/contexts/MessagingContext"
 import { ChallengeCard } from "@/components/ChallengeCard"
+import { navigateTo } from "@/utils/navigation"
 import { GameUrl, type RematchParam } from "@/utils/GameUrl"
 import { GAME_TYPES } from "@/config"
 import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
@@ -82,7 +83,7 @@ export default function Game() {
         shouldStartFirst,
         target: target.toString(),
       })
-      globalThis.location.href = target.toString()
+      navigateTo(target.toString())
     },
     [userId, userName]
   )

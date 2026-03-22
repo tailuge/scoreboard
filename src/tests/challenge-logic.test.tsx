@@ -10,6 +10,9 @@ jest.mock("@/contexts/UserContext", () => ({ useUser: jest.fn() }))
 jest.mock("@/contexts/MessagingContext", () => ({
   useMessaging: jest.fn(),
 }))
+jest.mock("@/utils/navigation", () => ({
+  navigateTo: jest.fn(),
+}))
 
 describe("Challenge Logic", () => {
   const mockUserId = "user-123"
@@ -77,10 +80,6 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    // Mock location.href assignment to avoid JSDOM navigation error
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
-
     render(<Game />)
 
     const acceptButton = screen.getByLabelText("Accept challenge")
@@ -127,9 +126,6 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
-
     render(<Game />)
 
     await waitFor(() => {
@@ -172,9 +168,6 @@ describe("Challenge Logic", () => {
       "/api/rank": () => mockFetchResponse([]),
       "/api/match-results": () => mockFetchResponse([]),
     })
-
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
 
     render(<Game />)
 
@@ -227,9 +220,6 @@ describe("Challenge Logic", () => {
       "/api/rank": () => mockFetchResponse([]),
       "/api/match-results": () => mockFetchResponse([]),
     })
-
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
 
     render(<Game />)
 
@@ -285,9 +275,6 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
-
     render(<Game />)
 
     await waitFor(() => {
@@ -338,9 +325,6 @@ describe("Challenge Logic", () => {
       "/api/rank": () => mockFetchResponse([]),
       "/api/match-results": () => mockFetchResponse([]),
     })
-
-    delete (globalThis as any).location
-    globalThis.location = { href: "http://localhost/game" } as any
 
     render(<Game />)
 
