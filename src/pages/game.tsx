@@ -61,7 +61,7 @@ export default function Game() {
   }, [pendingChallenge, users])
 
   const openGameWindow = useCallback(
-    (tableId: string, ruleType: string, isCreator: boolean) => {
+    (tableId: string, ruleType: string, shouldStartFirst: boolean) => {
       if (!userId || !userName) {
         console.log("[challenge] open blocked: missing user identity", {
           userId,
@@ -74,17 +74,23 @@ export default function Game() {
         userName,
         userId,
         ruleType,
-        isCreator,
+        isCreator: shouldStartFirst,
       })
       console.log("[challenge] redirecting to game", {
         tableId,
         ruleType,
-        isCreator,
+        shouldStartFirst,
         target: target.toString(),
       })
       globalThis.location.href = target.toString()
     },
     [userId, userName]
+  )
+
+  const resolveIsFirstPlayer = useCallback(
+    (rematch: RematchInfo | undefined, challengerId: string) =>
+      (rematch?.nextTurnId ?? challengerId) === userId,
+    [userId]
   )
 
   const updatePresenceForTable = useCallback(
@@ -146,9 +152,10 @@ export default function Game() {
         incomingChallenge.challengerId
       )
       // If it's a rematch, check if we should go first
-      const isFirst = incomingChallenge.rematch
-        ? incomingChallenge.rematch.nextTurnId === userId
-        : false
+      const isFirst = resolveIsFirstPlayer(
+        incomingChallenge.rematch,
+        incomingChallenge.challengerId
+      )
       openGameWindow(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
@@ -166,6 +173,7 @@ export default function Game() {
     openGameWindow,
     updatePresenceForTable,
     userId,
+    resolveIsFirstPlayer,
   ])
 
   const handleDeclineChallenge = useCallback(async () => {
@@ -326,11 +334,15 @@ export default function Game() {
         acceptedChallenge.ruleType,
         acceptedChallenge.recipientId
       )
-      // Determine if the current user should be first
-      // In a rematch, we use nextTurnId. Otherwise, the challenger is first.
-      const isFirst = acceptedChallenge.rematch
-        ? acceptedChallenge.rematch.nextTurnId === userId
-        : acceptedChallenge.challengerId === userId
+      const rematchNextTurnId =
+        acceptedChallenge.rematch?.nextTurnId ??
+        (rematchParam &&
+        acceptedChallenge.recipientId === rematchParam.opponentId &&
+        acceptedChallenge.ruleType === rematchParam.ruleType
+          ? rematchParam.nextTurnId
+          : null)
+
+      const isFirst = rematchNextTurnId ? rematchNextTurnId === userId : true
 
       openGameWindow(
         acceptedChallenge.tableId,
@@ -351,7 +363,6 @@ export default function Game() {
     updatePresenceForTable,
     rematchParam,
   ])
-
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">

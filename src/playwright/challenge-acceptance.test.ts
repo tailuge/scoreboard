@@ -13,7 +13,7 @@ const openOnlineUsers = async (page: Page) => {
 }
 
 test.describe("challenge acceptance test", () => {
-  test("challenge icon should disappear after game pairing", async ({
+  test("challenge should launch with challenger going first", async ({
     browser,
   }, testInfo) => {
     const suffix = `${testInfo.workerIndex}${Date.now().toString().slice(-4)}`
@@ -47,17 +47,18 @@ test.describe("challenge acceptance test", () => {
         name: `Challenge from ${aliceName}`,
       })
       await expect(challengeButton).toBeVisible({ timeout: 20_000 })
+      const page1GameUrl = page1.waitForURL(/billiards\.tailuge\.workers\.dev/)
+      const page2GameUrl = page2.waitForURL(/billiards\.tailuge\.workers\.dev/)
+
       await challengeButton.click()
 
-      await page2.waitForURL(/\/lobby/)
-      await expect(
-        page2.getByRole("heading", { name: "Opponent Ready" })
-      ).toBeVisible({ timeout: 30_000 })
-      await page2.goto("/game")
+      await Promise.all([page1GameUrl, page2GameUrl])
 
-      await expect(
-        page2.getByRole("button", { name: `Challenge from ${aliceName}` })
-      ).not.toBeVisible({ timeout: 60_000 })
+      const page1Url = new URL(page1.url())
+      const page2Url = new URL(page2.url())
+
+      expect(page1Url.searchParams.get("first")).toBe("true")
+      expect(page2Url.searchParams.get("first")).toBeNull()
     } finally {
       await context1.close()
       await context2.close()

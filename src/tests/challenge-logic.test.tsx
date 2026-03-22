@@ -54,7 +54,7 @@ describe("Challenge Logic", () => {
   // Since mocking location.href is hard, let's mock GameUrl.create to capture isCreator
   it("recipient of a normal challenge should NOT be first", async () => {
     const { GameUrl } = require("../utils/GameUrl")
-    const createSpy = jest.spyOn(GameUrl, 'create')
+    const createSpy = jest.spyOn(GameUrl, "create")
 
     const incomingChallenge = {
       messageType: "challenge",
@@ -94,17 +94,19 @@ describe("Challenge Logic", () => {
 
     const acceptButton = screen.getByLabelText("Accept challenge")
     await act(async () => {
-        acceptButton.click()
+      acceptButton.click()
     })
 
-    expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-      isCreator: false
-    }))
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isCreator: false,
+      })
+    )
   })
 
   it("challenger of a normal challenge should be first when accepted", async () => {
     const { GameUrl } = require("../utils/GameUrl")
-    const createSpy = jest.spyOn(GameUrl, 'create')
+    const createSpy = jest.spyOn(GameUrl, "create")
 
     const acceptedChallenge = {
       messageType: "challenge",
@@ -141,15 +143,64 @@ describe("Challenge Logic", () => {
     render(<Game />)
 
     await waitFor(() => {
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-        isCreator: true
-      }))
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          isCreator: true,
+        })
+      )
+    })
+  })
+
+  it("challenger should be first even if accept payload has swapped challengerId", async () => {
+    const { GameUrl } = require("../utils/GameUrl")
+    const createSpy = jest.spyOn(GameUrl, "create")
+
+    const acceptedChallenge = {
+      messageType: "challenge",
+      type: "accept",
+      challengerId: mockOpponentId, // swapped by server
+      challengerName: mockOpponentName,
+      recipientId: mockUserId,
+      ruleType: "nineball",
+      tableId: "table-789",
+    }
+
+    ;(useMessaging as jest.Mock).mockReturnValue({
+      users: [{ userId: mockOpponentId, userName: mockOpponentName }],
+      activeGames: [],
+      pendingChallenge: acceptedChallenge,
+      incomingChallenge: null,
+      acceptedChallenge,
+      challenge: jest.fn(),
+      acceptChallenge: jest.fn(),
+      declineChallenge: jest.fn(),
+      cancelChallenge: jest.fn(),
+      updatePresence: jest.fn().mockResolvedValue(undefined),
+      clearAcceptedChallenge: jest.fn(),
+    })
+
+    globalThis.fetch = createFetchMock({
+      "/api/rank": () => mockFetchResponse([]),
+      "/api/match-results": () => mockFetchResponse([]),
+    })
+
+    delete (globalThis as any).location
+    globalThis.location = { href: "http://localhost/game" } as any
+
+    render(<Game />)
+
+    await waitFor(() => {
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          isCreator: true,
+        })
+      )
     })
   })
 
   it("recipient of a rematch challenge should be first if nextTurnId matches", async () => {
     const { GameUrl } = require("../utils/GameUrl")
-    const createSpy = jest.spyOn(GameUrl, 'create')
+    const createSpy = jest.spyOn(GameUrl, "create")
 
     const incomingChallenge = {
       messageType: "challenge",
@@ -161,12 +212,12 @@ describe("Challenge Logic", () => {
       tableId: "table-789",
       rematch: {
         lastScores: [
-            { userId: mockUserId, score: 1 },
-            { userId: mockOpponentId, score: 0 }
+          { userId: mockUserId, score: 1 },
+          { userId: mockOpponentId, score: 0 },
         ],
         isRematch: true,
         nextTurnId: mockUserId, // Me!
-      }
+      },
     }
 
     const acceptChallengeMock = jest.fn().mockResolvedValue(undefined)
@@ -196,17 +247,19 @@ describe("Challenge Logic", () => {
 
     const acceptButton = screen.getByLabelText("Accept challenge")
     await act(async () => {
-        acceptButton.click()
+      acceptButton.click()
     })
 
-    expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-      isCreator: true
-    }))
+    expect(createSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isCreator: true,
+      })
+    )
   })
 
   it("challenger of a rematch challenge should be first if nextTurnId matches", async () => {
     const { GameUrl } = require("../utils/GameUrl")
-    const createSpy = jest.spyOn(GameUrl, 'create')
+    const createSpy = jest.spyOn(GameUrl, "create")
 
     const acceptedChallenge = {
       messageType: "challenge",
@@ -218,12 +271,12 @@ describe("Challenge Logic", () => {
       tableId: "table-789",
       rematch: {
         lastScores: [
-            { userId: mockUserId, score: 1 },
-            { userId: mockOpponentId, score: 0 }
+          { userId: mockUserId, score: 1 },
+          { userId: mockOpponentId, score: 0 },
         ],
         isRematch: true,
         nextTurnId: mockUserId, // Me!
-      }
+      },
     }
 
     ;(useMessaging as jest.Mock).mockReturnValue({
@@ -251,15 +304,17 @@ describe("Challenge Logic", () => {
     render(<Game />)
 
     await waitFor(() => {
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-        isCreator: true
-      }))
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          isCreator: true,
+        })
+      )
     })
   })
 
   it("challenger of a rematch challenge should NOT be first if nextTurnId does NOT match", async () => {
     const { GameUrl } = require("../utils/GameUrl")
-    const createSpy = jest.spyOn(GameUrl, 'create')
+    const createSpy = jest.spyOn(GameUrl, "create")
 
     const acceptedChallenge = {
       messageType: "challenge",
@@ -271,12 +326,12 @@ describe("Challenge Logic", () => {
       tableId: "table-789",
       rematch: {
         lastScores: [
-            { userId: mockUserId, score: 1 },
-            { userId: mockOpponentId, score: 0 }
+          { userId: mockUserId, score: 1 },
+          { userId: mockOpponentId, score: 0 },
         ],
         isRematch: true,
         nextTurnId: mockOpponentId, // Bob
-      }
+      },
     }
 
     ;(useMessaging as jest.Mock).mockReturnValue({
@@ -304,9 +359,11 @@ describe("Challenge Logic", () => {
     render(<Game />)
 
     await waitFor(() => {
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({
-        isCreator: false
-      }))
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          isCreator: false,
+        })
+      )
     })
   })
 })
