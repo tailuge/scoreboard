@@ -12,7 +12,7 @@ const openOnlineUsers = async (page: Page) => {
   await expect(page.getByLabel("Online users")).toBeVisible()
 }
 
-test.describe("challenge acceptance test", () => {
+test.describe.serial("challenge acceptance test", () => {
   test("challenge should launch with challenger going first", async ({
     browser,
   }, testInfo) => {
@@ -34,23 +34,31 @@ test.describe("challenge acceptance test", () => {
       await openOnlineUsers(page1)
       await expect(
         page1.getByLabel("Online users").getByText(bobName, { exact: false })
-      ).toBeVisible({ timeout: 20_000 })
+      ).toBeVisible({ timeout: 10_000 })
 
       const bobRow = page1.locator("li").filter({ hasText: bobName }).first()
       await bobRow.getByRole("button", { name: "Challenge" }).click()
-      await page1.waitForURL(/\/lobby/)
 
-      // Alice selects a rule type
-      await page1.getByRole("button", { name: "Nine Ball" }).click()
+      await page1.getByRole("button", { name: "Play nineball" }).click()
 
-      const challengeButton = page2.getByRole("button", {
-        name: `Challenge from ${aliceName}`,
+      const acceptButton = page2.getByRole("button", {
+        name: "Accept challenge",
       })
-      await expect(challengeButton).toBeVisible({ timeout: 20_000 })
-      const page1GameUrl = page1.waitForURL(/billiards\.tailuge\.workers\.dev/)
-      const page2GameUrl = page2.waitForURL(/billiards\.tailuge\.workers\.dev/)
+      await expect(acceptButton).toBeVisible({ timeout: 10_000 })
+      const page1GameUrl = page1.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
+      const page2GameUrl = page2.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
 
-      await challengeButton.click()
+      await acceptButton.click()
 
       await Promise.all([page1GameUrl, page2GameUrl])
 

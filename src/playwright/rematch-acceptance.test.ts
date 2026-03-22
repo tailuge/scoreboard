@@ -26,8 +26,8 @@ const buildRematchUrl = (params: {
   return `/game?${query.toString()}`
 }
 
-test.describe("rematch acceptance test", () => {
-  test("mutual rematch should auto-accept and honor nextTurnId", async ({
+test.describe.serial("rematch acceptance test", () => {
+  test("one-way rematch should honor nextTurnId", async ({
     browser,
   }, testInfo) => {
     const suffix = `${testInfo.workerIndex}${Date.now().toString().slice(-4)}`
@@ -35,11 +35,11 @@ test.describe("rematch acceptance test", () => {
     const bobId = `bob-${suffix}`
     const aliceName = `Alice${suffix}`
     const bobName = `Bob${suffix}`
-    const ruleType = "snooker"
+    const ruleType = "nineball"
 
     const lastScores = [
-      { userId: aliceId, score: 2 },
-      { userId: bobId, score: 1 },
+      { userId: aliceId, score: 0 },
+      { userId: bobId, score: 3 },
     ]
 
     const context1 = await browser.newContext()
@@ -56,31 +56,39 @@ test.describe("rematch acceptance test", () => {
         opponentName: bobName,
         ruleType,
         lastScores,
-        nextTurnId: bobId,
+        nextTurnId: aliceId,
       })
 
-      const page2Url = buildRematchUrl({
-        userId: bobId,
-        userName: bobName,
-        opponentId: aliceId,
-        opponentName: aliceName,
-        ruleType,
-        lastScores,
-        nextTurnId: bobId,
-      })
+      const page2Url = `/game?userId=${bobId}&userName=${bobName}`
 
       await Promise.all([page1.goto(page1Url), page2.goto(page2Url)])
 
-      const page1GameUrl = page1.waitForURL(/billiards\.tailuge\.workers\.dev/)
-      const page2GameUrl = page2.waitForURL(/billiards\.tailuge\.workers\.dev/)
+      const acceptButton = page2.getByRole("button", {
+        name: "Accept challenge",
+      })
+      await expect(acceptButton).toBeVisible({ timeout: 10_000 })
+      await acceptButton.click()
+
+      const page1GameUrl = page1.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
+      const page2GameUrl = page2.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
 
       await Promise.all([page1GameUrl, page2GameUrl])
 
       const page1FinalUrl = new URL(page1.url())
       const page2FinalUrl = new URL(page2.url())
 
-      expect(page1FinalUrl.searchParams.get("first")).toBeNull()
-      expect(page2FinalUrl.searchParams.get("first")).toBe("true")
+      expect(page1FinalUrl.searchParams.get("first")).toBe("true")
+      expect(page2FinalUrl.searchParams.get("first")).toBeNull()
     } finally {
       await context1.close()
       await context2.close()

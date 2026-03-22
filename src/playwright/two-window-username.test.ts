@@ -36,11 +36,11 @@ test.describe("two window username test", () => {
 
       await expect(
         page1.getByLabel("Online users").getByText(bobName, { exact: false })
-      ).toBeVisible({ timeout: 20_000 })
+      ).toBeVisible({ timeout: 10_000 })
 
       await expect(
         page2.getByLabel("Online users").getByText(aliceName, { exact: false })
-      ).toBeVisible({ timeout: 20_000 })
+      ).toBeVisible({ timeout: 10_000 })
     } finally {
       await context1.close()
       await context2.close()
