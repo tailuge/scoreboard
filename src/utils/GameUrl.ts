@@ -2,6 +2,14 @@ import { GAME_BASE_URL } from "@/config"
 
 const WEBSOCKET_SERVER = "wss://billiards.onrender.com/ws"
 
+export interface RematchParam {
+  readonly opponentId: string
+  readonly opponentName: string
+  readonly ruleType: string
+  readonly lastScores: { readonly userId: string; readonly score: number }[]
+  readonly nextTurnId: string
+}
+
 export class GameUrl {
   private static addUserParams(
     target: URL,
@@ -66,5 +74,29 @@ export class GameUrl {
     }
 
     return target
+  }
+
+  static serializeRematch(param: RematchParam): string {
+    return encodeURIComponent(JSON.stringify(param))
+  }
+
+  static parseRematch(url: URL): RematchParam | null {
+    const rematch = url.searchParams.get("rematch")
+    if (!rematch) return null
+    try {
+      const parsed = JSON.parse(rematch) as RematchParam
+      if (
+        parsed.opponentId &&
+        parsed.opponentName &&
+        parsed.ruleType &&
+        Array.isArray(parsed.lastScores) &&
+        parsed.nextTurnId
+      ) {
+        return parsed
+      }
+    } catch (e) {
+      console.error("Failed to parse rematch param", e)
+    }
+    return null
   }
 }

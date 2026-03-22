@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rematch Test Helper</title>
+    <link rel="icon" type="image/png" href="golden-cup.png" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f1f5f9;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex: 1;
+        flex-wrap: wrap;
+        padding: 20px;
+        gap: 20px;
+      }
+
+      .panel {
+        flex: 1 1 300px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #cbd5e1;
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+
+      .panel-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .panel iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      button:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .scenario-desc {
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+    <script type="module">
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
+
+      const panel1 = document.getElementById("panel1");
+      const panel2 = document.getElementById("panel2");
+
+      const p1Id = "player-1-" + faker.string.alphanumeric(4);
+      const p1Name = "Alice";
+      const p2Id = "player-2-" + faker.string.alphanumeric(4);
+      const p2Name = "Bob";
+
+      function createIframe(userId, userName, rematchParam = null) {
+        const url = new URL("/game", globalThis.location.origin);
+        url.searchParams.set("userId", userId);
+        url.searchParams.set("userName", userName);
+        if (rematchParam) {
+          url.searchParams.set("rematch", JSON.stringify(rematchParam));
+        }
+
+        const container = document.createElement("div");
+        container.className = "panel";
+        const label = document.createElement("div");
+        label.className = "panel-label";
+        label.textContent = `${userName} (${userId})`;
+        container.appendChild(label);
+
+        const iframe = document.createElement("iframe");
+        iframe.src = url.toString();
+        container.appendChild(iframe);
+        return container;
+      }
+
+      function clearPanels() {
+        panel1.innerHTML = "";
+        panel2.innerHTML = "";
+      }
+
+      function startMutualRematch() {
+        clearPanels();
+        const scores = [
+          { userId: p1Id, score: 2 },
+          { userId: p2Id, score: 1 }
+        ];
+
+        // P1 view: Bob is opponent
+        const p1Rematch = {
+          opponentId: p2Id,
+          opponentName: p2Name,
+          ruleType: "snooker",
+          lastScores: scores,
+          nextTurnId: p2Id
+        };
+
+        // P2 view: Alice is opponent
+        const p2Rematch = {
+          opponentId: p1Id,
+          opponentName: p1Name,
+          ruleType: "snooker",
+          lastScores: scores,
+          nextTurnId: p2Id
+        };
+
+        panel1.appendChild(createIframe(p1Id, p1Name, p1Rematch));
+        panel2.appendChild(createIframe(p2Id, p2Name, p2Rematch));
+      }
+
+      function startOneWayRematch() {
+        clearPanels();
+        const scores = [
+          { userId: p1Id, score: 0 },
+          { userId: p2Id, score: 3 }
+        ];
+
+        // Only P1 (Alice) wants a rematch
+        const p1Rematch = {
+          opponentId: p2Id,
+          opponentName: p2Name,
+          ruleType: "nineball",
+          lastScores: scores,
+          nextTurnId: p1Id
+        };
+
+        panel1.appendChild(createIframe(p1Id, p1Name, p1Rematch));
+        panel2.appendChild(createIframe(p2Id, p2Name, null)); // Bob has no rematch param
+      }
+
+      function startStandardLobby() {
+        clearPanels();
+        panel1.appendChild(createIframe(p1Id, p1Name, null));
+        panel2.appendChild(createIframe(p2Id, p2Name, null));
+      }
+
+      document.getElementById("btn-mutual").onclick = startMutualRematch;
+      document.getElementById("btn-oneway").onclick = startOneWayRematch;
+      document.getElementById("btn-standard").onclick = startStandardLobby;
+
+      // Start with standard lobby
+      startStandardLobby();
+    </script>
+  </head>
+  <body>
+    <div class="controls">
+      <h2 style="text-align: center; margin-bottom: 8px;">Rematch Test Scenarios</h2>
+      <div class="button-group">
+        <button id="btn-standard">Standard Lobby</button>
+        <button id="btn-oneway">One-way Rematch (P1 sends)</button>
+        <button id="btn-mutual">Mutual Rematch (Auto-accept)</button>
+      </div>
+      <p class="scenario-desc" id="desc">
+        Select a scenario to test. In <b>Mutual Rematch</b>, both players should automatically connect.
+        In <b>One-way</b>, P1 sends a challenge and P2 sees an "Incoming Rematch" dialog with scores.
+      </p>
+    </div>
+    <div class="container">
+      <div id="panel1" style="flex: 1; height: 100%;"></div>
+      <div id="panel2" style="flex: 1; height: 100%;"></div>
+    </div>
+  </body>
+</html>

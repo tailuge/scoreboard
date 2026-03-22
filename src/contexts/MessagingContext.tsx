@@ -13,6 +13,7 @@ import {
   type ChallengeMessage,
   type Lobby,
   type PresenceMessage,
+  type RematchInfo,
   MessagingClient,
 } from "@tailuge/messaging"
 import { useUser } from "@/contexts/UserContext"
@@ -23,7 +24,11 @@ interface MessagingContextType {
   pendingChallenge: ChallengeMessage | null
   incomingChallenge: ChallengeMessage | null
   acceptedChallenge: ChallengeMessage | null
-  challenge: (userId: string, ruleType: string) => Promise<string>
+  challenge: (
+    userId: string,
+    ruleType: string,
+    rematch?: RematchInfo
+  ) => Promise<string>
   acceptChallenge: (
     userId: string,
     ruleType: string,
@@ -159,12 +164,12 @@ export function MessagingProvider({
   }, [attachLobbyListeners, userId, userName])
 
   const challenge = useCallback(
-    async (targetUserId: string, ruleType: string) => {
+    async (targetUserId: string, ruleType: string, rematch?: RematchInfo) => {
       const lobby = lobbyRef.current
       if (!lobby) {
         throw new Error("Lobby not initialized")
       }
-      const tableId = await lobby.challenge(targetUserId, ruleType)
+      const tableId = await lobby.challenge(targetUserId, ruleType, rematch)
       setPendingChallenge({
         messageType: "challenge",
         type: "offer",
@@ -173,6 +178,7 @@ export function MessagingProvider({
         recipientId: targetUserId,
         ruleType,
         tableId,
+        rematch,
       })
       return tableId
     },

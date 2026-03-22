@@ -11,9 +11,9 @@ import { HighscoreGrid } from "@/components/HighscoreGrid"
 import { GameBackground } from "@/components/GameBackground"
 import { useMessaging } from "@/contexts/MessagingContext"
 import { ChallengeCard } from "@/components/ChallengeCard"
-import { GameUrl } from "@/utils/GameUrl"
+import { GameUrl, type RematchParam } from "@/utils/GameUrl"
 import { GAME_TYPES } from "@/config"
-import type { PresenceMessage } from "@tailuge/messaging"
+import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
 
 export default function Game() {
   const { userId, userName } = useUser()
@@ -33,6 +33,8 @@ export default function Game() {
   const presenceCount = users.length
   const [snookerReds, setSnookerReds] = useState(3)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
+  const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
+  const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
   const [selectedOpponent, setSelectedOpponent] =
     useState<PresenceMessage | null>(null)
   const [challengeError, setChallengeError] = useState<string | null>(null)
@@ -197,6 +199,93 @@ export default function Game() {
   }, [cancelChallenge, pendingChallenge])
 
   useEffect(() => {
+    const url = new URL(globalThis.location.href)
+    const parsed = GameUrl.parseRematch(url)
+    if (parsed) {
+      setRematchParam(parsed)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (
+      !rematchParam ||
+      !userId ||
+      challengeBusy ||
+      hasAttemptedRematch ||
+      pendingChallenge ||
+      incomingChallenge ||
+      acceptedChallenge
+    )
+      return
+
+    const isTargetOnline = users.some(
+      (u) => u.userId === rematchParam.opponentId
+    )
+    if (!isTargetOnline) return
+
+    const sendAutoRematch = async () => {
+      setChallengeBusy(true)
+      setHasAttemptedRematch(true)
+      try {
+        const info: RematchInfo = {
+          lastScores: rematchParam.lastScores,
+          isRematch: true,
+          nextTurnId: rematchParam.nextTurnId,
+        }
+        const tableId = await challenge(
+          rematchParam.opponentId,
+          rematchParam.ruleType,
+          info
+        )
+        lastOutgoingChallengeRef.current = {
+          tableId,
+          recipientId: rematchParam.opponentId,
+          ruleType: rematchParam.ruleType,
+        }
+      } catch (e) {
+        console.error("Auto rematch failed", e)
+      } finally {
+        setChallengeBusy(false)
+      }
+    }
+    void sendAutoRematch()
+  }, [
+    rematchParam,
+    userId,
+    users,
+    challenge,
+    pendingChallenge,
+    incomingChallenge,
+    acceptedChallenge,
+  ])
+
+  useEffect(() => {
+    if (
+      !incomingChallenge ||
+      !rematchParam ||
+      challengeBusy ||
+      acceptedChallenge
+    )
+      return
+
+    const isMatch =
+      incomingChallenge.rematch &&
+      incomingChallenge.challengerId === rematchParam.opponentId &&
+      incomingChallenge.ruleType === rematchParam.ruleType
+
+    if (isMatch) {
+      console.log("[rematch] auto-accepting mutual rematch", incomingChallenge)
+      void handleAcceptChallenge()
+    }
+  }, [
+    incomingChallenge,
+    rematchParam,
+    challengeBusy,
+    acceptedChallenge,
+    handleAcceptChallenge,
+  ])
+
+  useEffect(() => {
     if (!acceptedChallenge || !userId) return
     console.log("[challenge] accept received", {
       acceptedChallenge,
@@ -294,13 +383,31 @@ export default function Game() {
               >
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/70">
-                    Incoming Challenge
+                    {incomingChallenge.rematch
+                      ? "Incoming Rematch"
+                      : "Incoming Challenge"}
                   </p>
                   <p className="text-sm text-gray-200">
                     {incomingChallenge.challengerName} wants to play{" "}
                     {ruleTypeLabels[incomingChallenge.ruleType] ||
                       incomingChallenge.ruleType}
                   </p>
+                  {incomingChallenge.rematch && (
+                    <p className="text-xs text-emerald-400 mt-1">
+                      {incomingChallenge.rematch.lastScores.map((s, i) => {
+                      const isMe = s.userId === userId
+                      const name = isMe
+                        ? "You"
+                        : incomingChallenge.challengerName
+                      return (
+                        <span key={s.userId}>
+                          {name} {s.score}
+                          {i === 0 ? " — " : ""}
+                        </span>
+                      )
+                    })}
+                  </p>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <button
