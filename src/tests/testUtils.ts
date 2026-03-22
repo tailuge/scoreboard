@@ -1,44 +1,44 @@
-import { useUser } from "@/contexts/UserContext";
+import { useUser } from "@/contexts/UserContext"
 
 export const setupUserMock = (
   userId = "test-user-id",
   userName = "TestUser",
-  setUserName = jest.fn(),
+  setUserName = jest.fn()
 ) => {
-  (useUser as jest.Mock).mockReturnValue({
+  ;(useUser as jest.Mock).mockReturnValue({
     userId,
     userName,
     setUserName,
-  });
-};
+  })
+}
 
 export const mockFetchResponse = (data: any, ok = true, status = 200) => {
   return Promise.resolve({
     ok,
     status,
     json: () => Promise.resolve(data),
-  });
-};
+  })
+}
 
 export const createFetchMock = (handlers: {
-  [urlPattern: string]: (url: string, options?: any) => Promise<any>;
+  [urlPattern: string]: (url: string, options?: any) => Promise<any>
 }) => {
-  const patterns = Object.keys(handlers).sort((a, b) => b.length - a.length);
+  const patterns = Object.keys(handlers).sort((a, b) => b.length - a.length)
   return jest.fn().mockImplementation((url, options) => {
-    let urlString = "";
+    let urlString = ""
     if (typeof url === "string") {
-      urlString = url;
+      urlString = url
     } else if (url instanceof URL) {
-      urlString = url.href;
+      urlString = url.href
     } else if (url && typeof url === "object" && "url" in url) {
-      urlString = url.url;
+      urlString = url.url
     }
 
     for (const pattern of patterns) {
       if (urlString.includes(pattern)) {
-        return handlers[pattern](urlString, options);
+        return handlers[pattern](urlString, options)
       }
     }
-    return mockFetchResponse([]);
-  });
-};
+    return mockFetchResponse([])
+  })
+}
