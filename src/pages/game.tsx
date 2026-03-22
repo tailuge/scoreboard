@@ -145,10 +145,14 @@ export default function Game() {
         incomingChallenge.ruleType,
         incomingChallenge.challengerId
       )
+      // If it's a rematch, check if we should go first
+      const isFirst = incomingChallenge.rematch
+        ? incomingChallenge.rematch.nextTurnId === userId
+        : false
       openGameWindow(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
-        false
+        isFirst
       )
     } catch (error) {
       console.error("Failed to accept challenge", error)
@@ -161,6 +165,7 @@ export default function Game() {
     incomingChallenge,
     openGameWindow,
     updatePresenceForTable,
+    userId,
   ])
 
   const handleDeclineChallenge = useCallback(async () => {
@@ -321,12 +326,23 @@ export default function Game() {
         acceptedChallenge.ruleType,
         acceptedChallenge.recipientId
       )
-      // Determine if the current user is the creator (sender) of the challenge
-      const isCreator = acceptedChallenge.challengerId === userId
+      // Determine if the current user should be first
+      // In a rematch, we use nextTurnId. Otherwise, the challenger is first.
+      const isRematch =
+        acceptedChallenge.rematch ||
+        (rematchParam &&
+          rematchParam.ruleType === acceptedChallenge.ruleType &&
+          rematchParam.opponentId === acceptedChallenge.recipientId)
+
+      const isFirst = isRematch
+        ? (acceptedChallenge.rematch?.nextTurnId ||
+            rematchParam?.nextTurnId) === userId
+        : acceptedChallenge.challengerId === userId
+
       openGameWindow(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
-        isCreator
+        isFirst
       )
       lastOutgoingChallengeRef.current = null
       clearAcceptedChallenge()
@@ -340,7 +356,9 @@ export default function Game() {
     openGameWindow,
     pendingChallenge,
     updatePresenceForTable,
+    rematchParam,
   ])
+
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
