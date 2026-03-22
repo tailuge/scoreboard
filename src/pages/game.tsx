@@ -172,7 +172,6 @@ export default function Game() {
     incomingChallenge,
     openGameWindow,
     updatePresenceForTable,
-    userId,
     resolveIsFirstPlayer,
   ])
 
