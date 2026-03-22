@@ -336,9 +336,7 @@ export default function Game() {
       )
       const rematchNextTurnId =
         acceptedChallenge.rematch?.nextTurnId ??
-        (rematchParam &&
-        acceptedChallenge.recipientId === rematchParam.opponentId &&
-        acceptedChallenge.ruleType === rematchParam.ruleType
+        (rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
           ? rematchParam.nextTurnId
           : null)
 

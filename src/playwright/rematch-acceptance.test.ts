@@ -94,4 +94,74 @@ test.describe.serial("rematch acceptance test", () => {
       await context2.close()
     }
   })
+
+  test("mutual rematch should auto-accept and honor nextTurnId", async ({
+    browser,
+  }, testInfo) => {
+    const suffix = `${testInfo.workerIndex}${Date.now().toString().slice(-4)}`
+    const aliceId = `alice-${suffix}`
+    const bobId = `bob-${suffix}`
+    const aliceName = `Alice${suffix}`
+    const bobName = `Bob${suffix}`
+    const ruleType = "snooker"
+
+    const lastScores = [
+      { userId: aliceId, score: 2 },
+      { userId: bobId, score: 1 },
+    ]
+
+    const context1 = await browser.newContext()
+    const context2 = await browser.newContext()
+
+    try {
+      const page1 = await context1.newPage()
+      const page2 = await context2.newPage()
+
+      const page1Url = buildRematchUrl({
+        userId: aliceId,
+        userName: aliceName,
+        opponentId: bobId,
+        opponentName: bobName,
+        ruleType,
+        lastScores,
+        nextTurnId: bobId,
+      })
+
+      const page2Url = buildRematchUrl({
+        userId: bobId,
+        userName: bobName,
+        opponentId: aliceId,
+        opponentName: aliceName,
+        ruleType,
+        lastScores,
+        nextTurnId: bobId,
+      })
+
+      await Promise.all([page1.goto(page1Url), page2.goto(page2Url)])
+
+      const page1GameUrl = page1.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
+      const page2GameUrl = page2.waitForURL(
+        /billiards\.tailuge\.workers\.dev/,
+        {
+          timeout: 10_000,
+        }
+      )
+
+      await Promise.all([page1GameUrl, page2GameUrl])
+
+      const page1FinalUrl = new URL(page1.url())
+      const page2FinalUrl = new URL(page2.url())
+
+      expect(page1FinalUrl.searchParams.get("first")).toBeNull()
+      expect(page2FinalUrl.searchParams.get("first")).toBe("true")
+    } finally {
+      await context1.close()
+      await context2.close()
+    }
+  })
 })
