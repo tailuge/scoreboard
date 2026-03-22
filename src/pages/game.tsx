@@ -62,7 +62,12 @@ export default function Game() {
   }, [pendingChallenge, users])
 
   const openGameWindow = useCallback(
-    (tableId: string, ruleType: string, shouldStartFirst: boolean) => {
+    (
+      tableId: string,
+      ruleType: string,
+      shouldStartFirst: boolean,
+      rematch?: RematchParam
+    ) => {
       if (!userId || !userName) {
         console.log("[challenge] open blocked: missing user identity", {
           userId,
@@ -76,6 +81,7 @@ export default function Game() {
         userId,
         ruleType,
         isCreator: shouldStartFirst,
+        rematch,
       })
       console.log("[challenge] redirecting to game", {
         tableId,
@@ -157,10 +163,20 @@ export default function Game() {
         incomingChallenge.rematch,
         incomingChallenge.challengerId
       )
+      const rematchParam: RematchParam | undefined = incomingChallenge.rematch
+        ? {
+            opponentId: incomingChallenge.challengerId,
+            opponentName: incomingChallenge.challengerName,
+            ruleType: incomingChallenge.ruleType,
+            lastScores: incomingChallenge.rematch.lastScores,
+            nextTurnId: incomingChallenge.rematch.nextTurnId,
+          }
+        : undefined
       openGameWindow(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
-        isFirst
+        isFirst,
+        rematchParam
       )
     } catch (error) {
       console.error("Failed to accept challenge", error)
@@ -345,7 +361,8 @@ export default function Game() {
       openGameWindow(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
-        isFirst
+        isFirst,
+        rematchParam
       )
       lastOutgoingChallengeRef.current = null
       clearAcceptedChallenge()

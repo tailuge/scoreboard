@@ -89,6 +89,15 @@ test.describe.serial("rematch acceptance test", () => {
 
       expect(page1FinalUrl.searchParams.get("first")).toBe("true")
       expect(page2FinalUrl.searchParams.get("first")).toBeNull()
+
+      const page1Rematch = page1FinalUrl.searchParams.get("rematch")
+      const page2Rematch = page2FinalUrl.searchParams.get("rematch")
+      expect(page1Rematch).not.toBeNull()
+      expect(page2Rematch).not.toBeNull()
+      const page1RematchData = JSON.parse(decodeURIComponent(page1Rematch))
+      const page2RematchData = JSON.parse(decodeURIComponent(page2Rematch))
+      expect(page1RematchData.lastScores).toEqual(lastScores)
+      expect(page2RematchData.lastScores).toEqual(lastScores)
     } finally {
       await context1.close()
       await context2.close()
@@ -159,6 +168,15 @@ test.describe.serial("rematch acceptance test", () => {
 
       expect(page1FinalUrl.searchParams.get("first")).toBeNull()
       expect(page2FinalUrl.searchParams.get("first")).toBe("true")
+
+      const page1Rematch = page1FinalUrl.searchParams.get("rematch")
+      const page2Rematch = page2FinalUrl.searchParams.get("rematch")
+      expect(page1Rematch).not.toBeNull()
+      expect(page2Rematch).not.toBeNull()
+      const page1RematchData = JSON.parse(decodeURIComponent(page1Rematch))
+      const page2RematchData = JSON.parse(decodeURIComponent(page2Rematch))
+      expect(page1RematchData.lastScores).toEqual(lastScores)
+      expect(page2RematchData.lastScores).toEqual(lastScores)
     } finally {
       await context1.close()
       await context2.close()

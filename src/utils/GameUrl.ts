@@ -27,6 +27,7 @@ export class GameUrl {
     ruleType,
     isSpectator = false,
     isCreator = false,
+    rematch,
   }: {
     tableId: string
     userName: string
@@ -34,6 +35,7 @@ export class GameUrl {
     ruleType: string
     isSpectator?: boolean
     isCreator?: boolean
+    rematch?: RematchParam
   }): URL {
     const target = new URL(GAME_BASE_URL)
     target.searchParams.append("websocketserver", WEBSOCKET_SERVER)
@@ -45,6 +47,9 @@ export class GameUrl {
     }
     if (isCreator) {
       target.searchParams.append("first", "true")
+    }
+    if (rematch) {
+      target.searchParams.append("rematch", this.serializeRematch(rematch))
     }
 
     return target
