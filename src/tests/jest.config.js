@@ -13,12 +13,11 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@tailuge/messaging$":
       "<rootDir>/src/tests/__mocks__/@tailuge/messaging.ts",
-    "^jsoncrush$": "<rootDir>/src/tests/__mocks__/jsoncrush.ts",
   },
   transform: {
     "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.json" }],
   },
-  transformIgnorePatterns: ["/node_modules/(?!jsoncrush/)"],
+  transformIgnorePatterns: ["/node_modules/"],
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/tests/**", // Exclude test files and mocks in tests dir

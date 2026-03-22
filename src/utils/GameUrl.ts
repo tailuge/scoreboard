@@ -1,5 +1,4 @@
 import { GAME_BASE_URL } from "@/config"
-import JSONCrush from "jsoncrush"
 
 const WEBSOCKET_SERVER = "wss://billiards.onrender.com/ws"
 
@@ -78,16 +77,14 @@ export class GameUrl {
   }
 
   static serializeRematch(param: RematchParam): string {
-    const json = JSON.stringify(param)
-    return encodeURIComponent(JSONCrush.crush(json))
+    return encodeURIComponent(JSON.stringify(param))
   }
 
   static parseRematch(url: URL): RematchParam | null {
     const rematch = url.searchParams.get("rematch")
     if (!rematch) return null
     try {
-      const decoded = JSONCrush.uncrush(rematch)
-      const parsed = JSON.parse(decoded) as RematchParam
+      const parsed = JSON.parse(rematch) as RematchParam
       if (
         parsed.opponentId &&
         parsed.opponentName &&

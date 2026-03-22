@@ -392,21 +392,21 @@ export default function Game() {
                     {ruleTypeLabels[incomingChallenge.ruleType] ||
                       incomingChallenge.ruleType}
                   </p>
-                  {incomingChallenge.rematch?.lastScores && (
+                  {incomingChallenge.rematch && (
                     <p className="text-xs text-emerald-400 mt-1">
                       {incomingChallenge.rematch.lastScores.map((s, i) => {
-                        const isMe = s.userId === userId
-                        const name = isMe
-                          ? "You"
-                          : incomingChallenge.challengerName
-                        return (
-                          <span key={s.userId}>
-                            {name} {s.score}
-                            {i === 0 ? " — " : ""}
-                          </span>
-                        )
-                      })}
-                    </p>
+                      const isMe = s.userId === userId
+                      const name = isMe
+                        ? "You"
+                        : incomingChallenge.challengerName
+                      return (
+                        <span key={s.userId}>
+                          {name} {s.score}
+                          {i === 0 ? " — " : ""}
+                        </span>
+                      )
+                    })}
+                  </p>
                   )}
                 </div>
                 <div className="flex gap-2">

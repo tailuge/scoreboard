@@ -113,7 +113,6 @@
     </style>
     <script type="module">
       import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
-      import JSONCrush from "https://cdn.jsdelivr.net/npm/jsoncrush@1.1.8/+esm";
 
       const panel1 = document.getElementById("panel1");
       const panel2 = document.getElementById("panel2");
@@ -128,8 +127,7 @@
         url.searchParams.set("userId", userId);
         url.searchParams.set("userName", userName);
         if (rematchParam) {
-          const crushed = JSONCrush.crush(JSON.stringify(rematchParam));
-          url.searchParams.set("rematch", crushed);
+          url.searchParams.set("rematch", JSON.stringify(rematchParam));
         }
 
         const container = document.createElement("div");
