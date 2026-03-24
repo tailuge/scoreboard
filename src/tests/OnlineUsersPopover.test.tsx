@@ -137,8 +137,8 @@ describe("OnlineUsersPopover", () => {
     expect(screen.getByText("🎮")).toBeInTheDocument()
   })
 
-  it("shows game icon for same-origin users", () => {
-    const sameOriginUsers = [
+  it("shows house icon for localhost origin", () => {
+    const localhostUsers = [
       {
         messageType: "presence" as const,
         type: "join" as const,
@@ -172,13 +172,13 @@ describe("OnlineUsersPopover", () => {
     render(
       <OnlineUsersPopover
         count={2}
-        users={sameOriginUsers}
+        users={localhostUsers}
         currentUserId="user-1"
       />
     )
 
     fireEvent.click(screen.getByLabelText("2 users online"))
-    expect(screen.getByText("🎮")).toBeInTheDocument()
+    expect(screen.getByText("🏠")).toBeInTheDocument()
   })
 
   it("filters out users in games (with tableId)", () => {
