@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es6",
+    "ignoreDeprecations": "6.0",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -10,15 +10,16 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "rootDir": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@lib/*": ["lib/*"],
-      "@components": ["components/index"],
-      "@components/*": ["components/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@components": ["./src/components/index"],
+      "@components/*": ["./src/components/*"]
     },
     "incremental": true,
     "plugins": [

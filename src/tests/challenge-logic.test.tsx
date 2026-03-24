@@ -43,7 +43,7 @@ describe("Challenge Logic", () => {
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
   // Since mocking location.href is hard, let's mock GameUrl.create to capture isCreator

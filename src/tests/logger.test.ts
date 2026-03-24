@@ -14,8 +14,8 @@ describe("logger", () => {
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
-    logger.enabled = process.env.NODE_ENV !== "test"
+    jest.clearAllMocks()
+    logger.enabled = false
   })
 
   it("should not log when disabled", () => {

@@ -15,7 +15,7 @@ module.exports = {
       "<rootDir>/src/tests/__mocks__/@tailuge/messaging.ts",
   },
   transform: {
-    "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.json" }],
+    "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.json" }],
   },
   transformIgnorePatterns: ["/node_modules/"],
   collectCoverageFrom: [

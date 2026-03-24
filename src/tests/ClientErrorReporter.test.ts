@@ -37,7 +37,7 @@ describe("ClientErrorReporter", () => {
     jest.useRealTimers()
     delete (globalThis as any).fetch
     delete (globalThis as any).navigator
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
     // Restore console methods manually just in case
     console.error = originalError
     console.warn = originalWarn
