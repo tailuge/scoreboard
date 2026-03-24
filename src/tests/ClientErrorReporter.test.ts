@@ -57,6 +57,10 @@ describe("ClientErrorReporter", () => {
         "unhandledrejection",
         expect.any(Function)
       )
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        "securitypolicyviolation",
+        expect.any(Function)
+      )
     })
 
     it("should schedule periodic flush", () => {
@@ -307,6 +311,31 @@ describe("ClientErrorReporter", () => {
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
         expect.stringContaining("Promise rejected")
+      )
+    })
+
+    it("should capture security policy violations", () => {
+      reporter.start()
+
+      const listeners = (globalThis.addEventListener as jest.Mock).mock.calls
+      const cspListener = listeners.find(
+        (call) => call[0] === "securitypolicyviolation"
+      )?.[1]
+
+      if (cspListener) {
+        cspListener({
+          violatedDirective: "frame-ancestors",
+          blockedURI: "https://evil.com",
+        })
+      }
+
+      jest.advanceTimersByTime(5001)
+
+      expect(sendBeaconSpy).toHaveBeenCalledWith(
+        "/api/client-error",
+        expect.stringContaining(
+          "CSP Violation: frame-ancestors on https://evil.com"
+        )
       )
     })
   })
