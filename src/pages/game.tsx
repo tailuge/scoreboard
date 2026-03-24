@@ -12,6 +12,7 @@ import { GameBackground } from "@/components/GameBackground"
 import { useMessaging } from "@/contexts/MessagingContext"
 import { ChallengeCard } from "@/components/ChallengeCard"
 import { navigateTo } from "@/utils/navigation"
+import { markUsage } from "@/utils/usage"
 import { GameUrl, type RematchParam } from "@/utils/GameUrl"
 import { GAME_TYPES } from "@/config"
 import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
@@ -118,6 +119,7 @@ export default function Game() {
       setChallengeError(null)
       try {
         const tableId = await challenge(selectedOpponent.userId, ruleType)
+        markUsage("createTable")
         lastOutgoingChallengeRef.current = {
           tableId,
           recipientId: selectedOpponent.userId,
@@ -153,6 +155,7 @@ export default function Game() {
         incomingChallenge.ruleType,
         incomingChallenge.tableId
       )
+      markUsage("joinTable")
       await updatePresenceForTable(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
@@ -266,6 +269,7 @@ export default function Game() {
           rematchParam.ruleType,
           info
         )
+        markUsage("createTable")
         lastOutgoingChallengeRef.current = {
           tableId,
           recipientId: rematchParam.opponentId,
