@@ -1,14 +1,15 @@
-import type { RuleType } from "./gameTypes"
-
 export function getOriginEmoji(
   origin?: string,
-  ruleType?: RuleType | string
+  ruleType?: string
 ): { emoji: string; title: string } {
   if (origin?.includes("github")) {
     return { emoji: "🔧", title: "github" }
   }
   if (origin?.includes("vercel")) {
     return { emoji: "👥", title: "vercel" }
+  }
+  if (origin?.includes("localhost")) {
+    return { emoji: "🏠", title: "localhost" }
   }
 
   if (ruleType === "nineball") {

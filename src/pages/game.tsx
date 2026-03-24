@@ -310,7 +310,7 @@ export default function Game() {
 
     if (isMatch) {
       console.log("[rematch] auto-accepting mutual rematch", incomingChallenge)
-      void handleAcceptChallenge()
+      handleAcceptChallenge()
     }
   }, [
     incomingChallenge,
