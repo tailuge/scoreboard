@@ -135,6 +135,12 @@ export class ClientErrorReporter {
     globalThis.addEventListener?.("unhandledrejection", (e) => {
       this.capture("promise", [e.reason])
     })
+
+    globalThis.addEventListener?.("securitypolicyviolation", (e) => {
+      this.capture("csp", [
+        `CSP Violation: ${e.violatedDirective} on ${e.blockedURI}`,
+      ])
+    })
   }
 
   private capture(type: string, args: unknown[]) {
