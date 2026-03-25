@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Seo } from "@/components/Seo"
 import { GroupBox } from "../components/GroupBox"
-import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
+import { UsersIcon } from "@heroicons/react/24/solid"
 import { UserList } from "@/components/UserList"
 import { useUser } from "@/contexts/UserContext"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
@@ -404,16 +404,13 @@ export default function Game() {
           leftBadge={<User />}
           rightBadge={
             <div className="flex items-center gap-2">
-              <OnlineUsersPopover
-                count={presenceCount}
-                users={users}
-                totalCount={presenceCount}
-                currentUserId={userId}
-                onChallenge={(user) => {
-                  setChallengeError(null)
-                  setSelectedOpponent(user)
-                }}
-              />
+              <div
+                className="user-pill"
+                aria-label={`${presenceCount} users online`}
+              >
+                <UsersIcon className="h-4 w-4" aria-hidden="true" />
+                <span className="font-bold">{presenceCount}</span>
+              </div>
             </div>
           }
         >
