@@ -3,6 +3,7 @@ import { Seo } from "@/components/Seo"
 import { GroupBox } from "../components/GroupBox"
 import { OnlineUsersPopover } from "../components/OnlineUsersPopover"
 import { User } from "@/components/User"
+import { UserList } from "@/components/UserList"
 import { useUser } from "@/contexts/UserContext"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { GameGrid } from "@/components/GameGrid"
@@ -518,6 +519,20 @@ export default function Game() {
             {challengeError ? (
               <p className="text-xs text-red-400">{challengeError}</p>
             ) : null}
+
+            {users.length > 0 && (
+              <div className="pt-3">
+                <UserList
+                  users={users}
+                  currentUserId={userId}
+                  onChallenge={(user) => {
+                    setChallengeError(null)
+                    setSelectedOpponent(user)
+                  }}
+                  className="flex-col flex-wrap gap-2"
+                />
+              </div>
+            )}
           </div>
         </GroupBox>
 

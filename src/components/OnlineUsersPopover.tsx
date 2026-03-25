@@ -3,7 +3,7 @@ import { UsersIcon } from "@heroicons/react/24/solid"
 import React, { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import type { PresenceMessage } from "@tailuge/messaging"
-import { UserListItem } from "./UserListItem"
+import { UserList } from "./UserList"
 
 type OnlineUsersPopoverProps = {
   readonly count: number
@@ -43,7 +43,19 @@ export function OnlineUsersPopover({
 
   const overflow = totalCount ? totalCount - users.length : 0
 
-  const otherUsers = users.filter((user) => user.userId !== currentUserId)
+  const handleChallenge = (user: PresenceMessage) => {
+    if (onChallenge) {
+      onChallenge(user)
+    } else {
+      const query = {
+        ...router.query,
+        opponentId: user.userId,
+        opponentName: user.userName,
+      }
+      router.push({ pathname: "/lobby", query })
+    }
+    setIsOpen(false)
+  }
 
   return (
     <div ref={containerRef} className="relative">
@@ -84,28 +96,13 @@ export function OnlineUsersPopover({
                 </span>
               </div>
 
-              <ul className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
-                {otherUsers.map((user) => (
-                  <UserListItem
-                    key={user.userId}
-                    user={user}
-                    currentUserId={currentUserId}
-                    onChallenge={(u) => {
-                      if (onChallenge) {
-                        onChallenge(u)
-                      } else {
-                        const query = {
-                          ...router.query,
-                          opponentId: u.userId,
-                          opponentName: u.userName,
-                        }
-                        router.push({ pathname: "/lobby", query })
-                      }
-                      setIsOpen(false)
-                    }}
-                  />
-                ))}
-              </ul>
+              <div className="flex flex-col space-y-2 max-h-[160px] overflow-y-auto pr-1">
+                <UserList
+                  users={users}
+                  currentUserId={currentUserId}
+                  onChallenge={handleChallenge}
+                />
+              </div>
 
               {overflow > 0 && (
                 <p className="text-[10px] text-gray-500 mt-2 text-center">
