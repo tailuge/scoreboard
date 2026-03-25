@@ -1,7 +1,6 @@
 import React from "react"
-import { localeToFlag } from "@/utils/locale"
 import type { PresenceMessage } from "@tailuge/messaging"
-import { UserItemActions } from "./UserItemActions"
+import { UserListItem } from "./UserListItem"
 
 interface UserListProps {
   readonly users: PresenceMessage[]
@@ -21,26 +20,12 @@ export function UserList({
   return (
     <div className={`flex flex-wrap justify-between gap-2 ${className}`}>
       {otherUsers.map((user) => (
-        <div
+        <UserListItem
           key={user.userId}
-          className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-2 py-1 text-[11px] text-gray-300 transition-all duration-300 hover:border-white/20 hover:bg-white/10"
-        >
-          <span
-            className="h-1 w-1 rounded-full bg-green-accent shadow-[0_0_5px_var(--color-green-glow)]"
-            aria-hidden="true"
-          />
-          <span className="text-[11px] text-gray-300 truncate max-w-[100px]">
-            {localeToFlag(user.meta?.country)?.replace("🇺🇸", "🇬🇧")}{" "}
-            {user.userName}
-          </span>
-          <div className="flex items-center gap-0.5">
-            <UserItemActions
-              user={user}
-              currentUserId={currentUserId}
-              onChallenge={onChallenge}
-            />
-          </div>
-        </div>
+          user={user}
+          currentUserId={currentUserId}
+          onChallenge={onChallenge}
+        />
       ))}
     </div>
   )

@@ -19,8 +19,8 @@ export function UserItemActions({
 
   return (
     <>
-      <span className="text-[9px]">{osIcon(detectOS(userAgent))}</span>
-      <span className="text-[9px]">
+      <span className="text-[10px]">{osIcon(detectOS(userAgent))}</span>
+      <span className="text-[10px]">
         {browserIcon(detectBrowser(userAgent))}
       </span>
       <UserBadge user={user} currentUserId={currentUserId} />
@@ -31,7 +31,7 @@ export function UserItemActions({
             onChallenge(user)
           }}
           aria-label={`Challenge ${user.userName}`}
-          className="ml-2 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[9px] font-bold text-cyan-300 hover:bg-cyan-500/40 transition-colors"
+          className="ml-2 px-1.5 py-0.5 rounded-[5px] bg-cyan-500/20 border border-cyan-500/40 text-[10px] text-cyan-300 hover:bg-cyan-500/40 transition-colors"
         >
           Challenge
         </button>

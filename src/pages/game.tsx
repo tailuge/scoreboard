@@ -398,7 +398,7 @@ export default function Game() {
 
       <LogoSection />
 
-      <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-6">
+      <main className="relative z-10 w-full max-w-6xl mt-14 grid grid-cols-1 gap-6">
         <GroupBox
           title="Play Online"
           leftBadge={<User />}
