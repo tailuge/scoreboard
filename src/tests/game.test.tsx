@@ -61,8 +61,6 @@ describe("Game Page", () => {
       screen.getByRole("link", { name: /^Play Three Cushion$/i })
     ).toBeInTheDocument()
 
-    expect(screen.getAllByText("Practice")).toHaveLength(3)
-
     expect(
       screen.getByAltText(
         "Play classic Snooker billiards online with 22 balls on a full-size table"

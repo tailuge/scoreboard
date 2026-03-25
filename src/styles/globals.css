@@ -141,7 +141,13 @@ body {
 /* User Pill Styles */
 .pill-base,
 .user-pill {
-  font-size: 14px;
+  font-size: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: rgba(7, 27, 7, 0.724);
   backdrop-filter: blur(10px) saturate(100%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
@@ -162,15 +168,6 @@ body {
   border-radius: 6px;
   transform: translate(-50%, -50%);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-}
-
-.user-pill {
-  padding: 4px 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .user-pill-icon {

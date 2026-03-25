@@ -399,7 +399,7 @@ export default function Game() {
 
       <main className="relative z-10 w-full max-w-6xl mt-20 grid grid-cols-1 gap-6">
         <GroupBox
-          title="Play"
+          title="Play Online"
           leftBadge={<User />}
           rightBadge={
             <div className="flex items-center gap-2">
@@ -518,6 +518,11 @@ export default function Game() {
             {challengeError ? (
               <p className="text-xs text-red-400">{challengeError}</p>
             ) : null}
+          </div>
+        </GroupBox>
+
+        <GroupBox title="Play">
+          <div className="flex flex-col gap-4 -mt-3">
             <GameGrid
               userName={userName}
               userId={userId}

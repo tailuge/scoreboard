@@ -97,13 +97,6 @@ export function GameGrid({
             >
               {gameButtonChildren}
             </GameButton>
-            <ActionButton
-              href={practiceUrl.toString()}
-              hoverBorderColor="hover:border-blue-500"
-              hoverTextColor="hover:text-blue-400"
-            >
-              Practice
-            </ActionButton>
             {game.ruleType === "nineball" && (
               <ActionButton
                 href={botUrl.toString()}
