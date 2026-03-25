@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>multiplayer test helper</title>
+    <title>Multiplayer Test Helper</title>
     <link rel="icon" type="image/png" href="golden-cup.png" />
     <style>
       * {
@@ -18,6 +18,7 @@
         display: flex;
         flex-direction: column;
         background-color: #f1f5f9;
+        font-family: system-ui, -apple-system, sans-serif;
       }
 
       .container {
@@ -42,6 +43,19 @@
         box-shadow:
           0 4px 6px -1px rgb(0 0 0 / 0.1),
           0 2px 4px -2px rgb(0 0 0 / 0.1);
+      }
+
+      .panel-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        z-index: 10;
+        pointer-events: none;
       }
 
       .panel-close {
@@ -103,97 +117,102 @@
 
       .controls {
         display: flex;
-        gap: 12px;
-        padding: 16px 20px;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        background:
-          radial-gradient(
-            circle at top,
-            rgba(37, 99, 235, 0.12),
-            transparent 55%
-          ),
-          linear-gradient(180deg, #f8fafc 0%, #ffffff 70%);
+        gap: 8px;
+        padding: 8px 12px;
+        background: white;
         border-bottom: 1px solid #e2e8f0;
-        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+        flex-wrap: wrap;
+        align-items: center;
       }
 
-      .controls button {
-        appearance: none;
-        background: linear-gradient(180deg, #ffffff, #eef2ff);
-        color: #0f172a;
-        border: 1px solid #c7d2fe;
-        padding: 10px 20px;
-        border-radius: 14px;
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 0.2px;
-        cursor: pointer;
-        box-shadow:
-          0 8px 16px rgba(37, 99, 235, 0.12),
-          inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        transition:
-          transform 120ms ease,
-          box-shadow 120ms ease,
-          filter 120ms ease,
-          background 120ms ease;
+      .radio-group {
+        display: flex;
+        gap: 4px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 2px;
       }
 
-      .controls button:hover {
-        filter: brightness(1.02);
-        transform: translateY(-1px);
-        box-shadow:
-          0 12px 20px rgba(37, 99, 235, 0.18),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      }
-
-      .controls button:active {
-        transform: translateY(0);
-        filter: brightness(0.98);
-        box-shadow:
-          0 6px 12px rgba(37, 99, 235, 0.14),
-          inset 0 1px 0 rgba(255, 255, 255, 0.7);
-      }
-
-      .controls button:disabled {
-        background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
-        color: #475569;
-        border-color: #e2e8f0;
-        cursor: not-allowed;
-        box-shadow: none;
-        transform: none;
-      }
-
-      .controls button:disabled:hover {
-        filter: none;
-        transform: none;
-        box-shadow: none;
-      }
-
-      .controls button:focus-visible {
-        outline: 3px solid #60a5fa;
-        outline-offset: 2px;
-      }
-
-      .controls label {
+      .radio-group label {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 14px;
+        gap: 4px;
+        font-size: 11px;
         color: #1f2937;
-        font-weight: 600;
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 8px 12px;
-        box-shadow: 0 6px 12px rgba(15, 23, 42, 0.06);
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 8px;
+        margin: 0;
       }
 
-      .controls input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
+      .radio-group input[type="radio"] {
+        width: 14px;
+        height: 14px;
         accent-color: #2563eb;
+      }
+
+      button {
+        appearance: none;
+        background: #f1f5f9;
+        color: #0f172a;
+        border: 1px solid #cbd5e1;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 120ms ease;
+      }
+
+      button:hover {
+        background: #e2e8f0;
+      }
+
+      button:active {
+        background: #cbd5e1;
+      }
+
+      button.active {
+        background: #2563eb;
+        color: white;
+        border-color: #1d4ed8;
+      }
+
+      button:disabled {
+        background: #f1f5f9;
+        color: #94a3b8;
+        border-color: #e2e8f0;
+        cursor: not-allowed;
+      }
+
+      button:focus-visible {
+        outline: 2px solid #60a5fa;
+        outline-offset: 1px;
+      }
+
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: #1f2937;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 4px 8px;
+      }
+
+      input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        accent-color: #2563eb;
+      }
+
+      .hidden {
+        display: none !important;
       }
 
       .stats {
@@ -237,15 +256,36 @@
       .hidden {
         display: none;
       }
+
+      h2 {
+        text-align: center;
+        color: #1e293b;
+        margin-bottom: 8px;
+      }
     </style>
     <script type="module">
       import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@9.4.0/+esm";
+
+      // State
+      const playerNames = [];
+      const p1Id = "player-1-" + faker.string.alphanumeric(4).toLowerCase();
+      const p2Id = "player-2-" + faker.string.alphanumeric(4).toLowerCase();
+      const p1Name = "Alice";
+      const p2Name = "Bob";
+
+      // DOM elements
+      const panel1 = document.getElementById("panel1");
+      const panel2 = document.getElementById("panel2");
+      const panel3 = document.getElementById("panel3");
+      const stats = document.getElementById("stats");
+      const btnStart = document.getElementById("btn-start");
+      const ruleTypeRadios = document.querySelectorAll('input[name="ruleType"]');
 
       function getGameUrl() {
         return new URL("/game", globalThis.location.origin);
       }
 
-      // Function to create an iframe
+      // Lobby mode: create iframe with random name
       function createIframe(options = {}) {
         const userName = options.userName || faker.person.firstName();
         const playerId =
@@ -261,100 +301,157 @@
         return iframe;
       }
 
-      const panel1 = document.getElementById("panel1");
-      const panel2 = document.getElementById("panel2");
-      const panel3 = document.getElementById("panel3");
-      const controls = document.getElementById("controls");
-      const stats = document.getElementById("stats");
-      const spectatorToggle = document.getElementById("spectator-toggle");
-      const autoModeToggle = document.getElementById("auto-mode");
-      const buttonNineball = document.getElementById("button-nineball");
-      const buttonSnooker = document.getElementById("button-snooker");
-      const buttonThreecushion = document.getElementById("button-threecushion");
+      // Rematch mode: create iframe with specific userId/userName and optional rematch param
+      function createRematchIframe(userId, userName, rematchParam = null) {
+        const container = document.createElement("div");
+        container.className = "panel";
+        const label = document.createElement("div");
+        label.className = "panel-label";
+        label.textContent = `${userName} (${userId})`;
+        container.appendChild(label);
 
-      // Store player names by panel index
-      const playerNames = [];
+        const iframe = document.createElement("iframe");
+        const url = getGameUrl();
+        url.searchParams.set("userId", userId);
+        url.searchParams.set("userName", userName);
+        if (rematchParam) {
+          url.searchParams.set("rematch", JSON.stringify(rematchParam));
+        }
+        iframe.src = url.toString();
+        iframe.width = "100%";
+        iframe.height = "100%";
+        iframe.frameBorder = "0";
+        container.appendChild(iframe);
+        return container;
+      }
 
-      const createPanels = (ruleType, includeSpectator) => {
+      function clearPanels() {
+        panel1.innerHTML = "";
+        panel2.innerHTML = "";
+        panel3.innerHTML = "";
+        panel3.classList.add("hidden");
+      }
+
+      /*********************************
+       * LOBBY MODE
+       *********************************/
+      const createPanels = (ruleType) => {
         playerNames[0] = faker.person.firstName();
         playerNames[1] = faker.person.firstName();
-        // Panel 1: action=join
         panel1.appendChild(createIframe({ userName: playerNames[0] }));
-
-        // Panel 2: action=join
         panel2.appendChild(createIframe({ userName: playerNames[1] }));
-
-        // Panel 3: just a random name
-        if (panel3 && includeSpectator) {
-          panel3.appendChild(createIframe());
-        } else if (panel3) {
-          panel3.classList.add("hidden");
-        }
       };
 
       const hidePreGameUi = () => {
-        controls?.classList.add("hidden");
         stats?.classList.add("hidden");
-      };
-
-      const enableStartButtons = () => {
-        if (buttonNineball) buttonNineball.disabled = false;
-        if (buttonSnooker) buttonSnooker.disabled = false;
-        if (buttonThreecushion) buttonThreecushion.disabled = false;
       };
 
       const warmNchanStats = async () => {
         const url = "https://billiards-network.onrender.com/basic_status";
         try {
-          const response = await fetch(url, { mode: "cors" });
-          if (response.ok || response.type === "opaque") {
-            enableStartButtons();
-            stats?.classList.add("hidden");
-          }
+          await fetch(url, { mode: "cors" });
         } catch (error) {
-          // Ignore fetch failures; iframe load can still unlock buttons.
           console.warn("Failed to warm nchan stats:", error);
+        } finally {
+          stats?.classList.add("hidden");
         }
       };
 
-      /*********************************
-       *
-       * Test sequence to initiaite game.
-       *
-       *********************************/
-      const startGame = async (ruleType) => {
-        hidePreGameUi();
-        createPanels(ruleType, spectatorToggle?.checked);
-        const isAuto = autoModeToggle?.checked;
-        if (!isAuto) {
-          return;
+      const getSelectedRuleType = () => {
+        for (const radio of ruleTypeRadios) {
+          if (radio.checked) return radio.value;
         }
-        await wait(3000);
-        click(0, 'button[aria-label*="users online"]');
-        await wait(2000);
+        return "nineball";
+      };
+
+      const startGame = async () => {
+        const ruleType = getSelectedRuleType();
+        hidePreGameUi();
+        btnStart.disabled = true;
         click(0, `button[aria-label="Challenge ${getOpponentName(0)}"]`);
         await wait(2000);
         click(0, `button[aria-label="Play ${ruleType}"]`);
         await wait(2000);
         click(1, `button[aria-label="Accept challenge"]`);
-        //      Place ball
-        //      Hit cue ball
-        //      Concede
       };
 
-      document
-        .getElementById("button-nineball")
-        ?.addEventListener("click", () => startGame("nineball"));
-      document
-        .getElementById("button-snooker")
-        ?.addEventListener("click", () => startGame("snooker"));
-      document
-        .getElementById("button-threecushion")
-        ?.addEventListener("click", () => startGame("threecushion"));
+      btnStart?.addEventListener("click", () => startGame());
 
       warmNchanStats();
 
-      // ===== High-level click helper for iframe automation =====
+      /*********************************
+       * REMATCH MODE
+       *********************************/
+      function startMutualRematch() {
+        clearPanels();
+        const ruleType = getSelectedRuleType();
+        playerNames[0] = p1Name;
+        playerNames[1] = p2Name;
+        const scores = [
+          { userId: p1Id, score: 2 },
+          { userId: p2Id, score: 1 },
+        ];
+
+        const p1Rematch = {
+          opponentId: p2Id,
+          opponentName: p2Name,
+          ruleType: ruleType,
+          lastScores: scores,
+          nextTurnId: p2Id,
+        };
+
+        const p2Rematch = {
+          opponentId: p1Id,
+          opponentName: p1Name,
+          ruleType: ruleType,
+          lastScores: scores,
+          nextTurnId: p2Id,
+        };
+
+        panel1.appendChild(createRematchIframe(p1Id, p1Name, p1Rematch));
+        panel2.appendChild(createRematchIframe(p2Id, p2Name, p2Rematch));
+      }
+
+      function startOneWayRematch() {
+        clearPanels();
+        const ruleType = getSelectedRuleType();
+        playerNames[0] = p1Name;
+        playerNames[1] = p2Name;
+        const scores = [
+          { userId: p1Id, score: 0 },
+          { userId: p2Id, score: 3 },
+        ];
+
+        const p1Rematch = {
+          opponentId: p2Id,
+          opponentName: p2Name,
+          ruleType: ruleType,
+          lastScores: scores,
+          nextTurnId: p1Id,
+        };
+
+        panel1.appendChild(createRematchIframe(p1Id, p1Name, p1Rematch));
+        panel2.appendChild(createRematchIframe(p2Id, p2Name, null));
+      }
+
+      function startStandardLobby() {
+        clearPanels();
+        playerNames[0] = p1Name;
+        playerNames[1] = p2Name;
+        panel1.appendChild(createRematchIframe(p1Id, p1Name, null));
+        panel2.appendChild(createRematchIframe(p2Id, p2Name, null));
+      }
+
+      document.getElementById("btn-mutual").onclick = startMutualRematch;
+      document.getElementById("btn-oneway").onclick = startOneWayRematch;
+      document.getElementById("btn-standard").onclick = startStandardLobby;
+
+      // Start with standard lobby
+      startStandardLobby();
+
+      /*********************************
+       * SHARED UTILS
+       *********************************/
       const wait = (ms) => {
         console.log(`wait: ${ms}ms`);
         return new Promise((resolve) => setTimeout(resolve, ms));
@@ -368,7 +465,6 @@
           console.error(`Panel ${panelIndex}: no iframe found`);
           return;
         }
-        console.log(`Panel ${panelIndex}: iframe found, waiting for load...`);
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         if (!doc) {
           console.error(`Panel ${panelIndex}: no document`);
@@ -385,35 +481,45 @@
         console.log(`Panel ${panelIndex}: clicked "${selector}"`);
       }
 
-      // Get opponent's username from another panel
       function getOpponentName(panelIndex) {
-        return playerNames[1 - panelIndex];
+        if (playerNames[1 - panelIndex]) {
+          return playerNames[1 - panelIndex];
+        }
+        return panelIndex === 0 ? p2Name : p1Name;
       }
     </script>
   </head>
 
   <body>
-    <div class="controls" id="controls">
-      <button type="button" id="button-nineball" disabled>Nineball</button>
-      <button type="button" id="button-snooker" disabled>Snooker</button>
-      <button type="button" id="button-threecushion" disabled>
-        Three Cushion
-      </button>
-      <label for="spectator-toggle">
-        <input type="checkbox" id="spectator-toggle" />
-        Spectator
-      </label>
-      <label for="auto-mode">
-        <input type="checkbox" id="auto-mode" checked />
-        Auto
-      </label>
+    <div class="controls">
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="ruleType" value="nineball" checked />
+          Nineball
+        </label>
+        <label>
+          <input type="radio" name="ruleType" value="snooker" />
+          Snooker
+        </label>
+        <label>
+          <input type="radio" name="ruleType" value="threecushion" />
+          3-Cushion
+        </label>
+      </div>
+      <button id="btn-start">Start</button>
+      <span style="flex:1"></span>
+      <button id="btn-standard">Standard</button>
+      <button id="btn-oneway">One-way</button>
+      <button id="btn-mutual">Mutual</button>
     </div>
+
     <div class="stats" id="stats">
       <output class="nchan-wait">
         <span class="nchan-spinner" aria-hidden="true"></span>
         <span>Waiting for render.com to start nchan server...</span>
       </output>
     </div>
+
     <div class="container">
       <div class="panel" id="panel1"></div>
       <div class="panel" id="panel2"></div>

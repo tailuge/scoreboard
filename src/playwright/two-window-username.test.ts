@@ -7,9 +7,10 @@ const setUsername = async (page: Page, name: string) => {
   await expect(page.getByLabel(`Edit username: ${name}`)).toBeVisible()
 }
 
-const openOnlineUsers = async (page: Page) => {
-  await page.getByLabel(/users online/).click()
-  await expect(page.getByLabel("Online users")).toBeVisible()
+const waitForUserOnline = async (page: Page, name: string) => {
+  await expect(
+    page.locator(".stagger-item").filter({ hasText: name }).first()
+  ).toBeVisible({ timeout: 10_000 })
 }
 
 test.describe("two window username test", () => {
@@ -31,16 +32,8 @@ test.describe("two window username test", () => {
       await setUsername(page1, aliceName)
       await setUsername(page2, bobName)
 
-      await openOnlineUsers(page1)
-      await openOnlineUsers(page2)
-
-      await expect(
-        page1.getByLabel("Online users").getByText(bobName, { exact: false })
-      ).toBeVisible({ timeout: 10_000 })
-
-      await expect(
-        page2.getByLabel("Online users").getByText(aliceName, { exact: false })
-      ).toBeVisible({ timeout: 10_000 })
+      await waitForUserOnline(page1, bobName)
+      await waitForUserOnline(page2, aliceName)
     } finally {
       await context1.close()
       await context2.close()

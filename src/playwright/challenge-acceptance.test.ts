@@ -7,9 +7,10 @@ const setUsername = async (page: Page, name: string) => {
   await expect(page.getByLabel(`Edit username: ${name}`)).toBeVisible()
 }
 
-const openOnlineUsers = async (page: Page) => {
-  await page.getByLabel(/users online/).click()
-  await expect(page.getByLabel("Online users")).toBeVisible()
+const waitForUserOnline = async (page: Page, name: string) => {
+  await expect(
+    page.locator(".stagger-item").filter({ hasText: name }).first()
+  ).toBeVisible({ timeout: 10_000 })
 }
 
 test.describe.serial("challenge acceptance test", () => {
@@ -31,12 +32,12 @@ test.describe.serial("challenge acceptance test", () => {
       await setUsername(page1, aliceName)
       await setUsername(page2, bobName)
 
-      await openOnlineUsers(page1)
-      await expect(
-        page1.getByLabel("Online users").getByText(bobName, { exact: false })
-      ).toBeVisible({ timeout: 10_000 })
+      await waitForUserOnline(page1, bobName)
 
-      const bobRow = page1.locator("li").filter({ hasText: bobName }).first()
+      const bobRow = page1
+        .locator(".stagger-item")
+        .filter({ hasText: bobName })
+        .first()
       await bobRow.getByRole("button", { name: "Challenge" }).click()
 
       await page1.getByRole("button", { name: "Play nineball" }).click()
