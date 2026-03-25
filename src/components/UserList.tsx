@@ -19,7 +19,7 @@ export function UserList({
   const otherUsers = users.filter((user) => user.userId !== currentUserId)
 
   return (
-    <div className={`inline-flex flex-wrap gap-2 ${className}`}>
+    <div className={`flex flex-wrap justify-between gap-2 ${className}`}>
       {otherUsers.map((user) => (
         <div
           key={user.userId}

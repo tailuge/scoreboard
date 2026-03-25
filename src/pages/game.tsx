@@ -526,7 +526,7 @@ export default function Game() {
                     setChallengeError(null)
                     setSelectedOpponent(user)
                   }}
-                  className="flex-wrap gap-2"
+                  className="flex-wrap justify-center gap-2"
                 />
               </div>
             )}
