@@ -19,9 +19,12 @@ export function UserList({
   const otherUsers = users.filter((user) => user.userId !== currentUserId)
 
   return (
-    <div className={`flex ${className}`}>
+    <div className={`inline-flex flex-wrap gap-2 ${className}`}>
       {otherUsers.map((user) => (
-        <div key={user.userId} className="flex items-center gap-2 stagger-item">
+        <div
+          key={user.userId}
+          className="inline-flex items-center gap-2 rounded-[5px] border border-gray-300/50 px-2 py-1"
+        >
           <span
             className="h-1 w-1 rounded-full bg-green-accent shadow-[0_0_5px_var(--color-green-glow)]"
             aria-hidden="true"
