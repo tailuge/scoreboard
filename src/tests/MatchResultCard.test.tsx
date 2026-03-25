@@ -123,8 +123,6 @@ describe("MatchResultCard", () => {
 
     expect(badge).toBeInTheDocument()
     expect(badge).toHaveAttribute("href", "/api/match-replay?id=replay-1")
-    expect(badge).toHaveAttribute("target", "_blank")
-    expect(badge).toHaveAttribute("rel", "noreferrer")
   })
 
   it("does not render replay badge when replay is missing", () => {

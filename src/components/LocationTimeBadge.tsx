@@ -84,8 +84,6 @@ function MatchBadge({ variant, compact, matchId }: MatchBadgeProps) {
   return (
     <a
       href={`/api/match-replay?id=${matchId}`}
-      target="_blank"
-      rel="noreferrer"
       title="Watch replay"
       className={`inline-flex items-center rounded-sm bg-blue-600 text-white font-semibold leading-none transition-colors hover:bg-blue-500 ${sizeClasses}`}
     >

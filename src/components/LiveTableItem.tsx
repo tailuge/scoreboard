@@ -26,7 +26,7 @@ export function LiveTableItem({ game, onSpectate }: LiveTableItemProps) {
       isSpectator: true,
       isCreator: false,
     })
-    globalThis.open(spectatorUrl.toString(), "_blank")
+    globalThis.location.href = spectatorUrl.toString()
   }
 
   const virtualResult: MatchResult = {
