@@ -9,7 +9,7 @@ const setUsername = async (page: Page, name: string) => {
 
 const waitForUserOnline = async (page: Page, name: string) => {
   await expect(
-    page.locator(".stagger-item").filter({ hasText: name }).first()
+    page.locator(`[aria-label="Challenge ${name}"]`).first()
   ).toBeVisible({ timeout: 10_000 })
 }
 
@@ -34,11 +34,10 @@ test.describe.serial("challenge acceptance test", () => {
 
       await waitForUserOnline(page1, bobName)
 
-      const bobRow = page1
-        .locator(".stagger-item")
-        .filter({ hasText: bobName })
+      await page1
+        .locator(`[aria-label="Challenge ${bobName}"]`)
         .first()
-      await bobRow.getByRole("button", { name: "Challenge" }).click()
+        .click()
 
       await page1.getByRole("button", { name: "Play nineball" }).click()
 

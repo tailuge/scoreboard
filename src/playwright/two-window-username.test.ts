@@ -9,7 +9,7 @@ const setUsername = async (page: Page, name: string) => {
 
 const waitForUserOnline = async (page: Page, name: string) => {
   await expect(
-    page.locator(".stagger-item").filter({ hasText: name }).first()
+    page.locator(`[aria-label="Challenge ${name}"]`).first()
   ).toBeVisible({ timeout: 10_000 })
 }
 
