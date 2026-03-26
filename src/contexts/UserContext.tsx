@@ -32,20 +32,15 @@ export function UserProvider({
   useEffect(() => {
     const storedSessionId = globalThis.sessionStorage.getItem("userId")
     const storedSessionUserName = globalThis.sessionStorage.getItem("userName")
-    const storedId =
-      storedSessionId || globalThis.localStorage.getItem("userId")
-    const useSessionStorage = Boolean(storedSessionId || storedSessionUserName)
+    const storedId = storedSessionId
     if (storedId) {
       setUserId(storedId)
     } else {
       const newId = getUID()
       setUserId(newId)
-      if (useSessionStorage) {
-        globalThis.sessionStorage.setItem("userId", newId)
-      } else {
-        globalThis.localStorage.setItem("userId", newId)
-      }
+      globalThis.sessionStorage.setItem("userId", newId)
     }
+    globalThis.localStorage.removeItem("userId")
 
     const storedUserName =
       storedSessionUserName || globalThis.localStorage.getItem("userName")
@@ -92,11 +87,13 @@ export function UserProvider({
 
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
+    globalThis.sessionStorage.setItem("userName", name)
     globalThis.localStorage.setItem("userName", name)
     // Generate a new user ID when username changes
     const newId = getUID()
     setUserId(newId)
-    globalThis.localStorage.setItem("userId", newId)
+    globalThis.sessionStorage.setItem("userId", newId)
+    globalThis.localStorage.removeItem("userId")
     console.log("Generated new player ID due to username change: " + newId)
   }, [])
 
