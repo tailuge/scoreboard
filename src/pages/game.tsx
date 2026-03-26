@@ -529,7 +529,6 @@ export default function Game() {
             {selectedChatUser ? (
               <ChatCard
                 opponentName={selectedChatUser.userName}
-                opponentId={selectedChatUser.userId}
                 messages={chats[selectedChatUser.userId] || []}
                 currentUserId={userId || ""}
                 onSend={(text) => sendChat(selectedChatUser.userId, text)}

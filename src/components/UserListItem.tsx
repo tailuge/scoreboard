@@ -21,15 +21,16 @@ export function UserListItem({
 }: UserListItemProps) {
   return (
     <div className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-1 py-1 text-[14px] text-gray-300 transition-all duration-300 hover:border-white/20 hover:bg-white/10">
-      <div
+      <button
         onClick={() => onChat(user)}
-        className="flex items-center gap-2 cursor-pointer"
+        className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors"
+        aria-label={`Chat with ${user.userName}`}
       >
-        <span className="text-[14px] text-gray-300 truncate max-w-[100px]">
+        <span className="text-[14px] truncate max-w-[100px]">
           {localeToFlag(user.meta?.country)} {user.userName}
         </span>
         {hasUnread ? <ChatBubbleLeftEllipsisIcon className="h-3 w-3 text-cyan-400 animate-pulse" /> : null}
-      </div>
+      </button>
       <div className="flex items-center gap-0.5">
         <UserItemActions
           user={user}

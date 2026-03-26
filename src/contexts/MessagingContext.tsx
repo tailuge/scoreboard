@@ -53,6 +53,14 @@ const baseUrl =
   process.env.NEXT_PUBLIC_WEBSOCKET_HOST ||
   "https://billiards-network.onrender.com"
 
+const isDuplicateMessage = (chat: ChatMessage, existing: ChatMessage[]) =>
+  existing.some(
+    (msg) =>
+      msg.senderId === chat.senderId &&
+      msg.text === chat.text &&
+      Math.abs((msg.meta?.ts || 0) - (chat.meta?.ts || 0)) < 5000
+  )
+
 export function MessagingProvider({
   children,
 }: {
@@ -124,16 +132,7 @@ export function MessagingProvider({
           const otherId =
             chat.senderId === userId ? chat.recipientId : chat.senderId
           const existing = prev[otherId] || []
-          // Avoid duplicate messages if the server echoes them back.
-          // We check for sender, text and a timestamp within a 5-second window
-          // to account for client/server time differences while still preventing duplicates.
-          const isDuplicate = existing.some(
-            (msg) =>
-              msg.senderId === chat.senderId &&
-              msg.text === chat.text &&
-              Math.abs((msg.meta?.ts || 0) - (chat.meta?.ts || 0)) < 5000
-          )
-          if (isDuplicate) return prev
+          if (isDuplicateMessage(chat, existing)) return prev
 
           return {
             ...prev,
