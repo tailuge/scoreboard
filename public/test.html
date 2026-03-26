@@ -32,9 +32,6 @@
       .panel {
         flex: 1 1 300px;
         height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         border: 1px solid #cbd5e1;
         position: relative;
         background: white;
@@ -95,6 +92,7 @@
       }
 
       .panel iframe {
+        display: block;
         width: 100%;
         height: 100%;
         border: none;
@@ -301,14 +299,13 @@
         return iframe;
       }
 
-      // Rematch mode: create iframe with specific userId/userName and optional rematch param
+      // Rematch mode: create iframe contents with specific userId/userName and optional rematch param
       function createRematchIframe(userId, userName, rematchParam = null) {
-        const container = document.createElement("div");
-        container.className = "panel";
+        const fragment = document.createDocumentFragment();
         const label = document.createElement("div");
         label.className = "panel-label";
         label.textContent = `${userName} (${userId})`;
-        container.appendChild(label);
+        fragment.appendChild(label);
 
         const iframe = document.createElement("iframe");
         const url = getGameUrl();
@@ -321,15 +318,22 @@
         iframe.width = "100%";
         iframe.height = "100%";
         iframe.frameBorder = "0";
-        container.appendChild(iframe);
-        return container;
+        fragment.appendChild(iframe);
+        return fragment;
       }
 
       function clearPanels() {
+        // Clear panel1
         panel1.innerHTML = "";
+        panel1.className = "panel";
+
+        // Clear panel2
         panel2.innerHTML = "";
+        panel2.className = "panel";
+
+        // Clear panel3
         panel3.innerHTML = "";
-        panel3.classList.add("hidden");
+        panel3.className = "panel hidden";
       }
 
       /*********************************

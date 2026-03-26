@@ -124,6 +124,17 @@ export function MessagingProvider({
           const otherId =
             chat.senderId === userId ? chat.recipientId : chat.senderId
           const existing = prev[otherId] || []
+          // Avoid duplicate messages if the server echoes them back.
+          // We check for sender, text and a timestamp within a 5-second window
+          // to account for client/server time differences while still preventing duplicates.
+          const isDuplicate = existing.some(
+            (msg) =>
+              msg.senderId === chat.senderId &&
+              msg.text === chat.text &&
+              Math.abs((msg.meta?.ts || 0) - (chat.meta?.ts || 0)) < 5000
+          )
+          if (isDuplicate) return prev
+
           return {
             ...prev,
             [otherId]: [...existing, chat],
@@ -277,14 +288,26 @@ export function MessagingProvider({
         throw new Error("Lobby not initialized")
       }
       await lobby.sendChat(recipientId, text)
-      // Note: lobby.sendChat might not trigger onChat for the sender in some implementations,
-      // but typically we want to see our own messages immediately.
-      // Based on @tailuge/messaging, sendChat is async and might return before the message is broadcast back.
-      // We'll trust onChat to update the state if it broadcasts to self,
-      // otherwise we should manually add it.
-      // Messaging library's Lobby handles broadcasting.
+
+      // Manually add the sent message to the local state to ensure it shows up immediately
+      // and handles cases where the server doesn't echo back.
+      const sentMessage: ChatMessage = {
+        messageType: "chat",
+        senderId: userId,
+        recipientId,
+        text,
+        meta: { ts: Date.now() },
+      }
+
+      setChats((prev) => {
+        const existing = prev[recipientId] || []
+        return {
+          ...prev,
+          [recipientId]: [...existing, sentMessage],
+        }
+      })
     },
-    []
+    [userId]
   )
 
   const markChatAsRead = useCallback((targetUserId: string) => {
