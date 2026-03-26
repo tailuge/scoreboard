@@ -3,7 +3,6 @@ import type { ChatMessage } from "@tailuge/messaging"
 
 type ChatCardProps = {
   readonly opponentName: string
-  readonly opponentId: string
   readonly messages: ChatMessage[]
   readonly onSend: (text: string) => void
   readonly onClose: () => void
@@ -12,7 +11,6 @@ type ChatCardProps = {
 
 export function ChatCard({
   opponentName,
-  opponentId,
   messages,
   onSend,
   onClose,
