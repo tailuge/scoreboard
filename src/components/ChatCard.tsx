@@ -29,7 +29,7 @@ export function ChatCard({
   }
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-[150px]">
+    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 my-0 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-[150px]">
       <div className="flex justify-between items-center mb-1 border-b border-white/10 pb-1">
         <h3 className="text-xs font-semibold text-white truncate pr-4">
           Chat with {opponentName}

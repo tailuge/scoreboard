@@ -20,15 +20,11 @@ export function UserListItem({
   onChat,
 }: UserListItemProps) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-2 py-1 text-[14px] text-gray-300 transition-all duration-300 hover:border-white/20 hover:bg-white/10">
+    <div className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-1 py-1 text-[14px] text-gray-300 transition-all duration-300 hover:border-white/20 hover:bg-white/10">
       <div
         onClick={() => onChat(user)}
         className="flex items-center gap-2 cursor-pointer"
       >
-        <span
-          className="h-1 w-1 rounded-full bg-green-accent shadow-[0_0_5px_var(--color-green-glow)]"
-          aria-hidden="true"
-        />
         <span className="text-[14px] text-gray-300 truncate max-w-[100px]">
           {localeToFlag(user.meta?.country)} {user.userName}
         </span>

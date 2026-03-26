@@ -542,7 +542,7 @@ export default function Game() {
             ) : null}
 
             {users.length > 0 && (
-              <div className="pt-3">
+              <div className="pt-0">
                 <UserList
                   users={users}
                   currentUserId={userId}
@@ -564,7 +564,7 @@ export default function Game() {
         </GroupBox>
 
         <GroupBox title="Play">
-          <div className="flex flex-col gap-4 -mt-3">
+          <div className="flex flex-col gap-2 -mt-3">
             <GameGrid
               userName={userName}
               userId={userId}
