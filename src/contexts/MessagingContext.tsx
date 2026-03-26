@@ -296,7 +296,14 @@ export function MessagingProvider({
         senderId: userId,
         recipientId,
         text,
-        meta: { ts: Date.now() },
+        meta: {
+          ts: Date.now(),
+          ua: "",
+          ip: "",
+          origin: "",
+          method: "",
+          country: "",
+        },
       }
 
       setChats((prev) => {
