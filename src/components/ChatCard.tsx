@@ -39,7 +39,7 @@ export function ChatCard({
   }
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 p-4 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-[400px]">
+    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 p-4 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-[100px]">
       <div className="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
         <h3 className="text-lg font-bold text-white truncate pr-4">
           Chat with {opponentName}
