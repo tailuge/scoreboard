@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState } from "react"
 import type { ChatMessage } from "@tailuge/messaging"
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid"
 
 type ChatCardProps = {
   readonly opponentName: string
@@ -20,15 +19,6 @@ export function ChatCard({
   currentUserId,
 }: ChatCardProps) {
   const [inputText, setInputText] = useState("")
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
-  }
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,7 +29,7 @@ export function ChatCard({
   }
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-48">
+    <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-[150px]">
       <div className="flex justify-between items-center mb-1 border-b border-white/10 pb-1">
         <h3 className="text-xs font-semibold text-white truncate pr-4">
           Chat with {opponentName}
@@ -79,7 +69,6 @@ export function ChatCard({
             )
           })
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       <form onSubmit={handleSend} className="flex gap-2">
@@ -93,10 +82,10 @@ export function ChatCard({
         <button
           type="submit"
           disabled={!inputText.trim()}
-          className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:hover:bg-cyan-600 text-white p-1 rounded-lg transition-colors flex items-center justify-center"
+          className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:hover:bg-cyan-600 text-white px-2 py-1 rounded-lg transition-colors flex items-center justify-center text-xs font-semibold"
           aria-label="Send message"
         >
-          <PaperAirplaneIcon className="h-4 w-4" />
+          Send
         </button>
       </form>
     </div>
