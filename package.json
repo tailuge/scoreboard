@@ -1,6 +1,7 @@
 {
   "name": "scoreboard",
   "version": "1.0.0",
+  "private": true,
   "description": "scoreboard for tailuge/billiards running on vercel.com",
   "scripts": {
     "dev": "next dev --turbo",
