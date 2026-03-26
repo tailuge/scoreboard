@@ -29,7 +29,9 @@ export function UserListItem({
         <span className="text-[14px] truncate max-w-[100px]">
           {localeToFlag(user.meta?.country)} {user.userName}
         </span>
-        {hasUnread ? <ChatBubbleLeftEllipsisIcon className="h-3 w-3 text-cyan-400 animate-pulse" /> : null}
+        {hasUnread ? (
+          <ChatBubbleLeftEllipsisIcon className="h-3 w-3 text-cyan-400 animate-pulse" />
+        ) : null}
       </button>
       <div className="flex items-center gap-0.5">
         <UserItemActions

@@ -37,15 +37,27 @@ export function ChatCard({
           className="text-gray-400 hover:text-white transition-colors"
           aria-label="Close chat"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto mb-1 space-y-1 text-left pr-1 custom-scrollbar">
         {messages.length === 0 ? (
-          <p className="text-gray-500 text-xs italic text-center mt-1">No messages yet</p>
+          <p className="text-gray-500 text-xs italic text-center mt-1">
+            No messages yet
+          </p>
         ) : (
           messages.map((msg, i) => {
             const isMe = msg.senderId === currentUserId
