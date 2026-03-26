@@ -5,14 +5,18 @@ import { UserListItem } from "./UserListItem"
 interface UserListProps {
   readonly users: PresenceMessage[]
   readonly currentUserId?: string
+  readonly unreadUsers?: string[]
   readonly onChallenge: (user: PresenceMessage) => void
+  readonly onChat: (user: PresenceMessage) => void
   readonly className?: string
 }
 
 export function UserList({
   users,
   currentUserId,
+  unreadUsers = [],
   onChallenge,
+  onChat,
   className = "",
 }: UserListProps) {
   const otherUsers = users.filter((user) => user.userId !== currentUserId)
@@ -24,7 +28,9 @@ export function UserList({
           key={user.userId}
           user={user}
           currentUserId={currentUserId}
+          hasUnread={unreadUsers.includes(user.userId)}
           onChallenge={onChallenge}
+          onChat={onChat}
         />
       ))}
     </div>
