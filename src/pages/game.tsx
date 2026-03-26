@@ -12,6 +12,7 @@ import { HighscoreGrid } from "@/components/HighscoreGrid"
 import { GameBackground } from "@/components/GameBackground"
 import { useMessaging } from "@/contexts/MessagingContext"
 import { ChallengeCard } from "@/components/ChallengeCard"
+import { ChatCard } from "@/components/ChatCard"
 import { navigateTo } from "@/utils/navigation"
 import { markUsage } from "@/utils/usage"
 import { GameUrl, type RematchParam } from "@/utils/GameUrl"
@@ -26,12 +27,16 @@ export default function Game() {
     pendingChallenge,
     incomingChallenge,
     acceptedChallenge,
+    chats,
+    unreadUsers,
     challenge,
     acceptChallenge,
     declineChallenge,
     cancelChallenge,
     updatePresence,
     clearAcceptedChallenge,
+    sendChat,
+    markChatAsRead,
   } = useMessaging()
   const presenceCount = users.length
   const [snookerReds, setSnookerReds] = useState(3)
@@ -39,6 +44,8 @@ export default function Game() {
   const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
   const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
   const [selectedOpponent, setSelectedOpponent] =
+    useState<PresenceMessage | null>(null)
+  const [selectedChatUser, setSelectedChatUser] =
     useState<PresenceMessage | null>(null)
   const [challengeError, setChallengeError] = useState<string | null>(null)
   const [challengeBusy, setChallengeBusy] = useState(false)
@@ -322,6 +329,12 @@ export default function Game() {
   ])
 
   useEffect(() => {
+    if (selectedChatUser && unreadUsers.includes(selectedChatUser.userId)) {
+      markChatAsRead(selectedChatUser.userId)
+    }
+  }, [selectedChatUser, unreadUsers, markChatAsRead])
+
+  useEffect(() => {
     if (!acceptedChallenge || !userId) return
     console.log("[challenge] accept received", {
       acceptedChallenge,
@@ -513,6 +526,17 @@ export default function Game() {
               />
             ) : null}
 
+            {selectedChatUser ? (
+              <ChatCard
+                opponentName={selectedChatUser.userName}
+                opponentId={selectedChatUser.userId}
+                messages={chats[selectedChatUser.userId] || []}
+                currentUserId={userId || ""}
+                onSend={(text) => sendChat(selectedChatUser.userId, text)}
+                onClose={() => setSelectedChatUser(null)}
+              />
+            ) : null}
+
             {challengeError ? (
               <p className="text-xs text-red-400">{challengeError}</p>
             ) : null}
@@ -522,9 +546,15 @@ export default function Game() {
                 <UserList
                   users={users}
                   currentUserId={userId}
+                  unreadUsers={unreadUsers}
                   onChallenge={(user) => {
                     setChallengeError(null)
                     setSelectedOpponent(user)
+                    setSelectedChatUser(null)
+                  }}
+                  onChat={(user) => {
+                    setSelectedChatUser(user)
+                    setSelectedOpponent(null)
                   }}
                   className="flex-wrap justify-center gap-2"
                 />

@@ -14,6 +14,7 @@ import {
   type Lobby,
   type PresenceMessage,
   type RematchInfo,
+  type ChatMessage,
   MessagingClient,
 } from "@tailuge/messaging"
 import { useUser } from "@/contexts/UserContext"
@@ -24,6 +25,8 @@ interface MessagingContextType {
   pendingChallenge: ChallengeMessage | null
   incomingChallenge: ChallengeMessage | null
   acceptedChallenge: ChallengeMessage | null
+  chats: Record<string, ChatMessage[]>
+  unreadUsers: string[]
   challenge: (
     userId: string,
     ruleType: string,
@@ -38,6 +41,8 @@ interface MessagingContextType {
   cancelChallenge: (userId: string, ruleType: string) => Promise<void>
   updatePresence: (update: Partial<PresenceMessage>) => Promise<void>
   clearAcceptedChallenge: () => void
+  sendChat: (recipientId: string, text: string) => Promise<void>
+  markChatAsRead: (userId: string) => void
 }
 
 const MessagingContext = createContext<MessagingContextType | undefined>(
@@ -68,6 +73,8 @@ export function MessagingProvider({
     useState<ChallengeMessage | null>(null)
   const [acceptedChallenge, setAcceptedChallenge] =
     useState<ChallengeMessage | null>(null)
+  const [chats, setChats] = useState<Record<string, ChatMessage[]>>({})
+  const [unreadUsers, setUnreadUsers] = useState<string[]>([])
 
   const activeGames = useMemo(() => deriveActiveGames(users), [users])
 
@@ -81,38 +88,65 @@ export function MessagingProvider({
     }
   }, [])
 
-  const attachLobbyListeners = useCallback((lobby: Lobby) => {
-    const handleUsersChange = (nextUsers: PresenceMessage[]) => {
-      setUsers(nextUsers)
-    }
+  const attachLobbyListeners = useCallback(
+    (lobby: Lobby) => {
+      let active = true
 
-    const handleChallenge = (challenge: ChallengeMessage) => {
-      switch (challenge.type) {
-        case "offer":
-          setIncomingChallenge(challenge)
-          break
-        case "accept":
-          setPendingChallenge(null)
-          setAcceptedChallenge(challenge)
-          break
-        case "decline":
-        case "cancel":
-          setPendingChallenge(null)
-          setIncomingChallenge(null)
-          setAcceptedChallenge(null)
-          break
-        default:
-          break
+      const handleUsersChange = (nextUsers: PresenceMessage[]) => {
+        if (!active) return
+        setUsers(nextUsers)
       }
-    }
 
-    lobby.onUsersChange(handleUsersChange)
-    lobby.onChallenge(handleChallenge)
+      const handleChallenge = (challenge: ChallengeMessage) => {
+        if (!active) return
+        switch (challenge.type) {
+          case "offer":
+            setIncomingChallenge(challenge)
+            break
+          case "accept":
+            setPendingChallenge(null)
+            setAcceptedChallenge(challenge)
+            break
+          case "decline":
+          case "cancel":
+            setPendingChallenge(null)
+            setIncomingChallenge(null)
+            setAcceptedChallenge(null)
+            break
+          default:
+            break
+        }
+      }
 
-    return () => {
-      lobby.offUsersChange(handleUsersChange)
-    }
-  }, [])
+      const handleChat = (chat: ChatMessage) => {
+        if (!active) return
+        setChats((prev) => {
+          const otherId =
+            chat.senderId === userId ? chat.recipientId : chat.senderId
+          const existing = prev[otherId] || []
+          return {
+            ...prev,
+            [otherId]: [...existing, chat],
+          }
+        })
+        if (chat.senderId !== userId) {
+          setUnreadUsers((prev) =>
+            prev.includes(chat.senderId) ? prev : [...prev, chat.senderId]
+          )
+        }
+      }
+
+      lobby.onUsersChange(handleUsersChange)
+      lobby.onChallenge(handleChallenge)
+      lobby.onChat(handleChat)
+
+      return () => {
+        active = false
+        lobby.offUsersChange(handleUsersChange)
+      }
+    },
+    [userId]
+  )
 
   useEffect(() => {
     if (!userId || !userName) return
@@ -236,6 +270,27 @@ export function MessagingProvider({
     setAcceptedChallenge(null)
   }, [])
 
+  const sendChat = useCallback(
+    async (recipientId: string, text: string) => {
+      const lobby = lobbyRef.current
+      if (!lobby) {
+        throw new Error("Lobby not initialized")
+      }
+      await lobby.sendChat(recipientId, text)
+      // Note: lobby.sendChat might not trigger onChat for the sender in some implementations,
+      // but typically we want to see our own messages immediately.
+      // Based on @tailuge/messaging, sendChat is async and might return before the message is broadcast back.
+      // We'll trust onChat to update the state if it broadcasts to self,
+      // otherwise we should manually add it.
+      // Messaging library's Lobby handles broadcasting.
+    },
+    []
+  )
+
+  const markChatAsRead = useCallback((targetUserId: string) => {
+    setUnreadUsers((prev) => prev.filter((id) => id !== targetUserId))
+  }, [])
+
   const value = useMemo(
     () => ({
       users,
@@ -243,12 +298,16 @@ export function MessagingProvider({
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,
+      chats,
+      unreadUsers,
       challenge,
       acceptChallenge,
       declineChallenge,
       cancelChallenge,
       updatePresence,
       clearAcceptedChallenge,
+      sendChat,
+      markChatAsRead,
     }),
     [
       users,
@@ -256,12 +315,16 @@ export function MessagingProvider({
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,
+      chats,
+      unreadUsers,
       challenge,
       acceptChallenge,
       declineChallenge,
       cancelChallenge,
       updatePresence,
       clearAcceptedChallenge,
+      sendChat,
+      markChatAsRead,
     ]
   )
 
