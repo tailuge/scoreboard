@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(yarn *)",
-      "Bash(yarn test)"
-    ]
-  },
-  "$version": 3
-}
