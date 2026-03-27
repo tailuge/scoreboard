@@ -1,68 +1,69 @@
-import React, { useEffect, useRef, useState } from "react"
-import { ShareIcon } from "@heroicons/react/24/solid"
+import React, { useEffect, useRef, useState } from "react";
+import { ShareIcon } from "@heroicons/react/24/solid";
 
 type ServerStats = {
   uptime: {
-    seconds: number
-    days: number
-    hours: number
-    mins: number
-  }
-  ip_cache: Record<string, string>
-}
+    seconds: number;
+    days: number;
+    hours: number;
+    mins: number;
+  };
+  ip_cache: Record<string, string>;
+};
 
 type ParsedCountry = {
-  code: string
-  count: number
-}
+  code: string;
+  count: number;
+};
 
-const STATS_URL = "https://billiards-network.onrender.com/api/stats"
-const GITHUB_URL = "https://github.com/tailuge/billiards"
+const STATS_URL = "https://billiards-network.onrender.com/api/stats";
+const GITHUB_URL = "https://github.com/tailuge/billiards";
 
 function parseCountryData(ipCache: Record<string, string>): ParsedCountry[] {
-  const countryCounts = new Map<string, number>()
+  const countryCounts = new Map<string, number>();
 
   Object.values(ipCache).forEach((value) => {
-    const parts = value.split("|")
+    const parts = value.split("|");
     if (parts.length >= 1) {
-      const countryCode = parts[0]
-      countryCounts.set(countryCode, (countryCounts.get(countryCode) || 0) + 1)
+      const countryCode = parts[0];
+      countryCounts.set(countryCode, (countryCounts.get(countryCode) || 0) + 1);
     }
-  })
+  });
 
   return Array.from(countryCounts.entries())
     .map(([code, count]) => ({ code, count }))
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => b.count - a.count);
 }
 
 function getFlagEmoji(countryCode: string): string {
-  const code = countryCode.toUpperCase()
+  const code = countryCode.toUpperCase();
   return code
     .split("")
     .map((char) => String.fromCodePoint(0x1f1a5 + char.charCodeAt(0)))
-    .join("")
+    .join("");
 }
 
 function formatUptime(uptime: ServerStats["uptime"]): string {
-  const parts: string[] = []
-  if (uptime.days > 0) parts.push(`${uptime.days}d`)
-  if (uptime.hours > 0) parts.push(`${uptime.hours}h`)
-  if (uptime.mins > 0) parts.push(`${uptime.mins}m`)
-  if (uptime.seconds > 0 && parts.length === 0) parts.push(`${uptime.seconds}s`)
-  return parts.join(" ") || "0s"
+  const parts: string[] = [];
+  if (uptime.days > 0) parts.push(`${uptime.days}d`);
+  if (uptime.hours > 0) parts.push(`${uptime.hours}h`);
+  if (uptime.mins > 0) parts.push(`${uptime.mins}m`);
+  if (uptime.seconds > 0 && parts.length === 0)
+    parts.push(`${uptime.seconds}s`);
+  return parts.join(" ") || "0s";
 }
 
 export function ServerStatsPopover({
   children,
 }: {
-  readonly children: React.ReactNode
+  readonly children: React.ReactNode;
 }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [stats, setStats] = useState<ServerStats | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const popoverRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [stats, setStats] = useState<ServerStats | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -72,55 +73,56 @@ export function ServerStatsPopover({
         !popoverRef.current.contains(event.target as Node) &&
         !triggerRef.current?.contains(event.target as Node)
       ) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
     }
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-      return () => document.removeEventListener("mousedown", handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   useEffect(() => {
-    if (isOpen && !stats && !loading) {
-      setLoading(true)
-      setError(null)
+    if (isOpen && !loading) {
+      setLoading(true);
+      setError(null);
       fetch(STATS_URL)
         .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`)
-          return res.json()
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
         })
         .then((data: ServerStats) => {
-          setStats(data)
-          setLoading(false)
+          setStats(data);
+          setLoading(false);
         })
         .catch((err) => {
-          setError(err instanceof Error ? err.message : "Failed to load stats")
-          setLoading(false)
-        })
+          setError(err instanceof Error ? err.message : "Failed to load stats");
+          setLoading(false);
+        });
     }
-  }, [isOpen, stats, loading])
+  }, [isOpen, loading]);
 
   const handleShare = async () => {
-    const url = globalThis.location.href
+    const url = globalThis.location.href;
     const shareData = {
       title: "Billiards Scoreboard",
       url: url,
-    }
+    };
 
     try {
       if (navigator.share) {
-        await navigator.share(shareData)
+        await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(url)
+        await navigator.clipboard.writeText(url);
       }
     } catch (err) {
-      console.error("Share failed:", err)
+      console.error("Share failed:", err);
     }
-  }
+  };
 
-  const parsedCountries = stats ? parseCountryData(stats.ip_cache) : []
+  const parsedCountries = stats ? parseCountryData(stats.ip_cache) : [];
 
   return (
     <>
@@ -129,8 +131,8 @@ export function ServerStatsPopover({
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault()
-            setIsOpen(!isOpen)
+            e.preventDefault();
+            setIsOpen(!isOpen);
           }
         }}
         style={{ cursor: "pointer" }}
@@ -263,5 +265,5 @@ export function ServerStatsPopover({
         </div>
       ) : null}
     </>
-  )
+  );
 }
