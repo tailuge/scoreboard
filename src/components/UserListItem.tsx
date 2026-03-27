@@ -2,7 +2,6 @@ import React from "react"
 import { localeToFlag } from "@/utils/locale"
 import type { PresenceMessage } from "@tailuge/messaging"
 import { UserItemActions } from "./UserItemActions"
-import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid"
 
 interface UserListItemProps {
   readonly user: PresenceMessage
@@ -30,16 +29,20 @@ export function UserListItem({
           {localeToFlag(user.meta?.country)} {user.userName}
         </span>
         {hasUnread ? (
-          <ChatBubbleLeftEllipsisIcon className="h-3 w-3 text-cyan-400 animate-pulse" />
+          <span className="text-2xl text-green-400 animate-pulse drop-shadow-lg drop-shadow-green-500/50">
+            ✉️
+          </span>
         ) : null}
       </button>
-      <div className="flex items-center gap-0.5">
-        <UserItemActions
-          user={user}
-          currentUserId={currentUserId}
-          onChallenge={onChallenge}
-        />
-      </div>
+      {!hasUnread && (
+        <div className="flex items-center gap-0.5">
+          <UserItemActions
+            user={user}
+            currentUserId={currentUserId}
+            onChallenge={onChallenge}
+          />
+        </div>
+      )}
     </div>
   )
 }
