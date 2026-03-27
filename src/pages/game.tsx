@@ -402,7 +402,7 @@ export default function Game() {
     <div className="relative min-h-screen p-4 flex flex-col items-center">
       <Seo
         title="Play Billiards Online - Snooker, 9-Ball Pool & Carom Games"
-        description="Experience realistic physics in our free open source online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide. 無料のオンラインビリヤード、スヌーカー、9ボール、3クッション。 무료 온라인 당구, 스누커, 9볼, 3쿠션 게임."
+        description="Unsophisticated free open source online billiards games. Play Snooker, 9-Ball, and Three-Cushion carom against players worldwide. 無料のオンラインビリヤード、スヌーカー、9ボール、3クッション。 무료 온라인 당구, 스누커, 9볼, 3쿠션 게임."
         keywords="billiards, snooker, 9-ball, pool, carom, three-cushion, online game, free, open source, ビリヤード, スヌーカー, 9ボール, 3クッション, オンラインゲーム, 無料, 당구, 스누커, 9볼, 3쿠션, 온라인 게임, 무료"
         canonical="https://scoreboard-tailuge.vercel.app/game"
         ogUrl="https://scoreboard-tailuge.vercel.app/game"
