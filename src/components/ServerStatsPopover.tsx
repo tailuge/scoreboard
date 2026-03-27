@@ -61,7 +61,7 @@ export function ServerStatsPopover({
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const popoverRef = useRef<HTMLDialogElement>(null)
+  const popoverRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
