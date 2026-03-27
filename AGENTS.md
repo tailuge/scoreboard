@@ -21,7 +21,7 @@
 ## Coding Style & Naming Conventions
 - Language: TypeScript with Next.js pages router.
 - Formatting: no semicolons, trailing commas in ES5. 
-- Always run `yarn prettify` when work complete.
+- Always run `yarn prettify` when work complete. always.
 - Linting: ESLint plus TypeScript checks via `yarn lint`.
 - Naming: Prefer descriptive component and test names; API route tests use `api.*.test.ts` (see `src/tests`).
 - Portability: Use `globalThis` instead of `window`, `global`, or `self`.
