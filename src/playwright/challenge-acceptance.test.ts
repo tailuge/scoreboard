@@ -34,10 +34,7 @@ test.describe.serial("challenge acceptance test", () => {
 
       await waitForUserOnline(page1, bobName)
 
-      await page1
-        .locator(`[aria-label="Challenge ${bobName}"]`)
-        .first()
-        .click()
+      await page1.locator(`[aria-label="Challenge ${bobName}"]`).first().click()
 
       await page1.getByRole("button", { name: "Play nineball" }).click()
 

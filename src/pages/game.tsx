@@ -4,6 +4,7 @@ import { GroupBox } from "../components/GroupBox"
 import { User } from "@/components/User"
 import { UsersIcon } from "@heroicons/react/24/solid"
 import { UserList } from "@/components/UserList"
+import { ServerStatsPopover } from "@/components/ServerStatsPopover"
 import { useUser } from "@/contexts/UserContext"
 import { MatchHistoryList } from "@/components/MatchHistoryList"
 import { GameGrid } from "@/components/GameGrid"
@@ -417,13 +418,15 @@ export default function Game() {
           leftBadge={<User />}
           rightBadge={
             <div className="flex items-center gap-2">
-              <div
-                className="user-pill"
-                aria-label={`${presenceCount} users online`}
-              >
-                <UsersIcon className="h-4 w-4" aria-hidden="true" />
-                <span className="font-bold">{presenceCount}</span>
-              </div>
+              <ServerStatsPopover>
+                <div
+                  className="user-pill"
+                  aria-label={`${presenceCount} users online`}
+                >
+                  <UsersIcon className="h-4 w-4" aria-hidden="true" />
+                  <span className="font-bold">{presenceCount}</span>
+                </div>
+              </ServerStatsPopover>
             </div>
           }
         >
