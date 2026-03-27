@@ -62,8 +62,8 @@ export function ServerStatsPopover({
   const [stats, setStats] = useState<ServerStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDialogElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -85,7 +85,7 @@ export function ServerStatsPopover({
   }, [isOpen]);
 
   useEffect(() => {
-    if (isOpen && !loading) {
+    if (isOpen) {
       setLoading(true);
       setError(null);
       fetch(STATS_URL)
@@ -95,14 +95,17 @@ export function ServerStatsPopover({
         })
         .then((data: ServerStats) => {
           setStats(data);
-          setLoading(false);
         })
         .catch((err) => {
           setError(err instanceof Error ? err.message : "Failed to load stats");
+        })
+        .finally(() => {
           setLoading(false);
         });
+    } else {
+      setStats(null);
     }
-  }, [isOpen, loading]);
+  }, [isOpen]);
 
   const handleShare = async () => {
     const url = globalThis.location.href;
@@ -126,35 +129,27 @@ export function ServerStatsPopover({
 
   return (
     <>
-      <div
+      <button
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setIsOpen(!isOpen);
-          }
-        }}
-        style={{ cursor: "pointer" }}
+        className="bg-transparent border-none p-0 appearance-none text-inherit font-inherit cursor-pointer focus:outline-none block"
         aria-label="View server stats"
-        role="button"
-        tabIndex={0}
+        type="button"
       >
         {children}
-      </div>
+      </button>
 
       {isOpen ? (
-        <div
+        <dialog
+          open
           ref={popoverRef}
-          className="absolute top-full right-0 mt-2 w-72 rounded-lg border bg-gray-800/95 backdrop-blur-md shadow-2xl overflow-hidden animate-in"
+          className="absolute top-full right-0 mt-2 w-72 rounded-lg border bg-gray-800/95 backdrop-blur-md shadow-2xl overflow-hidden animate-in block"
           style={{
             borderColor: "rgba(255, 255, 255, 0.15)",
             boxShadow:
               "0 8px 32px rgba(0, 0, 0, 0.6), 0 0 15px rgba(6, 182, 212, 0.1)",
             zIndex: 50,
           }}
-          role="dialog"
-          aria-modal="true"
           aria-label="Online info"
         >
           <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700/50">
@@ -262,7 +257,7 @@ export function ServerStatsPopover({
               </>
             ) : null}
           </div>
-        </div>
+        </dialog>
       ) : null}
     </>
   );
