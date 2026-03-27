@@ -1741,10 +1741,10 @@
   dependencies:
     tslib "^2.8.0"
 
-"@tailuge/messaging@1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@tailuge/messaging/-/messaging-1.12.0.tgz#8ba9f534066ad63f5def7f4d9dba57984f2d8111"
-  integrity sha512-6HS8+4m06x+w9JYNVVniEdbe2fVCHuBjKYOCBlQTr5yTOGa+Hz2LnCQCk1z96TEEwtRBFJbWbuZnct+4F2ns8Q==
+"@tailuge/messaging@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@tailuge/messaging/-/messaging-1.13.0.tgz#e895e3d6029913956738e69440b24bde9f032745"
+  integrity sha512-X5WvC/nlh0/23gUOKfsvvKG4RX9b9g9xjMYJ7bkVRZn1BEYnByTmSeVIhTAKMzCexYUA/Np+PCjHazn1oSQKcQ==
 
 "@tailwindcss/node@4.2.2":
   version "4.2.2"
