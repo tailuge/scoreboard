@@ -61,7 +61,7 @@ export function ServerStatsPopover({
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const popoverRef = useRef<HTMLDivElement>(null)
+  const popoverRef = useRef<HTMLDialogElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -138,9 +138,9 @@ export function ServerStatsPopover({
       </button>
 
       {isOpen ? (
-        <div
+        <dialog
           ref={popoverRef}
-          role="dialog"
+          open={isOpen}
           className="absolute top-full right-0 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-lg border bg-gray-800/95 backdrop-blur-md shadow-2xl overflow-hidden animate-in block"
           style={{
             borderColor: "rgba(255, 255, 255, 0.15)",
@@ -255,7 +255,7 @@ export function ServerStatsPopover({
               </>
             ) : null}
           </div>
-        </div>
+        </dialog>
       ) : null}
     </div>
   )
