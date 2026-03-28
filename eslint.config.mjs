@@ -28,6 +28,9 @@ export default tseslint.config(
   sonarjs.configs.recommended,
   {
     languageOptions: {
+      parserOptions: {
+        warnOnUnsupportedTypeScriptVersion: false,
+      },
       globals: {
         ...globals.browser,
         ...globals.node,
