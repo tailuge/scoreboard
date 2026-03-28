@@ -70,6 +70,9 @@ test.describe("online user count after back navigation", () => {
       timeout: 10000,
     })
 
+    // Give the presence connection a short window to rehydrate after history restore.
+    await page.waitForTimeout(1000)
+
     // Now check the count. The user believes this is not updated correctly.
     const backCountText = await userPill.innerText()
     const backCount = Number.parseInt(backCountText, 10)
