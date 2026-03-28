@@ -240,6 +240,7 @@ export default function Game() {
   }, [cancelChallenge, pendingChallenge])
 
   useEffect(() => {
+    markUsage("lobby")
     const url = new URL(globalThis.location.href)
     const parsed = GameUrl.parseRematch(url)
     if (parsed) {
