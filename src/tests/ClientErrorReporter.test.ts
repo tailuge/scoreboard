@@ -177,6 +177,22 @@ describe("ClientErrorReporter", () => {
       expect(body[0].sid).toBeDefined()
       expect(body[0].sid.length).toBeGreaterThan(0)
     })
+
+    it("should suppress reports containing 'autoconsent'", () => {
+      reporter.start()
+
+      console.warn("autoconsent already initialized")
+      console.error("Critical autoconsent error")
+      console.error("Normal error")
+
+      jest.advanceTimersByTime(5001)
+
+      expect(sendBeaconSpy).toHaveBeenCalledTimes(1)
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body.length).toBe(1)
+      expect(body[0].message).toBe("Normal error")
+    })
   })
 
   describe("flush", () => {

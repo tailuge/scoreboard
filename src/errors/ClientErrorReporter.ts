@@ -168,6 +168,8 @@ export class ClientErrorReporter {
         })
         .join(" ")
 
+      if (message.includes("autoconsent")) return
+
       const key = type + ":" + message
       const count = (this.seen.get(key) ?? 0) + 1
       this.seen.set(key, count)
