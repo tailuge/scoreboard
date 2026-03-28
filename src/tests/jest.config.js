@@ -23,6 +23,6 @@ module.exports = {
     "!src/tests/**", // Exclude test files and mocks in tests dir
     "!src/**/*.d.ts", // Exclude type definitions
     "!**/node_modules/**",
-    "!src/playwrite/**", // explicitly exclude playwright folder from coverage too
+    "!src/playwright/**", // explicitly exclude playwright folder from coverage too
   ],
 };
