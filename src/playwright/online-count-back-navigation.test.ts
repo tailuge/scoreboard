@@ -31,7 +31,7 @@ test.describe("online user count after back navigation", () => {
     // We wait for the count to be at least 1 initially
     await expect(async () => {
       const countText = await userPill.innerText()
-      const count = parseInt(countText, 10)
+      const count = Number.parseInt(countText, 10)
       expect(count).toBeGreaterThanOrEqual(1)
     }).toPass({ timeout: 10000 })
     
@@ -65,7 +65,7 @@ test.describe("online user count after back navigation", () => {
     
     // Now check the count. The user believes this is not updated correctly.
     const backCountText = await userPill.innerText()
-    const backCount = parseInt(backCountText, 10)
+    const backCount = Number.parseInt(backCountText, 10)
     console.log(`Online count immediately after back navigation: ${backCount}`)
     
     // If this fails, it confirms the problem that the count is not immediately restored/updated.

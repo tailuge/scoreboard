@@ -55,7 +55,7 @@ describe("LiveTableItem", () => {
 
   it("defaults to nineball ruleType if not provided in game", () => {
     const gameWithoutRule = { ...mockGame, ruleType: undefined }
-    render(<LiveTableItem game={gameWithoutRule as any} />)
+    render(<LiveTableItem game={gameWithoutRule} />)
 
     // MatchResultCard renders an icon with the ball number.
     // For nineball, it uses (timestamp % 15) + 1. Timestamp 0 => 1.
