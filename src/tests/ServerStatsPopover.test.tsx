@@ -12,7 +12,7 @@ describe("ServerStatsPopover", () => {
     },
     ip_cache: {
       "127.0.0.1": "US|California",
-      "192.168.1.1": "GB|London",
+      "127.x.x.1": "GB|London",
     },
   }
 
@@ -99,7 +99,9 @@ describe("ServerStatsPopover", () => {
     )
 
     fireEvent.click(screen.getByText("Trigger"))
-    await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument()
+    )
 
     fireEvent.click(screen.getByRole("button", { name: /close/i }))
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
@@ -113,14 +115,18 @@ describe("ServerStatsPopover", () => {
     )
 
     fireEvent.click(screen.getByText("Trigger"))
-    await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument()
+    )
 
     fireEvent.click(screen.getByRole("button", { name: /share/i }))
 
-    expect(globalThis.navigator.share).toHaveBeenCalledWith(expect.objectContaining({
-      title: "Billiards Scoreboard",
-      url: expect.any(String),
-    }))
+    expect(globalThis.navigator.share).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Billiards Scoreboard",
+        url: expect.any(String),
+      })
+    )
   })
 
   it("copies URL to clipboard if navigator.share is not available", async () => {
@@ -137,11 +143,15 @@ describe("ServerStatsPopover", () => {
     )
 
     fireEvent.click(screen.getByText("Trigger"))
-    await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument()
+    )
 
     fireEvent.click(screen.getByRole("button", { name: /share/i }))
 
-    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith(expect.any(String))
+    expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith(
+      expect.any(String)
+    )
   })
 
   it("closes when clicking outside", async () => {
@@ -164,11 +174,11 @@ describe("ServerStatsPopover", () => {
   it("formats uptime correctly for just seconds", async () => {
     const shortUptimeStats = {
       ...mockStats,
-      uptime: { days: 0, hours: 0, mins: 0, seconds: 45 }
+      uptime: { days: 0, hours: 0, mins: 0, seconds: 45 },
     }
     globalThis.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(shortUptimeStats)
+      json: () => Promise.resolve(shortUptimeStats),
     })
 
     render(
@@ -183,11 +193,11 @@ describe("ServerStatsPopover", () => {
   it("formats uptime correctly for 0s", async () => {
     const zeroUptimeStats = {
       ...mockStats,
-      uptime: { days: 0, hours: 0, mins: 0, seconds: 0 }
+      uptime: { days: 0, hours: 0, mins: 0, seconds: 0 },
     }
     globalThis.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(zeroUptimeStats)
+      json: () => Promise.resolve(zeroUptimeStats),
     })
 
     render(
@@ -200,8 +210,10 @@ describe("ServerStatsPopover", () => {
   })
 
   it("handles share errors gracefully", async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
-    ;(globalThis.navigator.share as jest.Mock).mockRejectedValue(new Error("Share failed"))
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+    ;(globalThis.navigator.share as jest.Mock).mockRejectedValue(
+      new Error("Share failed")
+    )
 
     render(
       <ServerStatsPopover>
@@ -210,12 +222,17 @@ describe("ServerStatsPopover", () => {
     )
 
     fireEvent.click(screen.getByText("Trigger"))
-    await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument()
+    )
 
     fireEvent.click(screen.getByRole("button", { name: /share/i }))
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith("Share failed:", expect.any(Error))
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Share failed:",
+        expect.any(Error)
+      )
     })
     consoleSpy.mockRestore()
   })

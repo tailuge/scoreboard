@@ -333,7 +333,6 @@ describe("UserProvider", () => {
       expect(screen.getByTestId("user-id")).toHaveTextContent("initial-id")
     })
     expect(screen.getByTestId("user-id")).not.toHaveTextContent("late-id")
-
     ;(useRouter as jest.Mock).mockReturnValue({
       isReady: true,
       query: { userId: "late-id" },

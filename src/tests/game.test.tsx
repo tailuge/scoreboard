@@ -52,16 +52,6 @@ describe("Game Page", () => {
       "/api/rank": () => mockFetchResponse([]),
       "/api/match-results": () => mockFetchResponse([]),
     })
-
-    // Mock window.location minimally
-    delete (globalThis as any).location
-    ;(globalThis as any).location = {
-      href: "http://localhost/game",
-      toString: () => "http://localhost/game",
-      assign: jest.fn(),
-      replace: jest.fn(),
-      reload: jest.fn(),
-    }
   })
 
   it("renders the game selection page and online users", async () => {
@@ -193,7 +183,9 @@ describe("Game Page", () => {
       ],
       nextTurnId: "other-id",
     }
-    const parseSpy = jest.spyOn(GameUrl, "parseRematch").mockReturnValue(rematchData)
+    const parseSpy = jest
+      .spyOn(GameUrl, "parseRematch")
+      .mockReturnValue(rematchData)
 
     mockMessaging.users = [{ userId: "other-id", userName: "Other" }]
 
@@ -217,7 +209,9 @@ describe("Game Page", () => {
       lastScores: [],
       nextTurnId: "me-id",
     }
-    const parseSpy = jest.spyOn(GameUrl, "parseRematch").mockReturnValue(rematchData)
+    const parseSpy = jest
+      .spyOn(GameUrl, "parseRematch")
+      .mockReturnValue(rematchData)
 
     mockMessaging.incomingChallenge = {
       messageType: "challenge",
@@ -268,7 +262,7 @@ describe("Game Page", () => {
   it("handles chat selection and marking as read", async () => {
     mockMessaging.users = [
       { userId: "me-id", userName: "Me" },
-      { userId: "other-id", userName: "Other" }
+      { userId: "other-id", userName: "Other" },
     ]
     mockMessaging.unreadUsers = ["other-id"]
 
@@ -286,7 +280,7 @@ describe("Game Page", () => {
   it("handles challenge error", async () => {
     mockMessaging.users = [
       { userId: "me-id", userName: "Me" },
-      { userId: "other-id", userName: "Other" }
+      { userId: "other-id", userName: "Other" },
     ]
     mockMessaging.challenge.mockRejectedValueOnce(new Error("Failed"))
 
@@ -319,9 +313,13 @@ describe("Game Page", () => {
 
     render(<Game />)
 
-    const acceptBtn = await screen.findByRole("button", { name: "Accept challenge" })
+    const acceptBtn = await screen.findByRole("button", {
+      name: "Accept challenge",
+    })
     fireEvent.click(acceptBtn)
 
-    expect(await screen.findByText("Challenge is missing table information.")).toBeInTheDocument()
+    expect(
+      await screen.findByText("Challenge is missing table information.")
+    ).toBeInTheDocument()
   })
 })

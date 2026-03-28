@@ -11,19 +11,25 @@ describe("ChatCard", () => {
 
   const mockMessages: ChatMessage[] = [
     {
+      messageType: "chat",
       senderId: "alice-id",
+      recipientId: "me-id",
       text: "Hello!",
-      meta: { ts: 1000 },
+      meta: { ts: 1000, ua: "", ip: "", origin: "", method: "", country: "" },
     },
     {
+      messageType: "chat",
       senderId: "me-id",
+      recipientId: "alice-id",
       text: "Hi Alice!",
-      meta: { ts: 2000 },
+      meta: { ts: 2000, ua: "", ip: "", origin: "", method: "", country: "" },
     },
     {
+      messageType: "chat",
       senderId: "alice-id",
+      recipientId: "me-id",
       text: "No meta here",
-    }
+    },
   ]
 
   beforeEach(() => {

@@ -15,6 +15,15 @@ afterAll(() => {
   jest.restoreAllMocks()
 })
 
+// Suppress expected console.error from error handling tests
+const originalConsoleError = console.error
+console.error = function (...args: any[]) {
+  if (args[0]?.includes?.("Failed to send challenge")) {
+    return
+  }
+  originalConsoleError.apply(console, args)
+} as any
+
 jest.mock("@vercel/kv", () => ({
   kv: mockKv,
 }))

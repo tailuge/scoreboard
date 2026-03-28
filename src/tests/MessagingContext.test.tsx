@@ -44,7 +44,6 @@ describe("MessagingContext", () => {
       stop: jest.fn(),
       joinLobby: jest.fn().mockResolvedValue(mockLobby),
     }
-
     ;(MessagingClient as jest.Mock).mockImplementation(() => mockClient)
     ;(useUser as jest.Mock).mockReturnValue({
       userId: "user-1",
@@ -52,11 +51,7 @@ describe("MessagingContext", () => {
     })
   })
 
-  function TestComponent({
-    callback,
-  }: {
-    callback: (messaging: any) => void
-  }) {
+  function TestComponent({ callback }: { callback: (messaging: any) => void }) {
     const messaging = useMessaging()
     callback(messaging)
     return null
@@ -321,24 +316,24 @@ describe("MessagingContext", () => {
       </MessagingProvider>
     )
 
-    await expect(
-      capturedMessaging.challenge("u2", "9b")
-    ).rejects.toThrow("Lobby not initialized")
+    await expect(capturedMessaging.challenge("u2", "9b")).rejects.toThrow(
+      "Lobby not initialized"
+    )
     await expect(
       capturedMessaging.acceptChallenge("u2", "9b", "t1")
     ).rejects.toThrow("Lobby not initialized")
     await expect(
       capturedMessaging.declineChallenge("u2", "9b")
     ).rejects.toThrow("Lobby not initialized")
-    await expect(
-      capturedMessaging.cancelChallenge("u2", "9b")
-    ).rejects.toThrow("Lobby not initialized")
-    await expect(
-      capturedMessaging.updatePresence({})
-    ).rejects.toThrow("Lobby not initialized")
-    await expect(
-      capturedMessaging.sendChat("u2", "hi")
-    ).rejects.toThrow("Lobby not initialized")
+    await expect(capturedMessaging.cancelChallenge("u2", "9b")).rejects.toThrow(
+      "Lobby not initialized"
+    )
+    await expect(capturedMessaging.updatePresence({})).rejects.toThrow(
+      "Lobby not initialized"
+    )
+    await expect(capturedMessaging.sendChat("u2", "hi")).rejects.toThrow(
+      "Lobby not initialized"
+    )
   })
 
   it("handles lobby re-joining when userId changes", async () => {
@@ -349,7 +344,6 @@ describe("MessagingContext", () => {
     )
 
     await waitFor(() => expect(mockClient.joinLobby).toHaveBeenCalledTimes(1))
-
     ;(useUser as jest.Mock).mockReturnValue({
       userId: "user-new",
       userName: "User New",

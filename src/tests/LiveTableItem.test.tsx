@@ -27,7 +27,10 @@ describe("LiveTableItem", () => {
     // Minimal mock to avoid "Not implemented: navigation" error
     // We don't delete location, just mock the setter behavior if possible or ignore the error
     jest.spyOn(console, "error").mockImplementation((msg) => {
-      if (typeof msg === "string" && msg.includes("Not implemented: navigation"))
+      if (
+        typeof msg === "string" &&
+        msg.includes("Not implemented: navigation")
+      )
         return
       // console.log('CAUGHT ERROR:', msg)
     })
@@ -65,10 +68,7 @@ describe("LiveTableItem", () => {
   it("handles missing player names", () => {
     const gameWithMissingNames: ActiveGame = {
       ...mockGame,
-      players: [
-        { id: "1" } as any,
-        { id: "2" } as any
-      ]
+      players: [{ id: "1" } as any, { id: "2" } as any],
     }
     render(<LiveTableItem game={gameWithMissingNames} />)
     expect(screen.getByText("Player 1")).toBeInTheDocument()
