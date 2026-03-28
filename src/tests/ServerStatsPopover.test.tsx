@@ -59,7 +59,7 @@ describe("ServerStatsPopover", () => {
 
     fireEvent.click(screen.getByText("Trigger"))
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument()
+    expect(screen.getByRole("dialog")).toHaveClass("absolute", "right-0")
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument()
 
     await waitFor(() => {
