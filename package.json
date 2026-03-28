@@ -31,7 +31,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@tailuge/messaging": "1.13.0",
+    "@tailuge/messaging": "1.14.0",
     "@tailwindcss/postcss": "4.2.2",
     "@vercel/analytics": "2.0.1",
     "@vercel/kv": "3.0.0",
