@@ -54,8 +54,10 @@ function formatUptime(uptime: ServerStats["uptime"]): string {
 
 export function ServerStatsPopover({
   children,
+  onOpen,
 }: {
   readonly children: React.ReactNode
+  readonly onOpen?: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [stats, setStats] = useState<ServerStats | null>(null)
@@ -129,7 +131,10 @@ export function ServerStatsPopover({
     <div className="relative inline-block">
       <button
         ref={triggerRef}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (onOpen) onOpen()
+          setIsOpen(!isOpen)
+        }}
         className="bg-transparent border-none p-0 appearance-none text-inherit font-inherit cursor-pointer focus:outline-none block"
         aria-label="View server stats"
         type="button"
