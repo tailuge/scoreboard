@@ -6,6 +6,7 @@ export const ALLOWED_ORIGINS = new Set([
   "http://localhost:3000",
   "http://localhost:8080",
   "https://tailuge.github.io",
+  "https://billiards-network.onrender.com/",
   GAME_BASE_URL,
   "https://scoreboard-tailuge.vercel.app",
   "https://billiards.tailuge.workers.dev",
