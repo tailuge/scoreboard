@@ -10,7 +10,44 @@
       content="A TUI-inspired dashboard for monitoring usage metrics."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="usage.css" />
+    <style>
+      body {
+        background-color: #000;
+        color: #fff;
+        font-family: "IBM Plex Mono", monospace;
+        margin: 0;
+        padding: 20px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+      }
+      .title {
+        font-size: 1.5rem;
+        margin: 0;
+      }
+      .server-stats-links a {
+        color: #0055ff;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 0.8rem;
+      }
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+      }
+      .chart-container {
+        background-color: #111;
+        border: 1px solid #333;
+        padding: 10px;
+        height: 400px;
+      }
+    </style>
   </head>
   <body>
     <header class="header">
@@ -35,21 +72,33 @@
     ></script>
 
     <script type="module">
-      const METRICS = [
-        { id: "lobby", label: "LOBBY TRAFFIC", color: "#0055ff" },
-        { id: "createTable", label: "CHALLENGES", color: "#ff3e00" },
-        { id: "joinTable", label: "ACCEPTS", color: "#4caf50" },
-        { id: "game", label: "GAME ACTIVITY", color: "#9c27b0" },
+      const GROUPS = [
+        {
+          id: "lobby-game",
+          label: "LOBBY & GAME ACTIVITY",
+          metrics: [
+            { id: "lobby", label: "LOBBY TRAFFIC", color: "#0055ff" },
+            { id: "game", label: "GAME ACTIVITY", color: "#9c27b0" },
+          ],
+        },
+        {
+          id: "challenges-accepts",
+          label: "CHALLENGES & ACCEPTS",
+          metrics: [
+            { id: "createTable", label: "CHALLENGES", color: "#ff3e00" },
+            { id: "joinTable", label: "ACCEPTS", color: "#4caf50" },
+          ],
+        },
       ]
 
       const chartGrid = document.getElementById("chart-grid")
 
-      METRICS.forEach((metric) => {
+      GROUPS.forEach((group) => {
         const container = document.createElement("div")
-        container.id = metric.id
+        container.id = group.id
         container.className = "chart-container"
         chartGrid.appendChild(container)
-        plotMetric(metric)
+        plotGroup(group)
       })
 
       async function getData(url) {
@@ -57,34 +106,37 @@
         return response.json()
       }
 
-      async function plotMetric(metricConfig) {
-        const url = `/api/usage/${metricConfig.id}`
-        const rawData = await getData(url)
-        const data = []
+      async function plotGroup(groupConfig) {
+        const traces = await Promise.all(
+          groupConfig.metrics.map(async (metric) => {
+            const url = `/api/usage/${metric.id}`
+            const rawData = await getData(url)
+            const data = []
 
-        for (let i = 0; i < rawData.length; i += 2) {
-          data.push({ date: rawData[i].date, clicks: rawData[i + 1] })
-        }
+            for (let i = 0; i < rawData.length; i += 2) {
+              data.push({ date: rawData[i].date, clicks: rawData[i + 1] })
+            }
 
-        data.sort((a, b) => new Date(a.date) - new Date(b.date))
+            data.sort((a, b) => new Date(a.date) - new Date(b.date))
 
-        const plotData = [
-          {
-            x: data.map((d) => d.date),
-            y: data.map((d) => d.clicks),
-            type: "scatter",
-            mode: "lines",
-            line: { color: metricConfig.color, width: 2 },
-          },
-        ]
+            return {
+              x: data.map((d) => d.date),
+              y: data.map((d) => d.clicks),
+              name: metric.label,
+              type: "scatter",
+              mode: "lines",
+              line: { color: metric.color, width: 2 },
+            }
+          })
+        )
 
         const layout = {
           title: {
-            text: metricConfig.label,
+            text: groupConfig.label,
             font: {
               family: "'IBM Plex Mono', monospace",
               size: 11,
-              color: "#666",
+              color: "#888",
             },
             x: 0,
             xanchor: "left",
@@ -94,8 +146,8 @@
             tickangle: 0,
             dtick: "M3",
             tickformat: "%b %Y",
-            gridcolor: "#f0f0f0",
-            linecolor: "#f0f0f0",
+            gridcolor: "#333",
+            linecolor: "#333",
             tickfont: {
               family: "'DM Sans', sans-serif",
               size: 9,
@@ -104,14 +156,22 @@
             zeroline: false,
           },
           yaxis: {
-            gridcolor: "#f0f0f0",
-            linecolor: "#f0f0f0",
+            gridcolor: "#333",
+            linecolor: "#333",
             tickfont: {
               family: "'DM Sans', sans-serif",
               size: 9,
               color: "#999",
             },
             zeroline: false,
+          },
+          legend: {
+            font: {
+              family: "'DM Sans', sans-serif",
+              size: 9,
+              color: "#999",
+            },
+            bgcolor: "rgba(0,0,0,0)",
           },
           plot_bgcolor: "rgba(0,0,0,0)",
           paper_bgcolor: "rgba(0,0,0,0)",
@@ -122,10 +182,10 @@
         const config = {
           responsive: true,
           displayModeBar: false,
-          staticPlot: true,
+          staticPlot: false,
         }
 
-        Plotly.newPlot(metricConfig.id, plotData, layout, config)
+        Plotly.newPlot(groupConfig.id, traces, layout, config)
       }
     </script>
   </body>
