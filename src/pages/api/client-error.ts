@@ -8,7 +8,7 @@ export const config = {
 }
 
 const LOGS_KEY = "logs:collection"
-const MAX_SESSIONS = 200
+const MAX_SESSIONS = 50
 const TTL_SECONDS = 259200
 
 async function handlePost(req: NextRequest) {
@@ -28,7 +28,16 @@ async function handlePost(req: NextRequest) {
     for (const log of logs) {
       if (!log.sid) continue
       const existing = grouped.get(log.sid) || []
-      existing.push({ ...log, ua, region, city, country })
+      const truncatedLog = {
+        ...log,
+        message: log.message?.slice(0, 2000),
+        stack: log.stack?.slice(0, 2000),
+        ua,
+        region,
+        city,
+        country,
+      }
+      existing.push(truncatedLog)
       grouped.set(log.sid, existing)
     }
 

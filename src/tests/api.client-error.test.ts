@@ -133,4 +133,36 @@ describe("client-error API handler", () => {
     const data = await res.json()
     expect(data.ok).toBe(true)
   })
+
+  it("should truncate long messages and stacks", async () => {
+    const longString = "a".repeat(3000)
+    const logs = [{ sid: "s1", type: "error", message: longString, stack: longString, ts: 1000 }]
+    const req = {
+      method: "POST",
+      json: async () => logs,
+      headers: {
+        get: () => null,
+      },
+    } as unknown as NextRequest
+
+    ;(kv.get as jest.Mock).mockResolvedValue([])
+
+    await handler(req)
+
+    expect(kv.set).toHaveBeenCalledWith(
+      "logs:collection",
+      expect.arrayContaining([
+        expect.objectContaining({
+          sid: "s1",
+          logs: expect.arrayContaining([
+            expect.objectContaining({
+              message: "a".repeat(2000),
+              stack: "a".repeat(2000),
+            }),
+          ]),
+        }),
+      ]),
+      expect.any(Object)
+    )
+  })
 })

@@ -55,19 +55,19 @@ function SessionItem({
             alignItems: "center",
           }}
         >
-          <div style={{ fontSize: "11px", fontWeight: "bold" }}>
+          <div style={{ fontSize: "13px", fontWeight: "bold" }}>
             {session.sid}
           </div>
-          <div style={{ fontSize: "10px", color: "white" }}>
-            {new Date(session.ts).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
+          <div style={{ fontSize: "12px", color: "white" }}>
+            {new Date(session.ts).toLocaleString([], {
+              dateStyle: "short",
+              timeStyle: "short",
             })}
           </div>
         </div>
         <div
           style={{
-            fontSize: "10px",
+            fontSize: "11px",
             color: "white",
             display: "flex",
             gap: "4px",
@@ -87,7 +87,7 @@ function SessionItem({
         </div>
         <div
           style={{
-            fontSize: "9px",
+            fontSize: "10px",
             color: "#888",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -122,7 +122,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
           color: "white",
         }}
       >
-        <h3 style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
+        <h3 style={{ margin: "0 0 10px 0", fontSize: "16px" }}>
           Sessions ({sessions.length})
         </h3>
         {sessions.length === 0 ? (
