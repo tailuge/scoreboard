@@ -11,6 +11,76 @@ const LOGS_KEY = "logs:collection"
 const MAX_SESSIONS = 50
 const TTL_SECONDS = 259200
 
+interface Metadata {
+  ua?: string
+  region?: string
+  city?: string
+  country?: string
+}
+
+function extractMetadataFromHeaders(req: NextRequest): Metadata {
+  return {
+    ua: req.headers.get("user-agent") || undefined,
+    region: req.headers.get("x-vercel-id")?.split("::")[0] || undefined,
+    city: req.headers.get("x-vercel-ip-city") || undefined,
+    country: req.headers.get("x-vercel-ip-country") || undefined,
+  }
+}
+
+function groupAndTruncateLogs(
+  logs: ClientLog[],
+  metadata: Metadata
+): Map<string, ClientLog[]> {
+  const grouped = new Map<string, ClientLog[]>()
+  for (const log of logs) {
+    if (!log.sid) continue
+    const existing = grouped.get(log.sid) || []
+    const truncatedLog = {
+      ...log,
+      message: log.message?.slice(0, 2000),
+      stack: log.stack?.slice(0, 2000),
+      ...metadata,
+      version: log.version,
+      origin: log.origin,
+    }
+    existing.push(truncatedLog)
+    grouped.set(log.sid, existing)
+  }
+  return grouped
+}
+
+function applyLogsToCollection(
+  collectionMap: Map<string, SessionEntry>,
+  groupedLogs: Map<string, ClientLog[]>,
+  metadata: Metadata
+): void {
+  for (const [sid, sessionLogs] of groupedLogs) {
+    const existing = collectionMap.get(sid)
+    if (existing) {
+      existing.logs.push(...sessionLogs)
+      existing.ts = Math.max(existing.ts, ...sessionLogs.map((l) => l.ts))
+      if (metadata.ua) existing.ua = metadata.ua
+      if (metadata.city) existing.city = metadata.city
+      if (metadata.country) existing.country = metadata.country
+      if (metadata.region) existing.region = metadata.region
+      if (sessionLogs[0]?.version) existing.version = sessionLogs[0].version
+      if (sessionLogs[0]?.origin) existing.origin = sessionLogs[0].origin
+    } else {
+      collectionMap.set(sid, {
+        sid,
+        ua: metadata.ua || "",
+        ts: Math.max(...sessionLogs.map((l) => l.ts)),
+        logs: sessionLogs,
+        city: metadata.city,
+        country: metadata.country,
+        region: metadata.region,
+        version: sessionLogs[0]?.version,
+        origin: sessionLogs[0]?.origin,
+      })
+    }
+  }
+}
+
 async function handlePost(req: NextRequest) {
   try {
     const body = await req.json()
@@ -19,58 +89,13 @@ async function handlePost(req: NextRequest) {
     }
 
     const logs: ClientLog[] = body
-    const ua = req.headers.get("user-agent") || undefined
-    const region = req.headers.get("x-vercel-id")?.split("::")[0] || undefined
-    const city = req.headers.get("x-vercel-ip-city") || undefined
-    const country = req.headers.get("x-vercel-ip-country") || undefined
-
-    const grouped = new Map<string, ClientLog[]>()
-    for (const log of logs) {
-      if (!log.sid) continue
-      const existing = grouped.get(log.sid) || []
-      const truncatedLog = {
-        ...log,
-        message: log.message?.slice(0, 2000),
-        stack: log.stack?.slice(0, 2000),
-        ua,
-        region,
-        city,
-        country,
-        version: log.version,
-        origin: log.origin,
-      }
-      existing.push(truncatedLog)
-      grouped.set(log.sid, existing)
-    }
+    const metadata = extractMetadataFromHeaders(req)
+    const grouped = groupAndTruncateLogs(logs, metadata)
 
     const collection: SessionEntry[] = (await kv.get(LOGS_KEY)) || []
     const collectionMap = new Map(collection.map((s) => [s.sid, s]))
 
-    for (const [sid, sessionLogs] of grouped) {
-      const existing = collectionMap.get(sid)
-      if (existing) {
-        existing.logs.push(...sessionLogs)
-        existing.ts = Math.max(existing.ts, ...sessionLogs.map((l) => l.ts))
-        if (ua) existing.ua = ua
-        if (city) existing.city = city
-        if (country) existing.country = country
-        if (region) existing.region = region
-        if (sessionLogs[0]?.version) existing.version = sessionLogs[0].version
-        if (sessionLogs[0]?.origin) existing.origin = sessionLogs[0].origin
-      } else {
-        collectionMap.set(sid, {
-          sid,
-          ua,
-          ts: Math.max(...sessionLogs.map((l) => l.ts)),
-          logs: sessionLogs,
-          city,
-          country,
-          region,
-          version: sessionLogs[0]?.version,
-          origin: sessionLogs[0]?.origin,
-        })
-      }
-    }
+    applyLogsToCollection(collectionMap, grouped, metadata)
 
     const updated = Array.from(collectionMap.values())
     updated.sort((a, b) => b.ts - a.ts)

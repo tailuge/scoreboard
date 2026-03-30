@@ -75,16 +75,16 @@ function SessionItem({
             flexWrap: "wrap",
           }}
         >
-          {os !== "Unknown" ? (
+          {os === "Unknown" ? null : (
             <span>
               {osIcon(os)} {os}
             </span>
-          ) : null}
-          {browser !== "Unknown" ? (
+          )}
+          {browser === "Unknown" ? null : (
             <span>
               {browserIcon(browser)} {browser}
             </span>
-          ) : null}
+          )}
           {country ? <span>{localeToFlag(country)}</span> : null}
           {city ? <span>{decodeURIComponent(city)}</span> : null}
           {region ? <span style={{ color: "white" }}>({region})</span> : null}
