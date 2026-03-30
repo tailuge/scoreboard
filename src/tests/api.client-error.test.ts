@@ -136,7 +136,15 @@ describe("client-error API handler", () => {
 
   it("should truncate long messages and stacks", async () => {
     const longString = "a".repeat(3000)
-    const logs = [{ sid: "s1", type: "error", message: longString, stack: longString, ts: 1000 }]
+    const logs = [
+      {
+        sid: "s1",
+        type: "error",
+        message: longString,
+        stack: longString,
+        ts: 1000,
+      },
+    ]
     const req = {
       method: "POST",
       json: async () => logs,
