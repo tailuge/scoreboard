@@ -11,6 +11,8 @@ const mockSessions: SessionEntry[] = [
     city: "New York",
     country: "US",
     region: "iad1",
+    version: "1.0.0",
+    origin: "https://example.com",
     logs: [
       {
         type: "error",
@@ -65,6 +67,9 @@ describe("LogViewer", () => {
     expect(screen.getByText(/London/)).toBeInTheDocument()
     expect(screen.getByText("(iad1)")).toBeInTheDocument()
     expect(screen.getByText("(lhr1)")).toBeInTheDocument()
+    // Check for version and origin
+    expect(screen.getByText("v1.0.0")).toBeInTheDocument()
+    expect(screen.getByText("example.com")).toBeInTheDocument()
   })
 
   it("shows logs when a session is selected", () => {

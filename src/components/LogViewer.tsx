@@ -84,6 +84,14 @@ function SessionItem({
           {country ? <span>{localeToFlag(country)}</span> : null}
           {city ? <span>{decodeURIComponent(city)}</span> : null}
           {region ? <span style={{ color: "white" }}>({region})</span> : null}
+          {session.version ? (
+            <span style={{ color: "#aaa" }}>v{session.version}</span>
+          ) : null}
+          {session.origin ? (
+            <span style={{ color: "#888", fontSize: "10px" }}>
+              {session.origin.replace(/^https?:\/\//, "")}
+            </span>
+          ) : null}
         </div>
         <div
           style={{

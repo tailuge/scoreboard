@@ -17,6 +17,12 @@ jest.mock("@tailuge/messaging", () => {
   }
 })
 
+function TestComponent({ callback }: { callback: (messaging: any) => void }) {
+  const messaging = useMessaging()
+  callback(messaging)
+  return null
+}
+
 describe("MessagingContext", () => {
   let mockLobby: any
   let mockClient: any
@@ -50,12 +56,6 @@ describe("MessagingContext", () => {
       userName: "User One",
     })
   })
-
-  function TestComponent({ callback }: { callback: (messaging: any) => void }) {
-    const messaging = useMessaging()
-    callback(messaging)
-    return null
-  }
 
   it("initializes and joins lobby", async () => {
     render(

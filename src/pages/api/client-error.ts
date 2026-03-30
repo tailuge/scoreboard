@@ -36,6 +36,8 @@ async function handlePost(req: NextRequest) {
         region,
         city,
         country,
+        version: log.version,
+        origin: log.origin,
       }
       existing.push(truncatedLog)
       grouped.set(log.sid, existing)
@@ -53,6 +55,8 @@ async function handlePost(req: NextRequest) {
         existing.city = city
         existing.country = country
         existing.region = region
+        existing.version = sessionLogs[0]?.version
+        existing.origin = sessionLogs[0]?.origin
       } else {
         collectionMap.set(sid, {
           sid,
@@ -62,6 +66,8 @@ async function handlePost(req: NextRequest) {
           city,
           country,
           region,
+          version: sessionLogs[0]?.version,
+          origin: sessionLogs[0]?.origin,
         })
       }
     }
