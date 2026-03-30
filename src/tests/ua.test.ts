@@ -1,31 +1,10 @@
 import { detectOS, detectBrowser, browserIcon, osIcon } from "@/utils/ua"
 
 describe("UA Utils", () => {
-  const originalNavigator = globalThis.navigator
-
-  const setNavigator = (nav: any) => {
-    Object.defineProperty(globalThis, "navigator", {
-      value: nav,
-      configurable: true,
-    })
-  }
-
-  afterEach(() => {
-    setNavigator(originalNavigator)
-  })
-
   describe("detectOS", () => {
-    it("should return Unknown if navigator is not defined", () => {
-      setNavigator(undefined)
+    it("should return Unknown if input is empty", () => {
       expect(detectOS()).toBe("Unknown")
-    })
-
-    it("should use userAgentData.platform if available", () => {
-      setNavigator({
-        userAgentData: { platform: "macOS" },
-        userAgent: "something else",
-      })
-      expect(detectOS()).toBe("macOS")
+      expect(detectOS("")).toBe("Unknown")
     })
 
     const osTests = [
@@ -38,15 +17,14 @@ describe("UA Utils", () => {
     ]
 
     it.each(osTests)("should detect %s as %s", (userAgent, expectedOS) => {
-      setNavigator({ userAgent })
-      expect(detectOS()).toBe(expectedOS)
+      expect(detectOS(userAgent)).toBe(expectedOS)
     })
   })
 
   describe("detectBrowser", () => {
-    it("should return Unknown if navigator is not defined", () => {
-      setNavigator(undefined)
+    it("should return Unknown if input is empty", () => {
       expect(detectBrowser()).toBe("Unknown")
+      expect(detectBrowser("")).toBe("Unknown")
     })
 
     const browserTests = [
@@ -62,8 +40,7 @@ describe("UA Utils", () => {
     it.each(browserTests)(
       "should detect browser from %s as %s",
       (userAgent, expectedBrowser) => {
-        setNavigator({ userAgent })
-        expect(detectBrowser()).toBe(expectedBrowser)
+        expect(detectBrowser(userAgent)).toBe(expectedBrowser)
       }
     )
   })

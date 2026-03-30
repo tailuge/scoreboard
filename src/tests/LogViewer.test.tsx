@@ -114,7 +114,7 @@ describe("LogViewer", () => {
     expect(typeSpan.style.color).toBe("blue")
   })
 
-  it("uses log region if session region is missing", () => {
+  it("does not use log region if session region is missing", () => {
     const sessionWithNoRegion: SessionEntry = {
       ...mockSessions[0],
       sid: "session4",
@@ -122,7 +122,7 @@ describe("LogViewer", () => {
       logs: [{ ...mockSessions[0].logs[0], region: "fallback-region" }],
     }
     render(<LogViewer sessions={[sessionWithNoRegion]} />)
-    expect(screen.getByText("(fallback-region)")).toBeInTheDocument()
+    expect(screen.queryByText("(fallback-region)")).not.toBeInTheDocument()
   })
 
   it("shows 'Select a session' message when no session is selected", () => {

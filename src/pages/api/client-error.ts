@@ -19,8 +19,8 @@ async function handlePost(req: NextRequest) {
     }
 
     const logs: ClientLog[] = body
-    const ua = req.headers.get("user-agent") || "Unknown"
-    const region = req.headers.get("x-vercel-id")?.split("::")[0] || "unknown"
+    const ua = req.headers.get("user-agent") || undefined
+    const region = req.headers.get("x-vercel-id")?.split("::")[0] || undefined
     const city = req.headers.get("x-vercel-ip-city") || undefined
     const country = req.headers.get("x-vercel-ip-country") || undefined
 
@@ -51,12 +51,12 @@ async function handlePost(req: NextRequest) {
       if (existing) {
         existing.logs.push(...sessionLogs)
         existing.ts = Math.max(existing.ts, ...sessionLogs.map((l) => l.ts))
-        existing.ua = ua
-        existing.city = city
-        existing.country = country
-        existing.region = region
-        existing.version = sessionLogs[0]?.version
-        existing.origin = sessionLogs[0]?.origin
+        if (ua) existing.ua = ua
+        if (city) existing.city = city
+        if (country) existing.country = country
+        if (region) existing.region = region
+        if (sessionLogs[0]?.version) existing.version = sessionLogs[0].version
+        if (sessionLogs[0]?.origin) existing.origin = sessionLogs[0].origin
       } else {
         collectionMap.set(sid, {
           sid,
