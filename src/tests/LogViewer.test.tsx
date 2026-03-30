@@ -11,6 +11,8 @@ const mockSessions: SessionEntry[] = [
     city: "New York",
     country: "US",
     region: "iad1",
+    version: "1.0.0",
+    origin: "https://example.com",
     logs: [
       {
         type: "error",
@@ -65,6 +67,9 @@ describe("LogViewer", () => {
     expect(screen.getByText(/London/)).toBeInTheDocument()
     expect(screen.getByText("(iad1)")).toBeInTheDocument()
     expect(screen.getByText("(lhr1)")).toBeInTheDocument()
+    // Check for version and origin
+    expect(screen.getByText("v1.0.0")).toBeInTheDocument()
+    expect(screen.getByText("example.com")).toBeInTheDocument()
   })
 
   it("shows logs when a session is selected", () => {
@@ -109,7 +114,7 @@ describe("LogViewer", () => {
     expect(typeSpan.style.color).toBe("blue")
   })
 
-  it("uses log region if session region is missing", () => {
+  it("does not use log region if session region is missing", () => {
     const sessionWithNoRegion: SessionEntry = {
       ...mockSessions[0],
       sid: "session4",
@@ -117,7 +122,7 @@ describe("LogViewer", () => {
       logs: [{ ...mockSessions[0].logs[0], region: "fallback-region" }],
     }
     render(<LogViewer sessions={[sessionWithNoRegion]} />)
-    expect(screen.getByText("(fallback-region)")).toBeInTheDocument()
+    expect(screen.queryByText("(fallback-region)")).not.toBeInTheDocument()
   })
 
   it("shows 'Select a session' message when no session is selected", () => {

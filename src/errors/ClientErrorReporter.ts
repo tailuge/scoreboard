@@ -49,9 +49,12 @@ interface ErrorReport {
   url: string
   ts: number
   sid: string
+  version?: string
+  origin?: string
 }
 
 import { getUID } from "@/utils/uid"
+import pkg from "../../package.json"
 
 export class ClientErrorReporter {
   private readonly endpoint: string
@@ -183,6 +186,8 @@ export class ClientErrorReporter {
         url: globalThis.location?.href ?? "",
         ts: Date.now(),
         sid: this.sid,
+        version: pkg.version,
+        origin: globalThis.location?.origin,
       })
 
       if (this.queue.length > this.maxQueueSize) this.flush()

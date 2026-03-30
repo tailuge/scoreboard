@@ -9,6 +9,8 @@ export type ClientLog = {
   region?: string
   city?: string
   country?: string
+  version?: string
+  origin?: string
 }
 
 export type SessionEntry = {
@@ -19,4 +21,6 @@ export type SessionEntry = {
   city?: string
   country?: string
   region?: string
+  version?: string
+  origin?: string
 }

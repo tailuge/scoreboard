@@ -27,7 +27,7 @@ function SessionItem({
 }) {
   const os = detectOS(session.ua)
   const browser = detectBrowser(session.ua)
-  const region = session.region || session.logs[0]?.region
+  const region = session.region
   const city = session.city
   const country = session.country
 
@@ -75,15 +75,27 @@ function SessionItem({
             flexWrap: "wrap",
           }}
         >
-          <span>
-            {osIcon(os)} {os}
-          </span>
-          <span>
-            {browserIcon(browser)} {browser}
-          </span>
+          {os !== "Unknown" ? (
+            <span>
+              {osIcon(os)} {os}
+            </span>
+          ) : null}
+          {browser !== "Unknown" ? (
+            <span>
+              {browserIcon(browser)} {browser}
+            </span>
+          ) : null}
           {country ? <span>{localeToFlag(country)}</span> : null}
           {city ? <span>{decodeURIComponent(city)}</span> : null}
           {region ? <span style={{ color: "white" }}>({region})</span> : null}
+          {session.version ? (
+            <span style={{ color: "#aaa" }}>v{session.version}</span>
+          ) : null}
+          {session.origin ? (
+            <span style={{ color: "#888", fontSize: "10px" }}>
+              {session.origin.replace(/^https?:\/\//, "")}
+            </span>
+          ) : null}
         </div>
         <div
           style={{

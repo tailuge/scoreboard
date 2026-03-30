@@ -1,18 +1,6 @@
 export function detectOS(uaString?: string): string {
-  let ua = uaString
-
-  if (!ua) {
-    const nav = globalThis.navigator
-    if (!nav) return "Unknown"
-
-    // Modern API (Chromium) - only available for local environment
-    const uaData = (nav as any).userAgentData
-    if (uaData?.platform) {
-      return uaData.platform
-    }
-
-    ua = nav.userAgent
-  }
+  const ua = uaString
+  if (!ua) return "Unknown"
 
   if (ua.includes("Windows")) return "Windows"
   if (ua.includes("Android")) return "Android"
@@ -24,13 +12,8 @@ export function detectOS(uaString?: string): string {
 }
 
 export function detectBrowser(uaString?: string): string {
-  let ua = uaString
-
-  if (!ua) {
-    const nav = globalThis.navigator
-    if (!nav) return "Unknown"
-    ua = nav.userAgent
-  }
+  const ua = uaString
+  if (!ua) return "Unknown"
 
   if (ua.includes("Edg")) return "Edge"
   if (ua.includes("OPR")) return "Opera"
