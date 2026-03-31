@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import type { ChatMessage } from "@tailuge/messaging"
+import { useSpeechToText } from "../utils/useSpeechToText"
 
 type ChatCardProps = {
   readonly opponentName: string
@@ -7,6 +8,42 @@ type ChatCardProps = {
   readonly onSend: (text: string) => void
   readonly onClose: () => void
   readonly currentUserId: string
+}
+
+function getMicButtonClassName({
+  supported,
+  isHolding,
+}: {
+  supported: boolean
+  isHolding: boolean
+}) {
+  if (!supported) {
+    return "bg-gray-700 text-gray-400 cursor-not-allowed"
+  }
+
+  if (isHolding) {
+    return "bg-red-600 animate-pulse text-white"
+  }
+
+  return "bg-cyan-600 hover:bg-cyan-500 text-white"
+}
+
+function getMicButtonTitle({
+  supported,
+  permissionDenied,
+}: {
+  supported: boolean
+  permissionDenied: boolean
+}) {
+  if (!supported) {
+    return "Speech recognition is not available in this browser"
+  }
+
+  if (permissionDenied) {
+    return "Microphone blocked"
+  }
+
+  return "Hold to speak"
 }
 
 export function ChatCard({
@@ -17,6 +54,17 @@ export function ChatCard({
   currentUserId,
 }: ChatCardProps) {
   const [inputText, setInputText] = useState("")
+  const micBtnRef = useRef<HTMLButtonElement>(null)
+  const {
+    isHolding,
+    supported,
+    permissionDenied,
+    errorMessage,
+    startListening,
+    stopListening,
+  } = useSpeechToText((text) => {
+    onSend(text)
+  })
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,6 +73,13 @@ export function ChatCard({
       setInputText("")
     }
   }
+
+  const micButtonClassName = getMicButtonClassName({ supported, isHolding })
+  const micButtonTitle = getMicButtonTitle({ supported, permissionDenied })
+  const micAriaLabel = supported ? "Hold to speak" : "Speech unavailable"
+  const supportMessage = !supported
+    ? "Speech input is not available in this browser. Try Chrome."
+    : errorMessage
 
   return (
     <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 my-0 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-80 max-h-[60dvh]">
@@ -90,6 +145,29 @@ export function ChatCard({
           className="flex-1 bg-gray-900 border border-white/20 rounded-lg px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50"
         />
         <button
+          ref={micBtnRef}
+          type="button"
+          disabled={!supported}
+          onMouseDown={supported ? startListening : undefined}
+          onMouseUp={supported ? stopListening : undefined}
+          onMouseLeave={supported ? stopListening : undefined}
+          onTouchStart={
+            supported
+              ? (e) => {
+                  e.preventDefault()
+                  startListening()
+                }
+              : undefined
+          }
+          onTouchEnd={supported ? stopListening : undefined}
+          onTouchCancel={supported ? stopListening : undefined}
+          className={`flex items-center justify-center rounded-lg px-2 py-1 text-xs transition-colors select-none font-semibold ${micButtonClassName}`}
+          aria-label={micAriaLabel}
+          title={micButtonTitle}
+        >
+          🎤
+        </button>
+        <button
           type="submit"
           disabled={!inputText.trim()}
           className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:hover:bg-cyan-600 text-white px-2 py-1 rounded-lg transition-colors flex items-center justify-center text-xs font-semibold"
@@ -98,6 +176,11 @@ export function ChatCard({
           Send
         </button>
       </form>
+      {supportMessage ? (
+        <p className="mt-1 text-left text-[10px] text-amber-300">
+          {supportMessage}
+        </p>
+      ) : null}
     </div>
   )
 }
