@@ -1,8 +1,8 @@
 import React from "react"
 import {
-  ButtonOptionsPlaceholder,
   RaceToButtons,
   RedBallButtons,
+  NineBallOptions,
 } from "./GameButtonOptions"
 import { GameButton, ActionButton } from "./GameButtons"
 import { GameUrl } from "@/utils/GameUrl"
@@ -35,6 +35,8 @@ export function GameGrid({
   onSnookerRedsChange,
   threecushionRaceTo,
   onThreecushionRaceToChange,
+  nineballOption,
+  onNineballOptionChange,
 }: {
   readonly userName: string
   readonly userId: string
@@ -42,6 +44,8 @@ export function GameGrid({
   readonly onSnookerRedsChange: (value: number) => void
   readonly threecushionRaceTo: number
   readonly onThreecushionRaceToChange: (value: number) => void
+  readonly nineballOption: string
+  readonly onNineballOptionChange: (value: string) => void
 }) {
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
@@ -49,6 +53,10 @@ export function GameGrid({
         const extras: Record<string, string> = {}
         if (game.ruleType === "snooker") {
           extras.reds = String(snookerReds)
+        } else if (game.ruleType === "nineball") {
+          if (nineballOption === "Free") {
+            extras.practice = "true"
+          }
         } else if (game.ruleType === "threecushion") {
           extras.raceTo = String(threecushionRaceTo)
         }
@@ -77,7 +85,12 @@ export function GameGrid({
             />
           )
         } else if (game.ruleType === "nineball") {
-          gameButtonChildren = <ButtonOptionsPlaceholder />
+          gameButtonChildren = (
+            <NineBallOptions
+              selectedValue={nineballOption}
+              onChange={onNineballOptionChange}
+            />
+          )
         } else if (game.ruleType === "threecushion") {
           gameButtonChildren = (
             <RaceToButtons

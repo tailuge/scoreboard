@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import type { ChatMessage } from "@tailuge/messaging";
+import React, { useState } from "react"
+import type { ChatMessage } from "@tailuge/messaging"
 
 type ChatCardProps = {
-  readonly opponentName: string;
-  readonly messages: ChatMessage[];
-  readonly onSend: (text: string) => void;
-  readonly onClose: () => void;
-  readonly currentUserId: string;
-};
+  readonly opponentName: string
+  readonly messages: ChatMessage[]
+  readonly onSend: (text: string) => void
+  readonly onClose: () => void
+  readonly currentUserId: string
+}
 
 export function ChatCard({
   opponentName,
@@ -16,15 +16,15 @@ export function ChatCard({
   onClose,
   currentUserId,
 }: ChatCardProps) {
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState("")
 
   const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (inputText.trim()) {
-      onSend(inputText.trim());
-      setInputText("");
+      onSend(inputText.trim())
+      setInputText("")
     }
-  };
+  }
 
   return (
     <div className="mx-auto w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-800/90 my-0 p-2 text-center shadow-xl animate-in fade-in zoom-in duration-300 flex flex-col h-80 max-h-[60dvh]">
@@ -60,7 +60,7 @@ export function ChatCard({
           </p>
         ) : (
           messages.map((msg, i) => {
-            const isMe = msg.senderId === currentUserId;
+            const isMe = msg.senderId === currentUserId
             return (
               <div
                 key={`${msg.senderId}-${msg.meta?.ts || i}`}
@@ -76,7 +76,7 @@ export function ChatCard({
                   {msg.text}
                 </div>
               </div>
-            );
+            )
           })
         )}
       </div>
@@ -99,5 +99,5 @@ export function ChatCard({
         </button>
       </form>
     </div>
-  );
+  )
 }

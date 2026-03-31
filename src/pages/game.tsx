@@ -40,8 +40,9 @@ export default function Game() {
     markChatAsRead,
   } = useMessaging()
   const presenceCount = users.length
-  const [snookerReds, setSnookerReds] = useState(3)
+  const [snookerReds, setSnookerReds] = useState(6)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
+  const [nineballOption, setNineballOption] = useState("Free")
   const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
   const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
   const [selectedOpponent, setSelectedOpponent] =
@@ -575,6 +576,8 @@ export default function Game() {
               onSnookerRedsChange={setSnookerReds}
               threecushionRaceTo={threecushionRaceTo}
               onThreecushionRaceToChange={setThreecushionRaceTo}
+              nineballOption={nineballOption}
+              onNineballOptionChange={setNineballOption}
             />
           </div>
         </GroupBox>
