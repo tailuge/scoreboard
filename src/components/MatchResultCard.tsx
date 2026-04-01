@@ -50,18 +50,21 @@ function MatchResultCardComponent({
   isLive = false,
   onClick,
 }: MatchResultCardProps) {
+  const [mounted, setMounted] = useState(false)
   const [formattedTime, setFormattedTime] = useState<string>("")
 
   useEffect(() => {
+    setMounted(true)
     setFormattedTime(formatTimeAgo(result.timestamp))
   }, [result.timestamp])
 
-  const displayTime = isLive
-    ? ""
-    : formattedTime ||
-      new Date(result.timestamp).toLocaleTimeString([], {
-        hour: "numeric",
-      })
+  const displayTime =
+    isLive || !mounted
+      ? ""
+      : formattedTime ||
+        new Date(result.timestamp).toLocaleTimeString([], {
+          hour: "numeric",
+        })
 
   const padding = compact ? "px-1 py-0.5" : "py-1 px-2"
   const iconSize = compact ? 16 : 20

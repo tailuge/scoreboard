@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { detectOS, detectBrowser, osIcon, browserIcon } from "@/utils/ua"
 import { localeToFlag } from "@/utils/locale"
 import type { SessionEntry } from "@/types/client-log"
@@ -20,10 +20,12 @@ function SessionItem({
   session,
   selected,
   onSelect,
+  mounted,
 }: {
   readonly session: SessionEntry
   readonly selected: boolean
   readonly onSelect: () => void
+  readonly mounted: boolean
 }) {
   const os = detectOS(session.ua)
   const browser = detectBrowser(session.ua)
@@ -59,10 +61,12 @@ function SessionItem({
             {session.sid}
           </div>
           <div style={{ fontSize: "12px", color: "white" }}>
-            {new Date(session.ts).toLocaleString([], {
-              dateStyle: "short",
-              timeStyle: "short",
-            })}
+            {mounted
+              ? new Date(session.ts).toLocaleString([], {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                })
+              : ""}
           </div>
         </div>
         <div
@@ -120,6 +124,11 @@ interface LogViewerProps {
 
 export default function LogViewer({ sessions }: LogViewerProps) {
   const [selected, setSelected] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const session = sessions.find((s) => s.sid === selected)
 
@@ -147,6 +156,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
                 session={s}
                 selected={selected === s.sid}
                 onSelect={() => setSelected(s.sid)}
+                mounted={mounted}
               />
             ))}
           </ul>
@@ -163,7 +173,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
                 <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>
                     <span style={{ color: "#eee" }}>
-                      [{new Date(log.ts).toLocaleTimeString()}]
+                      [{mounted ? new Date(log.ts).toLocaleTimeString() : ""}]
                     </span>{" "}
                     <span
                       style={{
