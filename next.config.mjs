@@ -24,7 +24,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://cdn.plot.ly; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.onrender.com wss://*.onrender.com https://cdn.jsdelivr.net; frame-src 'self' https://tailuge.github.io https://billiards.tailuge.workers.dev; frame-ancestors *; object-src 'none'; upgrade-insecure-requests;",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.onrender.com wss://*.onrender.com https://cdn.jsdelivr.net https://vercel.live; frame-src 'self' https://tailuge.github.io https://billiards.tailuge.workers.dev; frame-ancestors *; object-src 'none'; upgrade-insecure-requests;",
           },
           {
             key: "X-XSS-Protection",
@@ -49,6 +49,16 @@ const nextConfig = {
           {
             key: "Cross-Origin-Resource-Policy",
             value: "same-origin",
+          },
+        ],
+      },
+      {
+        source: "/usage.html",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://cdn.plot.ly https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.onrender.com wss://*.onrender.com https://cdn.jsdelivr.net https://vercel.live; frame-src 'self' https://tailuge.github.io https://billiards.tailuge.workers.dev; frame-ancestors *; object-src 'none'; upgrade-insecure-requests;",
           },
         ],
       },
