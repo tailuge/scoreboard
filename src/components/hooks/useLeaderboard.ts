@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 
-export function useLeaderboard(ruleType: string) {
+export function useLeaderboard(ruleType: string, skipFetch = false) {
   const [data, setData] = useState<LeaderboardItem[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
@@ -29,10 +29,11 @@ export function useLeaderboard(ruleType: string) {
   )
 
   useEffect(() => {
+    if (skipFetch) return
     const controller = new AbortController()
     fetchData(controller.signal)
     return () => controller.abort()
-  }, [fetchData])
+  }, [fetchData, skipFetch])
 
   const handleLike = useCallback(
     async (id: string) => {

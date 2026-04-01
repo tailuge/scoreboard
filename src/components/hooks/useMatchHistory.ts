@@ -2,9 +2,12 @@ import { useState, useEffect, useCallback } from "react"
 import { MatchResult } from "@/types/match"
 import { logger } from "@/utils/logger"
 
-export function useMatchHistory(pollInterval: number = 30000) {
+export function useMatchHistory(
+  pollInterval: number = 30000,
+  skipInitialFetch = false
+) {
   const [results, setResults] = useState<MatchResult[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!skipInitialFetch)
 
   const fetchResults = useCallback(async () => {
     try {
@@ -20,10 +23,12 @@ export function useMatchHistory(pollInterval: number = 30000) {
   }, [])
 
   useEffect(() => {
-    fetchResults()
+    if (!skipInitialFetch) {
+      fetchResults()
+    }
     const interval = setInterval(fetchResults, pollInterval)
     return () => clearInterval(interval)
-  }, [fetchResults, pollInterval])
+  }, [fetchResults, pollInterval, skipInitialFetch])
 
   return { results, isLoading, fetchResults }
 }

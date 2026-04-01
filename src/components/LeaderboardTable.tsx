@@ -6,6 +6,7 @@ import { useLeaderboard } from "./hooks/useLeaderboard"
 interface LeaderboardTableProps {
   readonly ruleType: string
   readonly limit?: number
+  readonly initialData?: LeaderboardItem[]
 }
 
 type LeaderboardRowItem = LeaderboardItem & { isPlaceholder: boolean }
@@ -77,8 +78,16 @@ const LeaderboardRow: React.FC<{
   )
 }
 
-function LeaderboardTable({ ruleType, limit }: LeaderboardTableProps) {
-  const { data, handleLike } = useLeaderboard(ruleType)
+function LeaderboardTable({
+  ruleType,
+  limit,
+  initialData,
+}: LeaderboardTableProps) {
+  const { data: fetchedData, handleLike } = useLeaderboard(
+    ruleType,
+    !!initialData
+  )
+  const data = initialData ?? fetchedData
 
   const rows = useMemo<LeaderboardRowItem[]>(() => {
     const displayData = limit ? data.slice(0, limit) : data

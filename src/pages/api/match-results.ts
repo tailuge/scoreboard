@@ -93,7 +93,11 @@ async function handleGet(request: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
 
     const results = await matchResultService.getMatchResults(limit, ruleType)
-    return Response.json(results)
+    return Response.json(results, {
+      headers: {
+        "Cache-Control": "public, s-maxage=30, stale-while-revalidate=15",
+      },
+    })
   } catch (error) {
     logger.log("Error fetching match results:", error)
     return new Response("Internal Server Error", { status: 500 })
