@@ -236,4 +236,22 @@ describe("ServerStatsPopover", () => {
     })
     consoleSpy.mockRestore()
   })
+
+  it("contains a link to usage.html", async () => {
+    render(
+      <ServerStatsPopover>
+        <span>Trigger</span>
+      </ServerStatsPopover>
+    )
+
+    fireEvent.click(screen.getByText("Trigger"))
+
+    await waitFor(() => {
+      expect(screen.getByText("1d 2h 3m")).toBeInTheDocument()
+    })
+
+    const usageLink = screen.getByRole("link", { name: /usage/i })
+    expect(usageLink).toBeInTheDocument()
+    expect(usageLink).toHaveAttribute("href", "/usage.html")
+  })
 })
