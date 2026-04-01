@@ -4,17 +4,24 @@ import { GroupBox } from "./GroupBox"
 import { LiveTableItem } from "./LiveTableItem"
 import { useMatchHistory } from "./hooks/useMatchHistory"
 import type { ActiveGame } from "@tailuge/messaging"
+import { MatchResult } from "@/types/match"
 
 interface MatchHistoryListProps {
   readonly liveGames?: ActiveGame[]
   readonly tablesLoading?: boolean
+  readonly initialData?: MatchResult[]
 }
 
 export function MatchHistoryList({
   liveGames = [],
   tablesLoading,
+  initialData,
 }: MatchHistoryListProps) {
-  const { results, isLoading } = useMatchHistory()
+  const { results: fetchedResults, isLoading } = useMatchHistory(
+    30000,
+    !!initialData
+  )
+  const results = initialData ?? fetchedResults
 
   const activeGames = liveGames.filter((game) => game.players.length === 2)
 

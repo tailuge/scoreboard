@@ -19,8 +19,53 @@ import { markUsage } from "@/utils/usage"
 import { GameUrl, type RematchParam } from "@/utils/GameUrl"
 import { GAME_TYPES } from "@/config"
 import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
+import { GetStaticProps } from "next"
+import { kv } from "@vercel/kv"
+import { ScoreTable } from "@/services/scoretable"
+import { MatchResultService } from "@/services/MatchResultService"
+import { LeaderboardItem } from "@/types/leaderboard"
+import { MatchResult } from "@/types/match"
 
-export default function Game() {
+interface GameProps {
+  initialHighscores: Record<string, LeaderboardItem[]>
+  initialMatchResults: MatchResult[]
+}
+
+export const getStaticProps: GetStaticProps<GameProps> = async () => {
+  const scoretable = new ScoreTable(kv)
+  const matchResultService = new MatchResultService(kv)
+
+  const highscores: Record<string, LeaderboardItem[]> = {}
+  let matchResults: MatchResult[] = []
+
+  try {
+    await Promise.all(
+      GAME_TYPES.map(async (game) => {
+        highscores[game.ruleType] = await scoretable.topTen(game.ruleType)
+      })
+    )
+    matchResults = await matchResultService.getMatchResults(50)
+  } catch (error) {
+    console.error("Error fetching initial data for ISR:", error)
+    // Fallback to empty data if KV is unavailable during build/revalidation
+    GAME_TYPES.forEach((game) => {
+      if (!highscores[game.ruleType]) highscores[game.ruleType] = []
+    })
+  }
+
+  return {
+    props: {
+      initialHighscores: highscores,
+      initialMatchResults: matchResults,
+    },
+    revalidate: 30,
+  }
+}
+
+export default function Game({
+  initialHighscores,
+  initialMatchResults,
+}: GameProps) {
   const { userId, userName } = useUser()
   const {
     users,
@@ -584,9 +629,15 @@ export default function Game() {
 
         <div className="grid grid-cols-1 gap-6">
           <GroupBox title="Top Scores" titleHref="/leaderboard">
-            <HighscoreGrid className="-mt-3" />
+            <HighscoreGrid
+              className="-mt-3"
+              initialData={initialHighscores}
+            />
           </GroupBox>
-          <MatchHistoryList liveGames={activeGames} />
+          <MatchHistoryList
+            liveGames={activeGames}
+            initialData={initialMatchResults}
+          />
         </div>
       </main>
     </div>

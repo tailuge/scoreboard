@@ -14,6 +14,9 @@ describe("/api/rank handler", () => {
 
     const mockResponseConstructor = jest.fn((body, init) => ({
       status: init?.status || 200,
+      headers: {
+        get: (name: string) => init?.headers?.[name] || null,
+      },
       text: () => Promise.resolve(body),
     })) as any
     globalThis.Response = mockResponseConstructor
@@ -59,5 +62,32 @@ describe("/api/rank handler", () => {
     const response = await handler(req)
 
     expect(response.status).toBe(400)
+  })
+
+  it("should return all game types when ruletype=all", async () => {
+    const topTenData = [
+      { name: "Player1", likes: 10, id: "abc", score: 100 },
+    ]
+    const topTenSpy = jest
+      .spyOn(mockScoreTable.prototype, "topTen")
+      .mockResolvedValue(topTenData)
+
+    const url = "https://localhost/api/rank?ruletype=all"
+    req = {
+      method: "GET",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    const responseText = await response.text()
+    const jsonData = JSON.parse(responseText)
+
+    expect(topTenSpy).toHaveBeenCalledTimes(4) // VALID_RULE_TYPES has 4 types
+    expect(response.status).toBe(200)
+    expect(jsonData.snooker).toEqual(topTenData)
+    expect(jsonData.nineball).toEqual(topTenData)
+    expect(jsonData.threecushion).toEqual(topTenData)
+    expect(jsonData.eightball).toEqual(topTenData)
+    expect(response.headers.get("Cache-Control")).toBe("public, s-maxage=60, stale-while-revalidate=30")
   })
 })

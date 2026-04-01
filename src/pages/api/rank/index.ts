@@ -3,6 +3,7 @@ import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { logger } from "@/utils/logger"
 import { corsResponse } from "@/utils/cors"
+import { VALID_RULE_TYPES } from "@/utils/gameTypes"
 
 export const config = {
   runtime: "edge",
@@ -28,12 +29,37 @@ const scoretable = new ScoreTable(kv)
 export default async function handler(request: NextRequest) {
   const url = request.nextUrl
   const ruletype = url.searchParams.get("ruletype")
+
+  if (ruletype === "all") {
+    try {
+      const allData = {}
+      await Promise.all(
+        VALID_RULE_TYPES.map(async (type) => {
+          allData[type] = await scoretable.topTen(type)
+        })
+      )
+      return corsResponse(JSON.stringify(allData), {
+        headers: {
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30",
+        },
+      })
+    } catch (error) {
+      logger.error("Error fetching all top ten ranks:", error)
+      return corsResponse("Internal Server Error", { status: 500 })
+    }
+  }
+
   if (!ruletype) {
     return corsResponse("ruletype is required", { status: 400 })
   }
+
   try {
     const data = await scoretable.topTen(ruletype)
-    return corsResponse(JSON.stringify(data))
+    return corsResponse(JSON.stringify(data), {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30",
+      },
+    })
   } catch (error) {
     logger.warn("Error fetching top ten ranks:", error)
     return corsResponse("Invalid ruletype", { status: 400 })
