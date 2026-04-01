@@ -27,8 +27,8 @@ import { LeaderboardItem } from "@/types/leaderboard"
 import { MatchResult } from "@/types/match"
 
 interface GameProps {
-  initialHighscores: Record<string, LeaderboardItem[]>
-  initialMatchResults: MatchResult[]
+  readonly initialHighscores: Record<string, LeaderboardItem[]>
+  readonly initialMatchResults: MatchResult[]
 }
 
 export const getStaticProps: GetStaticProps<GameProps> = async () => {
