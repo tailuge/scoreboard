@@ -144,9 +144,6 @@ describe("ClientErrorReporter", () => {
         name: "PseudoError",
         message: "Something went wrong",
         stack: "at line 1",
-        toString() {
-          return `${this.name}: ${this.message}`
-        },
       }
       console.error(pseudoError)
 
