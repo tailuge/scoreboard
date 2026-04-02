@@ -14,13 +14,13 @@ export function useLeaderboard(ruleType: string, skipFetch = false) {
         const params = new URLSearchParams({ ruletype: ruleType })
         const url = `/api/rank?${params.toString()}`
         const response = await fetch(url, { signal })
-        if (!response.ok) throw new Error("Failed to fetch leaderboard data")
+        if (!response.ok) throw new Error(`Failed to fetch leaderboard data for ${ruleType}: ${response.status}`)
         const jsonData = await response.json()
         setData(jsonData)
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return
         setError(err instanceof Error ? err : new Error("Unknown error"))
-        console.error("Error fetching leaderboard data:", err)
+        console.error(`Error fetching leaderboard data for ${ruleType}:`, err)
       } finally {
         setLoading(false)
       }

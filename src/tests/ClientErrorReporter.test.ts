@@ -133,8 +133,29 @@ describe("ClientErrorReporter", () => {
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
-        expect.stringContaining("Test error")
+        expect.stringContaining("Error: Test error")
       )
+    })
+
+    it("should capture non-Error objects with stack/message/name", () => {
+      reporter.start()
+
+      const pseudoError = {
+        name: "PseudoError",
+        message: "Something went wrong",
+        stack: "at line 1",
+        toString() {
+          return `${this.name}: ${this.message}`
+        },
+      }
+      console.error(pseudoError)
+
+      jest.advanceTimersByTime(5001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body[0].message).toBe("PseudoError: Something went wrong")
+      expect(body[0].stack).toBe("at line 1")
     })
 
     it("should deduplicate similar errors", () => {

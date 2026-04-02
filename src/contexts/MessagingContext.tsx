@@ -286,7 +286,12 @@ export function MessagingProvider({
       if (!lobby) {
         throw new Error("Lobby not initialized")
       }
-      await lobby.sendChat(recipientId, text)
+      try {
+        await lobby.sendChat(recipientId, text)
+      } catch (error) {
+        console.error("Failed to send chat", { recipientId, error })
+        throw error
+      }
 
       // Manually add the sent message to the local state to ensure it shows up immediately
       // and handles cases where the server doesn't echo back.
