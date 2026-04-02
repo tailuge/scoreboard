@@ -23,7 +23,7 @@ export function useAllLeaderboards(skipFetch = false) {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [skipFetch])
 
   useEffect(() => {
     if (skipFetch) return
