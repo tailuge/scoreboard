@@ -87,7 +87,7 @@ export default function Game({
   const presenceCount = users.length
   const [snookerReds, setSnookerReds] = useState(6)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
-  const [nineballOption, setNineballOption] = useState("Free")
+  const [nineballOption, setNineballOption] = useState("1->9")
   const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
   const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
   const [selectedOpponent, setSelectedOpponent] =
