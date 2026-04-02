@@ -60,9 +60,7 @@ describe("Game Page", () => {
       { userId: "other-id", userName: "Other" },
     ]
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     expect(await screen.findByText(/Other/)).toBeInTheDocument()
     expect(screen.getByLabelText("2 users online")).toBeInTheDocument()
@@ -79,9 +77,7 @@ describe("Game Page", () => {
       tableId: "table-123",
     }
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     expect(await screen.findByText(/Other wants to play/)).toBeInTheDocument()
 
@@ -109,9 +105,7 @@ describe("Game Page", () => {
       tableId: "table-123",
     }
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     const declineBtn = await screen.findByRole("button", {
       name: "Decline challenge",
@@ -138,9 +132,7 @@ describe("Game Page", () => {
     }
     mockMessaging.users = [{ userId: "other-id", userName: "Other" }]
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     expect(
       await screen.findByText(/Waiting for Other to accept/)
@@ -163,9 +155,7 @@ describe("Game Page", () => {
       { userId: "other-id", userName: "Other" },
     ]
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     const challengeBtn = await screen.findByRole("button", {
       name: "Challenge Other",
@@ -199,9 +189,7 @@ describe("Game Page", () => {
 
     mockMessaging.users = [{ userId: "other-id", userName: "Other" }]
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     await waitFor(() => {
       expect(mockMessaging.challenge).toHaveBeenCalledWith(
@@ -236,9 +224,7 @@ describe("Game Page", () => {
       rematch: { lastScores: [], isRematch: true, nextTurnId: "me-id" },
     }
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     await waitFor(() => {
       expect(mockMessaging.acceptChallenge).toHaveBeenCalled()
@@ -265,9 +251,7 @@ describe("Game Page", () => {
       tableId: "table-accepted",
     }
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     await waitFor(() => {
       expect(navigateTo).toHaveBeenCalled()
@@ -282,9 +266,7 @@ describe("Game Page", () => {
     ]
     mockMessaging.unreadUsers = ["other-id"]
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     const chatBtn = await screen.findByRole("button", {
       name: "Chat with Other",
@@ -302,9 +284,7 @@ describe("Game Page", () => {
     ]
     mockMessaging.challenge.mockRejectedValueOnce(new Error("Failed"))
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     fireEvent.click(
       await screen.findByRole("button", { name: "Challenge Other" })
@@ -331,9 +311,7 @@ describe("Game Page", () => {
       // tableId missing
     }
 
-    render(
-      <Game initialHighscores={{}} initialMatchResults={[]} />
-    )
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
 
     const acceptBtn = await screen.findByRole("button", {
       name: "Accept challenge",

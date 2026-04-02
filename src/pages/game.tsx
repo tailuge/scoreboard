@@ -629,10 +629,7 @@ export default function Game({
 
         <div className="grid grid-cols-1 gap-6">
           <GroupBox title="Top Scores" titleHref="/leaderboard">
-            <HighscoreGrid
-              className="-mt-3"
-              initialData={initialHighscores}
-            />
+            <HighscoreGrid className="-mt-3" initialData={initialHighscores} />
           </GroupBox>
           <MatchHistoryList
             liveGames={activeGames}

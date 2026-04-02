@@ -65,9 +65,7 @@ describe("/api/rank handler", () => {
   })
 
   it("should return all game types when ruletype=all", async () => {
-    const topTenData = [
-      { name: "Player1", likes: 10, id: "abc", score: 100 },
-    ]
+    const topTenData = [{ name: "Player1", likes: 10, id: "abc", score: 100 }]
     const topTenSpy = jest
       .spyOn(mockScoreTable.prototype, "topTen")
       .mockResolvedValue(topTenData)
@@ -88,6 +86,8 @@ describe("/api/rank handler", () => {
     expect(jsonData.nineball).toEqual(topTenData)
     expect(jsonData.threecushion).toEqual(topTenData)
     expect(jsonData.eightball).toEqual(topTenData)
-    expect(response.headers.get("Cache-Control")).toBe("public, s-maxage=60, stale-while-revalidate=30")
+    expect(response.headers.get("Cache-Control")).toBe(
+      "public, s-maxage=60, stale-while-revalidate=30"
+    )
   })
 })
