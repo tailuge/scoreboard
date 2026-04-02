@@ -13,7 +13,7 @@ export function useAllLeaderboards(skipFetch = false) {
     try {
       const url = "/api/rank?ruletype=all"
       const response = await fetch(url, { signal })
-      if (!response.ok) throw new Error("Failed to fetch all leaderboard data")
+      if (!response.ok) throw new Error(`Failed to fetch all leaderboard data: ${response.status}`)
       const jsonData = await response.json()
       setData(jsonData)
     } catch (err) {

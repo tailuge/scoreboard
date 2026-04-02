@@ -155,9 +155,16 @@ export class ClientErrorReporter {
           if (a === undefined) return "undefined"
           if (a instanceof Error) {
             stack = stack || a.stack
-            return a.message
+            return String(a)
           }
           if (typeof a === "object") {
+            const obj = a as Record<string, unknown>
+            if (typeof obj.stack === "string") {
+              stack = stack || obj.stack
+            }
+            if (typeof obj.message === "string" && typeof obj.name === "string") {
+              return String(a)
+            }
             try {
               return JSON.stringify(a)
             } catch {

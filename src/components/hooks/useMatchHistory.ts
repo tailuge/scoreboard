@@ -12,11 +12,11 @@ export function useMatchHistory(
   const fetchResults = useCallback(async () => {
     try {
       const response = await fetch("/api/match-results")
-      if (!response.ok) throw new Error("Failed to fetch match history")
+      if (!response.ok) throw new Error(`Failed to fetch match history: ${response.status}`)
       const data = await response.json()
       setResults(data)
     } catch (error) {
-      logger.log("Error fetching match history:", error)
+      logger.error("Error fetching match history:", error)
     } finally {
       setIsLoading(false)
     }
