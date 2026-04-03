@@ -466,7 +466,9 @@ export default function Game({
           rightBadge={
             <div className="flex items-center gap-2">
               <ServerStatsPopover
-                onOpen={() => console.log(`users: ${JSON.stringify(users)}`)}
+                onOpen={() =>
+                  console.log("users:", JSON.stringify(users, null, 2))
+                }
               >
                 <div
                   className="user-pill"
