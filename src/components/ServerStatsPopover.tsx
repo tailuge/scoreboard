@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ShareIcon } from "@heroicons/react/24/solid"
+import { useMessaging } from "@/contexts/MessagingContext"
 
 type ServerStats = {
   uptime: {
@@ -63,6 +64,7 @@ export function ServerStatsPopover({
   const [stats, setStats] = useState<ServerStats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { notificationsEnabled, toggleNotifications } = useMessaging()
   const popoverRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
@@ -202,6 +204,34 @@ export function ServerStatsPopover({
                   </div>
                   <div className="text-sm font-mono text-cyan-300">
                     {formatUptime(stats.uptime)}
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase tracking-wider text-gray-500">
+                    Notifications
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-400">
+                      Challenge Alerts
+                    </span>
+                    <button
+                      role="switch"
+                      aria-checked={notificationsEnabled}
+                      onClick={() => toggleNotifications(!notificationsEnabled)}
+                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 ${
+                        notificationsEnabled ? "bg-cyan-500" : "bg-gray-600"
+                      }`}
+                      type="button"
+                    >
+                      <span
+                        className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
+                          notificationsEnabled
+                            ? "translate-x-5"
+                            : "translate-x-0.5"
+                        }`}
+                      />
+                    </button>
                   </div>
                 </div>
 

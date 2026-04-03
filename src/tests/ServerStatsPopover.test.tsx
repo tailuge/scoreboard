@@ -1,6 +1,11 @@
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { ServerStatsPopover } from "../components/ServerStatsPopover"
+import { useMessaging } from "@/contexts/MessagingContext"
+
+jest.mock("@/contexts/MessagingContext", () => ({
+  useMessaging: jest.fn(),
+}))
 
 describe("ServerStatsPopover", () => {
   const mockStats = {
@@ -16,8 +21,14 @@ describe("ServerStatsPopover", () => {
     },
   }
 
+  const mockToggleNotifications = jest.fn()
+
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(useMessaging as jest.Mock).mockReturnValue({
+      notificationsEnabled: false,
+      toggleNotifications: mockToggleNotifications,
+    })
     globalThis.fetch = jest.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
@@ -253,5 +264,24 @@ describe("ServerStatsPopover", () => {
     const usageLink = screen.getByRole("link", { name: /usage/i })
     expect(usageLink).toBeInTheDocument()
     expect(usageLink).toHaveAttribute("href", "/usage.html")
+  })
+
+  it("toggles notifications when notification switch is clicked", async () => {
+    render(
+      <ServerStatsPopover>
+        <span>Trigger</span>
+      </ServerStatsPopover>
+    )
+
+    fireEvent.click(screen.getByText("Trigger"))
+
+    await waitFor(() => {
+      expect(screen.getByText("1d 2h 3m")).toBeInTheDocument()
+    })
+
+    const toggle = screen.getByRole("switch")
+    fireEvent.click(toggle)
+
+    expect(mockToggleNotifications).toHaveBeenCalledWith(true)
   })
 })
