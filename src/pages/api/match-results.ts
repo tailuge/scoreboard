@@ -95,7 +95,7 @@ async function handleGet(request: NextRequest) {
     const results = await matchResultService.getMatchResults(limit, ruleType)
     return Response.json(results, {
       headers: {
-        "Cache-Control": "public, s-maxage=30, stale-while-revalidate=15",
+        "Cache-Control": "public, s-maxage=15, stale-while-revalidate=8",
       },
     })
   } catch (error) {

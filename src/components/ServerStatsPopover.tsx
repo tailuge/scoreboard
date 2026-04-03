@@ -94,10 +94,7 @@ function CountryList({
       </div>
       <div className="space-y-1">
         {parsedCountries.map(({ code, count }) => (
-          <div
-            key={code}
-            className="flex items-center justify-between text-xs"
-          >
+          <div key={code} className="flex items-center justify-between text-xs">
             <span className="flex items-center gap-2">
               <span>{getFlagEmoji(code)}</span>
               <span className="text-gray-400">{code}</span>

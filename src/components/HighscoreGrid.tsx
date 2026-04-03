@@ -15,8 +15,7 @@ export function HighscoreGrid({
   className = "",
   initialData,
 }: Readonly<HighscoreGridProps>) {
-  const { data: fetchedData } = useAllLeaderboards(!!initialData)
-  const data = initialData ?? fetchedData
+  const { data } = useAllLeaderboards(initialData)
 
   return (
     <div

@@ -179,7 +179,9 @@ export default function LogViewer({ sessions }: LogViewerProps) {
               <button
                 type="button"
                 onClick={async () => {
-                  await navigator.clipboard.writeText(JSON.stringify(session, null, 2))
+                  await navigator.clipboard.writeText(
+                    JSON.stringify(session, null, 2)
+                  )
                 }}
                 style={{
                   padding: "4px 8px",
@@ -194,7 +196,13 @@ export default function LogViewer({ sessions }: LogViewerProps) {
                 Copy
               </button>
             </div>
-            <pre style={{ fontSize: "11px", whiteSpace: "pre-wrap", color: "white" }}>
+            <pre
+              style={{
+                fontSize: "11px",
+                whiteSpace: "pre-wrap",
+                color: "white",
+              }}
+            >
               {session.logs.map((log, i) => (
                 <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>

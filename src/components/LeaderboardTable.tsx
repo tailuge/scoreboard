@@ -83,11 +83,7 @@ function LeaderboardTable({
   limit,
   initialData,
 }: LeaderboardTableProps) {
-  const { data: fetchedData, handleLike } = useLeaderboard(
-    ruleType,
-    !!initialData
-  )
-  const data = initialData ?? fetchedData
+  const { data, handleLike } = useLeaderboard(ruleType, initialData)
 
   const rows = useMemo<LeaderboardRowItem[]>(() => {
     const displayData = limit ? data.slice(0, limit) : data

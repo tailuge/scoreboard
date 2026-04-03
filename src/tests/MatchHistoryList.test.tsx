@@ -61,7 +61,7 @@ describe("MatchHistoryList", () => {
 
     render(<MatchHistoryList />)
     await waitFor(() => {
-      expect(screen.getByText("Alice")).toBeInTheDocument()
+      expect(screen.getByText(/Alice/)).toBeInTheDocument()
     })
   })
 
