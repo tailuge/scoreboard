@@ -465,7 +465,9 @@ export default function Game({
           leftBadge={<User />}
           rightBadge={
             <div className="flex items-center gap-2">
-              <ServerStatsPopover onOpen={() => console.log("users", users)}>
+              <ServerStatsPopover
+                onOpen={() => console.log(`users: ${JSON.stringify(users)}`)}
+              >
                 <div
                   className="user-pill"
                   aria-label={`${presenceCount} users online`}

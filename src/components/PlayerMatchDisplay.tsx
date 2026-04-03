@@ -33,7 +33,8 @@ export function PlayerMatchDisplay({
       <span
         className={`text-gray-200 truncate ${compact ? "text-[10px]" : "text-xs"}`}
       >
-        {showTrophy && "🎖️"}{winner}{" "}
+        {showTrophy ? "🎖️" : null}
+        {winner}{" "}
         <span className="text-gray-400 font-mono-data">({winnerScore})</span>
       </span>
       <span className="text-gray-400 text-[9px] flex-shrink-0">vs</span>

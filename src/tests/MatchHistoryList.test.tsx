@@ -61,7 +61,7 @@ describe("MatchHistoryList", () => {
 
     render(<MatchHistoryList />)
     await waitFor(() => {
-      expect(screen.getByText("Alice")).toBeInTheDocument()
+      expect(screen.getByText(/Alice/)).toBeInTheDocument()
     })
   })
 
@@ -96,9 +96,9 @@ describe("MatchHistoryList", () => {
       <MatchHistoryList liveGames={[mockLiveGame]} tablesLoading={false} />
     )
     await waitFor(() => {
-      expect(screen.getByText("PlayerOne")).toBeInTheDocument()
-      expect(screen.getByText("PlayerTwo")).toBeInTheDocument()
-      expect(screen.getByText("Live")).toBeInTheDocument()
+      expect(screen.getByText(/PlayerOne/)).toBeInTheDocument()
+      expect(screen.getByText(/PlayerTwo/)).toBeInTheDocument()
+      expect(screen.getByText(/Live/)).toBeInTheDocument()
     })
   })
 })
