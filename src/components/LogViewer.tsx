@@ -93,10 +93,10 @@ function SessionItem({
           {city ? <span>{decodeURIComponent(city)}</span> : null}
           {region ? <span style={{ color: "white" }}>({region})</span> : null}
           {session.version ? (
-            <span style={{ color: "#aaa" }}>v{session.version}</span>
+            <span style={{ color: "#ddd" }}>v{session.version}</span>
           ) : null}
           {session.origin ? (
-            <span style={{ color: "#888", fontSize: "10px" }}>
+            <span style={{ color: "#bbb", fontSize: "10px" }}>
               {session.origin.replace(/^https?:\/\//, "")}
             </span>
           ) : null}
@@ -104,7 +104,7 @@ function SessionItem({
         <div
           style={{
             fontSize: "10px",
-            color: "#888",
+            color: "#bbb",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -165,14 +165,40 @@ export default function LogViewer({ sessions }: LogViewerProps) {
       <div style={{ flex: 1, padding: "10px", overflowY: "auto" }}>
         {session ? (
           <>
-            <h3 style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
-              Logs for {session.sid.slice(0, 8)}
-            </h3>
-            <pre style={{ fontSize: "11px", whiteSpace: "pre-wrap" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
+              <h3 style={{ margin: 0, fontSize: "14px", color: "white" }}>
+                Logs for {session.sid.slice(0, 8)}
+              </h3>
+              <button
+                type="button"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(JSON.stringify(session, null, 2))
+                }}
+                style={{
+                  padding: "4px 8px",
+                  fontSize: "12px",
+                  background: "#444",
+                  color: "white",
+                  border: "1px solid #666",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Copy
+              </button>
+            </div>
+            <pre style={{ fontSize: "11px", whiteSpace: "pre-wrap", color: "white" }}>
               {session.logs.map((log, i) => (
                 <div key={`${log.ts}-${i}`} style={{ marginBottom: "12px" }}>
                   <div>
-                    <span style={{ color: "#eee" }}>
+                    <span style={{ color: "white" }}>
                       [{mounted ? new Date(log.ts).toLocaleTimeString() : ""}]
                     </span>{" "}
                     <span
@@ -188,7 +214,7 @@ export default function LogViewer({ sessions }: LogViewerProps) {
                   {log.stack ? (
                     <div
                       style={{
-                        color: "#eee",
+                        color: "white",
                         fontSize: "11px",
                         marginTop: "4px",
                       }}

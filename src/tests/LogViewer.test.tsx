@@ -79,6 +79,7 @@ describe("LogViewer", () => {
     fireEvent.click(screen.getByText("session1"))
 
     expect(screen.getByText("Logs for session1")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /Copy/i })).toBeInTheDocument()
     expect(screen.getByText("Something went wrong")).toBeInTheDocument()
     expect(screen.getByText("Be careful")).toBeInTheDocument()
     expect(screen.getByText("error")).toBeInTheDocument()
@@ -93,6 +94,28 @@ describe("LogViewer", () => {
 
     expect(screen.getByText("Uncaught error")).toBeInTheDocument()
     expect(screen.getByText(/at <anonymous>:1:1/)).toBeInTheDocument()
+  })
+
+  it("calls navigator.clipboard.writeText when Copy button is clicked", () => {
+    const writeTextMock = jest.fn()
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: writeTextMock,
+      },
+    })
+
+    render(<LogViewer sessions={mockSessions} />)
+
+    // Select first session
+    fireEvent.click(screen.getByText("session1"))
+
+    // Click Copy button
+    const copyButton = screen.getByRole("button", { name: /Copy/i })
+    fireEvent.click(copyButton)
+
+    expect(writeTextMock).toHaveBeenCalledWith(
+      JSON.stringify(mockSessions[0], null, 2)
+    )
   })
 
   it("uses default color for unknown log types", () => {
