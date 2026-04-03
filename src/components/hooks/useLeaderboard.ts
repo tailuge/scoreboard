@@ -14,7 +14,10 @@ export function useLeaderboard(ruleType: string, skipFetch = false) {
         const params = new URLSearchParams({ ruletype: ruleType })
         const url = `/api/rank?${params.toString()}`
         const response = await fetch(url, { signal })
-        if (!response.ok) throw new Error(`Failed to fetch leaderboard data for ${ruleType}: ${response.status}`)
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch leaderboard data for ${ruleType}: ${response.status}`
+          )
         const jsonData = await response.json()
         setData(jsonData)
       } catch (err) {

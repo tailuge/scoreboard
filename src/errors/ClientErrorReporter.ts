@@ -162,7 +162,10 @@ export class ClientErrorReporter {
             if (typeof obj.stack === "string") {
               stack = stack || obj.stack
             }
-            if (typeof obj.message === "string" && typeof obj.name === "string") {
+            if (
+              typeof obj.message === "string" &&
+              typeof obj.name === "string"
+            ) {
               return `${obj.name}: ${obj.message}`
             }
             try {

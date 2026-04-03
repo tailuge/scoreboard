@@ -12,7 +12,8 @@ export function useMatchHistory(
   const fetchResults = useCallback(async () => {
     try {
       const response = await fetch("/api/match-results")
-      if (!response.ok) throw new Error(`Failed to fetch match history: ${response.status}`)
+      if (!response.ok)
+        throw new Error(`Failed to fetch match history: ${response.status}`)
       const data = await response.json()
       setResults(data)
     } catch (error) {
