@@ -87,7 +87,7 @@ describe("/api/rank handler", () => {
     expect(jsonData.threecushion).toEqual(topTenData)
     expect(jsonData.eightball).toEqual(topTenData)
     expect(response.headers.get("Cache-Control")).toBe(
-      "public, s-maxage=60, stale-while-revalidate=30"
+      "public, max-age=0, s-maxage=15, stale-while-revalidate=8"
     )
   })
 })
