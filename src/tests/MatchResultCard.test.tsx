@@ -180,5 +180,25 @@ describe("MatchResultCard", () => {
     rerender(<MatchResultCard result={soloResult} />)
     expect(screen.queryByText(/🎖️/)).not.toBeInTheDocument()
     expect(screen.getByText("Charlie")).toBeInTheDocument()
+
+    // 4. ClawBreak as winner: should not have icon
+    const clawWinner: MatchResult = {
+      ...mockResult,
+      id: "claw-winner",
+      winner: "ClawBreak",
+    }
+    rerender(<MatchResultCard result={clawWinner} />)
+    expect(screen.queryByText(/🎖️/)).not.toBeInTheDocument()
+    expect(screen.getByText(/ClawBreak/)).toBeInTheDocument()
+
+    // 5. ClawBreak as loser: should not have icon
+    const clawLoser: MatchResult = {
+      ...mockResult,
+      id: "claw-loser",
+      loser: "ClawBreak",
+    }
+    rerender(<MatchResultCard result={clawLoser} />)
+    expect(screen.queryByText(/🎖️/)).not.toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
   })
 })
