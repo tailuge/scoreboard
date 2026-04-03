@@ -17,7 +17,7 @@ export function MatchHistoryList({
   tablesLoading,
   initialData,
 }: MatchHistoryListProps) {
-  const { results, isLoading } = useMatchHistory(15000, initialData)
+  const { results, isLoading } = useMatchHistory(initialData)
 
   const activeGames = liveGames.filter((game) => game.players.length === 2)
 

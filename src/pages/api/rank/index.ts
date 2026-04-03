@@ -40,7 +40,8 @@ export default async function handler(request: NextRequest) {
       )
       return corsResponse(JSON.stringify(allData), {
         headers: {
-          "Cache-Control": "public, s-maxage=15, stale-while-revalidate=8",
+          "Cache-Control":
+            "public, max-age=0, s-maxage=15, stale-while-revalidate=8",
         },
       })
     } catch (error) {
@@ -57,7 +58,8 @@ export default async function handler(request: NextRequest) {
     const data = await scoretable.topTen(ruletype)
     return corsResponse(JSON.stringify(data), {
       headers: {
-        "Cache-Control": "public, s-maxage=15, stale-while-revalidate=8",
+        "Cache-Control":
+          "public, max-age=0, s-maxage=15, stale-while-revalidate=8",
       },
     })
   } catch (error) {

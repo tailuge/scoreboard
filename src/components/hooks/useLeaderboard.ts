@@ -38,8 +38,6 @@ export function useLeaderboard(
     if (!initialData) {
       fetchData()
     }
-    const interval = setInterval(() => fetchData(), 15000)
-    return () => clearInterval(interval)
   }, [fetchData, initialData])
 
   const handleLike = useCallback(

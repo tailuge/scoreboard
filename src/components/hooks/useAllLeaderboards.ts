@@ -35,8 +35,6 @@ export function useAllLeaderboards(
     if (!initialData) {
       fetchData()
     }
-    const interval = setInterval(() => fetchData(), 15000)
-    return () => clearInterval(interval)
   }, [fetchData, initialData])
 
   return { data, loading, error, refresh: fetchData }
