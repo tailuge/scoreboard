@@ -390,6 +390,61 @@ describe("MessagingContext", () => {
     expect(capturedMessaging.acceptedChallenge).toBeNull()
   })
 
+  it("handles notifications", async () => {
+    // Mock Notification
+    const mockNotification = jest.fn()
+    globalThis.Notification = {
+      requestPermission: jest.fn().mockResolvedValue("granted"),
+      permission: "granted",
+    } as any
+    ;(globalThis as any).Notification = Object.assign(mockNotification, {
+      requestPermission: jest.fn().mockResolvedValue("granted"),
+      permission: "granted",
+    })
+
+    // Mock document.hidden
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      get: () => true,
+    })
+
+    let capturedMessaging: any
+    render(
+      <MessagingProvider>
+        <TestComponent callback={(m) => (capturedMessaging = m)} />
+      </MessagingProvider>
+    )
+
+    await act(async () => {
+      await capturedMessaging.toggleNotifications(true)
+    })
+
+    expect(capturedMessaging.notificationsEnabled).toBe(true)
+    expect(Notification.requestPermission).toHaveBeenCalled()
+
+    await waitFor(() => expect(mockLobby.onChallenge).toHaveBeenCalled())
+    const onChallengeHandler = mockLobby.onChallenge.mock.calls[0][0]
+
+    act(() => {
+      onChallengeHandler({
+        messageType: "challenge",
+        type: "offer",
+        challengerId: "user-2",
+        challengerName: "User Two",
+        recipientId: "user-1",
+        ruleType: "nineball",
+        tableId: "table-1",
+      })
+    })
+
+    expect(mockNotification).toHaveBeenCalledWith(
+      "Billiards Challenge",
+      expect.objectContaining({
+        body: "User Two wants to play nineball",
+      })
+    )
+  })
+
   it("throws error when useMessaging is used outside provider", () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
     expect(() => render(<TestComponent callback={() => {}} />)).toThrow(

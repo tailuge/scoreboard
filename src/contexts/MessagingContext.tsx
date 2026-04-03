@@ -43,6 +43,8 @@ interface MessagingContextType {
   clearAcceptedChallenge: () => void
   sendChat: (recipientId: string, text: string) => Promise<void>
   markChatAsRead: (userId: string) => void
+  notificationsEnabled: boolean
+  toggleNotifications: (enabled: boolean) => Promise<void>
 }
 
 const MessagingContext = createContext<MessagingContextType | undefined>(
@@ -83,6 +85,28 @@ export function MessagingProvider({
     useState<ChallengeMessage | null>(null)
   const [chats, setChats] = useState<Record<string, ChatMessage[]>>({})
   const [unreadUsers, setUnreadUsers] = useState<string[]>([])
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const notificationsEnabledRef = useRef(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem("notificationsEnabled")
+    if (stored === "true") {
+      setNotificationsEnabled(true)
+      notificationsEnabledRef.current = true
+    }
+  }, [])
+
+  const toggleNotifications = useCallback(async (enabled: boolean) => {
+    if (enabled) {
+      const permission = await Notification.requestPermission()
+      if (permission !== "granted") {
+        return
+      }
+    }
+    setNotificationsEnabled(enabled)
+    notificationsEnabledRef.current = enabled
+    localStorage.setItem("notificationsEnabled", String(enabled))
+  }, [])
 
   const activeGames = useMemo(() => deriveActiveGames(users), [users])
 
@@ -110,6 +134,16 @@ export function MessagingProvider({
         switch (challenge.type) {
           case "offer":
             setIncomingChallenge(challenge)
+            if (
+              document.hidden &&
+              notificationsEnabledRef.current &&
+              Notification.permission === "granted"
+            ) {
+              new Notification("Billiards Challenge", {
+                body: `${challenge.challengerName} wants to play ${challenge.ruleType}`,
+                icon: "/favicon.png",
+              })
+            }
             break
           case "accept":
             setPendingChallenge(null)
@@ -342,6 +376,8 @@ export function MessagingProvider({
       clearAcceptedChallenge,
       sendChat,
       markChatAsRead,
+      notificationsEnabled,
+      toggleNotifications,
     }),
     [
       users,
@@ -359,6 +395,8 @@ export function MessagingProvider({
       clearAcceptedChallenge,
       sendChat,
       markChatAsRead,
+      notificationsEnabled,
+      toggleNotifications,
     ]
   )
 
