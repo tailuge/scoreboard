@@ -100,6 +100,7 @@ function MatchResultCardComponent({
               loser={result.loser}
               loserScore={result.loserScore}
               compact={compact}
+              isLive={isLive}
             />
           </div>
         </div>

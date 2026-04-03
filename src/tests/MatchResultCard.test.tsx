@@ -16,8 +16,8 @@ describe("MatchResultCard", () => {
 
   it("renders winner and loser names", () => {
     render(<MatchResultCard result={mockResult} />)
-    expect(screen.getByText("Alice")).toBeInTheDocument()
-    expect(screen.getByText("Bob")).toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
+    expect(screen.getByText(/Bob/)).toBeInTheDocument()
   })
 
   it("renders scores", () => {
@@ -109,7 +109,7 @@ describe("MatchResultCard", () => {
     render(<MatchResultCard result={mockResult} compact={true} />)
     // In compact mode we might hide some elements or change style,
     // for now just check it still renders
-    expect(screen.getByText("Alice")).toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
   })
 
   it("renders replay badge when replay is available", () => {
@@ -144,18 +144,41 @@ describe("MatchResultCard", () => {
 
   it("handles re-renders with same or different props for memoization", () => {
     const { rerender } = render(<MatchResultCard result={mockResult} />)
-    expect(screen.getByText("Alice")).toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
 
     // Same props
     rerender(<MatchResultCard result={mockResult} />)
-    expect(screen.getByText("Alice")).toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
 
     // Different props
     rerender(<MatchResultCard result={mockResult} compact={true} />)
-    expect(screen.getByText("Alice")).toBeInTheDocument()
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
 
     const differentResult = { ...mockResult, id: "different" }
     rerender(<MatchResultCard result={differentResult} compact={true} />)
+    expect(screen.getByText(/Alice/)).toBeInTheDocument()
+  })
+
+  it("renders trophy icon for completed 2-player matches and not for live or solo matches", () => {
+    // 1. Completed 2-player match: should have icon
+    const { rerender } = render(<MatchResultCard result={mockResult} />)
+    expect(screen.getByText(/🎖️Alice/)).toBeInTheDocument()
+
+    // 2. Live 2-player match: should not have icon
+    rerender(<MatchResultCard result={mockResult} isLive={true} />)
+    expect(screen.queryByText(/🎖️/)).not.toBeInTheDocument()
     expect(screen.getByText("Alice")).toBeInTheDocument()
+
+    // 3. Completed solo match: should not have icon
+    const soloResult: MatchResult = {
+      id: "solo-1",
+      winner: "Charlie",
+      winnerScore: 50,
+      ruleType: "nineball",
+      timestamp: Date.now(),
+    }
+    rerender(<MatchResultCard result={soloResult} />)
+    expect(screen.queryByText(/🎖️/)).not.toBeInTheDocument()
+    expect(screen.getByText("Charlie")).toBeInTheDocument()
   })
 })
