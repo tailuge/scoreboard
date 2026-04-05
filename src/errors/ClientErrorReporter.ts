@@ -82,8 +82,8 @@ export class ClientErrorReporter {
     this.endpoint = endpoint
     this.sid = getUID()
     this.maxPerKey = options?.maxPerKey ?? 3
-    this.flushIntervalMs = options?.flushIntervalMs ?? 5000
-    this.maxQueueSize = options?.maxQueueSize ?? 20
+    this.flushIntervalMs = options?.flushIntervalMs ?? 30000
+    this.maxQueueSize = options?.maxQueueSize ?? 50
 
     this.boundFlush = this.flush.bind(this)
   }
