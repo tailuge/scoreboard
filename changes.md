@@ -1,36 +1,32 @@
-# Recommendations to Reduce Edge Invocation Count
+# Recommendations to Optimize Vercel Resource Usage
 
-To stay within Vercel's free tier limits for Edge Function invocations, the following changes are recommended for the `billiards` repository. These recommendations focus on consolidating requests, utilizing Incremental Static Regeneration (ISR), and optimizing client-side fetching patterns.
+To stay within Vercel's free tier limits, it is important to distinguish between **Edge Function Invocations** (500,000 per month) and **Serverless Function Executions** (100,000 per month). Currently, most API routes in this repository use the Edge runtime.
 
-## 1. Implement ISR for the Leaderboard Page
-**Current State:** `src/pages/leaderboard.tsx` is a client-side page that triggers three separate edge invocations (one for each game type: Snooker, 9-Ball, and Three-Cushion) via `LeaderboardTable` components.
-**Recommendation:**
-- Add `getStaticProps` to `src/pages/leaderboard.tsx` to fetch all leaderboard data at build/revalidation time (using the same logic as `src/pages/game.tsx`).
-- Pass the fetched data as props to the `LeaderboardTable` components to avoid client-side fetches on initial load.
-- Set a reasonable `revalidate` interval (e.g., 60 seconds) to keep the data fresh while significantly reducing invocations.
+This document focuses on reducing the invocation count for `game.tsx` and background reporting systems.
 
-## 2. Consolidate Data Fetching with Composition Patterns
-**Current State:** Multiple components (`HighscoreGrid`, `LeaderboardTable`) may trigger redundant fetches if not properly hydrated with initial data.
-**Recommendation:**
-- Use a **Data Provider Pattern**: Create a `LeaderboardProvider` that fetches all leaderboard data once (using `/api/rank?ruletype=all`) and shares it via React Context.
-- Refactor `LeaderboardTable` and `HighscoreGrid` to consume data from this provider instead of each calling their own hooks (`useLeaderboard`, `useAllLeaderboards`).
-- This ensures that even if multiple components need the same data, only one Edge invocation is made.
+## 1. Optimize `game.tsx` (Lobby Page)
+The lobby page is the primary entry point and currently utilizes Incremental Static Regeneration (ISR).
 
-## 3. Batch or Sample Usage Metrics
-**Current State:** The `markUsage` utility in `src/utils/usage.ts` sends a PUT request to `/api/usage/[metric]` for every event (e.g., every time a user enters the lobby).
-**Recommendation:**
-- **Batching:** Collect usage metrics in a client-side queue and send them in a single batch request every 30-60 seconds or when the user leaves the page.
-- **Sampling:** For high-frequency events like `lobby`, implement a sampling rate (e.g., only record 10% of lobby entries) to reduce the total number of Edge invocations.
+### 1.1 Increase ISR Revalidation Interval
+- **Current State:** `src/pages/game.tsx` has `revalidate: 15`, meaning every 15 seconds, a request to the lobby can trigger a background regeneration (one Edge invocation per game type for highscores, plus one for match results).
+- **Recommendation:** Increase `revalidate` to 60 or 120 seconds. Since the lobby also uses client-side hooks to fetch the latest data after hydration, the impact on user experience is minimal, but the background invocation overhead is reduced by 75-80%.
+
+### 1.2 Batch or Sample Usage Metrics
+- **Current State:** `markUsage("lobby")` is called immediately upon entry in `game.tsx`. This triggers a PUT request to `/api/usage/lobby` (an Edge invocation).
+- **Recommendation:**
+    - **Sampling:** Only call `markUsage("lobby")` for a percentage of users (e.g., 10%) if exact counts are not required.
+    - **Batching:** Buffer usage events (`lobby`, `createTable`, `joinTable`) in a client-side queue and send them as a single POST request to a consolidated endpoint when the user navigates away or after a set interval.
+
+## 2. Refine Background Reporting
+### 2.1 Consolidate `ClientErrorReporter`
+- **Current State:** `ClientErrorReporter` in `src/errors/ClientErrorReporter.ts` flushes the error queue every 5,000ms using `setInterval`. Each flush is an Edge invocation to `/api/client-error`.
+- **Recommendation:**
+    - Increase the `flushIntervalMs` to 30,000ms or more.
+    - Errors are non-critical for the user experience; longer intervals drastically reduce background invocations for long-lived sessions.
+
+## 3. Verify Polling and Data Fetching
+- **Confirmation:** A review of `src/components/hooks` confirms that `useLeaderboard`, `useAllLeaderboards`, and `useMatchHistory` **do not** implement automatic `setInterval` polling. They fetch data once upon mounting (if `initialData` is missing).
+- **Consolidation:** While they don't poll, the `HighscoreGrid` in `game.tsx` currently triggers a fetch for all leaderboards if ISR data is missing. Ensuring the ISR data is always present (by increasing revalidation time and handling KV misses gracefully) prevents these fallback invocations.
 
 ## 4. Optimize API Runtimes
-**Current State:** All API routes in `src/pages/api/` are currently configured with `runtime: "edge"`.
-**Recommendation:**
-- Evaluate which API routes actually require the low latency of the Edge runtime.
-- Routes such as `/api/client-error`, `/api/logs`, and `/api/shorten` might be suitable for the standard Node.js runtime. Moving them would shift their execution away from the Edge invocation quota.
-
-## 5. Refine Client-Side Polling
-**Current State:** Hooks like `useLeaderboard` and `useMatchHistory` may implement polling to keep data updated.
-**Recommendation:**
-- Increase the polling interval for non-critical data.
-- Use `stale-while-revalidate` headers (which are already partially implemented) more aggressively to allow the CDN to serve cached data, reducing the number of times the Edge Function is actually executed.
-- Ensure that client-side polling only occurs when the tab is active to avoid wasted invocations.
+- **Recommendation:** Not all routes benefit from the Edge runtime. Non-latency-sensitive routes like `/api/client-error`, `/api/logs`, and `/api/usage` should be evaluated for the standard Serverless runtime (Node.js) to move their execution away from the Edge invocation quota, although this still counts against the 100k Serverless execution limit.
