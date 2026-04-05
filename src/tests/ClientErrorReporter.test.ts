@@ -70,7 +70,7 @@ describe("ClientErrorReporter", () => {
       console.error("Test error")
 
       // Advance time to trigger flush
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalled()
     })
@@ -82,7 +82,7 @@ describe("ClientErrorReporter", () => {
 
       console.error("Test error message")
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
@@ -98,7 +98,7 @@ describe("ClientErrorReporter", () => {
 
       console.error("Data:", { a: 1 }, circular)
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -114,7 +114,7 @@ describe("ClientErrorReporter", () => {
 
       console.error("Values:", null, undefined)
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -129,7 +129,7 @@ describe("ClientErrorReporter", () => {
       const error = new Error("Test error")
       console.error(error)
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
@@ -147,7 +147,7 @@ describe("ClientErrorReporter", () => {
       }
       console.error(pseudoError)
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -163,7 +163,7 @@ describe("ClientErrorReporter", () => {
       console.error("Same error")
       console.error("Same error")
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -175,7 +175,7 @@ describe("ClientErrorReporter", () => {
 
       console.error("Error with context")
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -188,7 +188,7 @@ describe("ClientErrorReporter", () => {
 
       console.error("Test")
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
@@ -203,7 +203,7 @@ describe("ClientErrorReporter", () => {
       console.error("Critical autoconsent error")
       console.error("Normal error")
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledTimes(1)
       const call = sendBeaconSpy.mock.calls[0]
@@ -217,7 +217,7 @@ describe("ClientErrorReporter", () => {
     it("should not call fetch when queue is empty", () => {
       reporter.start()
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).not.toHaveBeenCalled()
     })
@@ -225,7 +225,7 @@ describe("ClientErrorReporter", () => {
     it("should flush on queue overflow", () => {
       reporter.start()
 
-      for (let i = 0; i < 21; i++) {
+      for (let i = 0; i < 51; i++) {
         console.error(`Error ${i}`)
       }
 
@@ -251,8 +251,8 @@ describe("ClientErrorReporter", () => {
 
       console.error("Error 1")
 
-      jest.advanceTimersByTime(5001)
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledTimes(1)
     })
@@ -264,7 +264,7 @@ describe("ClientErrorReporter", () => {
       console.error("Test error")
 
       // Trigger flush through timer
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(fetchSpy).toHaveBeenCalledWith(
         "/api/client-error",
@@ -317,7 +317,7 @@ describe("ClientErrorReporter", () => {
       })
       globalThis.dispatchEvent(errorEvent)
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
@@ -340,7 +340,7 @@ describe("ClientErrorReporter", () => {
         })
       }
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
@@ -363,7 +363,7 @@ describe("ClientErrorReporter", () => {
         })
       }
 
-      jest.advanceTimersByTime(5001)
+      jest.advanceTimersByTime(30001)
 
       expect(sendBeaconSpy).toHaveBeenCalledWith(
         "/api/client-error",
