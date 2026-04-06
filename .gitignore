@@ -38,6 +38,7 @@ dev.log
 .jules/
 .gemini/
 .qwen/
+.kilocode/
 
 # Vercel
 .vercel
