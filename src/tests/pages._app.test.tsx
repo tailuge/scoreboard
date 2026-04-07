@@ -18,15 +18,6 @@ jest.mock("@/contexts/MessagingContext", () => ({
   MessagingProvider: jest.fn(({ children }) => <>{children}</>),
 }))
 
-// Mock the Vercel analytics components
-jest.mock("@vercel/speed-insights/next", () => ({
-  SpeedInsights: () => <div>SpeedInsights</div>,
-}))
-
-jest.mock("@vercel/analytics/next", () => ({
-  Analytics: () => <div>Analytics</div>,
-}))
-
 // Mock ClientErrorReporter to prevent side effects in tests
 jest.mock("@/errors/ClientErrorReporter", () => ({
   ClientErrorReporter: jest.fn().mockImplementation(() => ({
@@ -35,7 +26,7 @@ jest.mock("@/errors/ClientErrorReporter", () => ({
 }))
 
 describe("App", () => {
-  it("renders the component and analytics scripts", () => {
+  it("renders the component", () => {
     const mockPageProps = {}
     const MockComponent = () => <div>Mock Component</div>
     const mockRouter = {
@@ -69,8 +60,6 @@ describe("App", () => {
     )
 
     expect(getByText("Mock Component")).toBeInTheDocument()
-    expect(getByText("SpeedInsights")).toBeInTheDocument()
-    expect(getByText("Analytics")).toBeInTheDocument()
     expect(MessagingProvider).toHaveBeenCalled()
   })
 })
