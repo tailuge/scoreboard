@@ -205,7 +205,7 @@ export function ServerStatsPopover({
         })
         .catch((err) => {
           setError(err instanceof Error ? err.message : "Failed to load stats")
-          console.error("Error loading server stats:", err)
+          console.error(`Error loading server stats from ${STATS_URL}:`, err)
         })
         .finally(() => {
           setLoading(false)

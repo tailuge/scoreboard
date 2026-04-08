@@ -211,6 +211,24 @@ describe("ClientErrorReporter", () => {
       expect(body.length).toBe(1)
       expect(body[0].message).toBe("Normal error")
     })
+
+    it("should enhance 'Load failed' and 'Failed to fetch' messages", () => {
+      reporter.start()
+
+      console.error("Load failed")
+      console.error("Failed to fetch")
+
+      jest.advanceTimersByTime(30001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body[0].message).toBe(
+        "Load failed (Note: Possible network error or CSP violation)"
+      )
+      expect(body[1].message).toBe(
+        "Failed to fetch (Note: Possible network error or CSP violation)"
+      )
+    })
   })
 
   describe("flush", () => {
