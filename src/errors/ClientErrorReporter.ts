@@ -183,7 +183,15 @@ export class ClientErrorReporter {
 
       if (message.includes("autoconsent")) return
 
-      const key = type + ":" + message
+      let enhancedMessage = message
+      if (
+        message.includes("Load failed") ||
+        message.includes("Failed to fetch")
+      ) {
+        enhancedMessage += " (Note: Possible network error or CSP violation)"
+      }
+
+      const key = type + ":" + enhancedMessage
       const count = (this.seen.get(key) ?? 0) + 1
       this.seen.set(key, count)
 
@@ -191,7 +199,7 @@ export class ClientErrorReporter {
 
       this.queue.push({
         type,
-        message,
+        message: enhancedMessage,
         stack,
         url: globalThis.location?.href ?? "",
         ts: Date.now(),
