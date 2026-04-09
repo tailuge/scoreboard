@@ -4,6 +4,7 @@ import { MatchResultService } from "@/services/MatchResultService"
 import { getUID } from "@/utils/uid"
 import { logger } from "@/utils/logger"
 import { isValidGameType } from "@/utils/gameTypes"
+import { corsJson } from "@/utils/cors"
 
 export const config = {
   runtime: "edge",
@@ -93,15 +94,15 @@ async function handleGet(request: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
 
     const results = await matchResultService.getMatchResults(limit, ruleType)
-    return Response.json(results, {
+    return corsJson(results, {
       headers: {
         "Cache-Control":
           "public, max-age=0, s-maxage=15, stale-while-revalidate=8",
       },
     })
   } catch (error) {
-    logger.log("Error fetching match results:", error)
-    return new Response("Internal Server Error", { status: 500 })
+    logger.error("Error fetching match results:", error)
+    return corsJson({ error: "Internal Server Error" }, { status: 500 })
   }
 }
 
@@ -150,9 +151,12 @@ async function handlePost(request: NextRequest) {
     }
 
     await matchResultService.addMatchResult(newResult, replayData)
-    return Response.json(newResult, { status: 201 })
+    return corsJson(newResult, { status: 201 })
   } catch (error) {
-    logger.log("Error adding match result:", error)
-    return new Response("Internal Server Error", { status: 500 })
+    logger.error("Error adding match result:", error)
+    return corsJson(
+      { error: "Internal Server Error", details: String(error) },
+      { status: 500 }
+    )
   }
 }

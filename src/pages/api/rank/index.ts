@@ -63,7 +63,7 @@ export default async function handler(request: NextRequest) {
       },
     })
   } catch (error) {
-    logger.warn("Error fetching top ten ranks:", error)
-    return corsResponse("Invalid ruletype", { status: 400 })
+    logger.error("Error fetching top ten ranks:", error)
+    return corsResponse(`Invalid ruletype: ${ruletype}`, { status: 400 })
   }
 }

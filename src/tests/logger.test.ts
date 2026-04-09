@@ -35,18 +35,33 @@ describe("logger", () => {
     logger.info("test info")
     logger.warn("test warn")
 
-    expect(consoleLogSpy).toHaveBeenCalledWith("test log")
-    expect(consoleInfoSpy).toHaveBeenCalledWith("test info")
-    expect(consoleWarnSpy).toHaveBeenCalledWith("test warn")
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[LOG]"),
+      "test log"
+    )
+    expect(consoleInfoSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[INFO]"),
+      "test info"
+    )
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[WARN]"),
+      "test warn"
+    )
   })
 
   it("should always log errors regardless of enabled status", () => {
     logger.enabled = false
     logger.error("test error")
-    expect(consoleErrorSpy).toHaveBeenCalledWith("test error")
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[ERROR]"),
+      "test error"
+    )
 
     logger.enabled = true
     logger.error("another error")
-    expect(consoleErrorSpy).toHaveBeenCalledWith("another error")
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[ERROR]"),
+      "another error"
+    )
   })
 })

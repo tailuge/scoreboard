@@ -63,7 +63,7 @@ export default async function handler(request: NextRequest) {
 
   // require up to date client version
   if (json?.v !== 1) {
-    logger.log("Client version is outdated")
+    logger.error("Client version is outdated:", json?.v)
     return corsResponse(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
       { status: 400 }
@@ -83,8 +83,8 @@ export default async function handler(request: NextRequest) {
   try {
     data = await scoretable.topTen(ruletype)
   } catch (error) {
-    logger.warn("Error fetching top ten ranks:", error)
-    return corsResponse("Invalid ruletype", { status: 400 })
+    logger.error("Error fetching top ten ranks for hiscore:", error)
+    return corsResponse(`Invalid ruletype: ${ruletype}`, { status: 400 })
   }
 
   if (
