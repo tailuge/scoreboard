@@ -10,7 +10,7 @@ describe("ClientErrorReporter", () => {
   beforeEach(() => {
     jest.useFakeTimers()
 
-    fetchSpy = jest.fn().mockResolvedValue({ ok: true })
+    fetchSpy = jest.fn().mockImplementation(() => Promise.resolve({ ok: true }))
     ;(globalThis as any).fetch = fetchSpy
 
     sendBeaconSpy = jest.fn().mockReturnValue(true)
@@ -228,6 +228,37 @@ describe("ClientErrorReporter", () => {
       expect(body[1].message).toBe(
         "Failed to fetch (Note: Possible network error or CSP violation)"
       )
+    })
+
+    it("should capture Error.cause when present", () => {
+      reporter.start()
+
+      const cause = new Error("Original cause")
+      const error = new Error("Wrapper error", { cause })
+      console.error(error)
+
+      jest.advanceTimersByTime(30001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body[0].message).toContain("Wrapper error")
+      expect(body[0].message).toContain("(Cause: Error: Original cause)")
+      expect(body[0].stack).toContain("Cause stack:")
+    })
+
+    it("should capture non-Error cause when present", () => {
+      reporter.start()
+
+      const cause = { code: 500, detail: "Server error" }
+      const error = new Error("Fetch failed", { cause })
+      console.error(error)
+
+      jest.advanceTimersByTime(30001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body[0].message).toContain("Fetch failed")
+      expect(body[0].message).toContain('(Cause: {"code":500,"detail":"Server error"})')
     })
   })
 

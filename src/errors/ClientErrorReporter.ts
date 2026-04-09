@@ -24,8 +24,8 @@
  *
  * RATE LIMITING:
  * - Maximum of maxPerKey (default: 3) reports per unique error message
- * - Maximum queue size of maxQueueSize (default: 20) before forced flush
- * - Automatic flush every flushIntervalMs (default: 5000ms)
+ * - Maximum queue size of maxQueueSize (default: 50) before forced flush
+ * - Automatic flush every flushIntervalMs (default: 30000ms)
  *
  * @example
  * // Basic usage with default settings
@@ -94,7 +94,7 @@ export class ClientErrorReporter {
 
     this.intervalId = setInterval(this.boundFlush, this.flushIntervalMs)
 
-    window.addEventListener("pagehide", this.boundFlush)
+    globalThis.addEventListener?.("pagehide", this.boundFlush)
   }
 
   stop() {
@@ -105,7 +105,7 @@ export class ClientErrorReporter {
       this.intervalId = undefined
     }
 
-    window.removeEventListener("pagehide", this.boundFlush)
+    globalThis.removeEventListener?.("pagehide", this.boundFlush)
 
     if (this.originalConsoleError) {
       console.error = this.originalConsoleError
@@ -148,38 +148,9 @@ export class ClientErrorReporter {
 
   private capture(type: string, args: unknown[]) {
     try {
-      let stack: string | undefined
-      const message = args
-        .map((a) => {
-          if (a === null) return "null"
-          if (a === undefined) return "undefined"
-          if (a instanceof Error) {
-            stack = stack || a.stack
-            return String(a)
-          }
-          if (typeof a === "object") {
-            const obj = a as Record<string, unknown>
-            if (typeof obj.stack === "string") {
-              stack = stack || obj.stack
-            }
-            if (
-              typeof obj.message === "string" &&
-              typeof obj.name === "string"
-            ) {
-              return `${obj.name}: ${obj.message}`
-            }
-            try {
-              return JSON.stringify(a)
-            } catch {
-              const constructorName =
-                (a as { constructor?: { name?: string } }).constructor?.name ??
-                "Object"
-              return `[Object ${constructorName}]`
-            }
-          }
-          return String(a)
-        })
-        .join(" ")
+      const result = this.serializeArgs(args)
+      const message = result.message
+      const stack = result.stack
 
       if (message.includes("autoconsent")) return
 
@@ -214,6 +185,61 @@ export class ClientErrorReporter {
     }
   }
 
+  private serializeArgs(args: unknown[]) {
+    let stack: string | undefined
+    const message = args
+      .map((a) => {
+        if (a === null) return "null"
+        if (a === undefined) return "undefined"
+        if (a instanceof Error) {
+          const result = this.serializeError(a)
+          stack = stack || result.stack
+          return result.message
+        }
+        if (typeof a === "object") {
+          const result = this.serializeObject(a as Record<string, unknown>)
+          stack = stack || result.stack
+          return result.message
+        }
+        return String(a)
+      })
+      .join(" ")
+    return { message, stack }
+  }
+
+  private serializeError(err: Error) {
+    let stack = err.stack
+    let message = String(err)
+    if (err.cause) {
+      const causeResult =
+        err.cause instanceof Error
+          ? this.serializeError(err.cause)
+          : this.serializeObject(err.cause as Record<string, unknown>)
+
+      message += ` (Cause: ${causeResult.message})`
+      if (causeResult.stack) {
+        stack = (stack || "") + "\nCause stack: " + causeResult.stack
+      }
+    }
+    return { message, stack }
+  }
+
+  private serializeObject(obj: Record<string, unknown>) {
+    let stack: string | undefined
+    if (typeof obj.stack === "string") {
+      stack = obj.stack
+    }
+    if (typeof obj.message === "string" && typeof obj.name === "string") {
+      return { message: `${obj.name}: ${obj.message}`, stack }
+    }
+    try {
+      return { message: JSON.stringify(obj), stack }
+    } catch {
+      const constructorName = obj.constructor?.name ?? "Object"
+      return { message: `[Object ${constructorName}]`, stack }
+    }
+  }
+
   private flush(useBeacon = true) {
     try {
       if (!this.queue.length) return
@@ -221,12 +247,12 @@ export class ClientErrorReporter {
       const payload = JSON.stringify(this.queue)
       this.queue = []
 
-      if (useBeacon && navigator.sendBeacon) {
-        navigator.sendBeacon(this.endpoint, payload)
+      if (useBeacon && globalThis.navigator?.sendBeacon) {
+        globalThis.navigator.sendBeacon(this.endpoint, payload)
         return
       }
 
-      fetch(this.endpoint, {
+      globalThis.fetch(this.endpoint, {
         method: "POST",
         body: payload,
         keepalive: true,
