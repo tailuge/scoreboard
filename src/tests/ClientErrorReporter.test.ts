@@ -242,8 +242,23 @@ describe("ClientErrorReporter", () => {
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
       expect(body[0].message).toContain("Wrapper error")
-      expect(body[0].message).toContain("(Cause: Original cause)")
+      expect(body[0].message).toContain("(Cause: Error: Original cause)")
       expect(body[0].stack).toContain("Cause stack:")
+    })
+
+    it("should capture non-Error cause when present", () => {
+      reporter.start()
+
+      const cause = { code: 500, detail: "Server error" }
+      const error = new Error("Fetch failed", { cause })
+      console.error(error)
+
+      jest.advanceTimersByTime(30001)
+
+      const call = sendBeaconSpy.mock.calls[0]
+      const body = JSON.parse(call[1] as string)
+      expect(body[0].message).toContain("Fetch failed")
+      expect(body[0].message).toContain('(Cause: {"code":500,"detail":"Server error"})')
     })
   })
 

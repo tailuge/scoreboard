@@ -211,11 +211,14 @@ export class ClientErrorReporter {
     let stack = err.stack
     let message = String(err)
     if (err.cause) {
-      message += ` (Cause: ${
-        err.cause instanceof Error ? err.cause.message : String(err.cause)
-      })`
-      if (err.cause instanceof Error && err.cause.stack) {
-        stack = (stack || "") + "\nCause stack: " + err.cause.stack
+      const causeResult =
+        err.cause instanceof Error
+          ? this.serializeError(err.cause)
+          : this.serializeObject(err.cause as Record<string, unknown>)
+
+      message += ` (Cause: ${causeResult.message})`
+      if (causeResult.stack) {
+        stack = (stack || "") + "\nCause stack: " + causeResult.stack
       }
     }
     return { message, stack }
