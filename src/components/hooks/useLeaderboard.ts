@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
+import { logger } from "@/utils/logger"
 
 export function useLeaderboard(
   ruleType: string,
@@ -26,7 +27,21 @@ export function useLeaderboard(
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return
         setError(err instanceof Error ? err : new Error("Unknown error"))
-        console.error(`Error fetching leaderboard data for ${ruleType}:`, err)
+        const url = `/api/rank?ruletype=${ruleType}`
+        logger.error(
+          `Error fetching leaderboard data for ${ruleType}`,
+          err instanceof Error ? err : new Error("Unknown error"),
+          {
+            operation: "fetchLeaderboard",
+            file: "src/components/hooks/useLeaderboard.ts",
+            url,
+            method: "GET",
+            status:
+              err instanceof Error && /status[:\s](\d+)/.test(err.message)
+                ? parseInt(err.message.match(/status[:\s](\d+)/)![1], 10)
+                : null,
+          }
+        )
       } finally {
         setLoading(false)
       }
@@ -52,7 +67,17 @@ export function useLeaderboard(
           )
         )
       } catch (err) {
-        console.error("Error updating likes:", err)
+        const url = `/api/rank/${id}?ruletype=${ruleType}`
+        logger.error(
+          `Error updating likes for ${id}`,
+          err instanceof Error ? err : new Error("Unknown error"),
+          {
+            operation: "updateLike",
+            file: "src/components/hooks/useLeaderboard.ts",
+            url,
+            method: "PUT",
+          }
+        )
       }
     },
     [ruleType]

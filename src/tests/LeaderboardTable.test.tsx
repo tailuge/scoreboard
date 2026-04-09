@@ -72,8 +72,7 @@ describe("LeaderboardTable", () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
-        "Error updating likes:",
-        expect.any(Error)
+        expect.stringContaining("Error updating likes")
       )
     })
     consoleSpy.mockRestore()
