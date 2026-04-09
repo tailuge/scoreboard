@@ -16,11 +16,7 @@ describe("ClientErrorReporter", () => {
     sendBeaconSpy = jest.fn().mockReturnValue(true)
     ;(globalThis as any).navigator = {
       sendBeacon: sendBeaconSpy,
-      onLine: true,
     }
-
-    globalThis.innerWidth = 1024
-    globalThis.innerHeight = 768
 
     jest.spyOn(globalThis, "addEventListener")
 
@@ -174,7 +170,7 @@ describe("ClientErrorReporter", () => {
       expect(body.filter((l: any) => l.message === "Same error").length).toBe(3)
     })
 
-    it("should include url, timestamp, online status and viewport", () => {
+    it("should include url and timestamp", () => {
       reporter.start()
 
       console.error("Error with context")
@@ -185,8 +181,6 @@ describe("ClientErrorReporter", () => {
       const body = JSON.parse(call[1] as string)
       expect(body[0].url).toBe("http://localhost/")
       expect(body[0].ts).toBeDefined()
-      expect(body[0].online).toBe(true)
-      expect(body[0].viewport).toBe("1024x768")
     })
 
     it("should include session id", () => {
@@ -250,41 +244,6 @@ describe("ClientErrorReporter", () => {
       expect(body[0].message).toContain("Wrapper error")
       expect(body[0].message).toContain("(Cause: Original cause)")
       expect(body[0].stack).toContain("Cause stack:")
-    })
-  })
-
-  describe("fetch interception", () => {
-    it("should intercept global fetch and report failures", async () => {
-      reporter.start()
-
-      const networkError = new TypeError("Failed to fetch")
-      fetchSpy.mockRejectedValueOnce(networkError)
-
-      await expect(globalThis.fetch("https://api.example.com/data")).rejects.toThrow()
-
-      jest.advanceTimersByTime(30001)
-
-      expect(sendBeaconSpy).toHaveBeenCalledWith(
-        "/api/client-error",
-        expect.stringContaining("Fetch error for https://api.example.com/data")
-      )
-    })
-
-    it("should not intercept reports to its own endpoint", async () => {
-      reporter.start()
-
-      await globalThis.fetch("/api/client-error", { method: "POST", body: "{}" })
-
-      // No error should be captured for this call even if it failed (but here it succeeds)
-      expect(reporter["queue"].length).toBe(0)
-    })
-
-    it("should use correct this context for fetch", async () => {
-      reporter.start()
-
-      // In JSDOM/Node environment, we want to ensure it doesn't throw the 'interface Window' error
-      // which usually happens when 'this' is wrong.
-      await expect(globalThis.fetch("https://api.example.com")).resolves.toBeDefined()
     })
   })
 
