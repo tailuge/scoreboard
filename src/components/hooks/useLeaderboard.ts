@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
+import { logger } from "@/utils/logger"
 
 export function useLeaderboard(
   ruleType: string,
@@ -19,14 +20,14 @@ export function useLeaderboard(
         const response = await fetch(url, { signal })
         if (!response.ok)
           throw new Error(
-            `Failed to fetch leaderboard data for ${ruleType}: ${response.status}`
+            `Failed to fetch leaderboard data for ${ruleType}: ${response.status} ${response.statusText}`
           )
         const jsonData = await response.json()
         setData(jsonData)
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return
         setError(err instanceof Error ? err : new Error("Unknown error"))
-        console.error(`Error fetching leaderboard data for ${ruleType}:`, err)
+        logger.error(`Error fetching leaderboard data for ${ruleType}:`, err)
       } finally {
         setLoading(false)
       }
@@ -42,17 +43,20 @@ export function useLeaderboard(
 
   const handleLike = useCallback(
     async (id: string) => {
+      const url = `/api/rank/${id}?ruletype=${ruleType}`
       try {
-        const url = `/api/rank/${id}?ruletype=${ruleType}`
         const response = await fetch(url, { method: "PUT" })
-        if (!response.ok) throw new Error("Failed to update likes")
+        if (!response.ok)
+          throw new Error(
+            `Failed to update likes: ${response.status} ${response.statusText}`
+          )
         setData((prevData) =>
           prevData.map((item) =>
             item.id === id ? { ...item, likes: (item.likes || 0) + 1 } : item
           )
         )
       } catch (err) {
-        console.error("Error updating likes:", err)
+        logger.error(`Error updating likes at ${url}:`, err)
       }
     },
     [ruleType]
