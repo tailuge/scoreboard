@@ -72,8 +72,7 @@ describe("LeaderboardTable", () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining("[ERROR]"),
-        expect.stringContaining("Error updating likes at /api/rank/1?ruletype=snooker"),
+        "Error updating likes:",
         expect.any(Error)
       )
     })

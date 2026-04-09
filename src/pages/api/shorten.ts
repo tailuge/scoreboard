@@ -33,6 +33,6 @@ export default async function handler(request: NextRequest) {
     return corsResponse(JSON.stringify(body))
   } catch (error) {
     logger.error("Shorten API error:", error)
-    return corsResponse(`Request failed: ${error}`, { status: 400 })
+    return corsResponse("Request failed", { status: 400 })
   }
 }

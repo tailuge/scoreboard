@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
-import { logger } from "@/utils/logger"
 
 export function useAllLeaderboards(
   initialData?: Record<string, LeaderboardItem[]>
@@ -14,19 +13,19 @@ export function useAllLeaderboards(
   const fetchData = useCallback(async (signal?: AbortSignal) => {
     setLoading(true)
     setError(null)
-    const url = "/api/rank?ruletype=all"
     try {
+      const url = "/api/rank?ruletype=all"
       const response = await fetch(url, { signal })
       if (!response.ok)
         throw new Error(
-          `Failed to fetch all leaderboard data: ${response.status} ${response.statusText}`
+          `Failed to fetch all leaderboard data: ${response.status}`
         )
       const jsonData = await response.json()
       setData(jsonData)
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return
       setError(err instanceof Error ? err : new Error("Unknown error"))
-      logger.error(`Error fetching all leaderboard data from ${url}:`, err)
+      console.error("Error fetching all leaderboard data:", err)
     } finally {
       setLoading(false)
     }

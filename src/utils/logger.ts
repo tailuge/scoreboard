@@ -1,29 +1,24 @@
-const format = (level: string, ...args: unknown[]) => {
-  const ts = new Date().toISOString()
-  return [`[${ts}] [${level}]`, ...args]
-}
-
 export const logger = {
   // Defaults to false in test environment, true otherwise
   enabled: typeof process !== "undefined" && process.env.NODE_ENV !== "test",
 
-  log: (...args: unknown[]) => {
+  log: (...args: any[]) => {
     if (logger.enabled) {
-      console.log(...format("LOG", ...args))
+      console.log(...args)
     }
   },
-  info: (...args: unknown[]) => {
+  info: (...args: any[]) => {
     if (logger.enabled) {
-      console.info(...format("INFO", ...args))
+      console.info(...args)
     }
   },
-  warn: (...args: unknown[]) => {
+  warn: (...args: any[]) => {
     if (logger.enabled) {
-      console.warn(...format("WARN", ...args))
+      console.warn(...args)
     }
   },
-  error: (...args: unknown[]) => {
+  error: (...args: any[]) => {
     // Errors are usually kept visible even in tests
-    console.error(...format("ERROR", ...args))
+    console.error(...args)
   },
 }
