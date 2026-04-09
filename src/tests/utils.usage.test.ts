@@ -11,7 +11,9 @@ describe("Usage Utils", () => {
 
   describe("markUsage", () => {
     it("should call the usage API with the correct metric", () => {
-      globalThis.fetch = jest.fn().mockReturnValue(Promise.resolve({ ok: true }))
+      globalThis.fetch = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({ ok: true }))
       markUsage(testMetric)
       expect(globalThis.fetch).toHaveBeenCalledWith(
         `/api/usage/${testMetric}`,
