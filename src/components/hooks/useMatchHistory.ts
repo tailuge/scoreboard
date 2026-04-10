@@ -15,6 +15,8 @@ export function useMatchHistory(initialData?: MatchResult[]) {
       const data = await response.json()
       setResults(data)
     } catch (error) {
+      const statusMatch =
+        error instanceof Error ? /status[:\s](\d+)/.exec(error.message) : null
       logger.error(
         "Error fetching match history",
         error instanceof Error ? error : new Error("Unknown error"),
@@ -23,10 +25,7 @@ export function useMatchHistory(initialData?: MatchResult[]) {
           file: "src/components/hooks/useMatchHistory.ts",
           url: "/api/match-results",
           method: "GET",
-          status:
-            error instanceof Error && /status[:\s](\d+)/.test(error.message)
-              ? parseInt(error.message.match(/status[:\s](\d+)/)![1], 10)
-              : null,
+          status: statusMatch ? Number.parseInt(statusMatch[1], 10) : null,
         }
       )
     } finally {

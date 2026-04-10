@@ -28,6 +28,8 @@ export function useLeaderboard(
         if (err instanceof Error && err.name === "AbortError") return
         setError(err instanceof Error ? err : new Error("Unknown error"))
         const url = `/api/rank?ruletype=${ruleType}`
+        const statusMatch =
+          err instanceof Error ? /status[:\s](\d+)/.exec(err.message) : null
         logger.error(
           `Error fetching leaderboard data for ${ruleType}`,
           err instanceof Error ? err : new Error("Unknown error"),
@@ -36,10 +38,7 @@ export function useLeaderboard(
             file: "src/components/hooks/useLeaderboard.ts",
             url,
             method: "GET",
-            status:
-              err instanceof Error && /status[:\s](\d+)/.test(err.message)
-                ? parseInt(err.message.match(/status[:\s](\d+)/)![1], 10)
-                : null,
+            status: statusMatch ? Number.parseInt(statusMatch[1], 10) : null,
           }
         )
       } finally {

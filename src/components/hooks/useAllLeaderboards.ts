@@ -26,6 +26,8 @@ export function useAllLeaderboards(
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return
       setError(err instanceof Error ? err : new Error("Unknown error"))
+      const statusMatch =
+        err instanceof Error ? /status[:\s](\d+)/.exec(err.message) : null
       logger.error(
         "Error fetching all leaderboard data",
         err instanceof Error ? err : new Error("Unknown error"),
@@ -34,10 +36,7 @@ export function useAllLeaderboards(
           file: "src/components/hooks/useAllLeaderboards.ts",
           url: "/api/rank?ruletype=all",
           method: "GET",
-          status:
-            err instanceof Error && /status[:\s](\d+)/.test(err.message)
-              ? parseInt(err.message.match(/status[:\s](\d+)/)![1], 10)
-              : null,
+          status: statusMatch ? Number.parseInt(statusMatch[1], 10) : null,
         }
       )
     } finally {

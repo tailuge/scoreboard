@@ -25,7 +25,9 @@ function buildErrorMessage(error: Error, ctx: ErrorContext): string {
   }
   if (ctx.details) {
     for (const [k, v] of Object.entries(ctx.details)) {
-      lines.push(`  ${k}: ${v}`)
+      const value =
+        typeof v === "object" && v !== null ? JSON.stringify(v) : String(v)
+      lines.push(`  ${k}: ${value}`)
     }
   }
   return lines.join("\n")
@@ -53,10 +55,10 @@ export const logger = {
   error: (message: string, error?: unknown, ctx?: ErrorContext) => {
     if (error instanceof Error && ctx) {
       console.error(message + "\n" + buildErrorMessage(error, ctx))
-    } else if (error != null) {
-      console.error(message, error)
-    } else {
+    } else if (error == null) {
       console.error(message)
+    } else {
+      console.error(message, error)
     }
   },
 }
