@@ -31,7 +31,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@tailuge/messaging": "1.14.0",
+    "@tailuge/messaging": "1.15.0",
     "@tailwindcss/postcss": "4.2.2",
     "@vercel/kv": "3.0.0",
     "jsoncrush": "^1.1.8",
@@ -70,7 +70,7 @@
     "jscpd": "4.0.8",
     "oxlint": "1.59.0",
     "postcss-load-config": "^6.0.1",
-    "prettier": "3.8.1",
+    "prettier": "3.8.2",
     "tailwindcss": "4.2.2",
     "ts-jest": "29.4.9",
     "typescript": "6.0.2",
