@@ -921,29 +921,29 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@jscpd/badge-reporter@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@jscpd/badge-reporter/-/badge-reporter-4.0.4.tgz#fa6c6765df56220e69884354dc5358f031950ca0"
-  integrity sha512-I9b4MmLXPM2vo0SxSUWnNGKcA4PjQlD3GzXvFK60z43cN/EIdLbOq3FVwCL+dg2obUqGXKIzAm7EsDFTg0D+mQ==
+"@jscpd/badge-reporter@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@jscpd/badge-reporter/-/badge-reporter-4.0.5.tgz#6414cca202f97a53d7a7c5ab67b3ceacfb77aa6d"
+  integrity sha512-SLVhP00R9lkQ//Ivaanfm7k0L9sewpBven670kk1uGec2SWUOa7MVQcuad/TV59KEZ73UIC1lXvi6O9hAnbpUw==
   dependencies:
     badgen "^3.2.3"
     colors "^1.4.0"
     fs-extra "^11.2.0"
 
-"@jscpd/core@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@jscpd/core/-/core-4.0.4.tgz#ead3bbd413460823c36b931e05d2bcd7a8830e95"
-  integrity sha512-QGMT3iXEX1fI6lgjPH+x8eyJwhwr2KkpSF5uBpjC0Z5Xloj0yFTFLtwJT+RhxP/Ob4WYrtx2jvpKB269oIwgMQ==
+"@jscpd/core@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@jscpd/core/-/core-4.0.5.tgz#f36f448014ea779713fb88b8883188c99998be51"
+  integrity sha512-Udvym21nWzxjYRVXwwpYNBqZ6b50QV2zHN3fFNzOPPg4cfQVYOZerILB7xNDUsXHC1PCr/N52Tq3q7AElvjWWA==
   dependencies:
     eventemitter3 "^5.0.1"
 
-"@jscpd/finder@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@jscpd/finder/-/finder-4.0.4.tgz#30be5b35c83fc0ddac8341d4930a48e7be7e9020"
-  integrity sha512-qVUWY7Nzuvfd5OIk+n7/5CM98LmFroLqblRXAI2gDABwZrc7qS+WH2SNr0qoUq0f4OqwM+piiwKvwL/VDNn/Cg==
+"@jscpd/finder@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@jscpd/finder/-/finder-4.0.5.tgz#d03888ca75310c979fd23e5a749adc0a517bfab3"
+  integrity sha512-/2VkRoVrrfya+51sitZo5I9MdwsRaPKB8X3L3khAYoHFXk4L/mUuG81RmGazDHjUIGg22ItlkQtwzorNZ2+aPw==
   dependencies:
-    "@jscpd/core" "4.0.4"
-    "@jscpd/tokenizer" "4.0.4"
+    "@jscpd/core" "4.0.5"
+    "@jscpd/tokenizer" "4.0.5"
     blamer "^1.0.6"
     bytes "^3.1.2"
     cli-table3 "^0.6.5"
@@ -953,21 +953,21 @@
     markdown-table "^2.0.0"
     pug "^3.0.3"
 
-"@jscpd/html-reporter@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@jscpd/html-reporter/-/html-reporter-4.0.4.tgz#4cf290064606f02841833cfe9594bbea92b0c942"
-  integrity sha512-YiepyeYkeH74Kx59PJRdUdonznct0wHPFkf6FLQN+mCBoy6leAWCcOfHtcexnp+UsBFDlItG5nRdKrDSxSH+Kg==
+"@jscpd/html-reporter@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@jscpd/html-reporter/-/html-reporter-4.0.5.tgz#74ccb08d8ab8704d7081aa7071b6441825cfb9f1"
+  integrity sha512-drK2J8KyPIW9wvaElSIobZFp4dBO9GA++JW4gx3oihvLdDSp8qSo/CNqH47Dw0XkjQTxND3j/+Wz5JWvYRBgFQ==
   dependencies:
     colors "1.4.0"
     fs-extra "^11.2.0"
     pug "^3.0.3"
 
-"@jscpd/tokenizer@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@jscpd/tokenizer/-/tokenizer-4.0.4.tgz#8075ce426d2c2180103ed150e63d2c485910e007"
-  integrity sha512-xxYYY/qaLah/FlwogEbGIxx9CjDO+G9E6qawcy26WwrflzJb6wsnhjwdneN6Wb0RNCDsqvzY+bzG453jsin4UQ==
+"@jscpd/tokenizer@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@jscpd/tokenizer/-/tokenizer-4.0.5.tgz#529d3cf6efefef6b2a2d34a8178b2a8cdd3cb25c"
+  integrity sha512-WzRujQtN5WedxZVDKuoanxmKAFrxcLrHpcA6kaM4z8AhGtWXZ325yseqgL5TZ8OK7Auwu7kQLlqhfk05fGYG7A==
   dependencies:
-    "@jscpd/core" "4.0.4"
+    "@jscpd/core" "4.0.5"
     reprism "^0.0.11"
     spark-md5 "^3.0.2"
 
@@ -4020,11 +4020,6 @@ get-tsconfig@^4.10.0:
   dependencies:
     resolve-pkg-maps "^1.0.0"
 
-gitignore-to-glob@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/gitignore-to-glob/-/gitignore-to-glob-0.3.0.tgz#59f32ab3d9b66ce50299c3ed24cb0ef42a094ceb"
-  integrity sha512-mk74BdnK7lIwDHnotHddx1wsjMOFIThpLY3cPNniJ/2fA/tlLzHnFxIdR+4sLOu5KGgQJdij4kjJ2RoUNnCNMA==
-
 glob-parent@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -4080,7 +4075,12 @@ globals@16.4.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-16.4.0.tgz#574bc7e72993d40cf27cf6c241f324ee77808e51"
   integrity sha512-ob/2LcVVaVGCYN+r14cnwnoDPUufjiYgSqRhiFD0Q1iI4Odora5RE8Iv1D24hAz5oMophRGkGz+yuvQmmUMnMw==
 
-globals@17.4.0, globals@^17.4.0:
+globals@17.5.0:
+  version "17.5.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-17.5.0.tgz#a82c641d898f8dfbe0e81f66fdff7d0de43f88c6"
+  integrity sha512-qoV+HK2yFl/366t2/Cb3+xxPUo5BuMynomoDmiaZBIdbs+0pYbjfZU+twLhGKp4uCZ/+NbtpVepH5bGCxRyy2g==
+
+globals@^17.4.0:
   version "17.4.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-17.4.0.tgz#33d7d297ed1536b388a0e2f4bcd0ff19c8ff91b5"
   integrity sha512-hjrNztw/VajQwOLsMNT1cbJiH2muO3OROCHnbehc8eY5JyD2gqz4AcMHPqgaOR59DjgUjYAYLeH699g/eWi2jw==
@@ -5076,30 +5076,29 @@ js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jscpd-sarif-reporter@4.0.6:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/jscpd-sarif-reporter/-/jscpd-sarif-reporter-4.0.6.tgz#6f740de78c00c365251a96e964fe5079bf0ea5e1"
-  integrity sha512-b9Sm3IPZ3+m8Lwa4gZa+4/LhDhlc/ZLEsLXKSOy1DANQ6kx0ueqZT+fUHWEdQ6m0o3+RIVIa7DmvLSojQD05ng==
+jscpd-sarif-reporter@4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/jscpd-sarif-reporter/-/jscpd-sarif-reporter-4.0.7.tgz#a80e2c5121b973f65fdd133f145dd709a72bf557"
+  integrity sha512-Q/VlfTI/Nbjc8dZ/2pDVIf1aRi2bM2CTYujcAoeYr7brRnS4o5ZeW86W8q7MM7cQu40gezlNckl+E9wKFSMFiA==
   dependencies:
     colors "^1.4.0"
     fs-extra "^11.2.0"
     node-sarif-builder "^3.4.0"
 
-jscpd@4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/jscpd/-/jscpd-4.0.8.tgz#638f6ff7aeaf5b913ff2b7fa444fe340d7acc24e"
-  integrity sha512-d2VNT/2Hv4dxT2/59He8Lyda4DYOxPRyRG9zBaOpTZAqJCVf2xLrBlZkT8Va6Lo9u3X2qz8Bpq4HrDi4JsrQhA==
+jscpd@4.0.9:
+  version "4.0.9"
+  resolved "https://registry.yarnpkg.com/jscpd/-/jscpd-4.0.9.tgz#90a51957e6a8cccf458501f32d2273608be25f93"
+  integrity sha512-fp6Sh42W3mIPoQgZmgYmKDLQzEDnnX2vaGlTN4haILkB2vsi+ewcCHEtWR/2CR/QbsBvAvsNo8U5Sa+p9aHiGw==
   dependencies:
-    "@jscpd/badge-reporter" "4.0.4"
-    "@jscpd/core" "4.0.4"
-    "@jscpd/finder" "4.0.4"
-    "@jscpd/html-reporter" "4.0.4"
-    "@jscpd/tokenizer" "4.0.4"
+    "@jscpd/badge-reporter" "4.0.5"
+    "@jscpd/core" "4.0.5"
+    "@jscpd/finder" "4.0.5"
+    "@jscpd/html-reporter" "4.0.5"
+    "@jscpd/tokenizer" "4.0.5"
     colors "^1.4.0"
     commander "^5.0.0"
     fs-extra "^11.2.0"
-    gitignore-to-glob "^0.3.0"
-    jscpd-sarif-reporter "4.0.6"
+    jscpd-sarif-reporter "4.0.7"
 
 jsdom@^26.1.0:
   version "26.1.0"
