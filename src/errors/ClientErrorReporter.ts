@@ -252,14 +252,16 @@ export class ClientErrorReporter {
         return
       }
 
-      globalThis.fetch(this.endpoint, {
-        method: "POST",
-        body: payload,
-        keepalive: true,
-        headers: { "content-type": "application/json" },
-      }).catch(() => {
-        // do nothing
-      })
+      globalThis
+        .fetch(this.endpoint, {
+          method: "POST",
+          body: payload,
+          keepalive: true,
+          headers: { "content-type": "application/json" },
+        })
+        .catch(() => {
+          // do nothing
+        })
     } catch {
       // do nothing
     }

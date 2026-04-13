@@ -1,4 +1,5 @@
 import React from "react"
+import Link from "next/link"
 import { Seo } from "@/components/Seo"
 import LeaderboardTable from "../components/LeaderboardTable"
 import { GroupBox } from "../components/GroupBox"
@@ -35,6 +36,23 @@ const LeaderboardPage: React.FC = () => {
             </GroupBox>
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <Link
+          href="/game"
+          className="inline-block px-4 py-1 text-gray-200 no-underline rounded-lg transition-colors hover:text-white"
+          style={{
+            color: "rgba(220, 230, 255, 0.9)",
+            backdropFilter: "blur(10px) saturate(100%)",
+            WebkitBackdropFilter: "blur(40px) saturate(200%)",
+            background: "rgba(7, 27, 7, 0.724)",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.6)",
+          }}
+        >
+          Back to Lobby
+        </Link>
       </div>
     </div>
   )

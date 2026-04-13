@@ -258,7 +258,9 @@ describe("ClientErrorReporter", () => {
       const call = sendBeaconSpy.mock.calls[0]
       const body = JSON.parse(call[1] as string)
       expect(body[0].message).toContain("Fetch failed")
-      expect(body[0].message).toContain('(Cause: {"code":500,"detail":"Server error"})')
+      expect(body[0].message).toContain(
+        '(Cause: {"code":500,"detail":"Server error"})'
+      )
     })
   })
 
