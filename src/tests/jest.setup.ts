@@ -21,10 +21,10 @@ console.error = function (...args: any[]) {
   if (args[0]?.includes?.("Failed to send challenge")) {
     return
   }
-  if (args[0]?.includes?.("Error loading server stats:")) {
+  if (args[0]?.includes?.("Error loading server stats")) {
     return
   }
-  if (args[0]?.includes?.("Error fetching match history:")) {
+  if (args[0]?.includes?.("Error fetching match history")) {
     return
   }
   originalConsoleError.apply(console, args)
