@@ -150,6 +150,14 @@
         transform: scale(0.98);
       }
 
+      .input-group .back-btn {
+        background: #6c757d;
+      }
+
+      .input-group .back-btn:hover {
+        background: #5a6268;
+      }
+
       /* Footer */
       footer {
         background: #ececec;
@@ -208,6 +216,7 @@
             maxlength="3"
           />
           <button id="submit" type="button">Upload</button>
+          <button id="backToLobby" type="button" class="back-btn">Back to Lobby</button>
         </div>
       </main>
       <footer>
@@ -254,6 +263,11 @@
 
       const button = document.getElementById("submit");
       button.onclick = hiscore;
+
+      const backBtn = document.getElementById("backToLobby");
+      backBtn.onclick = () => {
+        globalThis.location.href = "/game";
+      };
 
       const replayurl = new URL("https://billiards.tailuge.workers.dev/"); // See src/config.ts for centralized configuration
       const params = new URLSearchParams(globalThis.location.search);
