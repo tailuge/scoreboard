@@ -396,7 +396,7 @@ https://billiards.tailuge.workers.dev/?websocketserver=...&tableId=abc&userName=
 ## Dependencies
 
 1. ~~**`@tailuge/messaging`** - Must be updated to support `options` parameter in challenge protocol~~ ✅ **Already updated**
-2. **`billiards.tailuge.workers.dev`** - Must read `?reds=`, `?raceTo=`, `?practice=` from URL (verify existing support)
+2. **`billiards.tailuge.workers.dev`** - Must read `?reds=`, `?raceTo=`, `?practice=` from URL (verify existing support) ✅ Already checked
 
 ## Rollout Order
 
