@@ -26,3 +26,13 @@ export function buildGameOptions(params: {
 
   return options
 }
+
+/**
+ * Format game options for display in the UI
+ * Example: (reds:15, raceTo:10)
+ */
+export function formatOptions(options?: Record<string, string>): string {
+  if (!options || Object.keys(options).length === 0) return ""
+  const parts = Object.entries(options).map(([k, v]) => `${k}:${v}`)
+  return ` (${parts.join(", ")})`
+}

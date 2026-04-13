@@ -328,4 +328,51 @@ describe("Game Page", () => {
       await screen.findByText("Challenge is missing table information.")
     ).toBeInTheDocument()
   })
+
+  it("uses options from rematch URL parameter", async () => {
+    const rematchData = {
+      opponentId: "other-id",
+      opponentName: "Other",
+      ruleType: "snooker",
+      lastScores: [],
+      nextTurnId: "other-id",
+      options: { reds: "15" },
+    }
+    const parseSpy = jest
+      .spyOn(GameUrl, "parseRematch")
+      .mockReturnValue(rematchData as any)
+
+    mockMessaging.users = [{ userId: "other-id", userName: "Other" }]
+
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+
+    await waitFor(() => {
+      expect(mockMessaging.challenge).toHaveBeenCalledWith(
+        "other-id",
+        "snooker",
+        expect.any(Object),
+        { reds: "15" }
+      )
+    })
+    parseSpy.mockRestore()
+  })
+
+  it("displays options in the incoming challenge banner", async () => {
+    mockMessaging.incomingChallenge = {
+      messageType: "challenge",
+      type: "offer",
+      challengerId: "other-id",
+      challengerName: "Other",
+      recipientId: "me-id",
+      ruleType: "snooker",
+      tableId: "table-123",
+      options: { reds: "15" },
+    }
+
+    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+
+    expect(
+      await screen.findByText(/Other wants to play Snooker \(reds:15\)/)
+    ).toBeInTheDocument()
+  })
 })
