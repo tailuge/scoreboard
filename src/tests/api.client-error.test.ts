@@ -135,7 +135,7 @@ describe("client-error API handler", () => {
   })
 
   it("should truncate long messages and stacks", async () => {
-    const longString = "a".repeat(3000)
+    const longString = "a".repeat(11000)
     const logs = [
       {
         sid: "s1",
@@ -164,8 +164,8 @@ describe("client-error API handler", () => {
           sid: "s1",
           logs: expect.arrayContaining([
             expect.objectContaining({
-              message: "a".repeat(2000),
-              stack: "a".repeat(2000),
+              message: "a".repeat(10000),
+              stack: "a".repeat(10000),
             }),
           ]),
         }),
