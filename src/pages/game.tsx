@@ -101,6 +101,7 @@ export default function Game({
     tableId: string
     recipientId: string
     ruleType: string
+    options?: Record<string, string>
   } | null>(null)
 
   const ruleTypeLabels = useMemo(
@@ -193,11 +194,13 @@ export default function Game({
           tableId,
           recipientId: selectedOpponent.userId,
           ruleType,
+          options,
         }
         console.log("[challenge] offer sent", {
           tableId,
           recipientId: selectedOpponent.userId,
           ruleType,
+          options,
         })
         setSelectedOpponent(null)
       } catch (error) {
@@ -358,6 +361,7 @@ export default function Game({
           tableId,
           recipientId: rematchParam.opponentId,
           ruleType: rematchParam.ruleType,
+          options,
         }
       } catch (e) {
         console.error("Auto rematch failed", e)
@@ -457,9 +461,10 @@ export default function Game({
 
       // Use options from rematchParam if it's a rematch, otherwise use options from original challenge
       const options =
-        rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
+        acceptedChallenge.options ||
+        (rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
           ? rematchParam.options
-          : undefined
+          : outgoing?.options)
 
       openGameWindow(
         acceptedChallenge.tableId,
