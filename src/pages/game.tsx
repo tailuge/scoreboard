@@ -1,57 +1,57 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Seo } from "@/components/Seo"
-import { GroupBox } from "../components/GroupBox"
-import { User } from "@/components/User"
-import { UsersIcon } from "@heroicons/react/24/solid"
-import { UserList } from "@/components/UserList"
-import { ServerStatsPopover } from "@/components/ServerStatsPopover"
-import { useUser } from "@/contexts/UserContext"
-import { MatchHistoryList } from "@/components/MatchHistoryList"
-import { GameGrid } from "@/components/GameGrid"
-import { LogoSection } from "@/components/LogoSection"
-import { HighscoreGrid } from "@/components/HighscoreGrid"
-import { GameBackground } from "@/components/GameBackground"
-import { useMessaging } from "@/contexts/MessagingContext"
-import { ChallengeCard } from "@/components/ChallengeCard"
-import { ChatCard } from "@/components/ChatCard"
-import { navigateTo } from "@/utils/navigation"
-import { markUsage } from "@/utils/usage"
-import { GameUrl, type RematchParam } from "@/utils/GameUrl"
-import { buildGameOptions } from "@/utils/GameOptions"
-import { GAME_TYPES } from "@/config"
-import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
-import { GetStaticProps } from "next"
-import { kv } from "@vercel/kv"
-import { ScoreTable } from "@/services/scoretable"
-import { MatchResultService } from "@/services/MatchResultService"
-import { LeaderboardItem } from "@/types/leaderboard"
-import { MatchResult } from "@/types/match"
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Seo } from "@/components/Seo";
+import { GroupBox } from "../components/GroupBox";
+import { User } from "@/components/User";
+import { UsersIcon } from "@heroicons/react/24/solid";
+import { UserList } from "@/components/UserList";
+import { ServerStatsPopover } from "@/components/ServerStatsPopover";
+import { useUser } from "@/contexts/UserContext";
+import { MatchHistoryList } from "@/components/MatchHistoryList";
+import { GameGrid } from "@/components/GameGrid";
+import { LogoSection } from "@/components/LogoSection";
+import { HighscoreGrid } from "@/components/HighscoreGrid";
+import { GameBackground } from "@/components/GameBackground";
+import { useMessaging } from "@/contexts/MessagingContext";
+import { ChallengeCard } from "@/components/ChallengeCard";
+import { ChatCard } from "@/components/ChatCard";
+import { navigateTo } from "@/utils/navigation";
+import { markUsage } from "@/utils/usage";
+import { GameUrl, type RematchParam } from "@/utils/GameUrl";
+import { buildGameOptions } from "@/utils/GameOptions";
+import { GAME_TYPES } from "@/config";
+import type { PresenceMessage, RematchInfo } from "@tailuge/messaging";
+import { GetStaticProps } from "next";
+import { kv } from "@vercel/kv";
+import { ScoreTable } from "@/services/scoretable";
+import { MatchResultService } from "@/services/MatchResultService";
+import { LeaderboardItem } from "@/types/leaderboard";
+import { MatchResult } from "@/types/match";
 
 interface GameProps {
-  readonly initialHighscores: Record<string, LeaderboardItem[]>
-  readonly initialMatchResults: MatchResult[]
+  readonly initialHighscores: Record<string, LeaderboardItem[]>;
+  readonly initialMatchResults: MatchResult[];
 }
 
 export const getStaticProps: GetStaticProps<GameProps> = async () => {
-  const scoretable = new ScoreTable(kv)
-  const matchResultService = new MatchResultService(kv)
+  const scoretable = new ScoreTable(kv);
+  const matchResultService = new MatchResultService(kv);
 
-  const highscores: Record<string, LeaderboardItem[]> = {}
-  let matchResults: MatchResult[] = []
+  const highscores: Record<string, LeaderboardItem[]> = {};
+  let matchResults: MatchResult[] = [];
 
   try {
     await Promise.all(
       GAME_TYPES.map(async (game) => {
-        highscores[game.ruleType] = await scoretable.topTen(game.ruleType)
-      })
-    )
-    matchResults = await matchResultService.getMatchResults(50)
+        highscores[game.ruleType] = await scoretable.topTen(game.ruleType);
+      }),
+    );
+    matchResults = await matchResultService.getMatchResults(50);
   } catch (error) {
-    console.error("Error fetching initial data for ISR:", error)
+    console.error("Error fetching initial data for ISR:", error);
     // Fallback to empty data if KV is unavailable during build/revalidation
     GAME_TYPES.forEach((game) => {
-      if (!highscores[game.ruleType]) highscores[game.ruleType] = []
-    })
+      if (!highscores[game.ruleType]) highscores[game.ruleType] = [];
+    });
   }
 
   return {
@@ -60,14 +60,17 @@ export const getStaticProps: GetStaticProps<GameProps> = async () => {
       initialMatchResults: matchResults,
     },
     revalidate: 60,
-  }
-}
+  };
+};
 
 export default function Game({
   initialHighscores,
   initialMatchResults,
 }: GameProps) {
-  const { userId, userName } = useUser()
+  useEffect(() => {
+    console.log("query params:", window.location.search);
+  }, []);
+  const { userId, userName } = useUser();
   const {
     users,
     activeGames,
@@ -84,40 +87,40 @@ export default function Game({
     clearAcceptedChallenge,
     sendChat,
     markChatAsRead,
-  } = useMessaging()
-  const presenceCount = users.length
-  const [snookerReds, setSnookerReds] = useState(6)
-  const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
-  const [nineballOption, setNineballOption] = useState("1->9")
-  const [rematchParam, setRematchParam] = useState<RematchParam | null>(null)
-  const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false)
+  } = useMessaging();
+  const presenceCount = users.length;
+  const [snookerReds, setSnookerReds] = useState(6);
+  const [threecushionRaceTo, setThreecushionRaceTo] = useState(3);
+  const [nineballOption, setNineballOption] = useState("1->9");
+  const [rematchParam, setRematchParam] = useState<RematchParam | null>(null);
+  const [hasAttemptedRematch, setHasAttemptedRematch] = useState(false);
   const [selectedOpponent, setSelectedOpponent] =
-    useState<PresenceMessage | null>(null)
+    useState<PresenceMessage | null>(null);
   const [selectedChatUser, setSelectedChatUser] =
-    useState<PresenceMessage | null>(null)
-  const [challengeError, setChallengeError] = useState<string | null>(null)
-  const [challengeBusy, setChallengeBusy] = useState(false)
+    useState<PresenceMessage | null>(null);
+  const [challengeError, setChallengeError] = useState<string | null>(null);
+  const [challengeBusy, setChallengeBusy] = useState(false);
   const lastOutgoingChallengeRef = React.useRef<{
-    tableId: string
-    recipientId: string
-    ruleType: string
-    options?: Record<string, string>
-  } | null>(null)
+    tableId: string;
+    recipientId: string;
+    ruleType: string;
+    options?: Record<string, string>;
+  } | null>(null);
 
   const ruleTypeLabels = useMemo(
     () =>
       GAME_TYPES.reduce<Record<string, string>>((acc, game) => {
-        acc[game.ruleType] = game.name
-        return acc
+        acc[game.ruleType] = game.name;
+        return acc;
       }, {}),
-    []
-  )
+    [],
+  );
 
   const pendingRecipientName = useMemo(() => {
-    if (!pendingChallenge) return null
+    if (!pendingChallenge) return null;
     return users.find((user) => user.userId === pendingChallenge.recipientId)
-      ?.userName
-  }, [pendingChallenge, users])
+      ?.userName;
+  }, [pendingChallenge, users]);
 
   const openGameWindow = useCallback(
     (
@@ -125,14 +128,14 @@ export default function Game({
       ruleType: string,
       shouldStartFirst: boolean,
       rematch?: RematchParam,
-      options?: Record<string, string>
+      options?: Record<string, string>,
     ) => {
       if (!userId || !userName) {
         console.log("[challenge] open blocked: missing user identity", {
           userId,
           userName,
-        })
-        return
+        });
+        return;
       }
       const target = GameUrl.create({
         tableId,
@@ -142,72 +145,72 @@ export default function Game({
         isCreator: shouldStartFirst,
         rematch,
         options,
-      })
+      });
       console.log("[challenge] redirecting to game", {
         tableId,
         ruleType,
         shouldStartFirst,
         target: target.toString(),
-      })
-      navigateTo(target.toString())
+      });
+      navigateTo(target.toString());
     },
-    [userId, userName]
-  )
+    [userId, userName],
+  );
 
   const resolveIsFirstPlayer = useCallback(
     (rematch: RematchInfo | undefined, challengerId: string) =>
       (rematch?.nextTurnId ?? challengerId) === userId,
-    [userId]
-  )
+    [userId],
+  );
 
   const updatePresenceForTable = useCallback(
     async (tableId: string, ruleType: string, opponentId: string) => {
       try {
-        await updatePresence({ tableId, ruleType, opponentId })
+        await updatePresence({ tableId, ruleType, opponentId });
       } catch (error) {
-        console.error("Failed to update presence for table", error)
+        console.error("Failed to update presence for table", error);
       }
     },
-    [updatePresence]
-  )
+    [updatePresence],
+  );
 
   const handleSelectRuleType = useCallback(
     async (ruleType: string) => {
-      if (!selectedOpponent) return
-      setChallengeBusy(true)
-      setChallengeError(null)
+      if (!selectedOpponent) return;
+      setChallengeBusy(true);
+      setChallengeError(null);
       try {
         const options = buildGameOptions({
           ruleType,
           snookerReds,
           threecushionRaceTo,
           nineballOption,
-        })
+        });
         const tableId = await challenge(
           selectedOpponent.userId,
           ruleType,
           undefined,
-          Object.keys(options).length > 0 ? options : undefined
-        )
-        markUsage("createTable")
+          Object.keys(options).length > 0 ? options : undefined,
+        );
+        markUsage("createTable");
         lastOutgoingChallengeRef.current = {
           tableId,
           recipientId: selectedOpponent.userId,
           ruleType,
           options,
-        }
+        };
         console.log("[challenge] offer sent", {
           tableId,
           recipientId: selectedOpponent.userId,
           ruleType,
           options,
-        })
-        setSelectedOpponent(null)
+        });
+        setSelectedOpponent(null);
       } catch (error) {
-        console.error("Failed to send challenge", error)
-        setChallengeError("Failed to send challenge. Please try again.")
+        console.error("Failed to send challenge", error);
+        setChallengeError("Failed to send challenge. Please try again.");
       } finally {
-        setChallengeBusy(false)
+        setChallengeBusy(false);
       }
     },
     [
@@ -216,34 +219,34 @@ export default function Game({
       snookerReds,
       threecushionRaceTo,
       nineballOption,
-    ]
-  )
+    ],
+  );
 
   const handleAcceptChallenge = useCallback(async () => {
-    if (!incomingChallenge) return
+    if (!incomingChallenge) return;
     if (!incomingChallenge.tableId) {
-      setChallengeError("Challenge is missing table information.")
-      return
+      setChallengeError("Challenge is missing table information.");
+      return;
     }
-    setChallengeBusy(true)
-    setChallengeError(null)
+    setChallengeBusy(true);
+    setChallengeError(null);
     try {
       await acceptChallenge(
         incomingChallenge.challengerId,
         incomingChallenge.ruleType,
-        incomingChallenge.tableId
-      )
-      markUsage("joinTable")
+        incomingChallenge.tableId,
+      );
+      markUsage("joinTable");
       await updatePresenceForTable(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
-        incomingChallenge.challengerId
-      )
+        incomingChallenge.challengerId,
+      );
       // If it's a rematch, check if we should go first
       const isFirst = resolveIsFirstPlayer(
         incomingChallenge.rematch,
-        incomingChallenge.challengerId
-      )
+        incomingChallenge.challengerId,
+      );
       const rematchParam: RematchParam | undefined = incomingChallenge.rematch
         ? {
             opponentId: incomingChallenge.challengerId,
@@ -252,19 +255,19 @@ export default function Game({
             lastScores: incomingChallenge.rematch.lastScores,
             nextTurnId: incomingChallenge.rematch.nextTurnId,
           }
-        : undefined
+        : undefined;
       openGameWindow(
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
         isFirst,
         rematchParam,
-        incomingChallenge.options
-      )
+        incomingChallenge.options,
+      );
     } catch (error) {
-      console.error("Failed to accept challenge", error)
-      setChallengeError("Failed to accept challenge. Please try again.")
+      console.error("Failed to accept challenge", error);
+      setChallengeError("Failed to accept challenge. Please try again.");
     } finally {
-      setChallengeBusy(false)
+      setChallengeBusy(false);
     }
   }, [
     acceptChallenge,
@@ -272,51 +275,51 @@ export default function Game({
     openGameWindow,
     updatePresenceForTable,
     resolveIsFirstPlayer,
-  ])
+  ]);
 
   const handleDeclineChallenge = useCallback(async () => {
-    if (!incomingChallenge) return
-    setChallengeBusy(true)
-    setChallengeError(null)
+    if (!incomingChallenge) return;
+    setChallengeBusy(true);
+    setChallengeError(null);
     try {
       await declineChallenge(
         incomingChallenge.challengerId,
-        incomingChallenge.ruleType
-      )
+        incomingChallenge.ruleType,
+      );
     } catch (error) {
-      console.error("Failed to decline challenge", error)
-      setChallengeError("Failed to decline challenge. Please try again.")
+      console.error("Failed to decline challenge", error);
+      setChallengeError("Failed to decline challenge. Please try again.");
     } finally {
-      setChallengeBusy(false)
+      setChallengeBusy(false);
     }
-  }, [declineChallenge, incomingChallenge])
+  }, [declineChallenge, incomingChallenge]);
 
   const handleCancelChallenge = useCallback(async () => {
-    if (!pendingChallenge) return
-    setChallengeBusy(true)
-    setChallengeError(null)
+    if (!pendingChallenge) return;
+    setChallengeBusy(true);
+    setChallengeError(null);
     try {
       await cancelChallenge(
         pendingChallenge.recipientId,
-        pendingChallenge.ruleType
-      )
-      lastOutgoingChallengeRef.current = null
+        pendingChallenge.ruleType,
+      );
+      lastOutgoingChallengeRef.current = null;
     } catch (error) {
-      console.error("Failed to cancel challenge", error)
-      setChallengeError("Failed to cancel challenge. Please try again.")
+      console.error("Failed to cancel challenge", error);
+      setChallengeError("Failed to cancel challenge. Please try again.");
     } finally {
-      setChallengeBusy(false)
+      setChallengeBusy(false);
     }
-  }, [cancelChallenge, pendingChallenge])
+  }, [cancelChallenge, pendingChallenge]);
 
   useEffect(() => {
-    markUsage("lobby")
-    const url = new URL(globalThis.location.href)
-    const parsed = GameUrl.parseRematch(url)
+    markUsage("lobby");
+    const url = new URL(globalThis.location.href);
+    const parsed = GameUrl.parseRematch(url);
     if (parsed) {
-      setRematchParam(parsed)
+      setRematchParam(parsed);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (
@@ -328,48 +331,48 @@ export default function Game({
       incomingChallenge ||
       acceptedChallenge
     )
-      return
+      return;
 
     const isTargetOnline = users.some(
-      (u) => u.userId === rematchParam.opponentId
-    )
-    if (!isTargetOnline) return
+      (u) => u.userId === rematchParam.opponentId,
+    );
+    if (!isTargetOnline) return;
 
     const sendAutoRematch = async () => {
-      setChallengeBusy(true)
-      setHasAttemptedRematch(true)
+      setChallengeBusy(true);
+      setHasAttemptedRematch(true);
       try {
         const options = buildGameOptions({
           ruleType: rematchParam.ruleType,
           snookerReds,
           threecushionRaceTo,
           nineballOption,
-        })
+        });
         const info: RematchInfo = {
           lastScores: rematchParam.lastScores,
           isRematch: true,
           nextTurnId: rematchParam.nextTurnId,
-        }
+        };
         const tableId = await challenge(
           rematchParam.opponentId,
           rematchParam.ruleType,
           info,
-          Object.keys(options).length > 0 ? options : undefined
-        )
-        markUsage("createTable")
+          Object.keys(options).length > 0 ? options : undefined,
+        );
+        markUsage("createTable");
         lastOutgoingChallengeRef.current = {
           tableId,
           recipientId: rematchParam.opponentId,
           ruleType: rematchParam.ruleType,
           options,
-        }
+        };
       } catch (e) {
-        console.error("Auto rematch failed", e)
+        console.error("Auto rematch failed", e);
       } finally {
-        setChallengeBusy(false)
+        setChallengeBusy(false);
       }
-    }
-    void sendAutoRematch()
+    };
+    void sendAutoRematch();
   }, [
     rematchParam,
     userId,
@@ -383,7 +386,7 @@ export default function Game({
     snookerReds,
     threecushionRaceTo,
     nineballOption,
-  ])
+  ]);
 
   useEffect(() => {
     if (
@@ -392,16 +395,16 @@ export default function Game({
       challengeBusy ||
       acceptedChallenge
     )
-      return
+      return;
 
     const isMatch =
       incomingChallenge.rematch &&
       incomingChallenge.challengerId === rematchParam.opponentId &&
-      incomingChallenge.ruleType === rematchParam.ruleType
+      incomingChallenge.ruleType === rematchParam.ruleType;
 
     if (isMatch) {
-      console.log("[rematch] auto-accepting mutual rematch", incomingChallenge)
-      handleAcceptChallenge()
+      console.log("[rematch] auto-accepting mutual rematch", incomingChallenge);
+      handleAcceptChallenge();
     }
   }, [
     incomingChallenge,
@@ -409,75 +412,75 @@ export default function Game({
     challengeBusy,
     acceptedChallenge,
     handleAcceptChallenge,
-  ])
+  ]);
 
   useEffect(() => {
     if (selectedChatUser && unreadUsers.includes(selectedChatUser.userId)) {
-      markChatAsRead(selectedChatUser.userId)
+      markChatAsRead(selectedChatUser.userId);
     }
-  }, [selectedChatUser, unreadUsers, markChatAsRead])
+  }, [selectedChatUser, unreadUsers, markChatAsRead]);
 
   useEffect(() => {
-    if (!acceptedChallenge || !userId) return
+    if (!acceptedChallenge || !userId) return;
     console.log("[challenge] accept received", {
       acceptedChallenge,
       userId,
-    })
-    const outgoing = lastOutgoingChallengeRef.current
+    });
+    const outgoing = lastOutgoingChallengeRef.current;
     const matchesOutgoing =
       outgoing?.tableId === acceptedChallenge.tableId ||
-      outgoing?.recipientId === acceptedChallenge.recipientId
+      outgoing?.recipientId === acceptedChallenge.recipientId;
 
     if (!matchesOutgoing && !pendingChallenge) {
       console.log("[challenge] accept ignored (no outgoing match)", {
         acceptedChallenge,
         outgoing,
         pendingChallenge,
-      })
-      clearAcceptedChallenge()
-      return
+      });
+      clearAcceptedChallenge();
+      return;
     }
     if (!acceptedChallenge.tableId) {
       console.log("[challenge] accept missing tableId", {
         acceptedChallenge,
-      })
-      clearAcceptedChallenge()
-      return
+      });
+      clearAcceptedChallenge();
+      return;
     }
 
     const openAcceptedGame = async () => {
       await updatePresenceForTable(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
-        acceptedChallenge.recipientId
-      )
+        acceptedChallenge.recipientId,
+      );
       const rematchNextTurnId =
         acceptedChallenge.rematch?.nextTurnId ??
         (rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
           ? rematchParam.nextTurnId
-          : null)
+          : null);
 
-      const isFirst = rematchNextTurnId ? rematchNextTurnId === userId : true
+      const isFirst = rematchNextTurnId ? rematchNextTurnId === userId : true;
 
       // Use options from rematchParam if it's a rematch, otherwise use options from original challenge
       const options =
         acceptedChallenge.options ||
         (rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
           ? rematchParam.options
-          : outgoing?.options)
+          : outgoing?.options);
 
       openGameWindow(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
         isFirst,
         rematchParam,
-        options
-      )
-      lastOutgoingChallengeRef.current = null
-      clearAcceptedChallenge()
-    }
+        options,
+      );
+      lastOutgoingChallengeRef.current = null;
+      clearAcceptedChallenge();
+    };
 
-    void openAcceptedGame()
+    void openAcceptedGame();
   }, [
     acceptedChallenge,
     userId,
@@ -486,7 +489,7 @@ export default function Game({
     pendingChallenge,
     updatePresenceForTable,
     rematchParam,
-  ])
+  ]);
 
   return (
     <div className="relative min-h-screen p-4 flex flex-col items-center">
@@ -548,16 +551,16 @@ export default function Game({
                   {incomingChallenge.rematch ? (
                     <p className="text-xs text-emerald-400 mt-1">
                       {incomingChallenge.rematch.lastScores.map((s, i) => {
-                        const isMe = s.userId === userId
+                        const isMe = s.userId === userId;
                         const name = isMe
                           ? "You"
-                          : incomingChallenge.challengerName
+                          : incomingChallenge.challengerName;
                         return (
                           <span key={s.userId}>
                             {name} {s.score}
                             {i === 0 ? " — " : ""}
                           </span>
-                        )
+                        );
                       })}
                     </p>
                   ) : null}
@@ -644,13 +647,13 @@ export default function Game({
                   currentUserId={userId}
                   unreadUsers={unreadUsers}
                   onChallenge={(user) => {
-                    setChallengeError(null)
-                    setSelectedOpponent(user)
-                    setSelectedChatUser(null)
+                    setChallengeError(null);
+                    setSelectedOpponent(user);
+                    setSelectedChatUser(null);
                   }}
                   onChat={(user) => {
-                    setSelectedChatUser(user)
-                    setSelectedOpponent(null)
+                    setSelectedChatUser(user);
+                    setSelectedOpponent(null);
                   }}
                   className="flex-wrap justify-center gap-2"
                 />
@@ -685,5 +688,5 @@ export default function Game({
         </div>
       </main>
     </div>
-  )
+  );
 }
