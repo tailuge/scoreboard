@@ -298,6 +298,7 @@
         iframe.height = "100%";
         iframe.frameBorder = "0";
         iframe.allow = "microphone";
+        iframe.sandbox = "allow-scripts allow-same-origin";
         return iframe;
       }
 
@@ -321,6 +322,7 @@
         iframe.height = "100%";
         iframe.frameBorder = "0";
         iframe.allow = "microphone";
+        iframe.sandbox = "allow-scripts allow-same-origin";
         fragment.appendChild(iframe);
         return fragment;
       }

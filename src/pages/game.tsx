@@ -17,6 +17,7 @@ import { ChatCard } from "@/components/ChatCard"
 import { navigateTo } from "@/utils/navigation"
 import { markUsage } from "@/utils/usage"
 import { GameUrl, type RematchParam } from "@/utils/GameUrl"
+import { buildGameOptions } from "@/utils/GameOptions"
 import { GAME_TYPES } from "@/config"
 import type { PresenceMessage, RematchInfo } from "@tailuge/messaging"
 import { GetStaticProps } from "next"
@@ -122,7 +123,8 @@ export default function Game({
       tableId: string,
       ruleType: string,
       shouldStartFirst: boolean,
-      rematch?: RematchParam
+      rematch?: RematchParam,
+      options?: Record<string, string>
     ) => {
       if (!userId || !userName) {
         console.log("[challenge] open blocked: missing user identity", {
@@ -138,6 +140,7 @@ export default function Game({
         ruleType,
         isCreator: shouldStartFirst,
         rematch,
+        options,
       })
       console.log("[challenge] redirecting to game", {
         tableId,
@@ -173,7 +176,18 @@ export default function Game({
       setChallengeBusy(true)
       setChallengeError(null)
       try {
-        const tableId = await challenge(selectedOpponent.userId, ruleType)
+        const options = buildGameOptions({
+          ruleType,
+          snookerReds,
+          threecushionRaceTo,
+          nineballOption,
+        })
+        const tableId = await challenge(
+          selectedOpponent.userId,
+          ruleType,
+          undefined,
+          Object.keys(options).length > 0 ? options : undefined
+        )
         markUsage("createTable")
         lastOutgoingChallengeRef.current = {
           tableId,
@@ -193,7 +207,13 @@ export default function Game({
         setChallengeBusy(false)
       }
     },
-    [challenge, selectedOpponent]
+    [
+      challenge,
+      selectedOpponent,
+      snookerReds,
+      threecushionRaceTo,
+      nineballOption,
+    ]
   )
 
   const handleAcceptChallenge = useCallback(async () => {
@@ -234,7 +254,8 @@ export default function Game({
         incomingChallenge.tableId,
         incomingChallenge.ruleType,
         isFirst,
-        rematchParam
+        rematchParam,
+        incomingChallenge.options
       )
     } catch (error) {
       console.error("Failed to accept challenge", error)
@@ -315,6 +336,12 @@ export default function Game({
       setChallengeBusy(true)
       setHasAttemptedRematch(true)
       try {
+        const options = buildGameOptions({
+          ruleType: rematchParam.ruleType,
+          snookerReds,
+          threecushionRaceTo,
+          nineballOption,
+        })
         const info: RematchInfo = {
           lastScores: rematchParam.lastScores,
           isRematch: true,
@@ -323,7 +350,8 @@ export default function Game({
         const tableId = await challenge(
           rematchParam.opponentId,
           rematchParam.ruleType,
-          info
+          info,
+          Object.keys(options).length > 0 ? options : undefined
         )
         markUsage("createTable")
         lastOutgoingChallengeRef.current = {
@@ -348,6 +376,9 @@ export default function Game({
     pendingChallenge,
     incomingChallenge,
     acceptedChallenge,
+    snookerReds,
+    threecushionRaceTo,
+    nineballOption,
   ])
 
   useEffect(() => {
@@ -424,11 +455,18 @@ export default function Game({
 
       const isFirst = rematchNextTurnId ? rematchNextTurnId === userId : true
 
+      // Use options from rematchParam if it's a rematch, otherwise use options from original challenge
+      const options =
+        rematchParam && rematchParam.ruleType === acceptedChallenge.ruleType
+          ? rematchParam.options
+          : undefined
+
       openGameWindow(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
         isFirst,
-        rematchParam
+        rematchParam,
+        options
       )
       lastOutgoingChallengeRef.current = null
       clearAcceptedChallenge()

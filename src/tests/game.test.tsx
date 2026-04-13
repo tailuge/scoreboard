@@ -169,7 +169,12 @@ describe("Game Page", () => {
       fireEvent.click(snookerBtn)
     })
 
-    expect(mockMessaging.challenge).toHaveBeenCalledWith("other-id", "snooker")
+    expect(mockMessaging.challenge).toHaveBeenCalledWith(
+      "other-id",
+      "snooker",
+      undefined,
+      expect.any(Object)
+    )
   })
 
   it("handles auto-rematch from URL parameter", async () => {
@@ -195,7 +200,8 @@ describe("Game Page", () => {
       expect(mockMessaging.challenge).toHaveBeenCalledWith(
         "other-id",
         "nineball",
-        expect.objectContaining({ isRematch: true })
+        expect.objectContaining({ isRematch: true }),
+        undefined
       )
     })
     parseSpy.mockRestore()

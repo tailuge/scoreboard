@@ -6,6 +6,7 @@ import {
 } from "./GameButtonOptions"
 import { GameButton, ActionButton } from "./GameButtons"
 import { GameUrl } from "@/utils/GameUrl"
+import { buildGameOptions } from "@/utils/GameOptions"
 
 const GAMES = [
   {
@@ -50,16 +51,12 @@ export function GameGrid({
   return (
     <div className="grid grid-cols-3 gap-4 w-full">
       {GAMES.map((game) => {
-        const extras: Record<string, string> = {}
-        if (game.ruleType === "snooker") {
-          extras.reds = String(snookerReds)
-        } else if (game.ruleType === "nineball") {
-          if (nineballOption === "Free") {
-            extras.practice = "true"
-          }
-        } else if (game.ruleType === "threecushion") {
-          extras.raceTo = String(threecushionRaceTo)
-        }
+        const extras = buildGameOptions({
+          ruleType: game.ruleType,
+          snookerReds,
+          threecushionRaceTo,
+          nineballOption,
+        })
 
         const practiceUrl = GameUrl.createSinglePlayer({
           userName,

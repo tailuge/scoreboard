@@ -205,6 +205,7 @@ describe("MessagingContext", () => {
     expect(mockLobby.challenge).toHaveBeenCalledWith(
       "user-2",
       "nineball",
+      undefined,
       undefined
     )
     expect(capturedMessaging.pendingChallenge).toMatchObject({

@@ -8,6 +8,7 @@ export interface RematchParam {
   readonly ruleType: string
   readonly lastScores: { readonly userId: string; readonly score: number }[]
   readonly nextTurnId: string
+  readonly options?: Record<string, string>
 }
 
 export class GameUrl {
@@ -28,6 +29,7 @@ export class GameUrl {
     isSpectator = false,
     isCreator = false,
     rematch,
+    options,
   }: {
     tableId: string
     userName: string
@@ -36,6 +38,7 @@ export class GameUrl {
     isSpectator?: boolean
     isCreator?: boolean
     rematch?: RematchParam
+    options?: Record<string, string>
   }): URL {
     const target = new URL(GAME_BASE_URL)
     target.searchParams.append("websocketserver", WEBSOCKET_SERVER)
@@ -50,6 +53,11 @@ export class GameUrl {
     }
     if (rematch) {
       target.searchParams.append("rematch", this.serializeRematch(rematch))
+    }
+    if (options && Object.keys(options).length > 0) {
+      for (const [key, value] of Object.entries(options)) {
+        target.searchParams.append(key, value)
+      }
     }
 
     return target

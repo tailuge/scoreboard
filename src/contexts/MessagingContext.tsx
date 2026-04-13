@@ -30,7 +30,8 @@ interface MessagingContextType {
   challenge: (
     userId: string,
     ruleType: string,
-    rematch?: RematchInfo
+    rematch?: RematchInfo,
+    options?: Record<string, string>
   ) => Promise<string>
   acceptChallenge: (
     userId: string,
@@ -242,12 +243,22 @@ export function MessagingProvider({
   }, [attachLobbyListeners, userId, userName])
 
   const challenge = useCallback(
-    async (targetUserId: string, ruleType: string, rematch?: RematchInfo) => {
+    async (
+      targetUserId: string,
+      ruleType: string,
+      rematch?: RematchInfo,
+      options?: Record<string, string>
+    ) => {
       const lobby = lobbyRef.current
       if (!lobby) {
         throw new Error("Lobby not initialized")
       }
-      const tableId = await lobby.challenge(targetUserId, ruleType, rematch)
+      const tableId = await lobby.challenge(
+        targetUserId,
+        ruleType,
+        rematch,
+        options
+      )
       setPendingChallenge({
         messageType: "challenge",
         type: "offer",
@@ -255,6 +266,7 @@ export function MessagingProvider({
         challengerName: userName,
         recipientId: targetUserId,
         ruleType,
+        options,
         tableId,
         rematch,
       })

@@ -381,30 +381,41 @@ https://billiards.tailuge.workers.dev/?websocketserver=...&tableId=abc&userName=
 
 ## Testing Checklist
 
-- [ ] Challenge offer includes `options` in `ChallengeMessage`
-- [ ] Challenge accept propagates `options` to `GameUrl.create()`
-- [ ] Generated URL contains correct query params (e.g., `?raceTo=5`)
-- [ ] Snooker challenge with `reds=15` produces URL with `?reds=15`
-- [ ] Nineball "Free" challenge includes `?practice=true`
-- [ ] Challenge without options still works (backward compat)
-- [ ] Single-player URLs still work with consolidated `buildGameOptions()`
+- [x] Challenge offer includes `options` in `ChallengeMessage`
+- [x] Challenge accept propagates `options` to `GameUrl.create()`
+- [x] Generated URL contains correct query params (e.g., `?raceTo=5`)
+- [x] Snooker challenge with `reds=15` produces URL with `?reds=15`
+- [x] Nineball "Free" challenge includes `?practice=true`
+- [x] Challenge without options still works (backward compat)
+- [x] Single-player URLs still work with consolidated `buildGameOptions()`
 - [ ] Game engine reads options from URL params
-- [ ] `yarn test` passes
-- [ ] `yarn lint` passes
-- [ ] `yarn prettify` applied
+- [x] `yarn test` passes
+- [x] `yarn lint` passes
+- [x] `yarn prettify` applied
 
 ## Dependencies
 
 1. ~~**`@tailuge/messaging`** - Must be updated to support `options` parameter in challenge protocol~~ ✅ **Already updated**
 2. **`billiards.tailuge.workers.dev`** - Must read `?reds=`, `?raceTo=`, `?practice=` from URL (verify existing support) ✅ Already checked
 
-## Rollout Order
+## Progress
 
-1. ✅ ~~Update `@tailuge/messaging` package (external)~~ **Already done**
-2. Create `GameOptions.ts` utility with `buildGameOptions()` function
-3. Update `GameGrid.tsx` to use consolidated `buildGameOptions()`
-4. Update `GameUrl.ts` to accept and append options to multiplayer URLs
-5. Update `MessagingContext.tsx` challenge signature to accept options
-6. Update `game.tsx` to build options from state and pass to challenge
-7. Update `game.tsx` acceptance flow to propagate options to URL
-8. Test end-to-end with both single-player and challenge flows
+### ✅ Completed
+1. ~~Update `@tailuge/messaging` package (external)~~ **Already done**
+2. ✅ Create `GameOptions.ts` utility with `buildGameOptions()` function
+3. ✅ Update `GameGrid.tsx` to use consolidated `buildGameOptions()`
+4. ✅ Update `GameUrl.ts` to accept and append options to multiplayer URLs
+5. ✅ Update `GameUrl.ts` `RematchParam` interface to include `options`
+6. ✅ Update `MessagingContext.tsx` challenge signature to accept options (rematch, options)
+7. ✅ Update `game.tsx` to build options from state and pass to challenge
+8. ✅ Update `game.tsx` `openGameWindow` to accept options parameter
+9. ✅ Update `game.tsx` auto-rematch flow to include options
+10. ✅ Update `game.tsx` acceptance flow to propagate `incomingChallenge.options` to `openGameWindow`
+11. ✅ Update `game.tsx` `acceptedChallenge` effect to propagate options to URL
+12. ✅ Update tests to match new 4-argument challenge signature
+13. ✅ All tests pass (276/276)
+14. ✅ Lint passes
+15. ✅ Prettify applied
+
+### 🔄 Remaining
+16. [ ] Test end-to-end with both single-player and challenge flows (E2E - requires human/DB credentials)
