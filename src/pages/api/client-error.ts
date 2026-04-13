@@ -37,8 +37,8 @@ function groupAndTruncateLogs(
     const existing = grouped.get(log.sid) || []
     const truncatedLog = {
       ...log,
-      message: log.message?.slice(0, 2000),
-      stack: log.stack?.slice(0, 2000),
+      message: log.message?.slice(0, 10000),
+      stack: log.stack?.slice(0, 10000),
       ...metadata,
       version: log.version,
       origin: log.origin,
