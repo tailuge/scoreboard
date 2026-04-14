@@ -652,6 +652,16 @@ export default function Game({
                   unreadUsers={unreadUsers}
                   onChallenge={(user) => {
                     setChallengeError(null)
+                    if (user.userId.startsWith("bot:")) {
+                      const botUrl = GameUrl.createSinglePlayer({
+                        userName,
+                        userId,
+                        ruleType: "nineball",
+                        isBot: true,
+                      })
+                      navigateTo(botUrl.toString())
+                      return
+                    }
                     setSelectedOpponent(user)
                     setSelectedChatUser(null)
                   }}

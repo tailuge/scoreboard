@@ -64,6 +64,23 @@ const isDuplicateMessage = (chat: ChatMessage, existing: ChatMessage[]) =>
       Math.abs((msg.meta?.ts || 0) - (chat.meta?.ts || 0)) < 5000
   )
 
+const PERSISTENT_BOTS: PresenceMessage[] = [
+  {
+    userId: "bot:clawbreak",
+    userName: "ClawBreak",
+    messageType: "presence",
+    type: "join",
+    meta: {
+      ts: Date.now(),
+      ua: "Mozilla/5.0 (X11; Linux x86_64) Bot/1.0",
+      ip: "127.0.0.1",
+      origin: "https://billiards-network.onrender.com",
+      method: "bot",
+      country: "AQ",
+    },
+  },
+]
+
 export function MessagingProvider({
   children,
 }: {
@@ -77,7 +94,8 @@ export function MessagingProvider({
     clientRef.current = new MessagingClient({ baseUrl })
   }
 
-  const [users, setUsers] = useState<PresenceMessage[]>([])
+  const [lobbyUsers, setLobbyUsers] = useState<PresenceMessage[]>([])
+  const users = useMemo(() => [...PERSISTENT_BOTS, ...lobbyUsers], [lobbyUsers])
   const [pendingChallenge, setPendingChallenge] =
     useState<ChallengeMessage | null>(null)
   const [incomingChallenge, setIncomingChallenge] =
@@ -127,7 +145,7 @@ export function MessagingProvider({
 
       const handleUsersChange = (nextUsers: PresenceMessage[]) => {
         if (!active) return
-        setUsers(nextUsers)
+        setLobbyUsers(nextUsers)
       }
 
       const handleChallenge = (challenge: ChallengeMessage) => {
@@ -201,7 +219,7 @@ export function MessagingProvider({
     if (existingLobby && existingLobby.currentUser.userId !== userId) {
       existingLobby.leave({ isTeardown: true })
       lobbyRef.current = null
-      setUsers([])
+      setLobbyUsers([])
       setPendingChallenge(null)
       setIncomingChallenge(null)
     }

@@ -21,6 +21,7 @@ export function detectBrowser(uaString?: string): string {
   if (ua.includes("Chrome")) return "Chrome"
   if (ua.includes("Firefox")) return "Firefox"
   if (ua.includes("Safari")) return "Safari"
+  if (ua.includes("Bot")) return "Bot"
 
   return "Unknown"
 }
@@ -39,6 +40,8 @@ export function browserIcon(browser?: string): string {
       return "🅾️"
     case "Brave":
       return "🦁"
+    case "Bot":
+      return "🤖"
     default:
       return "🌍"
   }

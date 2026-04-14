@@ -103,7 +103,10 @@ describe("MessagingContext", () => {
       onUsersChangeHandler(mockUsers)
     })
 
-    expect(capturedMessaging.users).toEqual(mockUsers)
+    expect(capturedMessaging.users).toEqual([
+      expect.objectContaining({ userId: "bot:clawbreak" }),
+      ...mockUsers,
+    ])
   })
 
   it("handles challenge events", async () => {
