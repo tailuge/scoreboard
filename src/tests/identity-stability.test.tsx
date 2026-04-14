@@ -28,7 +28,6 @@ describe("Identity Stability Reproduction", () => {
 
   it("verifies that name change DOES NOT trigger userId change (new stable behavior)", async () => {
     ;(getUID as jest.Mock)
-      .mockReturnValueOnce("session-id-1")
       .mockReturnValueOnce("initial-id")
 
     render(

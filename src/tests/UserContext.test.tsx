@@ -28,7 +28,6 @@ describe("UserProvider", () => {
   })
 
   it("reuses stable userId from localStorage if available", async () => {
-    ;(getUID as jest.Mock).mockReturnValue("session-id")
     globalThis.localStorage.setItem("userId", "stable-user-id")
     globalThis.localStorage.setItem("userName", "Persisted User")
 
@@ -48,7 +47,6 @@ describe("UserProvider", () => {
 
   it("stores renamed users but keeps userId stable", async () => {
     ;(getUID as jest.Mock)
-      .mockReturnValueOnce("session-id")
       .mockReturnValueOnce("initial-user-id")
 
     render(

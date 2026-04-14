@@ -54,7 +54,6 @@ describe("MessagingContext", () => {
     ;(useUser as jest.Mock).mockReturnValue({
       userId: "user-1",
       userName: "User One",
-      sessionId: "session-1",
     })
   })
 
@@ -72,9 +71,6 @@ describe("MessagingContext", () => {
         type: "join",
         userId: "user-1",
         userName: "User One",
-        meta: {
-          sessionId: "session-1",
-        },
       })
     })
   })
@@ -355,7 +351,6 @@ describe("MessagingContext", () => {
     ;(useUser as jest.Mock).mockReturnValue({
       userId: "user-new",
       userName: "User New",
-      sessionId: "session-new",
     })
 
     rerender(
@@ -367,10 +362,7 @@ describe("MessagingContext", () => {
     await waitFor(() => expect(mockLobby.leave).toHaveBeenCalled())
     await waitFor(() => expect(mockClient.joinLobby).toHaveBeenCalledTimes(2))
     expect(mockClient.joinLobby).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        userId: "user-new",
-        meta: { sessionId: "session-new" },
-      })
+      expect.objectContaining({ userId: "user-new" })
     )
   })
 

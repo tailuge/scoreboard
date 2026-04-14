@@ -21,14 +21,9 @@ export function UserList({
 }: UserListProps) {
   const otherUsers = users.filter((user) => user.userId !== currentUserId)
 
-  // Deduplicate by userId to show only one row per human
-  const uniqueUsers = Array.from(
-    new Map(otherUsers.map((user) => [user.userId, user])).values()
-  )
-
   return (
     <div className={`flex flex-wrap justify-between gap-2 ${className}`}>
-      {uniqueUsers.map((user) => (
+      {otherUsers.map((user) => (
         <UserListItem
           key={user.userId}
           user={user}

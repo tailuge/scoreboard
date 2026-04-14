@@ -22,7 +22,6 @@ import { useUser } from "@/contexts/UserContext"
 interface MessagingContextType {
   users: PresenceMessage[]
   activeGames: ActiveGame[]
-  sessionId: string
   pendingChallenge: ChallengeMessage | null
   incomingChallenge: ChallengeMessage | null
   acceptedChallenge: ChallengeMessage | null
@@ -87,7 +86,7 @@ export function MessagingProvider({
 }: {
   readonly children: React.ReactNode
 }) {
-  const { userId, userName, sessionId } = useUser()
+  const { userId, userName } = useUser()
   const clientRef = useRef<MessagingClient | null>(null)
   const lobbyRef = useRef<Lobby | null>(null)
 
@@ -397,7 +396,6 @@ export function MessagingProvider({
     () => ({
       users,
       activeGames,
-      sessionId,
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,
@@ -417,7 +415,6 @@ export function MessagingProvider({
     [
       users,
       activeGames,
-      sessionId,
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,

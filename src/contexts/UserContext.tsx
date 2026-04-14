@@ -13,7 +13,6 @@ import { getAnonymousName, anonByLang } from "@/utils/locale"
 interface UserContextType {
   userId: string
   userName: string
-  sessionId: string
   setUserName: (name: string) => void
 }
 
@@ -28,14 +27,9 @@ export function UserProvider({
 }) {
   const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("Anonymous")
-  const [sessionId, setSessionId] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    // Session ID is strictly per-tab/refresh
-    const newSessionId = getUID()
-    setSessionId(newSessionId)
-
     const storedId =
       globalThis.localStorage.getItem("userId") ||
       globalThis.sessionStorage.getItem("userId")
@@ -120,10 +114,9 @@ export function UserProvider({
     () => ({
       userId,
       userName,
-      sessionId,
       setUserName: handleSetUserName,
     }),
-    [userId, userName, sessionId, handleSetUserName]
+    [userId, userName, handleSetUserName]
   )
 
   return (
