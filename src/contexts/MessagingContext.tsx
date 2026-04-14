@@ -22,6 +22,7 @@ import { useUser } from "@/contexts/UserContext"
 interface MessagingContextType {
   users: PresenceMessage[]
   activeGames: ActiveGame[]
+  sessionId: string
   pendingChallenge: ChallengeMessage | null
   incomingChallenge: ChallengeMessage | null
   acceptedChallenge: ChallengeMessage | null
@@ -86,7 +87,7 @@ export function MessagingProvider({
 }: {
   readonly children: React.ReactNode
 }) {
-  const { userId, userName } = useUser()
+  const { userId, userName, sessionId } = useUser()
   const clientRef = useRef<MessagingClient | null>(null)
   const lobbyRef = useRef<Lobby | null>(null)
 
@@ -234,7 +235,10 @@ export function MessagingProvider({
           type: "join",
           userId,
           userName,
-        })
+          // meta is provided by the server, but we can't easily extend the type here
+          // for custom metadata without casting if the library doesn't support it.
+          // However, we want to hide multiple tabs of the same user anyway.
+        } as PresenceMessage)
 
         if (!isActive) {
           await lobby.leave()
@@ -393,6 +397,7 @@ export function MessagingProvider({
     () => ({
       users,
       activeGames,
+      sessionId,
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,
@@ -412,6 +417,7 @@ export function MessagingProvider({
     [
       users,
       activeGames,
+      sessionId,
       pendingChallenge,
       incomingChallenge,
       acceptedChallenge,

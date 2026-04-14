@@ -27,9 +27,9 @@ describe("UserProvider", () => {
     globalThis.localStorage.clear()
   })
 
-  it("creates a fresh session-scoped user id instead of reusing localStorage", async () => {
-    ;(getUID as jest.Mock).mockReturnValue("session-user-id")
-    globalThis.localStorage.setItem("userId", "legacy-local-user-id")
+  it("reuses stable userId from localStorage if available", async () => {
+    ;(getUID as jest.Mock).mockReturnValue("session-id")
+    globalThis.localStorage.setItem("userId", "stable-user-id")
     globalThis.localStorage.setItem("userName", "Persisted User")
 
     render(
@@ -39,17 +39,17 @@ describe("UserProvider", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByTestId("user-id")).toHaveTextContent("session-user-id")
+      expect(screen.getByTestId("user-id")).toHaveTextContent("stable-user-id")
     })
     expect(screen.getByTestId("user-name")).toHaveTextContent("Persisted User")
-    expect(globalThis.sessionStorage.getItem("userId")).toBe("session-user-id")
-    expect(globalThis.localStorage.getItem("userId")).toBeNull()
+    expect(globalThis.sessionStorage.getItem("userId")).toBe("stable-user-id")
+    expect(globalThis.localStorage.getItem("userId")).toBe("stable-user-id")
   })
 
-  it("stores renamed users in sessionStorage and localStorage correctly", async () => {
+  it("stores renamed users but keeps userId stable", async () => {
     ;(getUID as jest.Mock)
+      .mockReturnValueOnce("session-id")
       .mockReturnValueOnce("initial-user-id")
-      .mockReturnValueOnce("renamed-user-id")
 
     render(
       <UserProvider>
@@ -64,13 +64,13 @@ describe("UserProvider", () => {
     fireEvent.click(screen.getByRole("button", { name: "rename" }))
 
     await waitFor(() => {
-      expect(screen.getByTestId("user-id")).toHaveTextContent("renamed-user-id")
+      // userId remains the same
+      expect(screen.getByTestId("user-id")).toHaveTextContent("initial-user-id")
     })
     expect(screen.getByTestId("user-name")).toHaveTextContent("Updated User")
-    expect(globalThis.sessionStorage.getItem("userId")).toBe("renamed-user-id")
     expect(globalThis.sessionStorage.getItem("userName")).toBe("Updated User")
     expect(globalThis.localStorage.getItem("userName")).toBe("Updated User")
-    expect(globalThis.localStorage.getItem("userId")).toBeNull()
+    expect(globalThis.localStorage.getItem("userId")).toBe("initial-user-id")
   })
 
   it("handles URL query parameters for userId and userName", async () => {

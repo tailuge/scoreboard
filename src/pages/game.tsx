@@ -88,7 +88,9 @@ export default function Game({
     sendChat,
     markChatAsRead,
   } = useMessaging()
-  const presenceCount = users.length
+  const presenceCount = useMemo(() => {
+    return new Set(users.map((u) => u.userId)).size
+  }, [users])
   const [snookerReds, setSnookerReds] = useState(6)
   const [threecushionRaceTo, setThreecushionRaceTo] = useState(3)
   const [nineballOption, setNineballOption] = useState("1->9")
@@ -521,6 +523,7 @@ export default function Game({
               >
                 <div
                   className="user-pill"
+                  title={`${users.length} connections`}
                   aria-label={`${presenceCount} users online`}
                 >
                   <UsersIcon className="h-4 w-4" aria-hidden="true" />
@@ -644,7 +647,7 @@ export default function Game({
               <p className="text-xs text-red-400">{challengeError}</p>
             ) : null}
 
-            {users.length > 0 && (
+            {users.length > 1 && (
               <div className="pt-0">
                 <UserList
                   users={users}

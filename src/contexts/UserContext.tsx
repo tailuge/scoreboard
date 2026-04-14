@@ -13,6 +13,7 @@ import { getAnonymousName, anonByLang } from "@/utils/locale"
 interface UserContextType {
   userId: string
   userName: string
+  sessionId: string
   setUserName: (name: string) => void
 }
 
@@ -27,20 +28,29 @@ export function UserProvider({
 }) {
   const [userId, setUserId] = useState("")
   const [userName, setUserName] = useState("Anonymous")
+  const [sessionId, setSessionId] = useState("")
   const router = useRouter()
 
   useEffect(() => {
-    const storedSessionId = globalThis.sessionStorage.getItem("userId")
+    // Session ID is strictly per-tab/refresh
+    const newSessionId = getUID()
+    setSessionId(newSessionId)
+
+    const storedId =
+      globalThis.localStorage.getItem("userId") ||
+      globalThis.sessionStorage.getItem("userId")
     const storedSessionUserName = globalThis.sessionStorage.getItem("userName")
-    const storedId = storedSessionId
+
     if (storedId) {
       setUserId(storedId)
+      globalThis.localStorage.setItem("userId", storedId)
+      globalThis.sessionStorage.setItem("userId", storedId)
     } else {
       const newId = getUID()
       setUserId(newId)
+      globalThis.localStorage.setItem("userId", newId)
       globalThis.sessionStorage.setItem("userId", newId)
     }
-    globalThis.localStorage.removeItem("userId")
 
     const storedUserName =
       storedSessionUserName || globalThis.localStorage.getItem("userName")
@@ -85,25 +95,35 @@ export function UserProvider({
     router.query.userName,
   ])
 
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "userName" && e.newValue) {
+        setUserName(e.newValue)
+      }
+      if (e.key === "userId" && e.newValue) {
+        setUserId(e.newValue)
+      }
+    }
+    globalThis.addEventListener("storage", handleStorageChange)
+    return () => globalThis.removeEventListener("storage", handleStorageChange)
+  }, [])
+
   const handleSetUserName = useCallback((name: string) => {
     setUserName(name)
     globalThis.sessionStorage.setItem("userName", name)
     globalThis.localStorage.setItem("userName", name)
-    // Generate a new user ID when username changes
-    const newId = getUID()
-    setUserId(newId)
-    globalThis.sessionStorage.setItem("userId", newId)
-    globalThis.localStorage.removeItem("userId")
-    console.log("Generated new player ID due to username change: " + newId)
+    // We no longer generate a new user ID when username changes to ensure identity stability.
+    console.log("Updated username to: " + name)
   }, [])
 
   const contextValue = useMemo(
     () => ({
       userId,
       userName,
+      sessionId,
       setUserName: handleSetUserName,
     }),
-    [userId, userName, handleSetUserName]
+    [userId, userName, sessionId, handleSetUserName]
   )
 
   return (
