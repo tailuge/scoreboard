@@ -676,7 +676,7 @@ export default function Game({
           </div>
         </GroupBox>
 
-        <GroupBox title="Play">
+        <GroupBox title="Practice">
           <div className="flex flex-col gap-2 -mt-3">
             <GameGrid
               userName={userName}

@@ -4,7 +4,7 @@ import {
   RedBallButtons,
   NineBallOptions,
 } from "./GameButtonOptions"
-import { GameButton, ActionButton } from "./GameButtons"
+import { GameButton } from "./GameButtons"
 import { GameUrl } from "@/utils/GameUrl"
 import { buildGameOptions } from "@/utils/GameOptions"
 
@@ -65,14 +65,6 @@ export function GameGrid({
           extras,
         })
 
-        const botUrl = GameUrl.createSinglePlayer({
-          userName,
-          userId,
-          ruleType: game.ruleType,
-          isBot: true,
-          extras,
-        })
-
         let gameButtonChildren: React.ReactNode = null
         if (game.ruleType === "snooker") {
           gameButtonChildren = (
@@ -107,15 +99,6 @@ export function GameGrid({
             >
               {gameButtonChildren}
             </GameButton>
-            {game.ruleType === "nineball" && (
-              <ActionButton
-                href={botUrl.toString()}
-                hoverBorderColor="hover:border-purple-500"
-                hoverTextColor="hover:text-purple-400"
-              >
-                Play vs Bot
-              </ActionButton>
-            )}
           </div>
         )
       })}
