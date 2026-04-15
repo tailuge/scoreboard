@@ -72,11 +72,11 @@ const PERSISTENT_BOTS: PresenceMessage[] = [
     type: "join",
     meta: {
       ts: Date.now(),
-      ua: "Mozilla/5.0 (X11; Linux x86_64) Bot/1.0",
+      ua: "",
       ip: "127.0.0.1",
       origin: "https://billiards-network.onrender.com",
       method: "bot",
-      country: "AQ",
+      country: "BOT",
     },
   },
 ]

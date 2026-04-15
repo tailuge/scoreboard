@@ -10,6 +10,10 @@ describe("localeToFlag", () => {
   it("should return globe for missing or invalid region", () => {
     expect(localeToFlag("bad")).toBe("🌐")
   })
+
+  it("should return robot emoji for BOT country code", () => {
+    expect(localeToFlag("BOT")).toBe("🤖")
+  })
 })
 
 describe("getAnonymousName", () => {

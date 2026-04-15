@@ -70,7 +70,7 @@
     "jscpd": "4.0.9",
     "oxlint": "1.60.0",
     "postcss-load-config": "^6.0.1",
-    "prettier": "3.8.2",
+    "prettier": "3.8.3",
     "tailwindcss": "4.2.2",
     "ts-jest": "29.4.9",
     "typescript": "6.0.2",

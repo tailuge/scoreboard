@@ -19,10 +19,14 @@ export function UserItemActions({
 
   return (
     <>
-      <span className="text-[10px]">{osIcon(detectOS(userAgent))}</span>
-      <span className="text-[10px]">
-        {browserIcon(detectBrowser(userAgent))}
-      </span>
+      {userAgent ? (
+        <>
+          <span className="text-[10px]">{osIcon(detectOS(userAgent))}</span>
+          <span className="text-[10px]">
+            {browserIcon(detectBrowser(userAgent))}
+          </span>
+        </>
+      ) : null}
       <UserBadge user={user} currentUserId={currentUserId} />
       {Boolean(currentUserId) && canChallenge(user, currentUserId) && (
         <button

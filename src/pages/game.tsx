@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps<GameProps> = async () => {
       initialHighscores: highscores,
       initialMatchResults: matchResults,
     },
-    revalidate: 60,
+    revalidate: false,
   }
 }
 

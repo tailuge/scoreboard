@@ -84,6 +84,8 @@ const languageToRegion: Record<string, string> = {
 export function localeToFlag(locale?: string): string {
   if (!locale) return "🌐"
 
+  if (locale === "BOT") return "🤖"
+
   const trimmed = locale.trim()
   if (!trimmed.includes("-") && trimmed.length === 2) {
     return trimmed
