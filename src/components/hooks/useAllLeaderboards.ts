@@ -45,10 +45,12 @@ export function useAllLeaderboards(
   }, [])
 
   useEffect(() => {
-    if (!initialData) {
-      fetchData()
+    const controller = new AbortController()
+    fetchData(controller.signal)
+    return () => {
+      controller.abort()
     }
-  }, [fetchData, initialData])
+  }, [fetchData])
 
   return { data, loading, error, refresh: fetchData }
 }
