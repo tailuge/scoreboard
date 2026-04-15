@@ -49,10 +49,12 @@ export function useLeaderboard(
   )
 
   useEffect(() => {
-    if (!initialData) {
-      fetchData()
+    const controller = new AbortController()
+    fetchData(controller.signal)
+    return () => {
+      controller.abort()
     }
-  }, [fetchData, initialData])
+  }, [fetchData])
 
   const handleLike = useCallback(
     async (id: string) => {

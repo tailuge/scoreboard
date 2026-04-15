@@ -6,15 +6,16 @@ export function useMatchHistory(initialData?: MatchResult[]) {
   const [results, setResults] = useState<MatchResult[]>(initialData ?? [])
   const [isLoading, setIsLoading] = useState(!initialData)
 
-  const fetchResults = useCallback(async () => {
+  const fetchResults = useCallback(async (signal?: AbortSignal) => {
     try {
       const url = "/api/match-results"
-      const response = await fetch(url)
+      const response = await fetch(url, { signal })
       if (!response.ok)
         throw new Error(`Failed to fetch match history: ${response.status}`)
       const data = await response.json()
       setResults(data)
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") return
       const statusMatch =
         error instanceof Error ? /status[:\s](\d+)/.exec(error.message) : null
       logger.error(
@@ -34,10 +35,12 @@ export function useMatchHistory(initialData?: MatchResult[]) {
   }, [])
 
   useEffect(() => {
-    if (!initialData) {
-      fetchResults()
+    const controller = new AbortController()
+    fetchResults(controller.signal)
+    return () => {
+      controller.abort()
     }
-  }, [fetchResults, initialData])
+  }, [fetchResults])
 
   return { results, isLoading, fetchResults }
 }
