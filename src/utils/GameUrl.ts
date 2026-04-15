@@ -79,11 +79,11 @@ export class GameUrl {
     const target = new URL(GAME_BASE_URL)
     this.addUserParams(target, userName, userId)
     target.searchParams.append("ruletype", ruleType)
-    if (isBot) {
-      target.searchParams.append("bot", "true")
-    }
     for (const [key, value] of Object.entries(extras)) {
-      target.searchParams.append(key, value)
+      target.searchParams.set(key, value)
+    }
+    if (isBot && !extras.bot) {
+      target.searchParams.append("bot", "true")
     }
 
     return target

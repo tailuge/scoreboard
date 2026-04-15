@@ -658,6 +658,7 @@ export default function Game({
                         userId,
                         ruleType: "nineball",
                         isBot: true,
+                        extras: { bot: user.userName },
                       })
                       navigateTo(botUrl.toString())
                       return

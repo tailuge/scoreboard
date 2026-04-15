@@ -39,3 +39,34 @@ describe("GameUrl", () => {
     expect(url.toString()).toContain("User+Name")
   })
 })
+
+describe("GameUrl.createSinglePlayer", () => {
+  const spParams = {
+    userName: "user-name",
+    userId: "user-id",
+    ruleType: "nineball",
+  }
+
+  it("should create a basic single-player URL", () => {
+    const url = GameUrl.createSinglePlayer(spParams)
+    expect(url.searchParams.get("userName")).toBe("user-name")
+    expect(url.searchParams.get("userId")).toBe("user-id")
+    expect(url.searchParams.get("ruletype")).toBe("nineball")
+    expect(url.searchParams.has("bot")).toBe(false)
+  })
+
+  it("should set bot=true when isBot is set without extras.bot", () => {
+    const url = GameUrl.createSinglePlayer({ ...spParams, isBot: true })
+    expect(url.searchParams.get("bot")).toBe("true")
+  })
+
+  it("should use extras.bot value instead of bot=true", () => {
+    const url = GameUrl.createSinglePlayer({
+      ...spParams,
+      isBot: true,
+      extras: { bot: "ClawBreak" },
+    })
+    expect(url.searchParams.get("bot")).toBe("ClawBreak")
+    expect(url.searchParams.getAll("bot")).toHaveLength(1)
+  })
+})
