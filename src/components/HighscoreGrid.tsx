@@ -11,7 +11,7 @@ interface HighscoreGridProps {
 }
 
 export function HighscoreGrid({
-  heightClass = "h-[78px] w-[142px]",
+  heightClass = "h-[100px] w-[142px]",
   className = "",
   initialData,
 }: Readonly<HighscoreGridProps>) {
@@ -29,7 +29,7 @@ export function HighscoreGrid({
           <div className={`overflow-hidden ${heightClass}`}>
             <LeaderboardTable
               ruleType={game.ruleType}
-              limit={3}
+              limit={4}
               initialData={data[game.ruleType]}
             />
           </div>

@@ -15,7 +15,7 @@ const cellClass = "px-0 py-0.5"
 const hideReplay = "@max-[300px]:hidden"
 
 function renderTrophy(index: number) {
-  const icons = ["🏆", "🥈", "🥉"]
+  const icons = ["🏆", "🥈", "🥉", "🎖️"]
   const icon = icons[index]
   if (!icon) return null
   return <span className="text-[1.15rem]">{icon}</span>
