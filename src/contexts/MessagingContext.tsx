@@ -79,6 +79,20 @@ const PERSISTENT_BOTS: PresenceMessage[] = [
       country: "BOT",
     },
   },
+  {
+    userId: "bot:thefarjaw",
+    userName: "TheFarJaw",
+    messageType: "presence",
+    type: "join",
+    meta: {
+      ts: Date.now(),
+      ua: "",
+      ip: "127.0.0.1",
+      origin: "https://billiards-network.onrender.com",
+      method: "bot",
+      country: "BOT",
+    },
+  },
 ]
 
 export function MessagingProvider({

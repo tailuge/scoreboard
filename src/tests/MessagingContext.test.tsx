@@ -105,6 +105,7 @@ describe("MessagingContext", () => {
 
     expect(capturedMessaging.users).toEqual([
       expect.objectContaining({ userId: "bot:clawbreak" }),
+      expect.objectContaining({ userId: "bot:thefarjaw" }),
       ...mockUsers,
     ])
   })
