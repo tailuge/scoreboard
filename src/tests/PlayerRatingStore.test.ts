@@ -95,4 +95,20 @@ describe("PlayerRatingStore", () => {
     const top = await store.getTopN("nineball", 3)
     expect(top).toHaveLength(3)
   })
+
+  it("stores and retrieves history", async () => {
+    const rating = {
+      rating: 1600,
+      rd: 80,
+      volatility: 0.06,
+      lastUpdated: Date.now(),
+      gamesPlayed: 5,
+      wins: 3,
+      losses: 2,
+    }
+    const date = new Date().toISOString().split("T")[0]
+    await store.save("nineball", "Alice", rating)
+    const history = await store.getHistory("nineball", "Alice")
+    expect(history).toEqual({ [date]: 1600 })
+  })
 })
