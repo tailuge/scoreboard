@@ -1,6 +1,8 @@
 import { NextRequest, userAgent } from "next/server"
 import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
+import { PlayerRatingStore } from "@/services/PlayerRatingStore"
+import { updateMatchRatings } from "@/services/RatingService"
 import { getUID } from "@/utils/uid"
 import { logger } from "@/utils/logger"
 import { isValidGameType } from "@/utils/gameTypes"
@@ -10,6 +12,7 @@ export const config = {
 }
 
 const matchResultService = new MatchResultService(kv)
+const playerRatingStore = new PlayerRatingStore(kv)
 
 /**
  * @swagger
@@ -150,6 +153,24 @@ async function handlePost(request: NextRequest) {
     }
 
     await matchResultService.addMatchResult(newResult, replayData)
+
+    if (newResult.loser) {
+      try {
+        const ruleType = newResult.ruleType ?? "nineball"
+        const [wRating, lRating] = await Promise.all([
+          playerRatingStore.getOrCreate(ruleType, newResult.winner),
+          playerRatingStore.getOrCreate(ruleType, newResult.loser),
+        ])
+        const [newW, newL] = updateMatchRatings(wRating, lRating)
+        await Promise.all([
+          playerRatingStore.save(ruleType, newResult.winner, newW),
+          playerRatingStore.save(ruleType, newResult.loser, newL),
+        ])
+      } catch (e) {
+        logger.log("ELO update failed:", e)
+      }
+    }
+
     return Response.json(newResult, { status: 201 })
   } catch (error) {
     logger.log("Error adding match result:", error)
