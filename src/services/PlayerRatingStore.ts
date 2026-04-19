@@ -7,6 +7,8 @@ export type PlayerEntry = {
   rd: number
   conservativeRating: number
   gamesPlayed: number
+  wins: number
+  losses: number
 }
 
 export class PlayerRatingStore {
@@ -44,6 +46,8 @@ export class PlayerRatingStore {
           rd: Math.round(decayed.rd),
           conservativeRating: Math.round(decayed.rating - 2 * decayed.rd),
           gamesPlayed: r.gamesPlayed ?? 0,
+          wins: r.wins ?? 0,
+          losses: r.losses ?? 0,
         }
       })
       .sort((a, b) => b.conservativeRating - a.conservativeRating)

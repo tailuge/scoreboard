@@ -60,10 +60,11 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                     <tr className="text-gray-400 border-b border-gray-700">
                       <th className="text-left py-1 w-6">#</th>
                       <th className="text-left py-1">Player</th>
-                      <th className="text-right py-1">Score</th>
                       <th className="text-right py-1">Rating</th>
+                      <th className="text-right py-1">Wins</th>
+                      <th className="text-right py-1">Losses</th>
+                      <th className="text-right py-1">Score</th>
                       <th className="text-right py-1">RD</th>
-                      <th className="text-right py-1">Games</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -73,17 +74,20 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                         <td className="py-1 truncate max-w-[120px]">
                           {p.name}
                         </td>
-                        <td className="py-1 text-right font-mono text-yellow-400">
-                          {p.conservativeRating}
-                        </td>
                         <td className="py-1 text-right font-mono">
                           {p.rating}
                         </td>
+                        <td className="py-1 text-right text-green-400">
+                          {p.wins}
+                        </td>
+                        <td className="py-1 text-right text-red-400">
+                          {p.losses}
+                        </td>
+                        <td className="py-1 text-right font-mono text-yellow-400">
+                          {p.conservativeRating}
+                        </td>
                         <td className="py-1 text-right font-mono text-gray-400">
                           {p.rd}
-                        </td>
-                        <td className="py-1 text-right text-gray-400">
-                          {p.gamesPlayed}
                         </td>
                       </tr>
                     ))}

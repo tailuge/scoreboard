@@ -15,6 +15,8 @@ describe("PlayerRatingStore", () => {
     expect(r.rating).toBe(DEFAULT_RATING.rating)
     expect(r.rd).toBe(DEFAULT_RATING.rd)
     expect(r.gamesPlayed).toBe(0)
+    expect(r.wins).toBe(0)
+    expect(r.losses).toBe(0)
   })
 
   it("saves and retrieves a rating", async () => {
@@ -24,11 +26,15 @@ describe("PlayerRatingStore", () => {
       volatility: 0.06,
       lastUpdated: Date.now(),
       gamesPlayed: 5,
+      wins: 3,
+      losses: 2,
     }
     await store.save("nineball", "Alice", rating)
     const retrieved = await store.getOrCreate("nineball", "Alice")
     expect(retrieved.rating).toBe(1600)
     expect(retrieved.gamesPlayed).toBe(5)
+    expect(retrieved.wins).toBe(3)
+    expect(retrieved.losses).toBe(2)
   })
 
   it("getTopN returns players sorted by conservative rating desc", async () => {
@@ -39,6 +45,8 @@ describe("PlayerRatingStore", () => {
       volatility: 0.06,
       lastUpdated: now,
       gamesPlayed: 10,
+      wins: 7,
+      losses: 3,
     })
     await store.save("nineball", "Bob", {
       rating: 1700,
@@ -46,6 +54,8 @@ describe("PlayerRatingStore", () => {
       volatility: 0.06,
       lastUpdated: now,
       gamesPlayed: 3,
+      wins: 2,
+      losses: 1,
     })
     await store.save("nineball", "Carol", {
       rating: 1550,
@@ -53,6 +63,8 @@ describe("PlayerRatingStore", () => {
       volatility: 0.06,
       lastUpdated: now,
       gamesPlayed: 20,
+      wins: 15,
+      losses: 5,
     })
 
     const top = await store.getTopN("nineball", 10)
@@ -76,6 +88,8 @@ describe("PlayerRatingStore", () => {
         volatility: 0.06,
         lastUpdated: now,
         gamesPlayed: i,
+        wins: i,
+        losses: 0,
       })
     }
     const top = await store.getTopN("nineball", 3)

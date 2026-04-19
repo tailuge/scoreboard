@@ -6,6 +6,8 @@ export type PlayerRating = {
   volatility: number
   lastUpdated: number
   gamesPlayed: number
+  wins: number
+  losses: number
 }
 
 export const DEFAULT_RATING: PlayerRating = {
@@ -14,6 +16,8 @@ export const DEFAULT_RATING: PlayerRating = {
   volatility: 0.06,
   lastUpdated: 0,
   gamesPlayed: 0,
+  wins: 0,
+  losses: 0,
 }
 
 const C = 50 // inactivity tuning constant
@@ -46,6 +50,8 @@ export function updateMatchRatings(
       volatility: pW.getVol(),
       lastUpdated: now,
       gamesPlayed: (winner.gamesPlayed ?? 0) + 1,
+      wins: (winner.wins ?? 0) + 1,
+      losses: winner.losses ?? 0,
     },
     {
       rating: pL.getRating(),
@@ -53,6 +59,8 @@ export function updateMatchRatings(
       volatility: pL.getVol(),
       lastUpdated: now,
       gamesPlayed: (loser.gamesPlayed ?? 0) + 1,
+      wins: loser.wins ?? 0,
+      losses: (loser.losses ?? 0) + 1,
     },
   ]
 }

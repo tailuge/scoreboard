@@ -39,6 +39,8 @@ it("returns sorted player list", async () => {
       rd: 50,
       conservativeRating: 1500,
       gamesPlayed: 10,
+      wins: 7,
+      losses: 3,
     },
     {
       name: "Bob",
@@ -46,6 +48,8 @@ it("returns sorted player list", async () => {
       rd: 30,
       conservativeRating: 1340,
       gamesPlayed: 5,
+      wins: 2,
+      losses: 3,
     },
   ]
   MockStore.prototype.getTopN.mockResolvedValue(players)
