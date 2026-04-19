@@ -154,6 +154,27 @@ function PopoverFooter({ onShare }: { readonly onShare: () => void }) {
             <path d="M3 13h2v7H3v-7zm5-7h2v14H8V6zm5 10h2v4h-2v-4zm5-4h2v8h-2v-8z" />
           </svg>
         </a>
+        <a
+          href="/elo"
+          className="p-1.5 rounded-md bg-gray-700/50 hover:bg-gray-600/50 transition-colors"
+          title="ELO Ratings"
+          aria-label="ELO Ratings"
+        >
+          <svg
+            className="h-4 w-4 text-gray-300"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 13l4-4 4 4" />
+            <path d="M8 17l4-4 4 4" />
+          </svg>
+        </a>
       </div>
     </div>
   )
@@ -290,7 +311,7 @@ export function ServerStatsPopover({
             </button>
           </div>
 
-          <div className="p-4 space-y-4 max-h-80 overflow-y-auto">
+          <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
             {loading ? (
               <div className="text-center text-xs text-gray-400 py-4">
                 Loading...
