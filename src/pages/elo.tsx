@@ -23,7 +23,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           `${base}/api/elo?ruleType=${g.ruleType}&limit=20`
         )
         const players: PlayerEntry[] = res.ok ? await res.json() : []
-        return { name: g.name, ruleType: g.ruleType, players }
+        const sortedPlayers = [...players].sort((a, b) => b.rating - a.rating)
+        return { name: g.name, ruleType: g.ruleType, players: sortedPlayers }
       } catch {
         return { name: g.name, ruleType: g.ruleType, players: [] }
       }
@@ -63,6 +64,7 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                       <th className="text-right py-1">Rating</th>
                       <th className="text-right py-1">Wins</th>
                       <th className="text-right py-1">Losses</th>
+                      <th className="text-right py-1">Games</th>
                       <th className="text-right py-1">Score</th>
                       <th className="text-right py-1">RD</th>
                     </tr>
@@ -82,6 +84,9 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                         </td>
                         <td className="py-1 text-right text-red-400">
                           {p.losses}
+                        </td>
+                        <td className="py-1 text-right text-gray-300">
+                          {p.gamesPlayed}
                         </td>
                         <td className="py-1 text-right font-mono text-yellow-400">
                           {p.conservativeRating}
