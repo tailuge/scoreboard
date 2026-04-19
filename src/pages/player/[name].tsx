@@ -9,10 +9,10 @@ type HistoryEntry = {
   rating: number
 }
 
-type PlayerPageProps = {
-  name: string
-  ruleType: string
-  history: HistoryEntry[]
+interface PlayerPageProps {
+  readonly name: string
+  readonly ruleType: string
+  readonly history: readonly HistoryEntry[]
 }
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 }
 
-function EloGraph({ history }: { history: HistoryEntry[] }) {
+function EloGraph({ history }: { readonly history: readonly HistoryEntry[] }) {
   if (history.length < 2) {
     return (
       <div className="h-64 flex items-center justify-center text-gray-500 italic">
@@ -106,7 +106,7 @@ function EloGraph({ history }: { history: HistoryEntry[] }) {
           const x = padding + (i / (history.length - 1)) * chartWidth
           return (
             <text
-              key={i}
+              key={h.date}
               x={x}
               y={height - padding + 20}
               fill="#9CA3AF"
@@ -135,7 +135,7 @@ function EloGraph({ history }: { history: HistoryEntry[] }) {
           const y = padding + chartHeight - ((h.rating - minRating) / range) * chartHeight
           return (
             <circle
-              key={i}
+              key={h.date}
               cx={x}
               cy={y}
               r="4"
@@ -151,7 +151,11 @@ function EloGraph({ history }: { history: HistoryEntry[] }) {
   )
 }
 
-export default function PlayerPage({ name, ruleType, history }: PlayerPageProps) {
+export default function PlayerPage({
+  name,
+  ruleType,
+  history,
+}: PlayerPageProps) {
   const gameName = GAME_TYPES.find((g) => g.ruleType === ruleType)?.name || ruleType
 
   return (
