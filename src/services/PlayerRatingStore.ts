@@ -28,7 +28,24 @@ export class PlayerRatingStore {
     name: string,
     rating: PlayerRating
   ): Promise<void> {
-    await this.store.hset(this.key(ruleType), { [name]: rating })
+    const date = new Date().toISOString().split("T")[0]
+    await Promise.all([
+      this.store.hset(this.key(ruleType), { [name]: rating }),
+      this.store.hset(`elo-history:${ruleType}:${name}`, {
+        [date]: Math.round(rating.rating),
+      }),
+    ])
+  }
+
+  async getHistory(
+    ruleType: string,
+    name: string
+  ): Promise<Record<string, number>> {
+    return (
+      (await this.store.hgetall<Record<string, number>>(
+        `elo-history:${ruleType}:${name}`
+      )) ?? {}
+    )
   }
 
   async getTopN(ruleType: string, n: number): Promise<PlayerEntry[]> {

@@ -74,7 +74,12 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                       <tr key={p.name} className="border-b border-gray-800">
                         <td className="py-1 text-gray-500">{i + 1}</td>
                         <td className="py-1 truncate max-w-[120px]">
-                          {p.name}
+                          <Link
+                            href={`/player/${encodeURIComponent(p.name)}?ruleType=${g.ruleType}`}
+                            className="hover:text-blue-400 transition-colors"
+                          >
+                            {p.name}
+                          </Link>
                         </td>
                         <td className="py-1 text-right font-mono">
                           {p.rating}
