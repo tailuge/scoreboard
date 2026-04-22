@@ -43,7 +43,9 @@ function EloGraph({ history }: { readonly history: readonly HistoryEntry[] }) {
   if (history.length < 2) {
     return (
       <div className="h-64 flex items-center justify-center text-gray-500 italic">
-        {history.length === 0 ? "No history data" : "Need at least 2 days of data for a graph"}
+        {history.length === 0
+          ? "No history data"
+          : "Need at least 2 days of data for a graph"}
       </div>
     )
   }
@@ -62,7 +64,8 @@ function EloGraph({ history }: { readonly history: readonly HistoryEntry[] }) {
   const points = history
     .map((h, i) => {
       const x = padding + (i / (history.length - 1)) * chartWidth
-      const y = padding + chartHeight - ((h.rating - minRating) / range) * chartHeight
+      const y =
+        padding + chartHeight - ((h.rating - minRating) / range) * chartHeight
       return `${x},${y}`
     })
     .join(" ")
@@ -102,7 +105,8 @@ function EloGraph({ history }: { readonly history: readonly HistoryEntry[] }) {
 
         {/* Date labels */}
         {history.map((h, i) => {
-          if (history.length > 10 && i % Math.ceil(history.length / 10) !== 0) return null
+          if (history.length > 10 && i % Math.ceil(history.length / 10) !== 0)
+            return null
           const x = padding + (i / (history.length - 1)) * chartWidth
           return (
             <text
@@ -132,7 +136,10 @@ function EloGraph({ history }: { readonly history: readonly HistoryEntry[] }) {
         {/* Data points */}
         {history.map((h, i) => {
           const x = padding + (i / (history.length - 1)) * chartWidth
-          const y = padding + chartHeight - ((h.rating - minRating) / range) * chartHeight
+          const y =
+            padding +
+            chartHeight -
+            ((h.rating - minRating) / range) * chartHeight
           return (
             <circle
               key={h.date}
@@ -156,7 +163,8 @@ export default function PlayerPage({
   ruleType,
   history,
 }: PlayerPageProps) {
-  const gameName = GAME_TYPES.find((g) => g.ruleType === ruleType)?.name || ruleType
+  const gameName =
+    GAME_TYPES.find((g) => g.ruleType === ruleType)?.name || ruleType
 
   return (
     <div className="min-h-screen bg-gray-900 p-4 md:p-8 font-sans text-gray-100">
@@ -173,24 +181,26 @@ export default function PlayerPage({
         </GroupBox>
 
         <div className="mt-8">
-            <GroupBox title="History Data">
-                <table className="w-full text-sm">
-                    <thead>
-                        <tr className="text-gray-400 border-b border-gray-700 text-left">
-                            <th className="py-2">Date</th>
-                            <th className="py-2 text-right">Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {[...history].reverse().map((h) => (
-                            <tr key={h.date} className="border-b border-gray-800">
-                                <td className="py-2 text-gray-300">{h.date}</td>
-                                <td className="py-2 text-right font-mono text-blue-400">{h.rating}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </GroupBox>
+          <GroupBox title="History Data">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-gray-400 border-b border-gray-700 text-left">
+                  <th className="py-2">Date</th>
+                  <th className="py-2 text-right">Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...history].reverse().map((h) => (
+                  <tr key={h.date} className="border-b border-gray-800">
+                    <td className="py-2 text-gray-300">{h.date}</td>
+                    <td className="py-2 text-right font-mono text-blue-400">
+                      {h.rating}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </GroupBox>
         </div>
 
         <div className="flex justify-center gap-4 mt-8">

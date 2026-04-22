@@ -26,18 +26,23 @@ import { ScoreTable } from "@/services/scoretable"
 import { MatchResultService } from "@/services/MatchResultService"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { MatchResult } from "@/types/match"
+import { PlayerRatingStore } from "@/services/PlayerRatingStore"
+import type { PlayerEntry } from "@/services/PlayerRatingStore"
 
 interface GameProps {
   readonly initialHighscores: Record<string, LeaderboardItem[]>
   readonly initialMatchResults: MatchResult[]
+  readonly topNineballPlayers: PlayerEntry[]
 }
 
 export const getStaticProps: GetStaticProps<GameProps> = async () => {
   const scoretable = new ScoreTable(kv)
   const matchResultService = new MatchResultService(kv)
+  const playerRatingStore = new PlayerRatingStore(kv)
 
   const highscores: Record<string, LeaderboardItem[]> = {}
   let matchResults: MatchResult[] = []
+  let topNineballPlayers: PlayerEntry[] = []
 
   try {
     await Promise.all(
@@ -46,6 +51,7 @@ export const getStaticProps: GetStaticProps<GameProps> = async () => {
       })
     )
     matchResults = await matchResultService.getMatchResults(50)
+    topNineballPlayers = await playerRatingStore.getTopN("nineball", 20)
   } catch (error) {
     console.error("Error fetching initial data for ISR:", error)
     // Fallback to empty data if KV is unavailable during build/revalidation
@@ -58,6 +64,7 @@ export const getStaticProps: GetStaticProps<GameProps> = async () => {
     props: {
       initialHighscores: highscores,
       initialMatchResults: matchResults,
+      topNineballPlayers,
     },
     revalidate: 60,
   }
@@ -66,6 +73,7 @@ export const getStaticProps: GetStaticProps<GameProps> = async () => {
 export default function Game({
   initialHighscores,
   initialMatchResults,
+  topNineballPlayers,
 }: GameProps) {
   useEffect(() => {
     console.log("query params:", window.location.search)
@@ -695,6 +703,31 @@ export default function Game({
         <div className="grid grid-cols-1 gap-6">
           <GroupBox title="Top Scores" titleHref="/leaderboard">
             <HighscoreGrid className="-mt-3" initialData={initialHighscores} />
+          </GroupBox>
+          <GroupBox title="Top Players" titleHref="/elo">
+            <ul className="-mt-3 space-y-1">
+              {[...topNineballPlayers]
+                .sort((a, b) => b.rating - a.rating)
+                .slice(0, 3)
+                .map((p, i) => (
+                  <li key={p.name} className="flex text-sm gap-1">
+                    <span className="w-5 text-center">
+                      {i === 0 ? "👑" : ""}
+                    </span>
+                    <span className="flex-1">
+                      <a
+                        href={`/player/${encodeURIComponent(p.name)}?ruleType=nineball`}
+                        className="hover:text-blue-400 transition-colors"
+                      >
+                        {p.name}
+                      </a>
+                    </span>
+                    <span className="font-mono text-yellow-400">
+                      {p.rating}
+                    </span>
+                  </li>
+                ))}
+            </ul>
           </GroupBox>
           <MatchHistoryList
             liveGames={activeGames}

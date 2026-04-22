@@ -80,7 +80,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     const acceptButton = screen.getByLabelText("Accept challenge")
     await act(async () => {
@@ -126,7 +132,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     await waitFor(() => {
       expect(createSpy).toHaveBeenCalledWith(
@@ -169,7 +181,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     await waitFor(() => {
       expect(createSpy).toHaveBeenCalledWith(
@@ -221,7 +239,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     const acceptButton = screen.getByLabelText("Accept challenge")
     await act(async () => {
@@ -275,7 +299,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     await waitFor(() => {
       expect(createSpy).toHaveBeenCalledWith(
@@ -326,7 +356,13 @@ describe("Challenge Logic", () => {
       "/api/match-results": () => mockFetchResponse([]),
     })
 
-    render(<Game initialHighscores={{}} initialMatchResults={[]} />)
+    render(
+      <Game
+        initialHighscores={{}}
+        initialMatchResults={[]}
+        topNineballPlayers={[]}
+      />
+    )
 
     await waitFor(() => {
       expect(createSpy).toHaveBeenCalledWith(
