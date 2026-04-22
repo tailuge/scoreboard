@@ -5,31 +5,28 @@ import { GroupBox } from "@/components/GroupBox"
 import { GAME_TYPES } from "@/config"
 import type { PlayerEntry } from "@/services/PlayerRatingStore"
 
+import { kv } from "@vercel/kv"
+import { PlayerRatingStore } from "@/services/PlayerRatingStore"
+
 type GameElo = {
   name: string
   ruleType: string
   players: PlayerEntry[]
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const host = req.headers.host ?? "localhost:3000"
-  const protocol = host.startsWith("localhost") ? "http" : "https"
-  const base = `${protocol}://${host}`
-
-  const results = await Promise.all(
-    GAME_TYPES.map(async (g) => {
-      try {
-        const res = await fetch(
-          `${base}/api/elo?ruleType=${g.ruleType}&limit=20`
-        )
-        const players: PlayerEntry[] = res.ok ? await res.json() : []
-        const sortedPlayers = [...players].sort((a, b) => b.rating - a.rating)
-        return { name: g.name, ruleType: g.ruleType, players: sortedPlayers }
-      } catch {
-        return { name: g.name, ruleType: g.ruleType, players: [] }
-      }
-    })
+export const getServerSideProps: GetServerSideProps = async () => {
+  const store = new PlayerRatingStore(kv)
+  const ruleTypes = GAME_TYPES.map((g) => g.ruleType)
+  const batchResults = await store.getTopNBatch(
+    ruleTypes as unknown as string[],
+    20
   )
+
+  const results = GAME_TYPES.map((g) => {
+    const players = batchResults[g.ruleType] ?? []
+    const sortedPlayers = [...players].sort((a, b) => b.rating - a.rating)
+    return { name: g.name, ruleType: g.ruleType, players: sortedPlayers }
+  })
 
   return { props: { games: results } }
 }

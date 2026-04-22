@@ -96,6 +96,34 @@ describe("PlayerRatingStore", () => {
     expect(top).toHaveLength(3)
   })
 
+  it("getTopNBatch retrieves multiple game types", async () => {
+    const now = Date.now()
+    await store.save("nineball", "Alice", {
+      rating: 1600,
+      rd: 50,
+      volatility: 0.06,
+      lastUpdated: now,
+      gamesPlayed: 1,
+      wins: 1,
+      losses: 0,
+    })
+    await store.save("snooker", "Bob", {
+      rating: 1700,
+      rd: 50,
+      volatility: 0.06,
+      lastUpdated: now,
+      gamesPlayed: 1,
+      wins: 1,
+      losses: 0,
+    })
+
+    const batch = await store.getTopNBatch(["nineball", "snooker"], 10)
+    expect(batch["nineball"]).toHaveLength(1)
+    expect(batch["nineball"][0].name).toBe("Alice")
+    expect(batch["snooker"]).toHaveLength(1)
+    expect(batch["snooker"][0].name).toBe("Bob")
+  })
+
   it("stores and retrieves history", async () => {
     const rating = {
       rating: 1600,

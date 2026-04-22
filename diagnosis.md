@@ -8,19 +8,6 @@ The `getServerSideProps` function in `src/pages/elo.tsx` uses `fetch()` to call 
 - **Network Latency:** Even though the server is calling itself, it performs a full HTTP/HTTPS request. In a serverless environment like Vercel, this may route through the public internet, incurring TLS handshake and routing overhead.
 - **Runtime Bootstrapping:** Each fetch to `/api/elo` triggers an execution of an Edge Function. If these functions are cold, you pay a startup penalty. Even if warm, you are spawning three separate execution contexts to fulfill one page request.
 
-### 2. Request Multiplication (Parallel but Heavy)
-The page fetches data for every game type (Snooker, 9-Ball, Three Cushion) individually:
-```typescript
-const results = await Promise.all(
-  GAME_TYPES.map(async (g) => {
-    const res = await fetch(`${base}/api/elo?ruleType=${g.ruleType}&limit=20`)
-    // ...
-  })
-)
-```
-While `Promise.all` runs these in parallel, the total time for `getServerSideProps` to complete is bound by the **slowest** of these three requests. If any one request hits a slight delay or cold start, the entire page hangs.
-
-### 3. Redundant Initialization
 Every time `/api/elo` is called, it:
 1. Instantiates a new `PlayerRatingStore`.
 2. Establishes a connection to Vercel KV.
@@ -37,11 +24,6 @@ Doing this three times per page load (once per game type) is inefficient when th
 Instead of fetching via HTTP, `getServerSideProps` should import the `PlayerRatingStore` and query the data directly.
 - **Why it works:** It eliminates the HTTP stack, network latency, and Edge Function overhead entirely. It's a direct function call to your database.
 - **Impact:** Reduces load time to the raw speed of the KV query (usually < 100ms).
-
-### Solution B: Consolidated API Endpoint
-Modify the API or create a new one (e.g., `/api/elo?ruleType=all`) that returns data for all game types in a single response.
-- **Why it works:** Reduces three HTTP round-trips to one.
-- **Impact:** Significantly reduces the "waiting for the slowest request" problem.
 
 ### Solution C: Client-Side Fetching (No SSR)
 Remove `getServerSideProps` and fetch the data in a `useEffect` hook or using a library like SWR/React Query.

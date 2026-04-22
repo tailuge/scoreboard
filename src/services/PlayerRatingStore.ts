@@ -52,6 +52,30 @@ export class PlayerRatingStore {
     const all = await this.store.hgetall<Record<string, PlayerRating>>(
       this.key(ruleType)
     )
+    return this.processEntries(all, n)
+  }
+
+  async getTopNBatch(
+    ruleTypes: string[],
+    n: number
+  ): Promise<Record<string, PlayerEntry[]>> {
+    const results = await Promise.all(
+      ruleTypes.map((rt) =>
+        this.store.hgetall<Record<string, PlayerRating>>(this.key(rt))
+      )
+    )
+
+    const response: Record<string, PlayerEntry[]> = {}
+    ruleTypes.forEach((rt, i) => {
+      response[rt] = this.processEntries(results[i], n)
+    })
+    return response
+  }
+
+  private processEntries(
+    all: Record<string, PlayerRating> | null,
+    n: number
+  ): PlayerEntry[] {
     if (!all) return []
 
     return Object.entries(all)
