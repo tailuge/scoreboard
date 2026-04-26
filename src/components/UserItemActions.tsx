@@ -1,5 +1,4 @@
 import React from "react"
-import { browserIcon, osIcon, detectOS, detectBrowser } from "@/utils/ua"
 import type { PresenceMessage } from "@tailuge/messaging"
 import { canChallenge } from "@tailuge/messaging"
 import { UserBadge } from "./UserBadge"
@@ -15,18 +14,8 @@ export function UserItemActions({
   currentUserId,
   onChallenge,
 }: UserItemActionsProps) {
-  const userAgent = user.meta?.ua
-
   return (
     <>
-      {userAgent ? (
-        <>
-          <span className="text-[10px]">{osIcon(detectOS(userAgent))}</span>
-          <span className="text-[10px]">
-            {browserIcon(detectBrowser(userAgent))}
-          </span>
-        </>
-      ) : null}
       <UserBadge user={user} currentUserId={currentUserId} />
       {Boolean(currentUserId) && canChallenge(user, currentUserId) && (
         <button

@@ -3,7 +3,7 @@ export function getOriginEmoji(
   ruleType?: string
 ): { emoji: string; title: string } {
   if (origin?.includes("github")) {
-    return { emoji: "🔧", title: "github" }
+    return { emoji: "🐙", title: "github" }
   }
   if (origin?.includes("vercel")) {
     return { emoji: "👥", title: "vercel" }
@@ -25,8 +25,11 @@ export function getOriginEmoji(
   if (ruleType === "nineball") {
     return { emoji: "⑨", title: "nineball" }
   }
+  if (ruleType === "eightball") {
+    return { emoji: "🎱", title: "eightball" }
+  }
   if (ruleType === "snooker") {
-    return { emoji: "⚪", title: "snooker" }
+    return { emoji: "🔴", title: "snooker" }
   }
   if (ruleType === "threecushion") {
     return { emoji: "③", title: "threecushion" }
