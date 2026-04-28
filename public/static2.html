@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billiards Lobby Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@200;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+        }
+
+        body {
+            background: linear-gradient(
+                to bottom,
+                #1a1a1a 0%,
+                #0f0f0f 100%
+            );
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Exo', sans-serif;
+            font-weight: 200;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        /* Reusing some styles from static.html */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            text-align: center;
+            padding: 0 1rem 1rem;
+            flex-shrink: 0;
+        }
+
+        .item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .item:hover { transform: translateY(-2px); }
+        .item:active { transform: scale(0.95); }
+
+        .pixelated {
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--card-bg);
+            margin-bottom: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            transition: filter 0.2s;
+        }
+        .item:hover .icon-box { filter: brightness(1.2); }
+        .icon-box img { display: none; }
+
+        .label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-rows: 1.2fr 1fr;
+            grid-template-columns: 1fr 1fr;
+            flex-grow: 1;
+            min-height: 0;
+            gap: 1rem;
+            padding: 0 1rem 1rem;
+        }
+
+        .bottom-section {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            min-height: 0;
+        }
+
+        /* Panel styles */
+        .panel {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .scroll-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        /* Custom Scrollbar */
+        .scroll-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroll-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        .scroll-area::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Naming Convention Fallbacks */
+        .fallback-eightball { --b64: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVRUmpjY299fH43OFUfkNl3AAAAE0lEQVQI12NgYGQAAiYwycwMxgAAggARzYDVGQAAAABJRU5ErkJggg=="); }
+        .fallback-nineball { --b64: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAAElBMVEVmeUehpGhjdjiGjDDYzInLt2lo5X8EAAAAGklEQVQI12NgYGRkYmBmYWVmYGYFspgYGJgAAXIAI3Y2z5oAAAAASUVORK5CYII="); }
+        .fallback-practice { --b64: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVoTGt7XoSGa4uumKgOwfDTAAAAF0lEQVQI12NgYGRiZGBkZmYCEkwMYAAAAPYAFO3iCuMAAAAASUVORK5CYII="); }
+        .fallback-snooker { --b64: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAAD1BMVEVKc0JRdEluLR87YjNQYDV1yIxOAAAAGklEQVQI1wXBAQEAAAiDMIT3z+wGd4DGdFA9APYAHwtdltcAAAAASUVORK5CYII="); }
+        .fallback-threecushion { --b64: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVbWG9kZohna5VXPlOdujwnAAAAFklEQVQI12NgYGRkYGBkAhJgFhAwAwAAfQAMlQzpOgAAAABJRU5ErkJggg=="); }
+
+        .is-fallback {
+            background-image: var(--b64) !important;
+        }
+
+        /* Data list styles */
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.875rem;
+        }
+        .data-item:last-child { border-bottom: none; }
+        .data-value { font-weight: 500; color: var(--accent); }
+    </style>
+    <script>
+        function handleImageError(img) {
+            const name = img.getAttribute('src').split('/').pop().split('.')[0];
+            const parent = img.parentElement;
+            parent.classList.add(`fallback-${name}`, 'is-fallback');
+        }
+    </script>
+</head>
+<body>
+    <h1>Billiards</h1>
+
+    <div class="grid">
+        <div class="item">
+            <div class="icon-box pixelated" style="background-image: url('assets/eightball.png')">
+                <img src="assets/eightball.png" onerror="handleImageError(this)">
+            </div>
+            <div class="label">8-Ball</div>
+        </div>
+
+        <div class="item">
+            <div class="icon-box pixelated" style="background-image: url('assets/nineball.png')">
+                <img src="assets/nineball.png" onerror="handleImageError(this)">
+            </div>
+            <div class="label">9-Ball</div>
+        </div>
+
+        <div class="item">
+            <div class="icon-box pixelated" style="background-image: url('assets/practice.png')">
+                <img src="assets/practice.png" onerror="handleImageError(this)">
+            </div>
+            <div class="label">Practice</div>
+        </div>
+
+        <div class="item">
+            <div class="icon-box pixelated" style="background-image: url('assets/snooker.png')">
+                <img src="assets/snooker.png" onerror="handleImageError(this)">
+            </div>
+            <div class="label">Snooker</div>
+        </div>
+
+        <div class="item">
+            <div class="icon-box pixelated" style="background-image: url('assets/threecushion.png')">
+                <img src="assets/threecushion.png" onerror="handleImageError(this)">
+            </div>
+            <div class="label">3-Cushion</div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <!-- Top Row -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Top Panel 1</h2>
+            </div>
+            <div class="scroll-area" id="top-panel-1">
+                <div class="data-item"><span>Table #123 (9-Ball)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #124 (8-Ball)</span><span class="data-value">Waiting</span></div>
+                <div class="data-item"><span>Table #125 (Snooker)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #126 (9-Ball)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #127 (3-Cushion)</span><span class="data-value">Finished</span></div>
+                <div class="data-item"><span>Table #128 (8-Ball)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #129 (Practice)</span><span class="data-value">Private</span></div>
+                <div class="data-item"><span>Table #130 (9-Ball)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #131 (Snooker)</span><span class="data-value">Finished</span></div>
+                <div class="data-item"><span>Table #132 (8-Ball)</span><span class="data-value">In Progress</span></div>
+                <div class="data-item"><span>Table #133 (9-Ball)</span><span class="data-value">Waiting</span></div>
+                <div class="data-item"><span>Table #134 (Practice)</span><span class="data-value">In Progress</span></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Top Panel 2</h2>
+            </div>
+            <div class="scroll-area" id="top-panel-2">
+                <div class="data-item"><span>Alice vs Bob</span><span class="data-value">2 - 1</span></div>
+                <div class="data-item"><span>Charlie vs Dave</span><span class="data-value">0 - 3</span></div>
+                <div class="data-item"><span>Eve vs Frank</span><span class="data-value">5 - 4</span></div>
+                <div class="data-item"><span>Grace vs Heidi</span><span class="data-value">2 - 2</span></div>
+                <div class="data-item"><span>Ivan vs Judy</span><span class="data-value">1 - 0</span></div>
+                <div class="data-item"><span>Kevin vs Laura</span><span class="data-value">3 - 1</span></div>
+                <div class="data-item"><span>Mallory vs Nels</span><span class="data-value">0 - 2</span></div>
+                <div class="data-item"><span>Oscar vs Peggy</span><span class="data-value">4 - 3</span></div>
+                <div class="data-item"><span>Quentin vs Riley</span><span class="data-value">1 - 1</span></div>
+                <div class="data-item"><span>Sybil vs Trent</span><span class="data-value">2 - 0</span></div>
+                <div class="data-item"><span>Victor vs Wendy</span><span class="data-value">0 - 1</span></div>
+            </div>
+        </div>
+
+        <!-- Bottom Section (Row 2) -->
+        <div class="bottom-section">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">High Scores</h2>
+                </div>
+                <div class="scroll-area" id="high-scores">
+                    <div class="data-item"><span>1. ProPlayer99</span><span class="data-value">2840</span></div>
+                    <div class="data-item"><span>2. SnookerKing</span><span class="data-value">2750</span></div>
+                    <div class="data-item"><span>3. CushionMaster</span><span class="data-value">2690</span></div>
+                    <div class="data-item"><span>4. EightBaller</span><span class="data-value">2620</span></div>
+                    <div class="data-item"><span>5. Sharky</span><span class="data-value">2580</span></div>
+                    <div class="data-item"><span>6. TrickShot</span><span class="data-value">2510</span></div>
+                    <div class="data-item"><span>7. BreakRun</span><span class="data-value">2490</span></div>
+                    <div class="data-item"><span>8. CueBall</span><span class="data-value">2450</span></div>
+                    <div class="data-item"><span>9. SpinDoctor</span><span class="data-value">2410</span></div>
+                    <div class="data-item"><span>10. RailMaster</span><span class="data-value">2380</span></div>
+                    <div class="data-item"><span>11. CornerPocket</span><span class="data-value">2350</span></div>
+                    <div class="data-item"><span>12. ChalkItUp</span><span class="data-value">2320</span></div>
+                </div>
+            </div>
+
+            <div class="panel" style="grid-column: span 2;">
+                <div class="panel-header">
+                    <h2 class="panel-title">Live Feed</h2>
+                </div>
+                <div class="scroll-area" id="live-feed">
+                    <div class="data-item"><span>[14:20:05] Alice joined Table #123</span></div>
+                    <div class="data-item"><span>[14:20:12] Bob joined Table #123</span></div>
+                    <div class="data-item"><span>[14:20:15] Table #123 game started (9-Ball)</span></div>
+                    <div class="data-item"><span>[14:21:30] Charlie won a match against Dave</span></div>
+                    <div class="data-item"><span>[14:22:10] Eve submitted a new high score: 1540</span></div>
+                    <div class="data-item"><span>[14:22:45] Frank entered the lobby</span></div>
+                    <div class="data-item"><span>[14:23:05] Table #127 finished (Alice wins)</span></div>
+                    <div class="data-item"><span>[14:23:40] Grace created Table #135</span></div>
+                    <div class="data-item"><span>[14:24:15] Heidi challenged Ivan to 9-Ball</span></div>
+                    <div class="data-item"><span>[14:24:50] Judy joined the global chat</span></div>
+                    <div class="data-item"><span>[14:25:20] Kevin achieved 'Century Break' in Snooker</span></div>
+                    <div class="data-item"><span>[14:25:55] Laura left Table #130</span></div>
+                    <div class="data-item"><span>[14:26:30] Mallory is now spectating Table #123</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
