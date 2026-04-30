@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Billiards Grid</title>
+    <style>
+      :root {
+        --bg-color: #0f172a;
+        --btn-bg: #1e293b;
+        --btn-border: #475569;
+        --btn-highlight: rgba(255, 255, 255, 0.4);
+        --btn-shadow: rgba(0, 0, 0, 0.8);
+        --img-8ball: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVRUmpjY299fH43OFUfkNl3AAAAE0lEQVQI12NgYGQAAiYwycwMxgAAggARzYDVGQAAAABJRU5ErkJggg==");
+        --img-9ball: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAAElBMVEVmeUehpGhjdjiGjDDYzInLt2lo5X8EAAAAGklEQVQI12NgYGRkYmBmYWVmYGYFspgYGJgAAXIAI3Y2z5oAAAAASUVORK5CYII=");
+        --img-practice: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVoTGt7XoSGa4uumKgOwfDTAAAAF0lEQVQI12NgYGRiZGBkZmYCEkwMYAAAAPYAFO3iCuMAAAAASUVORK5CYII=");
+        --img-snooker: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAAD1BMVEVKc0JRdEluLR87YjNQYDV1yIxOAAAAGklEQVQI1wXBAQEAAAiDMIT3z+wGd4DGdFA9APYAHwtdltcAAAAASUVORK5CYII=");
+        --img-3cushion: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAMAAACeL25MAAAADFBMVEVbWG9kZohna5VXPlOdujwnAAAAFklEQVQI12NgYGRkYGBkAhJgFhAwAwAAfQAMlQzpOgAAAABJRU5ErkJggg==");
+      }
+      body {
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        min-height: 100vh;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 48px);
+        grid-template-rows: repeat(3, 48px);
+        gap: 4px;
+        padding: 8px;
+      }
+      .btn {
+        width: 48px;
+        height: 48px;
+        background-color: var(--btn-bg);
+        border: 1.5px solid var(--btn-border);
+        border-radius: 6px;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        position: relative;
+        image-rendering: pixelated;
+        box-shadow: 0 3px 6px 0 var(--btn-shadow);
+        transition:
+          transform 0.05s ease,
+          filter 0.1s ease;
+      }
+      /* The Overlay - Stamp shadows on top of the icon */
+      .btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        box-shadow:
+          inset 0 2px 0 0 var(--btn-highlight),
+          /* Stronger Top Bevel */ inset 0 -2px 2px 0 rgba(0, 0, 0, 0.5); /* Stronger Bottom Edge */
+      }
+      .btn:hover {
+        filter: brightness(1.2);
+        border-color: #94a3b8;
+      }
+      .btn:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 2px 0 var(--btn-shadow);
+        filter: brightness(0.8);
+      }
+      .btn:active::after {
+        box-shadow: inset 0 4px 8px 0 var(--btn-shadow); /* Deep depression look */
+      }
+      .btn-icon {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .btn-icon img {
+        display: none;
+      }
+
+      .eightball {
+        background-image: url("assets/eightball.png");
+      }
+      .nineball {
+        background-image: url("assets/nineball.png");
+      }
+      .practice {
+        background-image: url("assets/practice.png");
+      }
+      .snooker {
+        background-image: url("assets/snooker.png");
+      }
+      .threecushion {
+        background-image: url("assets/threecushion.png");
+      }
+
+      .is-fallback.eightball {
+        background-image: var(--img-8ball);
+      }
+      .is-fallback.nineball {
+        background-image: var(--img-9ball);
+      }
+      .is-fallback.practice {
+        background-image: var(--img-practice);
+      }
+      .is-fallback.snooker {
+        background-image: var(--img-snooker);
+      }
+      .is-fallback.threecushion {
+        background-image: var(--img-3cushion);
+      }
+
+      .placeholder {
+        opacity: 0.05;
+        cursor: default;
+      }
+    </style>
+    <script>
+      function handleImageError(img) {
+        img.parentElement.classList.add("is-fallback");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="grid">
+      <button class="btn">
+        <div class="btn-icon eightball">
+          <img src="assets/eightball.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon nineball">
+          <img src="assets/nineball.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon practice">
+          <img src="assets/practice.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon snooker">
+          <img src="assets/snooker.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon threecushion">
+          <img src="assets/threecushion.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+
+      <div class="btn placeholder"></div>
+      <div class="btn placeholder"></div>
+      <div class="btn placeholder"></div>
+      <div class="btn placeholder"></div>
+    </div>
+  </body>
+</html>
