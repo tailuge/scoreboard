@@ -59,8 +59,7 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                       <th className="text-left py-1 w-6">#</th>
                       <th className="text-left py-1">Player</th>
                       <th className="text-right py-1">Rating</th>
-                      <th className="text-right py-1">Wins</th>
-                      <th className="text-right py-1">Losses</th>
+                      <th className="text-right py-1">w/l</th>
                       <th className="text-right py-1">Games</th>
                       <th className="text-right py-1">Score</th>
                       <th className="text-right py-1">RD</th>
@@ -81,11 +80,10 @@ export default function EloPage({ games }: { games: GameElo[] }) {
                         <td className="py-1 text-right font-mono">
                           {p.rating}
                         </td>
-                        <td className="py-1 text-right text-green-400">
-                          {p.wins}
-                        </td>
-                        <td className="py-1 text-right text-red-400">
-                          {p.losses}
+                        <td className="py-1 text-right whitespace-nowrap">
+                          <span className="text-green-400">{p.wins}</span>
+                          <span className="text-gray-500 mx-0.5">/</span>
+                          <span className="text-red-400">{p.losses}</span>
                         </td>
                         <td className="py-1 text-right text-gray-300">
                           {p.gamesPlayed}
