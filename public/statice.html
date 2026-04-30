@@ -49,7 +49,8 @@
         transition:
           transform 0.05s ease,
           filter 0.1s ease;
-      } /* The Overlay - Stamp shadows on top of the icon */
+      }
+      /* The Overlay - Stamp shadows on top of the icon */
       .btn::after {
         content: "";
         position: absolute;
@@ -78,34 +79,81 @@
         background-repeat: no-repeat;
         background-position: center;
       }
+      .btn-icon img {
+        display: none;
+      }
+
       .eightball {
-        background-image: var(--img-8ball);
+        background-image: url("assets/eightball.png");
       }
       .nineball {
-        background-image: var(--img-9ball);
+        background-image: url("assets/nineball.png");
       }
       .practice {
-        background-image: var(--img-practice);
+        background-image: url("assets/practice.png");
       }
       .snooker {
-        background-image: var(--img-snooker);
+        background-image: url("assets/snooker.png");
       }
       .threecushion {
+        background-image: url("assets/threecushion.png");
+      }
+
+      .is-fallback.eightball {
+        background-image: var(--img-8ball);
+      }
+      .is-fallback.nineball {
+        background-image: var(--img-9ball);
+      }
+      .is-fallback.practice {
+        background-image: var(--img-practice);
+      }
+      .is-fallback.snooker {
+        background-image: var(--img-snooker);
+      }
+      .is-fallback.threecushion {
         background-image: var(--img-3cushion);
       }
+
       .placeholder {
         opacity: 0.05;
         cursor: default;
       }
     </style>
+    <script>
+      function handleImageError(img) {
+        img.parentElement.classList.add("is-fallback");
+      }
+    </script>
   </head>
   <body>
     <div class="grid">
-      <button class="btn"><div class="btn-icon eightball"></div></button>
-      <button class="btn"><div class="btn-icon nineball"></div></button>
-      <button class="btn"><div class="btn-icon practice"></div></button>
-      <button class="btn"><div class="btn-icon snooker"></div></button>
-      <button class="btn"><div class="btn-icon threecushion"></div></button>
+      <button class="btn">
+        <div class="btn-icon eightball">
+          <img src="assets/eightball.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon nineball">
+          <img src="assets/nineball.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon practice">
+          <img src="assets/practice.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon snooker">
+          <img src="assets/snooker.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+      <button class="btn">
+        <div class="btn-icon threecushion">
+          <img src="assets/threecushion.png" onerror="handleImageError(this)" />
+        </div>
+      </button>
+
       <div class="btn placeholder"></div>
       <div class="btn placeholder"></div>
       <div class="btn placeholder"></div>
