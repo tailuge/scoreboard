@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { logger } from "@/utils/logger"
 
@@ -6,6 +6,7 @@ export function useLeaderboard(
   ruleType: string,
   initialData?: LeaderboardItem[]
 ) {
+  const isInitialMount = useRef(true)
   const [data, setData] = useState<LeaderboardItem[]>(initialData ?? [])
   const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<Error | null>(null)
@@ -49,6 +50,12 @@ export function useLeaderboard(
   )
 
   useEffect(() => {
+    if (isInitialMount.current && initialData && initialData.length > 0) {
+      isInitialMount.current = false
+      return
+    }
+    isInitialMount.current = false
+
     const controller = new AbortController()
     fetchData(controller.signal)
     return () => {

@@ -52,6 +52,25 @@ export class ScoreTable {
     }))
   }
 
+  async topTenMulti(ruletypes: readonly string[]) {
+    const p = (this.store as any).pipeline()
+    for (const type of ruletypes) {
+      p.zrange(this.dbKey(type), 0, 9)
+    }
+    const results = await p.exec()
+    const allData = {}
+    ruletypes.forEach((type, i) => {
+      const data = ((results[i] as ScoreData[]) || []).reverse()
+      allData[type] = data.map((row: ScoreData) => ({
+        name: row.name,
+        likes: row.likes ?? 0,
+        id: row.id,
+        score: Math.floor(row.score),
+      }))
+    })
+    return allData
+  }
+
   async getById(ruletype: string, id: string): Promise<ScoreData> {
     const data = await this.store.zrange(this.dbKey(ruletype), 0, 9)
     return data
