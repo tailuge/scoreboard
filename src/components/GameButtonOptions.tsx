@@ -1,7 +1,7 @@
 import { useId } from "react"
 
 const RED_BALL_OPTIONS = [3, 6, 15] as const
-const RACE_TO_OPTIONS = [3, 5] as const
+const RACE_TO_OPTIONS = [3, 11] as const
 const NINEBALL_OPTIONS = ["1->9", "Free"] as const
 
 type RadioButtonsProps = {
