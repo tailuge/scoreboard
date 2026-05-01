@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { LeaderboardItem } from "@/types/leaderboard"
 import { logger } from "@/utils/logger"
 
 export function useAllLeaderboards(
   initialData?: Record<string, LeaderboardItem[]>
 ) {
+  const isInitialMount = useRef(true)
   const [data, setData] = useState<Record<string, LeaderboardItem[]>>(
     initialData ?? {}
   )
@@ -45,6 +46,16 @@ export function useAllLeaderboards(
   }, [])
 
   useEffect(() => {
+    if (
+      isInitialMount.current &&
+      initialData &&
+      Object.keys(initialData).length > 0
+    ) {
+      isInitialMount.current = false
+      return
+    }
+    isInitialMount.current = false
+
     const controller = new AbortController()
     fetchData(controller.signal)
     return () => {

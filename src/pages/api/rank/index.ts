@@ -32,16 +32,11 @@ export default async function handler(request: NextRequest) {
 
   if (ruletype === "all") {
     try {
-      const allData = {}
-      await Promise.all(
-        VALID_RULE_TYPES.map(async (type) => {
-          allData[type] = await scoretable.topTen(type)
-        })
-      )
+      const allData = await scoretable.topTenMulti(VALID_RULE_TYPES)
       return corsResponse(JSON.stringify(allData), {
         headers: {
           "Cache-Control":
-            "public, max-age=0, s-maxage=15, stale-while-revalidate=8",
+            "public, max-age=0, s-maxage=60, stale-while-revalidate=30",
         },
       })
     } catch (error) {
@@ -59,7 +54,7 @@ export default async function handler(request: NextRequest) {
     return corsResponse(JSON.stringify(data), {
       headers: {
         "Cache-Control":
-          "public, max-age=0, s-maxage=15, stale-while-revalidate=8",
+          "public, max-age=0, s-maxage=60, stale-while-revalidate=30",
       },
     })
   } catch (error) {
