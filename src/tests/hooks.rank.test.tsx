@@ -77,10 +77,12 @@ describe("Rank hooks optimization", () => {
     })
 
     it("skips fetching when initialData is provided", async () => {
-      const initialData = { snooker: [{ id: "1", name: "Player", score: 100, likes: 0 }] }
+      const initialData = {
+        snooker: [{ id: "1", name: "Player", score: 100, likes: 0 }],
+      }
       renderHook(() => useAllLeaderboards(initialData))
 
-      await new Promise(resolve => setTimeout(resolve, 100))
+      await new Promise((resolve) => setTimeout(resolve, 100))
       expect(globalThis.fetch).not.toHaveBeenCalled()
     })
   })
