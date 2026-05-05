@@ -8,6 +8,10 @@ const setUsername = async (page: Page, name: string) => {
 }
 
 test.describe("online user count after back navigation", () => {
+  test.afterEach(async ({ page }) => {
+    await page.goto("about:blank")
+  })
+
   test("confirm online count problem after back navigation", async ({
     page,
   }, testInfo) => {
@@ -41,17 +45,17 @@ test.describe("online user count after back navigation", () => {
     const initialCountText = await userPill.innerText()
     console.log(`Initial online count: ${initialCountText}`)
 
-    // 3. Click 'Play vs Bot'
-    const playVsBotButton = page
-      .getByRole("link", { name: "Play vs Bot" })
-      .first()
+    // 3. Click 'Challenge ClawBreak' to start a bot game
+    const playVsBotButton = page.getByRole("button", {
+      name: "Challenge ClawBreak",
+    })
     await expect(playVsBotButton).toBeVisible()
 
     // Navigate away to the external bot game
     await playVsBotButton.click()
 
     // Check we navigated away
-    await expect(page).toHaveURL(/bot=true/)
+    await expect(page).toHaveURL(/bot=ClawBreak/)
     console.log("Navigated away from lobby")
 
     // 4. Wait 2 seconds

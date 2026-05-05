@@ -99,6 +99,10 @@ test.describe.serial("rematch acceptance test", () => {
       expect(page1RematchData.lastScores).toEqual(lastScores)
       expect(page2RematchData.lastScores).toEqual(lastScores)
     } finally {
+      await Promise.allSettled([
+        context1.pages()[0]?.goto("about:blank"),
+        context2.pages()[0]?.goto("about:blank"),
+      ])
       await context1.close()
       await context2.close()
     }
@@ -178,6 +182,10 @@ test.describe.serial("rematch acceptance test", () => {
       expect(page1RematchData.lastScores).toEqual(lastScores)
       expect(page2RematchData.lastScores).toEqual(lastScores)
     } finally {
+      await Promise.allSettled([
+        context1.pages()[0]?.goto("about:blank"),
+        context2.pages()[0]?.goto("about:blank"),
+      ])
       await context1.close()
       await context2.close()
     }

@@ -22,7 +22,7 @@ export default defineConfig({
   webServer: process.env.TEST_URL
     ? undefined
     : {
-        command: "yarn dev",
+        command: "next dev",
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
