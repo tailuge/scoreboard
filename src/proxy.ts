@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server"
 import { GAME_BASE_URL } from "@/config"
 
 export const ALLOWED_ORIGINS = new Set([
+  "http://localhost",
   "http://localhost:3000",
   "http://localhost:8080",
   "https://tailuge.github.io",
