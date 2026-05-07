@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Info</title>
+<style>table { border: 1px solid; }</style>
+<script type="module">
+import {html, render} from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js'
+
+async function load() {
+  const res = await fetch('/api/summary')
+  const {hiscores, topPlayers, recentMatches} = await res.json()
+
+  const games = Object.keys(hiscores)
+
+  render(html`
+    ${games.map(game => html`
+      <h2>${game}</h2>
+
+      <h3>High Scores</h3>
+      <table>
+        <tr><th>Name</th><th>Score</th><th></th></tr>
+        ${hiscores[game].map(s => html`<tr>
+          <td>${s.name}</td>
+          <td>${s.score}</td>
+          <td><a href="/api/rank/${s.id}?ruletype=${game}">replay</a></td>
+        </tr>`)}
+      </table>
+
+      <h3>Top Players</h3>
+      <table>
+        <tr><th>Name</th><th>Rating</th><th>Wins</th><th>Losses</th></tr>
+        ${topPlayers[game].map(p => html`<tr>
+          <td><a href="/player/${encodeURIComponent(p.name)}?ruleType=${game}">${p.name}</a></td>
+          <td>${Math.round(p.rating)}</td>
+          <td>${p.wins}</td>
+          <td>${p.losses}</td>
+        </tr>`)}
+      </table>
+    `)}
+
+    <h2>Recent Matches</h2>
+    <table>
+      <tr><th>Winner</th><th>Loser</th><th>Rule</th><th>Date</th><th></th></tr>
+      ${recentMatches.map(m => html`<tr>
+        <td>${m.winner}</td>
+        <td>${m.loser||'-'}</td>
+        <td>${m.ruleType||'nineball'}</td>
+        <td>${new Date(m.timestamp).toLocaleString()}</td>
+        <td>${m.hasReplay ? html`<a href="/api/match-replay?id=${m.id}">replay</a>` : ''}</td>
+      </tr>`)}
+    </table>
+  `, document.body)
+}
+
+load()
+</script>
+</head>
+<body></body>
+</html>
