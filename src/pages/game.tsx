@@ -110,7 +110,7 @@ export default function Game({
   const [challengeBusy, setChallengeBusy] = useState(false)
   const lastOutgoingChallengeRef = React.useRef<{
     tableId: string
-    recipientId: string
+    challengeeId: string
     ruleType: string
     options?: Record<string, string>
   } | null>(null)
@@ -126,7 +126,7 @@ export default function Game({
 
   const pendingRecipientName = useMemo(() => {
     if (!pendingChallenge) return null
-    return users.find((user) => user.userId === pendingChallenge.recipientId)
+    return users.find((user) => user.userId === pendingChallenge.challengeeId)
       ?.userName
   }, [pendingChallenge, users])
 
@@ -203,13 +203,13 @@ export default function Game({
         markUsage("createTable")
         lastOutgoingChallengeRef.current = {
           tableId,
-          recipientId: selectedOpponent.userId,
+          challengeeId: selectedOpponent.userId,
           ruleType,
           options,
         }
         console.log("[challenge] offer sent", {
           tableId,
-          recipientId: selectedOpponent.userId,
+          challengeeId: selectedOpponent.userId,
           ruleType,
           options,
         })
@@ -309,7 +309,7 @@ export default function Game({
     setChallengeError(null)
     try {
       await cancelChallenge(
-        pendingChallenge.recipientId,
+        pendingChallenge.challengeeId,
         pendingChallenge.ruleType
       )
       lastOutgoingChallengeRef.current = null
@@ -373,7 +373,7 @@ export default function Game({
         markUsage("createTable")
         lastOutgoingChallengeRef.current = {
           tableId,
-          recipientId: rematchParam.opponentId,
+          challengeeId: rematchParam.opponentId,
           ruleType: rematchParam.ruleType,
           options,
         }
@@ -440,7 +440,7 @@ export default function Game({
     const outgoing = lastOutgoingChallengeRef.current
     const matchesOutgoing =
       outgoing?.tableId === acceptedChallenge.tableId ||
-      outgoing?.recipientId === acceptedChallenge.recipientId
+      outgoing?.challengeeId === acceptedChallenge.challengeeId
 
     if (!matchesOutgoing && !pendingChallenge) {
       console.log("[challenge] accept ignored (no outgoing match)", {
@@ -463,7 +463,7 @@ export default function Game({
       await updatePresenceForTable(
         acceptedChallenge.tableId,
         acceptedChallenge.ruleType,
-        acceptedChallenge.recipientId
+        acceptedChallenge.challengeeId
       )
       const rematchNextTurnId =
         acceptedChallenge.rematch?.nextTurnId ??

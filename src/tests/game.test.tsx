@@ -78,7 +78,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "other-id",
       challengerName: "Other",
-      recipientId: "me-id",
+      challengeeId: "me-id",
       ruleType: "nineball",
       tableId: "table-123",
     }
@@ -112,7 +112,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "other-id",
       challengerName: "Other",
-      recipientId: "me-id",
+      challengeeId: "me-id",
       ruleType: "snooker",
       tableId: "table-123",
     }
@@ -144,7 +144,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "me-id",
       challengerName: "Me",
-      recipientId: "other-id",
+      challengeeId: "other-id",
       ruleType: "threecushion",
       tableId: "table-123",
     }
@@ -260,7 +260,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "other-id",
       challengerName: "Other",
-      recipientId: "me-id",
+      challengeeId: "me-id",
       ruleType: "nineball",
       tableId: "table-mutual",
       rematch: { lastScores: [], isRematch: true, nextTurnId: "me-id" },
@@ -285,7 +285,7 @@ describe("Game Page", () => {
       messageType: "challenge",
       type: "accept",
       challengerId: "me-id",
-      recipientId: "other-id",
+      challengeeId: "other-id",
       ruleType: "nineball",
       tableId: "table-accepted",
     }
@@ -294,7 +294,7 @@ describe("Game Page", () => {
       messageType: "challenge",
       type: "offer",
       challengerId: "me-id",
-      recipientId: "other-id",
+      challengeeId: "other-id",
       ruleType: "nineball",
       tableId: "table-accepted",
     }
@@ -372,7 +372,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "other-id",
       challengerName: "Other",
-      recipientId: "me-id",
+      challengeeId: "me-id",
       ruleType: "nineball",
       // tableId missing
     }
@@ -435,7 +435,7 @@ describe("Game Page", () => {
       type: "offer",
       challengerId: "other-id",
       challengerName: "Other",
-      recipientId: "me-id",
+      challengeeId: "me-id",
       ruleType: "snooker",
       tableId: "table-123",
       options: { reds: "15" },

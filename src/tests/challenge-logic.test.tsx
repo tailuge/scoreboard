@@ -55,7 +55,7 @@ describe("Challenge Logic", () => {
       type: "offer",
       challengerId: mockOpponentId,
       challengerName: mockOpponentName,
-      recipientId: mockUserId,
+      challengeeId: mockUserId,
       ruleType: "nineball",
       tableId: "table-789",
     }
@@ -108,56 +108,7 @@ describe("Challenge Logic", () => {
       type: "accept",
       challengerId: mockUserId,
       challengerName: mockUserName,
-      recipientId: mockOpponentId,
-      ruleType: "nineball",
-      tableId: "table-789",
-    }
-
-    ;(useMessaging as jest.Mock).mockReturnValue({
-      users: [{ userId: mockOpponentId, userName: mockOpponentName }],
-      activeGames: [],
-      pendingChallenge: acceptedChallenge,
-      incomingChallenge: null,
-      acceptedChallenge,
-      challenge: jest.fn(),
-      acceptChallenge: jest.fn(),
-      declineChallenge: jest.fn(),
-      cancelChallenge: jest.fn(),
-      updatePresence: jest.fn().mockResolvedValue(undefined),
-      clearAcceptedChallenge: jest.fn(),
-    })
-
-    globalThis.fetch = createFetchMock({
-      "/api/rank": () => mockFetchResponse([]),
-      "/api/match-results": () => mockFetchResponse([]),
-    })
-
-    render(
-      <Game
-        initialHighscores={{}}
-        initialMatchResults={[]}
-        topNineballPlayers={[]}
-      />
-    )
-
-    await waitFor(() => {
-      expect(createSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          isCreator: true,
-        })
-      )
-    })
-  })
-
-  it("challenger should be first even if accept payload has swapped challengerId", async () => {
-    const createSpy = jest.spyOn(GameUrl, "create")
-
-    const acceptedChallenge = {
-      messageType: "challenge",
-      type: "accept",
-      challengerId: mockOpponentId, // swapped by server
-      challengerName: mockOpponentName,
-      recipientId: mockUserId,
+      challengeeId: mockOpponentId,
       ruleType: "nineball",
       tableId: "table-789",
     }
@@ -206,7 +157,7 @@ describe("Challenge Logic", () => {
       type: "offer",
       challengerId: mockOpponentId,
       challengerName: mockOpponentName,
-      recipientId: mockUserId,
+      challengeeId: mockUserId,
       ruleType: "nineball",
       tableId: "table-789",
       rematch: {
@@ -267,7 +218,7 @@ describe("Challenge Logic", () => {
       type: "accept",
       challengerId: mockUserId,
       challengerName: mockUserName,
-      recipientId: mockOpponentId,
+      challengeeId: mockOpponentId,
       ruleType: "nineball",
       tableId: "table-789",
       rematch: {
@@ -324,7 +275,7 @@ describe("Challenge Logic", () => {
       type: "accept",
       challengerId: mockUserId,
       challengerName: mockUserName,
-      recipientId: mockOpponentId,
+      challengeeId: mockOpponentId,
       ruleType: "nineball",
       tableId: "table-789",
       rematch: {

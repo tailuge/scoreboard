@@ -126,7 +126,7 @@ describe("MessagingContext", () => {
       messageType: "challenge",
       type: "offer",
       challengerId: "user-2",
-      recipientId: "user-1",
+      challengeeId: "user-1",
       ruleType: "nineball",
       tableId: "table-1",
     }
@@ -213,7 +213,7 @@ describe("MessagingContext", () => {
       undefined
     )
     expect(capturedMessaging.pendingChallenge).toMatchObject({
-      recipientId: "user-2",
+      challengeeId: "user-2",
       ruleType: "nineball",
     })
 
@@ -383,7 +383,7 @@ describe("MessagingContext", () => {
         messageType: "challenge",
         type: "accept",
         challengerId: "user-1",
-        recipientId: "user-2",
+        challengeeId: "user-2",
         tableId: "table-1",
       })
     })
@@ -436,7 +436,7 @@ describe("MessagingContext", () => {
         type: "offer",
         challengerId: "user-2",
         challengerName: "User Two",
-        recipientId: "user-1",
+        challengeeId: "user-1",
         ruleType: "nineball",
         tableId: "table-1",
       })

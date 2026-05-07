@@ -296,7 +296,7 @@ export function MessagingProvider({
         type: "offer",
         challengerId: userId,
         challengerName: userName,
-        recipientId: targetUserId,
+        challengeeId: targetUserId,
         ruleType,
         options,
         tableId,
