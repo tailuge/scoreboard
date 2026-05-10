@@ -69,11 +69,17 @@ export default async function handler(request: NextRequest) {
       logger.warn("Error fetching rank by id:", error)
       return corsResponse("Invalid ruletype", { status: 400 })
     }
-    logger.log(`redirecting ${ruletype} id ${id} to ${url}`)
+    const dest = new URL(url)
+    for (const [key, value] of searchParams.entries()) {
+      if (key !== "ruletype" && key !== "id") {
+        dest.searchParams.set(key, value)
+      }
+    }
+    logger.log(`redirecting ${ruletype} id ${id} to ${dest}`)
     return new Response(null, {
       status: 302,
       headers: {
-        Location: url,
+        Location: dest.toString(),
         ...CORS_HEADERS,
       },
     })

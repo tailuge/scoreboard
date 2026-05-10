@@ -66,6 +66,11 @@ export default async function handler(request: NextRequest) {
     const viewerUrl = new URL(GAME_BASE_URL)
     viewerUrl.searchParams.set("ruletype", getRuleType(matchResult))
     viewerUrl.searchParams.set("state", replayData)
+    for (const [key, value] of searchParams.entries()) {
+      if (key !== "id") {
+        viewerUrl.searchParams.set(key, value)
+      }
+    }
     return Response.redirect(viewerUrl.toString(), 307)
   } catch (error) {
     logger.log("Error fetching match replay:", error)

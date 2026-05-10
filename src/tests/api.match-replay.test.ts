@@ -61,6 +61,40 @@ describe("/api/match-replay handler", () => {
     expect(getSpy).toHaveBeenCalledWith("match123")
   })
 
+  it("should forward extra query params to viewer url", async () => {
+    const mockReplay = "replay-blob-data"
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchReplay")
+      .mockResolvedValue(mockReplay)
+    jest
+      .spyOn(MockMatchResultService.prototype, "getMatchResults")
+      .mockResolvedValue([
+        {
+          id: "match123",
+          winner: "A",
+          winnerScore: 10,
+          ruleType: "snooker",
+          timestamp: Date.now(),
+        },
+      ])
+
+    req = {
+      method: "GET",
+      nextUrl: new URL(
+        "https://localhost/api/match-replay?id=match123&userName=Alice&userId=u1&lod=2"
+      ),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    const location = response.headers.get("Location")
+
+    expect(response.status).toBe(307)
+    expect(location).toContain("userName=Alice")
+    expect(location).toContain("userId=u1")
+    expect(location).toContain("lod=2")
+    expect(location).not.toContain("id=match123")
+  })
+
   it("should default to nineball when ruleType is missing", async () => {
     const mockReplay = "replay-blob-data"
     jest

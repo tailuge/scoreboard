@@ -36,7 +36,29 @@ describe("/api/rank/[id] handler", () => {
 
     expect(getSpy).toHaveBeenCalledWith(ruletype, id)
     expect(response.status).toBe(302)
-    expect(response.headers.get("Location")).toBe("https://some-url.com")
+    expect(response.headers.get("Location")).toBe("https://some-url.com/")
+  })
+
+  it("should forward extra query params to destination url", async () => {
+    jest
+      .spyOn(mockScoreTable.prototype, "get")
+      .mockResolvedValue("https://some-url.com")
+
+    const url =
+      "https://localhost/api/rank/123?ruletype=eightball&id=123&userName=Alice&lod=2"
+    req = {
+      method: "GET",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+    const location = response.headers.get("Location")
+
+    expect(response.status).toBe(302)
+    expect(location).toContain("userName=Alice")
+    expect(location).toContain("lod=2")
+    expect(location).not.toContain("ruletype=")
+    expect(location).not.toContain("id=123")
   })
 
   it("should call like on PUT request", async () => {
