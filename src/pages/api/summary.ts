@@ -5,6 +5,7 @@ import { PlayerRatingStore } from "@/services/PlayerRatingStore"
 import { MatchResultService } from "@/services/MatchResultService"
 import { VALID_RULE_TYPES } from "@/utils/gameTypes"
 import { corsJson } from "@/utils/cors"
+import { markUsageFromServer } from "@/utils/usage"
 
 export const config = {
   runtime: "edge",
@@ -47,6 +48,7 @@ export default async function handler(request: NextRequest) {
   )
 
   try {
+    markUsageFromServer("lobby").catch(() => {})
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
       scoreTable.topTenMulti(VALID_RULE_TYPES),
       playerRatingStore.getTopNBatch(VALID_RULE_TYPES as any, limitElo),
