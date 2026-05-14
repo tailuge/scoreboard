@@ -3,12 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: ["127.0.0.1"],
   transpilePackages: ["framer-motion", "jsoncrush"],
-  async redirects() {
+  async rewrites() {
     return [
       {
-        source: "/",
-        destination: "/game",
-        permanent: false,
+        source: "/game",
+        destination: "/game.html",
       },
     ];
   },
