@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { NextRequest, NextFetchEvent } from "next/server"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
@@ -39,7 +39,10 @@ const matchResultService = new MatchResultService(kv)
  *       500:
  *         description: Internal server error
  */
-export default async function handler(request: NextRequest) {
+export default async function handler(
+  request: NextRequest,
+  event: NextFetchEvent
+) {
   const { searchParams } = request.nextUrl
   const limitElo = Number.parseInt(searchParams.get("limitElo") || "10", 10)
   const limitMatches = Number.parseInt(
@@ -48,7 +51,14 @@ export default async function handler(request: NextRequest) {
   )
 
   try {
-    markUsageFromServer("lobby").catch(() => {})
+    // Use event.waitUntil if available to avoid blocking the response for usage tracking
+    const trackingPromise = markUsageFromServer("lobby").catch((err) =>
+      console.error("Usage tracking error:", err)
+    )
+    if (event && typeof event.waitUntil === "function") {
+      event.waitUntil(trackingPromise)
+    }
+
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
       scoreTable.topTenMulti(VALID_RULE_TYPES),
       playerRatingStore.getTopNBatch(VALID_RULE_TYPES as any, limitElo),
@@ -63,7 +73,8 @@ export default async function handler(request: NextRequest) {
       },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30",
+          // Increased cache time to 2 minutes to reduce quota consumption
+          "Cache-Control": "public, s-maxage=120, stale-while-revalidate=60",
         },
       }
     )

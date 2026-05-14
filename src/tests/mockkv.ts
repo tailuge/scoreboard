@@ -122,6 +122,16 @@ class MockKV {
     return score === null ? null : Number.parseFloat(score)
   }
 
+  async zincrby<TData>(
+    key: string,
+    increment: number,
+    member: TData
+  ): Promise<number> {
+    const stringMember = JSON.stringify(member)
+    const result = await this.mockRedis.zincrby(key, increment, stringMember)
+    return Number.parseFloat(result)
+  }
+
   /**
    * Adapter function to match @vercel/kv's hset signature using ioredis-mock's hset.
    * @param key - The name of the hash.
@@ -269,6 +279,33 @@ class MockKV {
    */
   async incr(key: string): Promise<number> {
     return this.mockRedis.incr(key)
+  }
+
+  pipeline() {
+    const commands: { name: string; args: any[] }[] = []
+    const self = this
+    const p = {
+      exec: async () => {
+        const results = []
+        for (const cmd of commands) {
+          const result = await (self as any)[cmd.name](...cmd.args)
+          results.push(result)
+        }
+        return results
+      },
+    }
+
+    // Proxy to capture command calls
+    const proxy = new Proxy(p, {
+      get: (target, prop) => {
+        if (prop === "exec") return target.exec
+        return (...args: any[]) => {
+          commands.push({ name: prop as string, args })
+          return proxy
+        }
+      },
+    })
+    return proxy
   }
 }
 

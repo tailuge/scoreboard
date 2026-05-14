@@ -59,11 +59,11 @@ export class PlayerRatingStore {
     ruleTypes: string[],
     n: number
   ): Promise<Record<string, PlayerEntry[]>> {
-    const results = await Promise.all(
-      ruleTypes.map((rt) =>
-        this.store.hgetall<Record<string, PlayerRating>>(this.key(rt))
-      )
-    )
+    const p = (this.store as any).pipeline()
+    for (const rt of ruleTypes) {
+      p.hgetall(this.key(rt))
+    }
+    const results = await p.exec()
 
     const response: Record<string, PlayerEntry[]> = {}
     ruleTypes.forEach((rt, i) => {

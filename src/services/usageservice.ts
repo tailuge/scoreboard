@@ -17,11 +17,8 @@ export class UsageService {
   async incrementCount(date): Promise<void> {
     const day = { date: new Date(date).toISOString().split("T")[0] }
 
-    const currentScore = (await this.store.zscore(this.fullKey(), day)) || 0
-    await this.store.zadd(this.fullKey(), {
-      score: currentScore + 1,
-      member: day,
-    })
+    // Use zincrby to perform the increment in a single roundtrip
+    await this.store.zincrby!(this.fullKey(), 1, day)
   }
 
   async getAllCounts(): Promise<unknown[]> {
