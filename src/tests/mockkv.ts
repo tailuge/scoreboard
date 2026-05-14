@@ -309,4 +309,4 @@ class MockKV {
   }
 }
 
-export const mockKv: Partial<VercelKV> = new MockKV()
+export const mockKv: any = new MockKV()
