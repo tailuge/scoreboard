@@ -2,7 +2,7 @@ import { kv, VercelKV } from "@vercel/kv"
 import { MatchResult, getRuleType } from "../types/match"
 
 const KEY = "match_results"
-const HISTORY_LIMIT = 50
+const HISTORY_LIMIT = 32
 const MATCH_REPLAY_KEY_PREFIX = "match_replay:"
 
 export const getMatchReplayKey = (matchId: string): string =>
@@ -19,7 +19,7 @@ export class MatchResultService {
    * Identifies and removes match results and their replay data beyond the HISTORY_LIMIT.
    */
   private async evictOldResults(): Promise<void> {
-    // Identify matches that are about to be evicted from the sorted set (beyond the 50 limit).
+    // Identify matches that are about to be evicted from the sorted set (beyond the 32 limit).
     // zrange(0, -(HISTORY_LIMIT + 1)) returns members that will be removed by zremrangebyrank(0, -(HISTORY_LIMIT + 1))
     const toEvict = await this.store.zrange<MatchResult[]>(
       KEY,

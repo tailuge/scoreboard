@@ -29,7 +29,7 @@ const playerRatingStore = new PlayerRatingStore(kv)
  *         name: limit
  *         schema:
  *           type: integer
- *           default: 50
+ *           default: 32
  *         description: Limit the number of results
  *     responses:
  *       200:
@@ -93,7 +93,7 @@ async function handleGet(request: NextRequest) {
       return new Response("Invalid ruleType", { status: 400 })
     }
 
-    const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
+    const limit = Number.parseInt(searchParams.get("limit") || "32", 10)
 
     const results = await matchResultService.getMatchResults(limit, ruleType)
     return Response.json(results, {

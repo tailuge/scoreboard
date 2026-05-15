@@ -68,7 +68,7 @@ describe("/api/match-results handler", () => {
     } as unknown as NextRequest
 
     await handler(req)
-    expect(getSpy).toHaveBeenCalledWith(50, "snooker")
+    expect(getSpy).toHaveBeenCalledWith(32, "snooker")
   })
 
   it("should add a match result on POST request", async () => {

@@ -88,7 +88,7 @@ describe("MatchResultService", () => {
       "evict-me-replay"
     )
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 32; i++) {
       await service.addMatchResult({
         id: `m${i}`,
         winner: "P",
@@ -99,7 +99,7 @@ describe("MatchResultService", () => {
     }
 
     const history = await service.getMatchResults()
-    expect(history).toHaveLength(50)
+    expect(history).toHaveLength(32)
     expect(history.find((r) => r.id === firstMatchId)).toBeUndefined()
 
     const storedReplay = await (mockKv as any).get(
@@ -127,7 +127,7 @@ describe("MatchResultService", () => {
     }
 
     const history = await service.getMatchResults()
-    expect(history).toHaveLength(50)
+    expect(history).toHaveLength(32)
     expect(history[0].id).toBe("match59")
   })
 
@@ -167,7 +167,7 @@ describe("MatchResultService", () => {
     await service.addMatchResult(match1)
     await service.addMatchResult(match2)
 
-    const snookerOnly = await service.getMatchResults(50, "snooker")
+    const snookerOnly = await service.getMatchResults(32, "snooker")
     expect(snookerOnly).toHaveLength(1)
     expect(snookerOnly[0].id).toBe("match1")
 

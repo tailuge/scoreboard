@@ -31,7 +31,7 @@ const matchResultService = new MatchResultService(kv)
  *         name: limitMatches
  *         schema:
  *           type: integer
- *           default: 50
+ *           default: 32
  *         description: Limit the number of recent match results
  *     responses:
  *       200:
@@ -46,7 +46,7 @@ export default async function handler(
   const { searchParams } = request.nextUrl
   const limitElo = Number.parseInt(searchParams.get("limitElo") || "10", 10)
   const limitMatches = Number.parseInt(
-    searchParams.get("limitMatches") || "50",
+    searchParams.get("limitMatches") || "32",
     10
   )
 
