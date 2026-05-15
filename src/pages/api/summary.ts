@@ -15,33 +15,9 @@ const scoreTable = new ScoreTable(kv)
 const playerRatingStore = new PlayerRatingStore(kv)
 const matchResultService = new MatchResultService(kv)
 
-/**
- * @swagger
- * /api/summary:
- *   get:
- *     summary: Returns a summary of high scores, top players, and recent matches
- *     parameters:
- *       - in: query
- *         name: limitElo
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Limit the number of top ELO players per rule type
- *       - in: query
- *         name: limitMatches
- *         schema:
- *           type: integer
- *           default: 32
- *         description: Limit the number of recent match results
- *     responses:
- *       200:
- *         description: A summary object containing hiscores, topPlayers, and recentMatches
- *       500:
- *         description: Internal server error
- */
 export default async function handler(
   request: NextRequest,
-  event: NextFetchEvent
+  event?: NextFetchEvent
 ) {
   const { searchParams } = request.nextUrl
   const limitElo = Number.parseInt(searchParams.get("limitElo") || "10", 10)
