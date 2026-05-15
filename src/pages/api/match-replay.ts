@@ -12,28 +12,6 @@ export const config = {
 
 const matchResultService = new MatchResultService(kv)
 
-/**
- * @swagger
- * /api/match-replay:
- *   get:
- *     summary: Redirects to the replay viewer for a match
- *     parameters:
- *       - in: query
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The match ID
- *     responses:
- *       307:
- *         description: Redirects to replay viewer
- *       400:
- *         description: ID is required
- *       404:
- *         description: Replay not found
- *       500:
- *         description: Internal server error
- */
 export default async function handler(request: NextRequest) {
   if (request.method !== "GET") {
     return corsResponse(`Method ${request.method} Not Allowed`, {

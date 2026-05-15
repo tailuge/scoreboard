@@ -14,60 +14,6 @@ export const config = {
 const matchResultService = new MatchResultService(kv)
 const playerRatingStore = new PlayerRatingStore(kv)
 
-/**
- * @swagger
- * /api/match-results:
- *   get:
- *     summary: Returns a list of match results
- *     parameters:
- *       - in: query
- *         name: ruleType
- *         schema:
- *           type: string
- *         description: Filter by rule type
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 32
- *         description: Limit the number of results
- *     responses:
- *       200:
- *         description: A list of match results
- *       500:
- *         description: Internal server error
- *   post:
- *     summary: Adds a new match result
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - winner
- *               - winnerScore
- *             properties:
- *               winner:
- *                 type: string
- *               winnerScore:
- *                 type: number
- *               loser:
- *                 type: string
- *               loserScore:
- *                 type: number
- *               ruleType:
- *                 type: string
- *               replayData:
- *                 type: string
- *     responses:
- *       201:
- *         description: Match result created
- *       400:
- *         description: Missing required fields
- *       500:
- *         description: Internal server error
- */
 export default async function handler(request: NextRequest) {
   const { method } = request
 
