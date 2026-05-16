@@ -248,7 +248,7 @@ h1 a { color: inherit; text-decoration: none; }
                 ${this.label?l`<span>${this.label}</span>`:""}
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </a>
-        `}};customElements.define("replay-button",Pe);var ke=class extends x{static styles=bt;connectedCallback(){super.connectedCallback(),!N&&fetch(`${M}/api/summary`,{mode:"cors"}).then(e=>e.json()).then(e=>{this._data=e,this.classList.add("loaded"),this.requestUpdate()}).catch(()=>{this._err=!0,this.classList.add("loaded"),this.requestUpdate()})}render(){if(N)return l`<span class="loading"><a href="https://billiards.tailuge.workers.dev/lobby">Play online here</a></span>`;if(this._err)return l`<span class="loading">Could not load scores.</span>`;if(!this._data)return l`<span class="loading">Connecting to server…</span>`;let{hiscores:e,topPlayers:t,recentMatches:s}=this._data,i=Object.keys(e);return l`
+        `}};customElements.define("replay-button",Pe);var ke=class extends x{static styles=bt;connectedCallback(){if(super.connectedCallback(),N){this.classList.add("loaded");return}fetch(`${M}/api/summary`,{mode:"cors"}).then(e=>e.json()).then(e=>{this._data=e,this.classList.add("loaded"),this.requestUpdate()}).catch(()=>{this._err=!0,this.classList.add("loaded"),this.requestUpdate()})}render(){if(N)return l`<span class="loading"><a href="https://billiards.tailuge.workers.dev/lobby">Play online here</a></span>`;if(this._err)return l`<span class="loading">Could not load scores.</span>`;if(!this._data)return l`<span class="loading">Connecting to server…</span>`;let{hiscores:e,topPlayers:t,recentMatches:s}=this._data,i=Object.keys(e);return l`
             <div class="group hiscores">
                 <div class="group-body">
                     ${i.map(n=>l`
@@ -475,7 +475,7 @@ h1 a { color: inherit; text-decoration: none; }
                         ${this._showStats?l`<div><strong style="font-size:0.82rem">Recent visitors</strong><stats-panel></stats-panel></div>`:""}
                     </div>
                 </div>`:""}
-        `}};customElements.define("settings-modal",Ye);var Ot=135,Ge=class extends f{static properties={_theme:{type:String,reflect:!0,attribute:"theme"}};static styles=yt;constructor(){super(),console.log("URL:",window.location.href),console.log("Search params:",Object.fromEntries(new URLSearchParams(window.location.search))),this._theme=document.documentElement.getAttribute("theme")||"light"}get _ctrl(){return this.shadowRoot.querySelector("online-panel")}render(){return l`
+        `}};customElements.define("settings-modal",Ye);var Ot=136,Ge=class extends f{static properties={_theme:{type:String,reflect:!0,attribute:"theme"}};static styles=yt;constructor(){super(),console.log("URL:",window.location.href),console.log("Search params:",Object.fromEntries(new URLSearchParams(window.location.search))),this._theme=document.documentElement.getAttribute("theme")||"light"}get _ctrl(){return this.shadowRoot.querySelector("online-panel")}render(){return l`
             <div class="container">
                 <header class="topbar">
                     <img src="assets/threecushion.png" class="logo" alt="Billiards Logo">
