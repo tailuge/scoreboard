@@ -259,7 +259,7 @@
         details.append("id", input.value);
         url.search = details.toString();
         await postData(url, globalThis.location.search);
-        globalThis.location.href = "/leaderboard";
+        globalThis.location.replace("/leaderboard");
       }
 
       const button = document.getElementById("submit");
