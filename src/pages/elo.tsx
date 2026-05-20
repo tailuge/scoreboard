@@ -105,8 +105,8 @@ export default function EloPage({ games }: { games: GameElo[] }) {
       </div>
 
       <div className="flex justify-center mt-8">
-        <Link
-          href="/game"
+        <a
+          href="https://billiards.tailuge.workers.dev/lobby"
           className="inline-block px-4 py-1 text-gray-200 no-underline rounded-lg transition-colors hover:text-white"
           style={{
             color: "rgba(220, 230, 255, 0.9)",
@@ -118,7 +118,7 @@ export default function EloPage({ games }: { games: GameElo[] }) {
           }}
         >
           Back to Lobby
-        </Link>
+        </a>
       </div>
     </div>
   )
