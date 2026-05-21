@@ -36,6 +36,23 @@ describe("/api/replay/[id] handler", () => {
     await handler(req)
 
     expect(replaySpy).toHaveBeenCalledWith(id)
-    expect(Response.redirect).toHaveBeenCalledWith(replayUrl)
+    expect(Response.redirect).toHaveBeenCalledWith("https://replayed-url.com/")
+  })
+
+  it("should forward extra query params to the redirect URL", async () => {
+    const replayUrl = "https://replayed-url.com"
+    jest.spyOn(mockShortener.prototype, "replay").mockResolvedValue(replayUrl)
+
+    const id = "some-id"
+    req = {
+      method: "GET",
+      nextUrl: new URL(`https://localhost/api/replay/${id}?id=${id}&lod=4`),
+    } as unknown as NextRequest
+
+    await handler(req)
+
+    expect(Response.redirect).toHaveBeenCalledWith(
+      "https://replayed-url.com/?lod=4"
+    )
   })
 })

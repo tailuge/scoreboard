@@ -13,6 +13,10 @@ export default async function handler(req: NextRequest) {
     return new Response("ID is required", { status: 400 })
   }
   const url = await new Shortener(kv).replay(id)
-  logger.log(`redirecting to ${url}`)
-  return Response.redirect(url)
+  const redirectUrl = new URL(url)
+  req.nextUrl.searchParams.forEach((value, key) => {
+    if (key !== "id") redirectUrl.searchParams.set(key, value)
+  })
+  logger.log(`redirecting to ${redirectUrl}`)
+  return Response.redirect(redirectUrl.toString())
 }
