@@ -58,19 +58,19 @@
     "eslint-plugin-sonarjs": "4.0.3",
     "globals": "17.6.0",
     "identity-obj-proxy": "^3.0.0",
-    "ioredis": "5.10.1",
+    "ioredis": "5.11.0",
     "ioredis-mock": "8.13.1",
     "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "jest-transform-stub": "^2.0.0",
-    "jscpd": "4.2.3",
-    "oxlint": "1.66.0",
+    "jscpd": "4.2.4",
+    "oxlint": "1.67.0",
     "postcss-load-config": "^6.0.1",
     "prettier": "3.8.3",
     "tailwindcss": "4.3.0",
     "ts-jest": "29.4.11",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.4"
+    "typescript-eslint": "8.60.0"
   },
   "browserslist": [
     "defaults",
