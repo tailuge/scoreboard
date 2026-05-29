@@ -7,6 +7,7 @@ export const GAME_BASE_URL = "https://billiards.tailuge.workers.dev/"
 export const GAME_TYPES = [
   { name: "Snooker", ruleType: "snooker" },
   { name: "9-Ball", ruleType: "nineball" },
+  { name: "Eight Ball", ruleType: "eightball" },
   { name: "Three Cushion", ruleType: "threecushion" },
 ] as const
 
