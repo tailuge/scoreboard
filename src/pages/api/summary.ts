@@ -28,11 +28,14 @@ export default async function handler(
 
   try {
     // Use event.waitUntil if available to avoid blocking the response for usage tracking
-    const trackingPromise = markUsageFromServer("lobby").catch((err) =>
-      console.error("Usage tracking error:", err)
-    )
-    if (event && typeof event.waitUntil === "function") {
-      event.waitUntil(trackingPromise)
+    // Sample "lobby" usage at 10% to reduce CPU and I/O overhead
+    if (Math.random() < 0.1) {
+      const trackingPromise = markUsageFromServer("lobby").catch((err) =>
+        console.error("Usage tracking error:", err)
+      )
+      if (event && typeof event.waitUntil === "function") {
+        event.waitUntil(trackingPromise)
+      }
     }
 
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
