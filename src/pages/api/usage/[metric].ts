@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { NextRequest, NextFetchEvent } from "next/server"
 import { UsageService } from "@/services/usageservice"
 import { logger } from "@/utils/logger"
 import { corsResponse, corsJson } from "@/utils/cors"
@@ -7,7 +7,10 @@ export const config = {
   runtime: "edge",
 }
 
-export default async function handler(request: NextRequest) {
+export default async function handler(
+  request: NextRequest,
+  event?: NextFetchEvent
+) {
   const searchParams = request.nextUrl.searchParams
   const metric = searchParams.get("metric")
 
@@ -28,7 +31,16 @@ export default async function handler(request: NextRequest) {
   }
 
   if (request.method === "PUT") {
-    await usageService.incrementCount(Date.now())
+    const promise = usageService.incrementCount(Date.now()).catch((err) => {
+      logger.error("Failed to increment usage count:", err)
+    })
+
+    if (event && typeof event.waitUntil === "function") {
+      event.waitUntil(promise)
+      return corsResponse(null, { status: 202 })
+    }
+
+    await promise
   }
 
   return corsResponse(null, { status: 200 })
