@@ -67,7 +67,6 @@ describe("/api/summary handler", () => {
     jest
       .spyOn(mockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue(mockRecentMatches as any)
-
     ;(markUsageFromServer as jest.Mock).mockReturnValue(Promise.resolve())
 
     const url = "https://localhost/api/summary?limitElo=5&limitMatches=10"
