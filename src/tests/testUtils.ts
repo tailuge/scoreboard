@@ -1,17 +1,3 @@
-import { useUser } from "@/contexts/UserContext"
-
-export const setupUserMock = (
-  userId = "test-user-id",
-  userName = "TestUser",
-  setUserName = jest.fn()
-) => {
-  ;(useUser as jest.Mock).mockReturnValue({
-    userId,
-    userName,
-    setUserName,
-  })
-}
-
 export const mockFetchResponse = (data: any, ok = true, status = 200) => {
   return Promise.resolve({
     ok,

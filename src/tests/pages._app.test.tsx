@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react"
 import App from "@/pages/_app"
-import { MessagingProvider } from "@/contexts/MessagingContext"
 
 // Mock next/font/google
 jest.mock("next/font/google", () => ({
@@ -12,10 +11,6 @@ jest.mock("next/font/google", () => ({
     variable: "--font-bitcount",
     className: "font-bitcount",
   })),
-}))
-
-jest.mock("@/contexts/MessagingContext", () => ({
-  MessagingProvider: jest.fn(({ children }) => <>{children}</>),
 }))
 
 // Mock ClientErrorReporter to prevent side effects in tests
@@ -60,6 +55,5 @@ describe("App", () => {
     )
 
     expect(getByText("Mock Component")).toBeInTheDocument()
-    expect(MessagingProvider).toHaveBeenCalled()
   })
 })

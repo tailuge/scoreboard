@@ -8,9 +8,7 @@ const exo = Exo({
   variable: "--font-exo",
 })
 
-import { UserProvider } from "@/contexts/UserContext"
 import { ClientErrorReporter } from "@/errors/ClientErrorReporter"
-import { MessagingProvider } from "@/contexts/MessagingContext"
 
 if (globalThis.window !== undefined) {
   new ClientErrorReporter("/api/client-error").start()
@@ -18,12 +16,8 @@ if (globalThis.window !== undefined) {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <UserProvider>
-      <MessagingProvider>
-        <main className={`${exo.variable} ${exo.className} font-sans`}>
-          <Component {...pageProps} />
-        </main>
-      </MessagingProvider>
-    </UserProvider>
+    <main className={`${exo.variable} ${exo.className} font-sans`}>
+      <Component {...pageProps} />
+    </main>
   )
 }
