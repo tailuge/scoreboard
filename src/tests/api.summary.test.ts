@@ -2,11 +2,13 @@ import handler from "@/pages/api/summary"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
 import { MatchResultService } from "@/services/MatchResultService"
+import { markUsageFromServer } from "@/utils/usage"
 import { NextRequest } from "next/server"
 
 jest.mock("@/services/scoretable")
 jest.mock("@/services/PlayerRatingStore")
 jest.mock("@/services/MatchResultService")
+jest.mock("@/utils/usage")
 
 const mockScoreTable = ScoreTable as jest.MockedClass<typeof ScoreTable>
 const mockPlayerRatingStore = PlayerRatingStore as jest.MockedClass<
@@ -65,6 +67,7 @@ describe("/api/summary handler", () => {
     jest
       .spyOn(mockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue(mockRecentMatches as any)
+    ;(markUsageFromServer as jest.Mock).mockReturnValue(Promise.resolve())
 
     const url = "https://localhost/api/summary?limitElo=5&limitMatches=10"
     const req = {
