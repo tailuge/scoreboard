@@ -24,7 +24,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const results = GAME_TYPES.map((g) => {
     const players = batchResults[g.ruleType] ?? []
-    const sortedPlayers = [...players].sort((a, b) => b.rating - a.rating)
+    const sortedPlayers = [...players].sort(
+      (a, b) => b.conservativeRating - a.conservativeRating
+    )
     return { name: g.name, ruleType: g.ruleType, players: sortedPlayers }
   })
 
