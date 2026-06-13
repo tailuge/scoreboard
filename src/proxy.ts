@@ -24,6 +24,7 @@ function withCorsHeaders(response: NextResponse, origin: string) {
     "Access-Control-Allow-Headers",
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   )
+  response.headers.set("Access-Control-Max-Age", "86400")
   response.headers.set("Vary", "Origin")
 
   return response

@@ -1,6 +1,7 @@
 export const CORS_HEADERS = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Max-Age": "86400",
 }
 
 export function corsResponse(

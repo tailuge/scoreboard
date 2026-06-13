@@ -33,6 +33,7 @@ describe("middleware logic", () => {
     expect(response?.headers.get("Access-Control-Allow-Credentials")).toBe(
       "true"
     )
+    expect(response?.headers.get("Access-Control-Max-Age")).toBe("86400")
   })
 
   it("should return 403 for disallowed origins", () => {
@@ -61,6 +62,7 @@ describe("middleware logic", () => {
     expect(response?.headers.get("Access-Control-Allow-Methods")).toContain(
       "OPTIONS"
     )
+    expect(response?.headers.get("Access-Control-Max-Age")).toBe("86400")
   })
 
   it("should allow requests without origin header (e.g. server-to-server or direct browser)", () => {
