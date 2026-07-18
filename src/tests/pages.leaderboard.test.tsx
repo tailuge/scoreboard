@@ -30,7 +30,7 @@ describe("LeaderboardPage", () => {
     })
   })
 
-  it("renders the leaderboard page with four tables", async () => {
+  it("renders the leaderboard page with five tables", async () => {
     render(<LeaderboardPage />)
 
     expect(
@@ -42,6 +42,7 @@ describe("LeaderboardPage", () => {
     expect(screen.getByText("9-Ball")).toBeInTheDocument()
     expect(screen.getByText("Eight Ball")).toBeInTheDocument()
     expect(screen.getByText("Three Cushion")).toBeInTheDocument()
+    expect(screen.getByText("Sagu")).toBeInTheDocument()
 
     // Wait for any data to load to prevent act warning
     await waitFor(() => {
@@ -54,25 +55,25 @@ describe("LeaderboardPage", () => {
 
     // Wait for data to load
     await waitFor(() => {
-      // Since we render 4 tables and mock data is same for all,
-      // we expect 'Player 1' to appear 4 times.
+      // Since we render 5 tables and mock data is same for all,
+      // we expect 'Player 1' to appear 5 times.
       const player1Elements = screen.getAllByText("Player 1")
-      expect(player1Elements).toHaveLength(4)
+      expect(player1Elements).toHaveLength(5)
     })
 
     // Check for scores
     const scoreElements = screen.getAllByText("100")
-    expect(scoreElements).toHaveLength(4)
+    expect(scoreElements).toHaveLength(5)
 
     // Check for trophies
-    expect(screen.getAllByText("🏆")).toHaveLength(4)
+    expect(screen.getAllByText("🏆")).toHaveLength(5)
   })
 
   it("handles like button click", async () => {
     render(<LeaderboardPage />)
 
     await waitFor(() => {
-      expect(screen.getAllByText("Player 1")).toHaveLength(4)
+      expect(screen.getAllByText("Player 1")).toHaveLength(5)
     })
 
     // Find the first like button for Player 1 (5 likes)

@@ -34,6 +34,9 @@ export function getOriginEmoji(
   if (ruleType === "threecushion") {
     return { emoji: "③", title: "threecushion" }
   }
+  if (ruleType === "sagu") {
+    return { emoji: "④", title: "sagu" }
+  }
 
   return { emoji: "🎮", title: "external" }
 }
