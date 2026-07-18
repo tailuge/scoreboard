@@ -3,6 +3,7 @@ export const VALID_RULE_TYPES = [
   "nineball",
   "threecushion",
   "eightball",
+  "sagu",
 ] as const
 
 export type RuleType = (typeof VALID_RULE_TYPES)[number]

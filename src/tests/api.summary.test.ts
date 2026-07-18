@@ -27,6 +27,7 @@ describe("/api/summary handler", () => {
       nineball: [],
       threecushion: [],
       eightball: [],
+      sagu: [],
     }
     const mockTopPlayers = {
       snooker: [
@@ -43,6 +44,7 @@ describe("/api/summary handler", () => {
       nineball: [],
       threecushion: [],
       eightball: [],
+      sagu: [],
     }
     const mockRecentMatches = [
       {

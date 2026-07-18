@@ -70,6 +70,7 @@ describe("/api/rank handler", () => {
       nineball: [],
       threecushion: [],
       eightball: [],
+      sagu: [],
     }
     const topTenMultiSpy = jest
       .spyOn(mockScoreTable.prototype, "topTenMulti")

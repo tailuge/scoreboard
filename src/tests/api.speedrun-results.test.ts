@@ -149,9 +149,7 @@ describe("/api/speedrun-results handler", () => {
       } as unknown as NextRequest
 
       const response = await mainHandler(req)
-      expect(response.headers.get("Cache-Control")).toBe(
-        "public, s-maxage=30"
-      )
+      expect(response.headers.get("Cache-Control")).toBe("public, s-maxage=30")
     })
   })
 
@@ -437,9 +435,7 @@ describe("/api/speedrun-results/[id] handler", () => {
   it("returns 404 if entry not found in leaderboard", async () => {
     const req = {
       method: "GET",
-      nextUrl: new URL(
-        "https://localhost/api/speedrun-results/nonexistent"
-      ),
+      nextUrl: new URL("https://localhost/api/speedrun-results/nonexistent"),
     } as unknown as NextRequest
 
     const response = await replayHandler(req)
@@ -501,7 +497,7 @@ describe("/api/speedrun-results/[id] handler", () => {
   })
 
   it("returns 500 on unexpected error", async () => {
-    (mockKv.get as jest.Mock).mockRejectedValueOnce(new Error("KV error"))
+    ;(mockKv.get as jest.Mock).mockRejectedValueOnce(new Error("KV error"))
 
     const req = {
       method: "GET",
