@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server"
-import JSONCrush from "jsoncrush"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { ScoreData } from "@/types/score"
+import { ReplayCodec } from "@/utils/replay-codec"
 import { logger } from "@/utils/logger"
 import { corsResponse } from "@/utils/cors"
 
@@ -21,7 +21,7 @@ export default async function handler(request: NextRequest) {
   logger.log(raw)
   let json: any
   try {
-    json = JSON.parse(JSONCrush.uncrush(raw))
+    json = ReplayCodec.decode(raw)
     logger.log(json)
   } catch (error) {
     logger.error("Failed to parse hiscore state:", error)

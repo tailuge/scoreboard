@@ -21,8 +21,16 @@ module.exports = {
         tsconfig: "<rootDir>/tsconfig.jest.json",
       },
     ],
+    // jsoncrush is shipped as ESM only; transpile it so the real codec can be
+    // exercised in tests (allowJs + isolatedModules are already enabled).
+    "^.+\\.(js|jsx)$": [
+      "ts-jest",
+      {
+        tsconfig: "<rootDir>/tsconfig.jest.json",
+      },
+    ],
   },
-  transformIgnorePatterns: ["/node_modules/"],
+  transformIgnorePatterns: ["/node_modules/(?!jsoncrush)"],
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/tests/**", // Exclude test files and mocks in tests dir
