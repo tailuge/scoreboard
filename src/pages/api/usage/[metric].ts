@@ -24,7 +24,11 @@ export default async function handler(request: NextRequest) {
   }
 
   if (request.method === "GET") {
-    return corsJson(await usageService.getAllCounts())
+    return corsJson(await usageService.getAllCounts(), {
+      headers: {
+        "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=3600",
+      },
+    })
   }
 
   if (request.method === "PUT") {
