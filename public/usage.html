@@ -88,6 +88,12 @@
         },
       ]
 
+      // CHALLENGES & ACCEPTS is plotted as a trailing mean so day-to-day noise
+      // doesn't hide the trend. Every other panel is plotted raw.
+      const SMOOTHED_GROUP_ID = "challenges-accepts"
+      const SMOOTHING_WINDOW = 3
+      const DAY_MS = 24 * 60 * 60 * 1000
+
       const chartGrid = document.getElementById("chart-grid")
 
       GROUPS.forEach((group) => {
@@ -103,6 +109,34 @@
         return response.json()
       }
 
+      // Days with no activity are absent from the store, so insert explicit
+      // zero counts — otherwise a "3 day" mean would span three active days.
+      function fillMissingDays(data) {
+        if (data.length === 0) return data
+
+        const countByDate = new Map(data.map((d) => [d.date, d.clicks]))
+        const filled = []
+        const start = new Date(data[0].date).getTime()
+        const end = new Date(data[data.length - 1].date).getTime()
+
+        for (let time = start; time <= end; time += DAY_MS) {
+          const date = new Date(time).toISOString().split("T")[0]
+          filled.push({ date, clicks: countByDate.get(date) ?? 0 })
+        }
+
+        return filled
+      }
+
+      function movingAverage(data, window) {
+        const filled = fillMissingDays(data)
+
+        return filled.map((point, index) => {
+          const slice = filled.slice(Math.max(0, index - window + 1), index + 1)
+          const total = slice.reduce((sum, d) => sum + Number(d.clicks), 0)
+          return { date: point.date, clicks: total / slice.length }
+        })
+      }
+
       async function plotGroup(groupConfig) {
         const traces = await Promise.all(
           groupConfig.metrics.map(async (metric) => {
@@ -116,9 +150,14 @@
 
             data.sort((a, b) => new Date(a.date) - new Date(b.date))
 
+            const points =
+              groupConfig.id === SMOOTHED_GROUP_ID
+                ? movingAverage(data, SMOOTHING_WINDOW)
+                : data
+
             return {
-              x: data.map((d) => d.date),
-              y: data.map((d) => d.clicks),
+              x: points.map((d) => d.date),
+              y: points.map((d) => d.clicks),
               name: metric.label,
               type: "scatter",
               mode: "lines",
