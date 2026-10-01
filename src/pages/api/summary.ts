@@ -1,4 +1,4 @@
-import { NextRequest, NextFetchEvent } from "next/server"
+import { NextRequest } from "next/server"
 import { unstable_cache } from "next/cache"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
@@ -52,10 +52,7 @@ function timed<T>(
   })
 }
 
-export default async function handler(
-  request: NextRequest,
-  event?: NextFetchEvent
-) {
+export default async function handler(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const limitElo = Number.parseInt(searchParams.get("limitElo") || "10", 10)
   const limitMatches = Number.parseInt(
@@ -69,19 +66,9 @@ export default async function handler(
   try {
     logTiming("start", { limitElo, limitMatches })
 
-    // Use event.waitUntil if available to avoid blocking the response for usage tracking
-    const usageStartedAt = now()
-    const trackingPromise = markUsageFromServer("lobby").catch((err) =>
+    markUsageFromServer("lobby").catch((err) =>
       console.error("Usage tracking error:", err)
     )
-    // Observes the same promise without altering it; it already has a catch, so
-    // this cannot become an unhandled rejection.
-    trackingPromise.then(() => {
-      parts.usageMs = Math.round(now() - usageStartedAt)
-    })
-    if (event && typeof event.waitUntil === "function") {
-      event.waitUntil(trackingPromise)
-    }
 
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
       timed("hiscoresMs", scoreTable.topTenMulti(VALID_RULE_TYPES), parts),
