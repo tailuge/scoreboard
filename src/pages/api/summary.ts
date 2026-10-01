@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { unstable_cache } from "next/cache"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
@@ -16,16 +15,34 @@ const scoreTable = new ScoreTable(kv)
 const playerRatingStore = new PlayerRatingStore(kv)
 const matchResultService = new MatchResultService(kv)
 
-// The leaderboard only needs recomputing hourly. Without this, getTopNBatch
-// reads every player's rating for every rule type on each request, which grows
-// with the player base. Hiscores and recentMatches stay uncached so new matches
-// still show up in the lobby immediately. Arguments form part of the cache key.
-const getCachedTopNBatch = unstable_cache(
-  (limitElo: number) =>
-    playerRatingStore.getTopNBatch(VALID_RULE_TYPES as any, limitElo),
-  ["summary-top-players"],
-  { revalidate: 3600 }
-)
+// In-process cache for the leaderboard. Only recomputed hourly because
+// getTopNBatch reads every player's rating for every rule type and grows with
+// the player base. Node runtime shares this across warm invocations. Each
+// limitElo value gets its own entry.
+const TOP_PLAYERS_TTL_MS = 60 * 60 * 1000
+const topPlayersCache = new Map<
+  number,
+  {
+    value: Awaited<ReturnType<typeof playerRatingStore.getTopNBatch>>
+    expiresAt: number
+  }
+>()
+
+async function getCachedTopNBatch(limitElo: number) {
+  const cached = topPlayersCache.get(limitElo)
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.value
+  }
+  const value = await playerRatingStore.getTopNBatch(
+    VALID_RULE_TYPES as any,
+    limitElo
+  )
+  topPlayersCache.set(limitElo, {
+    value,
+    expiresAt: Date.now() + TOP_PLAYERS_TTL_MS,
+  })
+  return value
+}
 
 // TEMPORARY diagnostics for Vercel fluid-compute investigation. Remove once we
 // know where this route's budget goes. Deliberately uses console.log rather than
