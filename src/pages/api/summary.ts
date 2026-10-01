@@ -27,6 +27,31 @@ const getCachedTopNBatch = unstable_cache(
   { revalidate: 3600 }
 )
 
+// TEMPORARY diagnostics for Vercel fluid-compute investigation. Remove once we
+// know where this route's budget goes. Deliberately uses console.log rather than
+// logger.log: logger.enabled is derived from `typeof process`, which is fragile
+// on the Edge runtime, and a silent no-op here would waste a deploy cycle.
+const now = () => globalThis.performance?.now?.() ?? Date.now()
+const TIMING = "[summary-timing]"
+
+function logTiming(stage: string, detail: Record<string, unknown>) {
+  console.log(`${TIMING} ${stage} ${JSON.stringify(detail)}`)
+}
+
+// Records how long a branch took without altering the value it resolves to, so
+// the Promise.all below keeps its exact current shape and semantics.
+function timed<T>(
+  label: string,
+  promise: Promise<T>,
+  into: Record<string, number>
+) {
+  const startedAt = now()
+  return promise.then((value) => {
+    into[label] = Math.round(now() - startedAt)
+    return value
+  })
+}
+
 export default async function handler(
   request: NextRequest,
   event?: NextFetchEvent
@@ -38,20 +63,42 @@ export default async function handler(
     10
   )
 
+  const startedAt = now()
+  const parts: Record<string, number> = {}
+
   try {
+    logTiming("start", { limitElo, limitMatches })
+
     // Use event.waitUntil if available to avoid blocking the response for usage tracking
+    const usageStartedAt = now()
     const trackingPromise = markUsageFromServer("lobby").catch((err) =>
       console.error("Usage tracking error:", err)
     )
+    // Observes the same promise without altering it; it already has a catch, so
+    // this cannot become an unhandled rejection.
+    trackingPromise.then(() => {
+      parts.usageMs = Math.round(now() - usageStartedAt)
+    })
     if (event && typeof event.waitUntil === "function") {
       event.waitUntil(trackingPromise)
     }
 
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
-      scoreTable.topTenMulti(VALID_RULE_TYPES),
-      getCachedTopNBatch(limitElo),
-      matchResultService.getMatchResults(limitMatches),
+      timed("hiscoresMs", scoreTable.topTenMulti(VALID_RULE_TYPES), parts),
+      timed("topPlayersMs", getCachedTopNBatch(limitElo), parts),
+      timed(
+        "recentMatchesMs",
+        matchResultService.getMatchResults(limitMatches),
+        parts
+      ),
     ])
+
+    logTiming("done", {
+      totalMs: Math.round(now() - startedAt),
+      ...parts,
+      hiscoreGames: Object.keys(hiscores).length,
+      recentMatches: recentMatches.length,
+    })
 
     return corsJson(
       {
