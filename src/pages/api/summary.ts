@@ -1,4 +1,5 @@
 import { NextRequest, NextFetchEvent } from "next/server"
+import { unstable_cache } from "next/cache"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
@@ -14,6 +15,17 @@ export const config = {
 const scoreTable = new ScoreTable(kv)
 const playerRatingStore = new PlayerRatingStore(kv)
 const matchResultService = new MatchResultService(kv)
+
+// The leaderboard only needs recomputing hourly. Without this, getTopNBatch
+// reads every player's rating for every rule type on each request, which grows
+// with the player base. Hiscores and recentMatches stay uncached so new matches
+// still show up in the lobby immediately. Arguments form part of the cache key.
+const getCachedTopNBatch = unstable_cache(
+  (limitElo: number) =>
+    playerRatingStore.getTopNBatch(VALID_RULE_TYPES as any, limitElo),
+  ["summary-top-players"],
+  { revalidate: 3600 }
+)
 
 export default async function handler(
   request: NextRequest,
@@ -37,7 +49,7 @@ export default async function handler(
 
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
       scoreTable.topTenMulti(VALID_RULE_TYPES),
-      playerRatingStore.getTopNBatch(VALID_RULE_TYPES as any, limitElo),
+      getCachedTopNBatch(limitElo),
       matchResultService.getMatchResults(limitMatches),
     ])
 

@@ -70,12 +70,7 @@
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Exo:wght@200;600&display=swap"
-      rel="stylesheet"
-    />
     <link rel="icon" type="image/png" href="assets/threecushion.png" />
     <link rel="manifest" href="manifest.json" />
     <meta
@@ -84,6 +79,24 @@
     />
     <meta name="theme-color" content="#1a1a1a" />
     <style>
+      @font-face {
+        font-family: Exo;
+        font-style: normal;
+        font-weight: 200;
+        font-display: swap;
+        src: url("https://fonts.gstatic.com/s/exo/v25/4UaZrEtFpBI4f1ZSIK9d4LjJ4tM3CwM.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: Exo;
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url("https://fonts.gstatic.com/s/exo/v25/4UaZrEtFpBI4f1ZSIK9d4LjJ4o0wCwM.ttf")
+          format("truetype");
+      }
+
       html,
       body {
         margin: 0;
@@ -268,21 +281,17 @@
 
         <div class="site-links-panel">
           <p class="site-links-intro">
-            A free,
-            <a
-              href="https://github.com/tailuge/billiards"
-              target="_blank"
-              rel="noopener"
-              >open source</a
-            >
-            3D WebGL and Three.js billiards simulator written in TypeScript that
-            runs entirely in the browser — nothing to download or install. Play
-            snooker, 9-ball, 8-ball, three-cushion carom and Korean four-ball
-            games (sagu) on a physics engine built to reproduce real
-            ball–cushion behaviour, spin mechanics, and collision throw: solo
-            practice, play vs AI bots (TheFarJaw, ClawBreak), two players
-            sharing one device, or live online multiplayer via nchan. Guides are
-            also published in eight other languages.
+            Play free online billiards, pool, snooker and carom in a realistic
+            3D browser simulator. Play snooker, 9-ball, 8-ball, three-cushion
+            billiards and Korean four-ball (sagu) with realistic ball physics,
+            spin, collisions and cushion behaviour. Practice solo, play against
+            computer opponents, play two players on one device, or play live
+            online multiplayer. Runs directly in your browser with no download
+            or installation required.Free and open source, built with
+            TypeScript, Three.js and WebGL. The physics engine is designed to
+            reproduce real billiard-ball and cushion behaviour, including spin
+            and collision throw. Guides are also available in eight other
+            languages.
           </p>
 
           <h2>Play</h2>
@@ -619,6 +628,17 @@
               </span>
             </li>
           </ul>
+
+          <h2>Try</h2>
+          <p>
+            <a href="./?ruletype=eightball&amp;lod=4">8-ball</a>,
+            <a href="./?ruletype=nineball&amp;lod=4">9-ball</a>,
+            <a href="./?ruletype=threecushion&amp;lod=4">threecushion</a>,
+            <a href="./?ruletype=sagu">sagu</a>,
+            <a href="./speedrun/index.html">speedrun</a>,
+            <a href="./exam/index.html">exam</a>,
+            <a href="/reveal/">cards</a>
+          </p>
         </div>
       </details>
     </nav>

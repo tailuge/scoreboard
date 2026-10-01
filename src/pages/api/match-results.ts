@@ -14,6 +14,17 @@ export const config = {
 const matchResultService = new MatchResultService(kv)
 const playerRatingStore = new PlayerRatingStore(kv)
 
+// TEMPORARY diagnostics for Vercel fluid-compute investigation. Remove once we
+// know where the POST budget goes. Deliberately uses console.log rather than
+// logger.log: logger.enabled is derived from `typeof process`, which is fragile
+// on the Edge runtime, and a silent no-op here would waste a deploy cycle.
+const now = () => globalThis.performance?.now?.() ?? Date.now()
+const TIMING = "[mr-timing]"
+
+function logTiming(stage: string, detail: Record<string, unknown>) {
+  console.log(`${TIMING} ${stage} ${JSON.stringify(detail)}`)
+}
+
 export default async function handler(request: NextRequest) {
   const { method } = request
 
@@ -31,6 +42,7 @@ export default async function handler(request: NextRequest) {
 }
 
 async function handleGet(request: NextRequest) {
+  const startedAt = now()
   try {
     const { searchParams } = request.nextUrl
     const ruleType = searchParams.get("ruleType") || undefined
@@ -42,6 +54,12 @@ async function handleGet(request: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "32", 10)
 
     const results = await matchResultService.getMatchResults(limit, ruleType)
+    logTiming("GET done", {
+      totalMs: Math.round(now() - startedAt),
+      returned: results.length,
+      limit,
+      ruleType: ruleType ?? null,
+    })
     return Response.json(results, {
       headers: {
         "Cache-Control":
@@ -55,8 +73,20 @@ async function handleGet(request: NextRequest) {
 }
 
 async function handlePost(request: NextRequest) {
+  const startedAt = now()
+  let parsedMs: number | undefined
   try {
     const { replayData, ...data } = await request.json()
+    parsedMs = Math.round(now() - startedAt)
+
+    // Distinguishes solo uploads (no ELO block) from two-player uploads, and
+    // records whether the replay `set` ran at all.
+    logTiming("POST parsed", {
+      parsedMs,
+      payloadBytes: JSON.stringify(data).length,
+      replayBytes: replayData ? replayData.length : 0,
+      isTwoPlayer: !!data.loser,
+    })
 
     const locationCountry =
       request.headers?.get("x-vercel-ip-country") || undefined
@@ -98,9 +128,17 @@ async function handlePost(request: NextRequest) {
       os: os?.name,
     }
 
+    const storeStartedAt = now()
     await matchResultService.addMatchResult(newResult, replayData)
+    const storeMs = Math.round(now() - storeStartedAt)
 
+    // addMatchResult covers set + zadd + the 3-command eviction, so this single
+    // number is the main thing to compare against ELO below.
+    logTiming("POST stored", { storeMs })
+
+    let eloMs: number | null = null
     if (newResult.loser) {
+      const eloStartedAt = now()
       try {
         const ruleType = newResult.ruleType ?? "nineball"
         const [wRating, lRating] = await Promise.all([
@@ -112,10 +150,20 @@ async function handlePost(request: NextRequest) {
           playerRatingStore.save(ruleType, newResult.winner, newW),
           playerRatingStore.save(ruleType, newResult.loser, newL),
         ])
+        eloMs = Math.round(now() - eloStartedAt)
       } catch (e) {
+        eloMs = Math.round(now() - eloStartedAt)
         logger.log("ELO update failed:", e)
       }
     }
+
+    logTiming("POST done", {
+      totalMs: Math.round(now() - startedAt),
+      parsedMs,
+      storeMs,
+      eloMs,
+      isTwoPlayer: !!newResult.loser,
+    })
 
     return Response.json(newResult, { status: 201 })
   } catch (error) {

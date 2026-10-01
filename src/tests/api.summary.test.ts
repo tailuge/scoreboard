@@ -8,6 +8,12 @@ jest.mock("@/services/scoretable")
 jest.mock("@/services/PlayerRatingStore")
 jest.mock("@/services/MatchResultService")
 
+// The real unstable_cache pulls in web streams APIs that jsdom does not provide.
+// Call through instead: these tests assert which reads happen, not cache behaviour.
+jest.mock("next/cache", () => ({
+  unstable_cache: (fn: any) => fn,
+}))
+
 const mockScoreTable = ScoreTable as jest.MockedClass<typeof ScoreTable>
 const mockPlayerRatingStore = PlayerRatingStore as jest.MockedClass<
   typeof PlayerRatingStore
