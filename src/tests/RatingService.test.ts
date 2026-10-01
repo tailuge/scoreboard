@@ -32,23 +32,23 @@ describe("applyInactivity", () => {
 })
 
 describe("updateMatchRatings", () => {
-  it("winner gains rating, loser loses rating", () => {
+  it("winner gains rating, loser loses rating", async () => {
     const w = { ...DEFAULT_RATING, lastUpdated: Date.now() }
     const l = { ...DEFAULT_RATING, lastUpdated: Date.now() }
-    const [newW, newL] = updateMatchRatings(w, l)
+    const [newW, newL] = await updateMatchRatings(w, l)
     expect(newW.rating).toBeGreaterThan(DEFAULT_RATING.rating)
     expect(newL.rating).toBeLessThan(DEFAULT_RATING.rating)
   })
 
-  it("increments gamesPlayed for both players", () => {
+  it("increments gamesPlayed for both players", async () => {
     const w = { ...DEFAULT_RATING, lastUpdated: Date.now(), gamesPlayed: 3 }
     const l = { ...DEFAULT_RATING, lastUpdated: Date.now(), gamesPlayed: 5 }
-    const [newW, newL] = updateMatchRatings(w, l)
+    const [newW, newL] = await updateMatchRatings(w, l)
     expect(newW.gamesPlayed).toBe(4)
     expect(newL.gamesPlayed).toBe(6)
   })
 
-  it("increments wins for winner and losses for loser", () => {
+  it("increments wins for winner and losses for loser", async () => {
     const w = {
       ...DEFAULT_RATING,
       lastUpdated: Date.now(),
@@ -61,14 +61,14 @@ describe("updateMatchRatings", () => {
       wins: 1,
       losses: 2,
     }
-    const [newW, newL] = updateMatchRatings(w, l)
+    const [newW, newL] = await updateMatchRatings(w, l)
     expect(newW.wins).toBe(3)
     expect(newW.losses).toBe(1)
     expect(newL.wins).toBe(1)
     expect(newL.losses).toBe(3)
   })
 
-  it("high-RD player changes more than low-RD player", () => {
+  it("high-RD player changes more than low-RD player", async () => {
     const now = Date.now()
     const highRd: PlayerRating = {
       rating: 1500,
@@ -89,11 +89,11 @@ describe("updateMatchRatings", () => {
       losses: 0,
     }
 
-    const [newHighW] = updateMatchRatings(highRd, {
+    const [newHighW] = await updateMatchRatings(highRd, {
       ...DEFAULT_RATING,
       lastUpdated: now,
     })
-    const [newLowW] = updateMatchRatings(lowRd, {
+    const [newLowW] = await updateMatchRatings(lowRd, {
       ...DEFAULT_RATING,
       lastUpdated: now,
     })

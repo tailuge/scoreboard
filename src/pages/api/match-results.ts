@@ -83,7 +83,6 @@ async function handlePost(request: NextRequest) {
     // records whether the replay `set` ran at all.
     logTiming("POST parsed", {
       parsedMs,
-      payloadBytes: JSON.stringify(data).length,
       replayBytes: replayData ? replayData.length : 0,
       isTwoPlayer: !!data.loser,
     })
@@ -132,8 +131,8 @@ async function handlePost(request: NextRequest) {
     await matchResultService.addMatchResult(newResult, replayData)
     const storeMs = Math.round(now() - storeStartedAt)
 
-    // addMatchResult covers set + zadd + the 3-command eviction, so this single
-    // number is the main thing to compare against ELO below.
+    // addMatchResult queues set + zadd + trim as one pipeline (single round
+    // trip), so this number is the main thing to compare against ELO below.
     logTiming("POST stored", { storeMs })
 
     let eloMs: number | null = null
@@ -145,7 +144,7 @@ async function handlePost(request: NextRequest) {
           playerRatingStore.getOrCreate(ruleType, newResult.winner),
           playerRatingStore.getOrCreate(ruleType, newResult.loser),
         ])
-        const [newW, newL] = updateMatchRatings(wRating, lRating)
+        const [newW, newL] = await updateMatchRatings(wRating, lRating)
         await Promise.all([
           playerRatingStore.save(ruleType, newResult.winner, newW),
           playerRatingStore.save(ruleType, newResult.loser, newL),

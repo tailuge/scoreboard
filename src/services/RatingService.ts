@@ -1,4 +1,4 @@
-import { Glicko2 } from "glicko2.ts"
+import type { Glicko2 as Glicko2Instance } from "glicko2.ts"
 
 export type PlayerRating = {
   rating: number
@@ -28,12 +28,27 @@ export function applyInactivity(player: PlayerRating): PlayerRating {
   return { ...player, rd: newRd }
 }
 
-const glicko = new Glicko2({ tau: 0.5, rating: 1500, rd: 350, vol: 0.06 })
+// The Glicko2 module is only needed for two-player results. Importing it lazily
+// keeps it out of module evaluation for solo uploads and every GET, so those
+// invocations never pay for it. The instance is cached for the isolate's life.
+let glickoPromise: Promise<Glicko2Instance> | undefined
 
-export function updateMatchRatings(
+function getGlicko(): Promise<Glicko2Instance> {
+  if (!glickoPromise) {
+    glickoPromise = import("glicko2.ts").then(
+      ({ Glicko2 }) =>
+        new Glicko2({ tau: 0.5, rating: 1500, rd: 350, vol: 0.06 })
+    )
+  }
+  return glickoPromise
+}
+
+export async function updateMatchRatings(
   winner: PlayerRating,
   loser: PlayerRating
-): [PlayerRating, PlayerRating] {
+): Promise<[PlayerRating, PlayerRating]> {
+  const glicko = await getGlicko()
+
   const w = applyInactivity(winner)
   const l = applyInactivity(loser)
 

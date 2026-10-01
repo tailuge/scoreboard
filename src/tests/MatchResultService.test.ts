@@ -1,5 +1,6 @@
 import {
   getMatchReplayKey,
+  MATCH_REPLAY_TTL_SECONDS,
   MatchResultService,
 } from "../services/MatchResultService"
 import { mockKv } from "./mockkv"
@@ -53,6 +54,23 @@ describe("MatchResultService", () => {
     expect(storedReplay).toBe("replay-data")
   })
 
+  it("should give stored replay data a TTL", async () => {
+    const matchId = "match-with-ttl"
+    const result: MatchResult = {
+      id: matchId,
+      winner: "Winner",
+      winnerScore: 100,
+      ruleType: "snooker",
+      timestamp: Date.now(),
+    }
+
+    await service.addMatchResult(result, "replay-data")
+
+    const ttl = await (mockKv as any).ttl(getMatchReplayKey(matchId))
+    expect(ttl).toBeGreaterThan(0)
+    expect(ttl).toBeLessThanOrEqual(MATCH_REPLAY_TTL_SECONDS)
+  })
+
   it("should retrieve replay data using getMatchReplay", async () => {
     const matchId = "match-with-replay"
     const result: MatchResult = {
@@ -73,7 +91,7 @@ describe("MatchResultService", () => {
     expect(replay).toBeNull()
   })
 
-  it("should cleanup replay data when match is evicted from rolling history", async () => {
+  it("should evict the oldest match from rolling history while its replay expires via TTL", async () => {
     const firstMatchId = "match-to-evict"
     const firstResult: MatchResult = {
       id: firstMatchId,
@@ -102,10 +120,10 @@ describe("MatchResultService", () => {
     expect(history).toHaveLength(32)
     expect(history.find((r) => r.id === firstMatchId)).toBeUndefined()
 
-    const storedReplay = await (mockKv as any).get(
-      getMatchReplayKey(firstMatchId)
-    )
-    expect(storedReplay).toBeNull()
+    // Eviction no longer deletes the replay eagerly: it is left to the TTL set
+    // on write, avoiding the read-then-delete round trips.
+    const ttl = await (mockKv as any).ttl(getMatchReplayKey(firstMatchId))
+    expect(ttl).toBeGreaterThan(0)
   })
 
   it("should build match replay keys consistently", () => {

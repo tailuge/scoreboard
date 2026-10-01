@@ -254,11 +254,21 @@ class MockKV {
 
   /**
    * Adapter function to match @vercel/kv's set signature using ioredis-mock's set.
+   * Supports `ex` so TTL-based expiry can be exercised in tests.
    */
-  async set(key: string, value: any): Promise<any> {
+  async set(key: string, value: any, opts?: { ex?: number }): Promise<any> {
     const stringValue = JSON.stringify(value)
-    // Basic support for opts if needed in future, currently just simple set
+    if (opts?.ex) {
+      return this.mockRedis.set(key, stringValue, "EX", opts.ex)
+    }
     return this.mockRedis.set(key, stringValue)
+  }
+
+  /**
+   * Returns the remaining time to live of a key, in seconds.
+   */
+  async ttl(key: string): Promise<number> {
+    return this.mockRedis.ttl(key)
   }
 
   /**

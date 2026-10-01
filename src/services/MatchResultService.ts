@@ -5,6 +5,14 @@ const KEY = "match_results"
 const HISTORY_LIMIT = 32
 const MATCH_REPLAY_KEY_PREFIX = "match_replay:"
 
+/**
+ * How long a replay is kept. Replays are only useful while their match is still
+ * in the rolling history, so rather than reading the sorted set to find evicted
+ * matches and deleting their replays (a read-then-delete on every write), the
+ * key is given a TTL and Redis expires it on its own.
+ */
+export const MATCH_REPLAY_TTL_SECONDS = 5 * 24 * 60 * 60
+
 export const getMatchReplayKey = (matchId: string): string =>
   `${MATCH_REPLAY_KEY_PREFIX}${matchId}`
 
@@ -13,47 +21,29 @@ export class MatchResultService {
 
   /**
    * Adds a match result to the rolling history.
-   * Uses a sorted set where the score is the timestamp.
+   *
+   * Uses a sorted set where the score is the timestamp. The replay `set`, the
+   * `zadd`, and the trim are queued as a single pipeline: one HTTP round trip
+   * instead of the previous read-then-delete eviction dance.
    */
-  /**
-   * Identifies and removes match results and their replay data beyond the HISTORY_LIMIT.
-   */
-  private async evictOldResults(): Promise<void> {
-    // Identify matches that are about to be evicted from the sorted set (beyond the 32 limit).
-    // zrange(0, -(HISTORY_LIMIT + 1)) returns members that will be removed by zremrangebyrank(0, -(HISTORY_LIMIT + 1))
-    const toEvict = await this.store.zrange<MatchResult[]>(
-      KEY,
-      0,
-      -(HISTORY_LIMIT + 1)
-    )
-
-    if (toEvict.length > 0) {
-      const keysToDelete = toEvict.map((r) => getMatchReplayKey(r.id))
-      if (this.store.del) {
-        await this.store.del(...keysToDelete)
-      }
-    }
-
-    // Trim to HISTORY_LIMIT (remove older entries)
-    await this.store.zremrangebyrank(KEY, 0, -(HISTORY_LIMIT + 1))
-  }
-
   async addMatchResult(
     result: MatchResult,
     replayData?: string
   ): Promise<void> {
+    const pipeline = (this.store as VercelKV).pipeline()
+
     if (replayData) {
-      await this.store.set(getMatchReplayKey(result.id), replayData)
+      pipeline.set(getMatchReplayKey(result.id), replayData, {
+        ex: MATCH_REPLAY_TTL_SECONDS,
+      })
       result.hasReplay = true
     }
 
-    // Add to sorted set
-    await this.store.zadd(KEY, {
-      score: result.timestamp,
-      member: result,
-    })
-
-    await this.evictOldResults()
+    // Add to the sorted set, then trim to the newest HISTORY_LIMIT members.
+    await pipeline
+      .zadd(KEY, { score: result.timestamp, member: result })
+      .zremrangebyrank(KEY, 0, -(HISTORY_LIMIT + 1))
+      .exec()
   }
 
   /**
