@@ -1,15 +1,15 @@
-import { NextRequest } from "next/server"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { unstable_cache } from "next/cache"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
 import { MatchResultService } from "@/services/MatchResultService"
 import { VALID_RULE_TYPES } from "@/utils/gameTypes"
-import { corsJson } from "@/utils/cors"
+import { CORS_HEADERS } from "@/utils/cors"
 import { markUsageFromServer } from "@/utils/usage"
 
 export const config = {
-  runtime: "edge",
+  runtime: "nodejs",
 }
 
 const scoreTable = new ScoreTable(kv)
@@ -52,11 +52,19 @@ function timed<T>(
   })
 }
 
-export default async function handler(request: NextRequest) {
-  const { searchParams } = request.nextUrl
-  const limitElo = Number.parseInt(searchParams.get("limitElo") || "10", 10)
+function setCorsHeaders(res: NextApiResponse) {
+  for (const [key, value] of Object.entries(CORS_HEADERS)) {
+    res.setHeader(key, value)
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const limitElo = Number.parseInt((req.query.limitElo as string) || "10", 10)
   const limitMatches = Number.parseInt(
-    searchParams.get("limitMatches") || "32",
+    (req.query.limitMatches as string) || "32",
     10
   )
 
@@ -87,21 +95,15 @@ export default async function handler(request: NextRequest) {
       recentMatches: recentMatches.length,
     })
 
-    return corsJson(
-      {
-        hiscores,
-        topPlayers,
-        recentMatches,
-      },
-      {
-        headers: {
-          // Increased cache time to 2 minutes to reduce quota consumption
-          "Cache-Control": "public, s-maxage=120, stale-while-revalidate=60",
-        },
-      }
+    setCorsHeaders(res)
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=120, stale-while-revalidate=60"
     )
+    return res.json({ hiscores, topPlayers, recentMatches })
   } catch (error) {
     console.error("Error generating summary:", error)
-    return corsJson({ error: "Internal Server Error" }, { status: 500 })
+    setCorsHeaders(res)
+    return res.status(500).json({ error: "Internal Server Error" })
   }
 }

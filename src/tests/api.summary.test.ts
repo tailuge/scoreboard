@@ -2,7 +2,7 @@ import handler from "@/pages/api/summary"
 import { ScoreTable } from "@/services/scoretable"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
 import { MatchResultService } from "@/services/MatchResultService"
-import { NextRequest } from "next/server"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("@/services/scoretable")
 jest.mock("@/services/PlayerRatingStore")
@@ -21,6 +21,39 @@ const mockPlayerRatingStore = PlayerRatingStore as jest.MockedClass<
 const mockMatchResultService = MatchResultService as jest.MockedClass<
   typeof MatchResultService
 >
+
+function makeRes() {
+  const headers: Record<string, string> = {}
+  let statusCode = 200
+  let body: unknown
+
+  const res = {
+    setHeader: (key: string, value: string) => {
+      headers[key] = value
+    },
+    status: (code: number) => {
+      statusCode = code
+      return res
+    },
+    json: (data: unknown) => {
+      body = data
+      return res
+    },
+    _headers: headers,
+    get statusCode() {
+      return statusCode
+    },
+    get body() {
+      return body
+    },
+  } as unknown as NextApiResponse & {
+    _headers: Record<string, string>
+    statusCode: number
+    body: unknown
+  }
+
+  return res as typeof res
+}
 
 describe("/api/summary handler", () => {
   beforeEach(() => {
@@ -74,14 +107,12 @@ describe("/api/summary handler", () => {
       .spyOn(mockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue(mockRecentMatches as any)
 
-    const url = "https://localhost/api/summary?limitElo=5&limitMatches=10"
     const req = {
-      method: "GET",
-      nextUrl: new URL(url),
-    } as unknown as NextRequest
+      query: { limitElo: "5", limitMatches: "10" },
+    } as unknown as NextApiRequest
 
-    const response = await handler(req)
-    const jsonData = await response.json()
+    const res = makeRes()
+    await handler(req, res)
 
     expect(mockScoreTable.prototype.topTenMulti).toHaveBeenCalled()
     expect(mockPlayerRatingStore.prototype.getTopNBatch).toHaveBeenCalledWith(
@@ -92,13 +123,13 @@ describe("/api/summary handler", () => {
       mockMatchResultService.prototype.getMatchResults
     ).toHaveBeenCalledWith(10)
 
-    expect(response.status).toBe(200)
-    expect(jsonData).toEqual({
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual({
       hiscores: mockHiscores,
       topPlayers: mockTopPlayers,
       recentMatches: mockRecentMatches,
     })
-    expect(response.headers.get("Cache-Control")).toBe(
+    expect(res._headers["Cache-Control"]).toBe(
       "public, s-maxage=120, stale-while-revalidate=60"
     )
   })
@@ -108,16 +139,14 @@ describe("/api/summary handler", () => {
       .spyOn(mockScoreTable.prototype, "topTenMulti")
       .mockRejectedValue(new Error("KV error"))
 
-    const url = "https://localhost/api/summary"
     const req = {
-      method: "GET",
-      nextUrl: new URL(url),
-    } as unknown as NextRequest
+      query: {},
+    } as unknown as NextApiRequest
 
-    const response = await handler(req)
-    const jsonData = await response.json()
+    const res = makeRes()
+    await handler(req, res)
 
-    expect(response.status).toBe(500)
-    expect(jsonData).toEqual({ error: "Internal Server Error" })
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toEqual({ error: "Internal Server Error" })
   })
 })
