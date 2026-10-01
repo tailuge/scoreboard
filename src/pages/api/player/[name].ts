@@ -1,23 +1,25 @@
-import type { NextRequest } from "next/server"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { kv } from "@vercel/kv"
 import { PlayerRatingStore } from "@/services/PlayerRatingStore"
 import { isValidGameType } from "@/utils/gameTypes"
 
-export const config = { runtime: "edge" }
+export const config = { runtime: "nodejs" }
 
 const store = new PlayerRatingStore(kv)
 
-export default async function handler(request: NextRequest) {
-  const { searchParams } = request.nextUrl
-  const name = searchParams.get("name")
-  const ruleType = searchParams.get("ruleType") ?? "nineball"
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const name = req.query.name as string | undefined
+  const ruleType = (req.query.ruleType as string | undefined) ?? "nineball"
 
   if (!name) {
-    return new Response("Missing name", { status: 400 })
+    return res.status(400).end("Missing name")
   }
 
   if (!isValidGameType(ruleType)) {
-    return new Response("Invalid ruleType", { status: 400 })
+    return res.status(400).end("Invalid ruleType")
   }
 
   const history = await store.getHistory(ruleType, name)
@@ -27,7 +29,6 @@ export default async function handler(request: NextRequest) {
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
     .map(([date, rating]) => ({ date, rating }))
 
-  return Response.json(sortedHistory, {
-    headers: { "Cache-Control": "public, s-maxage=30" },
-  })
+  res.setHeader("Cache-Control", "public, s-maxage=30")
+  return res.json(sortedHistory)
 }
