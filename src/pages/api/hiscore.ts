@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 import { ScoreTable } from "@/services/scoretable"
 import { ScoreData } from "@/types/score"
-import { ReplayCodec } from "@/utils/replay-codec"
 import { logger } from "@/utils/logger"
 import { corsResponse } from "@/utils/cors"
 
@@ -17,24 +16,28 @@ export default async function handler(request: NextRequest) {
   const body = await request.text()
   logger.log(`body = ${body}`)
   logger.log(`url.searchParams = ${url.searchParams}`)
-  const raw = new URLSearchParams(body).get("state")
-  logger.log(raw)
-  let json: any
-  try {
-    json = ReplayCodec.decode(raw)
-    logger.log(json)
-  } catch (error) {
-    logger.error("Failed to parse hiscore state:", error)
-    return corsResponse("Invalid score state", { status: 400 })
-  }
+  const params = new URLSearchParams(body)
+  const raw = params.get("state")
 
-  // require up to date client version
-  if (json?.v !== 1) {
+  // The client reports its own version and score as plain params, so the
+  // compressed state blob no longer needs to be decoded here.
+  if (Number(params.get("v")) !== 1) {
     logger.log("Client version is outdated")
     return corsResponse(
       "Please update your client or use version hosted at https://github.com/tailuge/billiards",
       { status: 400 }
     )
+  }
+
+  if (!raw) {
+    logger.error("Invalid score state: missing state")
+    return corsResponse("Invalid score state", { status: 400 })
+  }
+
+  const rawScore = Number(params.get("score"))
+  if (!Number.isFinite(rawScore)) {
+    logger.error("Invalid score state: missing or non-numeric score")
+    return corsResponse("Invalid score state", { status: 400 })
   }
 
   const ruletype = url.searchParams.get("ruletype")
@@ -43,7 +46,7 @@ export default async function handler(request: NextRequest) {
   }
 
   const base = new Date("2024").valueOf()
-  const score = json?.score + (Date.now() - base) / base
+  const score = rawScore + (Date.now() - base) / base
   const player = url.searchParams.get("id") || "***"
   logger.log(`Received ${ruletype} hiscore of ${score} for player ${player}`)
   let data
