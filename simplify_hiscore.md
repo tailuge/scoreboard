@@ -1,5 +1,18 @@
 # Simplifying the hi-score upload: drop fflate + jsoncrush from the scoreboard
 
+## Status
+
+- ✅ **Scoreboard (this repo) — done.** Implemented as described below.
+  `fflate` and `jsoncrush` are gone; `src/utils/replay-codec.ts` is deleted;
+  `api/hiscore.ts` reads `state`/`score`/`v` from the POST body.
+  `public/hiscore.html` needed no change — it already POSTs the client's entire
+  query string, so the new `score`/`v` params are forwarded verbatim.
+  Verified: `yarn prettify`, `tsc --noEmit`, and `yarn test` (33 suites / 207
+  tests, hiscore suite 7/7) pass; the changed files pass ESLint. The repo-wide
+  ESLint gate still fails on a pre-existing baseline in untouched files.
+- ⏳ **Client (`../billiards`) — pending.** Not started. Until it appends
+  `score`/`v` to the hi-score URL, `/api/hiscore` returns 400 by design.
+
 ## Goal
 
 The scoreboard only decompresses a replay blob in one place — `src/pages/api/hiscore.ts`
@@ -22,7 +35,7 @@ replay and used byte-for-byte for duplicate detection.
    `/api/hiscore?ruletype=…&id=…`.
 4. `api/hiscore.ts` reads `state` from the body and fflate-decodes it to get `v`/`score`.
 
-## Changes — scoreboard (this repo)
+## Changes — scoreboard (this repo) ✅ done
 
 ### 1. `src/pages/api/hiscore.ts`
 
@@ -61,7 +74,7 @@ Its only consumer is the route above.
 
 `yarn prettify && yarn lint && yarn test`
 
-## Changes — client (`../billiards`)
+## Changes — client (`../billiards`) ⏳ pending
 
 ### 1. `src/view/link-formatter.ts`
 
