@@ -4,7 +4,7 @@ import { logger } from "@/utils/logger"
 import { GAME_BASE_URL } from "@/config"
 
 export const config = {
-  runtime: "edge",
+  runtime: "nodejs",
 }
 
 const LEADERBOARD_KEY = "speedrun-leaderboard"
@@ -72,7 +72,12 @@ export default async function handler(request: NextRequest) {
     viewerUrl.searchParams.set("ruletype", foundEntry.ruleType)
     viewerUrl.searchParams.set("state", state)
 
-    return Response.redirect(viewerUrl.toString(), 307)
+    const response = Response.redirect(viewerUrl.toString(), 307)
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=172800, stale-while-revalidate=86400"
+    )
+    return response
   } catch (error) {
     logger.log("Error fetching speedrun replay:", error)
     return new Response("Internal Server Error", { status: 500 })

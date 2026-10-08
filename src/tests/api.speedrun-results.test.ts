@@ -52,6 +52,7 @@ beforeAll(() => {
       status: status || 307,
       headers: {
         get: (name: string) => headers.get(name) || null,
+        set: (name: string, value: string) => headers.set(name, value),
       },
     }
   })
@@ -494,6 +495,9 @@ describe("/api/speedrun-results/[id] handler", () => {
     expect(location).toContain(GAME_BASE_URL)
     expect(location).toContain("ruletype=nineball")
     expect(location).toContain("state=crushed-replay-string")
+    expect(response.headers.get("Cache-Control")).toBe(
+      "public, s-maxage=172800, stale-while-revalidate=86400"
+    )
   })
 
   it("returns 500 on unexpected error", async () => {
