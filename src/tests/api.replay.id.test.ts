@@ -13,10 +13,16 @@ describe("/api/replay/[id] handler", () => {
     jest.clearAllMocks()
 
     const mockResponseConstructor = jest.fn() as any
-    mockResponseConstructor.redirect = jest.fn((url) => ({
-      status: 307,
-      headers: new Map([["Location", url]]),
-    }))
+    mockResponseConstructor.redirect = jest.fn((url) => {
+      const headers = new Map([["Location", url]])
+      return {
+        status: 307,
+        headers: {
+          get: (name: string) => headers.get(name) || null,
+          set: (name: string, value: string) => headers.set(name, value),
+        },
+      }
+    })
     globalThis.Response = mockResponseConstructor
   })
 
@@ -33,10 +39,13 @@ describe("/api/replay/[id] handler", () => {
       nextUrl: new URL(url),
     } as unknown as NextRequest
 
-    await handler(req)
+    const res = await handler(req)
 
     expect(replaySpy).toHaveBeenCalledWith(id)
     expect(Response.redirect).toHaveBeenCalledWith("https://replayed-url.com/")
+    expect(res.headers.get("Cache-Control")).toBe(
+      "public, s-maxage=172800, stale-while-revalidate=86400"
+    )
   })
 
   it("should forward extra query params to the redirect URL", async () => {

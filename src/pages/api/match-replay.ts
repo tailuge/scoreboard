@@ -7,7 +7,7 @@ import { corsResponse } from "@/utils/cors"
 import { GAME_BASE_URL } from "@/config"
 
 export const config = {
-  runtime: "edge",
+  runtime: "nodejs",
 }
 
 const matchResultService = new MatchResultService(kv)
@@ -49,7 +49,12 @@ export default async function handler(request: NextRequest) {
         viewerUrl.searchParams.set(key, value)
       }
     }
-    return Response.redirect(viewerUrl.toString(), 307)
+    const response = Response.redirect(viewerUrl.toString(), 307)
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=172800, stale-while-revalidate=86400"
+    )
+    return response
   } catch (error) {
     logger.log("Error fetching match replay:", error)
     return corsResponse("Internal Server Error", { status: 500 })

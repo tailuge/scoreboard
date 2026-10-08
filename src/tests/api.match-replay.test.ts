@@ -20,11 +20,17 @@ describe("/api/match-replay handler", () => {
       headers: new Map(Object.entries(init?.headers || {})),
     })) as any
 
-    mockResponseConstructor.redirect = (url: string, status = 307) => ({
-      status,
-      headers: new Map([["Location", url]]),
-      text: () => Promise.resolve(""),
-    })
+    mockResponseConstructor.redirect = (url: string, status = 307) => {
+      const headers = new Map([["Location", url]])
+      return {
+        status,
+        headers: {
+          get: (name: string) => headers.get(name) || null,
+          set: (name: string, value: string) => headers.set(name, value),
+        },
+        text: () => Promise.resolve(""),
+      }
+    }
 
     globalThis.Response = mockResponseConstructor
   })
@@ -57,6 +63,9 @@ describe("/api/match-replay handler", () => {
     expect(response.status).toBe(307)
     expect(location).toBe(
       `${GAME_BASE_URL}?ruletype=snooker&state=${encodeURIComponent(mockReplay)}`
+    )
+    expect(response.headers.get("Cache-Control")).toBe(
+      "public, s-maxage=172800, stale-while-revalidate=86400"
     )
     expect(getSpy).toHaveBeenCalledWith("match123")
   })

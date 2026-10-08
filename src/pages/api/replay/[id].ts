@@ -4,7 +4,7 @@ import { logger } from "@/utils/logger"
 import { kv } from "@vercel/kv"
 
 export const config = {
-  runtime: "edge",
+  runtime: "nodejs",
 }
 
 export default async function handler(req: NextRequest) {
@@ -18,5 +18,10 @@ export default async function handler(req: NextRequest) {
     if (key !== "id") redirectUrl.searchParams.set(key, value)
   })
   logger.log(`redirecting to ${redirectUrl}`)
-  return Response.redirect(redirectUrl.toString())
+  const response = Response.redirect(redirectUrl.toString())
+  response.headers.set(
+    "Cache-Control",
+    "public, s-maxage=172800, stale-while-revalidate=86400"
+  )
+  return response
 }
