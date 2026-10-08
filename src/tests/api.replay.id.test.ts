@@ -1,29 +1,57 @@
 import handler from "@/pages/api/replay/[id]"
 import { Shortener } from "@/services/shortener"
-import { NextRequest } from "next/server"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("@/services/shortener")
 
 const mockShortener = Shortener as jest.MockedClass<typeof Shortener>
 
-describe("/api/replay/[id] handler", () => {
-  let req: NextRequest
+function makeRes() {
+  const headers: Record<string, string> = {}
+  let statusCode = 200
+  let redirectUrl: string | undefined
 
+  const res = {
+    setHeader: (key: string, value: string) => {
+      headers[key] = value
+    },
+    status: (code: number) => {
+      statusCode = code
+      return res
+    },
+    end: (_body?: string) => {
+      return res
+    },
+    redirect: (code: number, url: string) => {
+      statusCode = code
+      redirectUrl = url
+      return res
+    },
+    get _headers() {
+      return headers
+    },
+    get statusCode() {
+      return statusCode
+    },
+    get redirectUrl() {
+      return redirectUrl
+    },
+  } as unknown as NextApiResponse & {
+    _headers: Record<string, string>
+    statusCode: number
+    redirectUrl: string | undefined
+  }
+
+  return res as typeof res
+}
+
+function makeReq(query: Record<string, string>): NextApiRequest {
+  return { method: "GET", query } as unknown as NextApiRequest
+}
+
+describe("/api/replay/[id] handler", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
-    const mockResponseConstructor = jest.fn() as any
-    mockResponseConstructor.redirect = jest.fn((url) => {
-      const headers = new Map([["Location", url]])
-      return {
-        status: 307,
-        headers: {
-          get: (name: string) => headers.get(name) || null,
-          set: (name: string, value: string) => headers.set(name, value),
-        },
-      }
-    })
-    globalThis.Response = mockResponseConstructor
   })
 
   it("should redirect to the replayed URL", async () => {
@@ -33,17 +61,14 @@ describe("/api/replay/[id] handler", () => {
       .mockResolvedValue(replayUrl)
 
     const id = "some-id"
-    const url = `https://localhost/api/replay/${id}?id=${id}`
-    req = {
-      method: "GET",
-      nextUrl: new URL(url),
-    } as unknown as NextRequest
-
-    const res = await handler(req)
+    const req = makeReq({ id })
+    const res = makeRes()
+    await handler(req, res)
 
     expect(replaySpy).toHaveBeenCalledWith(id)
-    expect(Response.redirect).toHaveBeenCalledWith("https://replayed-url.com/")
-    expect(res.headers.get("Cache-Control")).toBe(
+    expect(res.statusCode).toBe(307)
+    expect(res.redirectUrl).toBe("https://replayed-url.com/")
+    expect(res._headers["Cache-Control"]).toBe(
       "public, s-maxage=172800, stale-while-revalidate=86400"
     )
   })
@@ -53,15 +78,11 @@ describe("/api/replay/[id] handler", () => {
     jest.spyOn(mockShortener.prototype, "replay").mockResolvedValue(replayUrl)
 
     const id = "some-id"
-    req = {
-      method: "GET",
-      nextUrl: new URL(`https://localhost/api/replay/${id}?id=${id}&lod=4`),
-    } as unknown as NextRequest
+    const req = makeReq({ id, lod: "4" })
+    const res = makeRes()
+    await handler(req, res)
 
-    await handler(req)
-
-    expect(Response.redirect).toHaveBeenCalledWith(
-      "https://replayed-url.com/?lod=4"
-    )
+    expect(res.statusCode).toBe(307)
+    expect(res.redirectUrl).toBe("https://replayed-url.com/?lod=4")
   })
 })

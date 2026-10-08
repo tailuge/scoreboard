@@ -1,9 +1,9 @@
-import { NextRequest } from "next/server"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { kv } from "@vercel/kv"
 import { MatchResultService } from "@/services/MatchResultService"
 import { getRuleType } from "@/types/match"
 import { logger } from "@/utils/logger"
-import { corsResponse } from "@/utils/cors"
+import { CORS_HEADERS } from "@/utils/cors"
 import { GAME_BASE_URL } from "@/config"
 
 export const config = {
@@ -12,51 +12,61 @@ export const config = {
 
 const matchResultService = new MatchResultService(kv)
 
-export default async function handler(request: NextRequest) {
-  if (request.method !== "GET") {
-    return corsResponse(`Method ${request.method} Not Allowed`, {
-      status: 405,
-      headers: { Allow: "GET" },
-    })
+function setCorsHeaders(res: NextApiResponse) {
+  for (const [key, value] of Object.entries(CORS_HEADERS)) {
+    res.setHeader(key, value)
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET")
+    return res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 
   try {
-    const { searchParams } = request.nextUrl
-    const id = searchParams.get("id")
+    const id = req.query.id as string | undefined
 
     if (!id) {
-      return corsResponse("ID is required", { status: 400 })
+      setCorsHeaders(res)
+      return res.status(400).end("ID is required")
     }
 
     const replayData = await matchResultService.getMatchReplay(id)
 
     if (replayData === null) {
-      return corsResponse("Replay not found", { status: 404 })
+      setCorsHeaders(res)
+      return res.status(404).end("Replay not found")
     }
 
     const matchResults = await matchResultService.getMatchResults()
     const matchResult = matchResults.find((result) => result.id === id)
 
     if (!matchResult) {
-      return corsResponse("Match result not found", { status: 404 })
+      setCorsHeaders(res)
+      return res.status(404).end("Match result not found")
     }
 
     const viewerUrl = new URL(GAME_BASE_URL)
     viewerUrl.searchParams.set("ruletype", getRuleType(matchResult))
     viewerUrl.searchParams.set("state", replayData)
-    for (const [key, value] of searchParams.entries()) {
-      if (key !== "id") {
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== "id" && typeof value === "string") {
         viewerUrl.searchParams.set(key, value)
       }
     }
-    const response = Response.redirect(viewerUrl.toString(), 307)
-    response.headers.set(
+
+    res.setHeader(
       "Cache-Control",
       "public, s-maxage=172800, stale-while-revalidate=86400"
     )
-    return response
+    return res.redirect(307, viewerUrl.toString())
   } catch (error) {
     logger.log("Error fetching match replay:", error)
-    return corsResponse("Internal Server Error", { status: 500 })
+    setCorsHeaders(res)
+    return res.status(500).end("Internal Server Error")
   }
 }

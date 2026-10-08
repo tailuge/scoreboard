@@ -1,5 +1,5 @@
+import type { NextApiRequest, NextApiResponse } from "next"
 import { Shortener } from "@/services/shortener"
-import { NextRequest } from "next/server"
 import { logger } from "@/utils/logger"
 import { kv } from "@vercel/kv"
 
@@ -7,21 +7,25 @@ export const config = {
   runtime: "nodejs",
 }
 
-export default async function handler(req: NextRequest) {
-  const id = req.nextUrl.searchParams.get("id")
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const id = req.query.id as string | undefined
   if (!id) {
-    return new Response("ID is required", { status: 400 })
+    return res.status(400).end("ID is required")
   }
   const url = await new Shortener(kv).replay(id)
   const redirectUrl = new URL(url)
-  req.nextUrl.searchParams.forEach((value, key) => {
-    if (key !== "id") redirectUrl.searchParams.set(key, value)
-  })
+  for (const [key, value] of Object.entries(req.query)) {
+    if (key !== "id" && typeof value === "string") {
+      redirectUrl.searchParams.set(key, value)
+    }
+  }
   logger.log(`redirecting to ${redirectUrl}`)
-  const response = Response.redirect(redirectUrl.toString())
-  response.headers.set(
+  res.setHeader(
     "Cache-Control",
     "public, s-maxage=172800, stale-while-revalidate=86400"
   )
-  return response
+  return res.redirect(307, redirectUrl.toString())
 }

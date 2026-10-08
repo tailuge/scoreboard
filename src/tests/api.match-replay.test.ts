@@ -1,38 +1,68 @@
 import handler from "../pages/api/match-replay"
-import { NextRequest } from "next/server"
 import { MatchResultService } from "../services/MatchResultService"
 import { GAME_BASE_URL } from "@/config"
+import type { NextApiRequest, NextApiResponse } from "next"
 
 jest.mock("../services/MatchResultService")
 const MockMatchResultService = MatchResultService as jest.MockedClass<
   typeof MatchResultService
 >
 
-describe("/api/match-replay handler", () => {
-  let req: NextRequest
+function makeRes() {
+  const headers: Record<string, string> = {}
+  let statusCode = 200
+  let redirectUrl: string | undefined
+  let ended = false
 
+  const res = {
+    setHeader: (key: string, value: string) => {
+      headers[key] = value
+    },
+    status: (code: number) => {
+      statusCode = code
+      return res
+    },
+    end: (_body?: string) => {
+      ended = true
+      return res
+    },
+    redirect: (code: number, url: string) => {
+      statusCode = code
+      redirectUrl = url
+      return res
+    },
+    get _headers() {
+      return headers
+    },
+    get statusCode() {
+      return statusCode
+    },
+    get redirectUrl() {
+      return redirectUrl
+    },
+    get ended() {
+      return ended
+    },
+  } as unknown as NextApiResponse & {
+    _headers: Record<string, string>
+    statusCode: number
+    redirectUrl: string | undefined
+    ended: boolean
+  }
+
+  return res as typeof res
+}
+
+function makeReq(
+  query: Record<string, string>,
+  method = "GET"
+): NextApiRequest {
+  return { method, query } as unknown as NextApiRequest
+}
+
+describe("/api/match-replay handler", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
-    const mockResponseConstructor = jest.fn((body, init) => ({
-      status: init?.status || 200,
-      text: () => Promise.resolve(body),
-      headers: new Map(Object.entries(init?.headers || {})),
-    })) as any
-
-    mockResponseConstructor.redirect = (url: string, status = 307) => {
-      const headers = new Map([["Location", url]])
-      return {
-        status,
-        headers: {
-          get: (name: string) => headers.get(name) || null,
-          set: (name: string, value: string) => headers.set(name, value),
-        },
-        text: () => Promise.resolve(""),
-      }
-    }
-
-    globalThis.Response = mockResponseConstructor
   })
 
   it("should redirect to viewer on GET request with ruleType", async () => {
@@ -52,19 +82,15 @@ describe("/api/match-replay handler", () => {
         },
       ])
 
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
-    } as unknown as NextRequest
+    const req = makeReq({ id: "match123" })
+    const res = makeRes()
+    await handler(req, res)
 
-    const response = await handler(req)
-    const location = response.headers.get("Location")
-
-    expect(response.status).toBe(307)
-    expect(location).toBe(
+    expect(res.statusCode).toBe(307)
+    expect(res.redirectUrl).toBe(
       `${GAME_BASE_URL}?ruletype=snooker&state=${encodeURIComponent(mockReplay)}`
     )
-    expect(response.headers.get("Cache-Control")).toBe(
+    expect(res._headers["Cache-Control"]).toBe(
       "public, s-maxage=172800, stale-while-revalidate=86400"
     )
     expect(getSpy).toHaveBeenCalledWith("match123")
@@ -87,21 +113,20 @@ describe("/api/match-replay handler", () => {
         },
       ])
 
-    req = {
-      method: "GET",
-      nextUrl: new URL(
-        "https://localhost/api/match-replay?id=match123&userName=Alice&userId=u1&lod=2"
-      ),
-    } as unknown as NextRequest
+    const req = makeReq({
+      id: "match123",
+      userName: "Alice",
+      userId: "u1",
+      lod: "2",
+    })
+    const res = makeRes()
+    await handler(req, res)
 
-    const response = await handler(req)
-    const location = response.headers.get("Location")
-
-    expect(response.status).toBe(307)
-    expect(location).toContain("userName=Alice")
-    expect(location).toContain("userId=u1")
-    expect(location).toContain("lod=2")
-    expect(location).not.toContain("id=match123")
+    expect(res.statusCode).toBe(307)
+    expect(res.redirectUrl).toContain("userName=Alice")
+    expect(res.redirectUrl).toContain("userId=u1")
+    expect(res.redirectUrl).toContain("lod=2")
+    expect(res.redirectUrl).not.toContain("id=match123")
   })
 
   it("should default to nineball when ruleType is missing", async () => {
@@ -120,26 +145,19 @@ describe("/api/match-replay handler", () => {
         },
       ])
 
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
-    } as unknown as NextRequest
+    const req = makeReq({ id: "match123" })
+    const res = makeRes()
+    await handler(req, res)
 
-    const response = await handler(req)
-    const location = response.headers.get("Location")
-
-    expect(response.status).toBe(307)
-    expect(location).toContain("ruletype=nineball")
+    expect(res.statusCode).toBe(307)
+    expect(res.redirectUrl).toContain("ruletype=nineball")
   })
 
   it("should return 400 if id is missing", async () => {
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(400)
+    const req = makeReq({})
+    const res = makeRes()
+    await handler(req, res)
+    expect(res.statusCode).toBe(400)
   })
 
   it("should return 404 if replay is not found", async () => {
@@ -147,13 +165,10 @@ describe("/api/match-replay handler", () => {
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
       .mockResolvedValue(null)
 
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=missing"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(404)
+    const req = makeReq({ id: "missing" })
+    const res = makeRes()
+    await handler(req, res)
+    expect(res.statusCode).toBe(404)
   })
 
   it("should return 404 if match result is not found", async () => {
@@ -164,13 +179,10 @@ describe("/api/match-replay handler", () => {
       .spyOn(MockMatchResultService.prototype, "getMatchResults")
       .mockResolvedValue([])
 
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=missing"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(404)
+    const req = makeReq({ id: "missing" })
+    const res = makeRes()
+    await handler(req, res)
+    expect(res.statusCode).toBe(404)
   })
 
   it("should return 500 if service fails", async () => {
@@ -178,22 +190,16 @@ describe("/api/match-replay handler", () => {
       .spyOn(MockMatchResultService.prototype, "getMatchReplay")
       .mockRejectedValue(new Error("KV error"))
 
-    req = {
-      method: "GET",
-      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(500)
+    const req = makeReq({ id: "match123" })
+    const res = makeRes()
+    await handler(req, res)
+    expect(res.statusCode).toBe(500)
   })
 
   it("should return 405 for unsupported methods", async () => {
-    req = {
-      method: "POST",
-      nextUrl: new URL("https://localhost/api/match-replay?id=match123"),
-    } as unknown as NextRequest
-
-    const response = await handler(req)
-    expect(response.status).toBe(405)
+    const req = makeReq({ id: "match123" }, "POST")
+    const res = makeRes()
+    await handler(req, res)
+    expect(res.statusCode).toBe(405)
   })
 })
