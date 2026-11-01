@@ -10,6 +10,7 @@ export const GAME_TYPES = [
   { name: "Eight Ball", ruleType: "eightball" },
   { name: "Three Cushion", ruleType: "threecushion" },
   { name: "Sagu", ruleType: "sagu" },
+  { name: "Libre", ruleType: "libre" },
 ] as const
 
 export type GameRuleType = (typeof GAME_TYPES)[number]["ruleType"]

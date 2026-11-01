@@ -4,6 +4,7 @@ export const VALID_RULE_TYPES = [
   "threecushion",
   "eightball",
   "sagu",
+  "libre",
 ] as const
 
 export type RuleType = (typeof VALID_RULE_TYPES)[number]
