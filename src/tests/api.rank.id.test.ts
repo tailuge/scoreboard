@@ -80,6 +80,25 @@ describe("/api/rank/[id] handler", () => {
     expect(response.status).toBe(200)
   })
 
+  it("should redirect to not found url when scoretable returns notfound", async () => {
+    jest
+      .spyOn(mockScoreTable.prototype, "get")
+      .mockResolvedValue("https://scoreboard-tailuge.vercel.app/notfound.html")
+
+    const url = "https://localhost/api/rank/unknown?ruletype=nineball&id=unknown"
+    req = {
+      method: "GET",
+      nextUrl: new URL(url),
+    } as unknown as NextRequest
+
+    const response = await handler(req)
+
+    expect(response.status).toBe(302)
+    expect(response.headers.get("Location")).toBe(
+      "https://scoreboard-tailuge.vercel.app/notfound.html"
+    )
+  })
+
   it("should return 400 for invalid ruletype on GET", async () => {
     jest.spyOn(mockScoreTable.prototype, "get").mockImplementationOnce(() => {
       throw new Error("Invalid ruletype")

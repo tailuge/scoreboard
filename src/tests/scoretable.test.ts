@@ -57,4 +57,10 @@ describe("ScoreTable", () => {
       "Invalid ruletype"
     )
   })
+
+  it("should return not found url when rank id does not exist", async () => {
+    const scoreTable = new ScoreTable(mockKv)
+    const url = await scoreTable.get("nineball", "non-existent-id")
+    expect(url).toBe(scoreTable.notFound)
+  })
 })

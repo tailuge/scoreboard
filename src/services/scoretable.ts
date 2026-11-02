@@ -86,7 +86,7 @@ export class ScoreTable {
     return allData
   }
 
-  async getById(ruletype: string, id: string): Promise<ScoreData> {
+  async getById(ruletype: string, id: string): Promise<ScoreData | undefined> {
     const data = await this.store.zrange(this.dbKey(ruletype), 0, 9)
     return data
       .map((item: any) => ({
@@ -117,6 +117,9 @@ export class ScoreTable {
 
   async get(ruletype: string, id: string) {
     const item = await this.getById(ruletype, id)
+    if (!item) {
+      return this.notFound
+    }
     return this.formatReplayUrl(item.data)
   }
 }
