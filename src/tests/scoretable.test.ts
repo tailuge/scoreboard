@@ -22,6 +22,23 @@ describe("ScoreTable", () => {
     expect(likedItem.likes).toEqual(1)
   })
 
+  it("should retain 20 sagu scores but only 10 for other rule types", async () => {
+    const scoreTable = new ScoreTable(mockKv)
+
+    for (let score = 1; score <= 25; score++) {
+      await scoreTable.add("sagu", score, `sagu-${score}`, { score })
+      await scoreTable.add("nineball", score, `nineball-${score}`, { score })
+    }
+
+    const sagu = await mockKv.zrange(scoreTable.dbKey("sagu"), 0, -1)
+    const nineball = await mockKv.zrange(scoreTable.dbKey("nineball"), 0, -1)
+
+    expect(sagu).toHaveLength(20)
+    expect(nineball).toHaveLength(10)
+    // Reads are unchanged: nothing above the top ten reaches a consumer.
+    expect(await scoreTable.topTen("sagu")).toHaveLength(10)
+  })
+
   it("should throw error for invalid ruletype", async () => {
     const scoreTable = new ScoreTable(mockKv)
     await expect(

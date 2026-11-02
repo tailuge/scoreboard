@@ -5,6 +5,12 @@ import { isValidGameType } from "@/utils/gameTypes"
 import { GAME_BASE_URL } from "@/config"
 import { getUID } from "@/utils/uid"
 
+// How many entries each game type keeps in its sorted set. Every read path
+// (topTen, topTenMulti, getById) still stops at the top 10, so anything above
+// that is retention headroom rather than something a consumer can see.
+const DEFAULT_RETAIN_COUNT = 10
+const RETAIN_BY_RULE_TYPE: Record<string, number> = { sagu: 20 }
+
 export class ScoreTable {
   readonly prefix = "hiscore"
   readonly replayUrl = GAME_BASE_URL
@@ -34,8 +40,17 @@ export class ScoreTable {
     return this.trim(ruletype)
   }
 
+  retainCount(ruletype: string) {
+    return RETAIN_BY_RULE_TYPE[ruletype] ?? DEFAULT_RETAIN_COUNT
+  }
+
   async trim(ruletype: string) {
-    return await this.store.zremrangebyrank(this.dbKey(ruletype), 0, -11)
+    // Ranks 0..-(n+1) are dropped, which leaves the highest n members.
+    return await this.store.zremrangebyrank(
+      this.dbKey(ruletype),
+      0,
+      -(this.retainCount(ruletype) + 1)
+    )
   }
 
   private formatReplayUrl(data: string): string {
