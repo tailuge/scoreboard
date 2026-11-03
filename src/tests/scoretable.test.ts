@@ -35,8 +35,9 @@ describe("ScoreTable", () => {
 
     expect(sagu).toHaveLength(20)
     expect(nineball).toHaveLength(10)
-    // Reads are unchanged: nothing above the top ten reaches a consumer.
-    expect(await scoreTable.topTen("sagu")).toHaveLength(10)
+    // Reads match retention: sagu returns all 20 kept entries, others 10.
+    expect(await scoreTable.topTen("sagu")).toHaveLength(20)
+    expect(await scoreTable.topTen("nineball")).toHaveLength(10)
   })
 
   it("should throw error for invalid ruletype", async () => {

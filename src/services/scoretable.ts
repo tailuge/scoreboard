@@ -5,9 +5,8 @@ import { isValidGameType } from "@/utils/gameTypes"
 import { GAME_BASE_URL } from "@/config"
 import { getUID } from "@/utils/uid"
 
-// How many entries each game type keeps in its sorted set. Every read path
-// (topTen, topTenMulti, getById) still stops at the top 10, so anything above
-// that is retention headroom rather than something a consumer can see.
+// How many entries each game type keeps in its sorted set. Reads (topTen,
+// topTenMulti, getById) use the same window, so every retained entry is visible.
 const DEFAULT_RETAIN_COUNT = 10
 const RETAIN_BY_RULE_TYPE: Record<string, number> = { sagu: 20 }
 
@@ -58,7 +57,13 @@ export class ScoreTable {
   }
 
   async topTen(ruletype: string) {
-    const data = (await this.store.zrange(this.dbKey(ruletype), 0, 9)).reverse()
+    const data = (
+      await this.store.zrange(
+        this.dbKey(ruletype),
+        0,
+        this.retainCount(ruletype) - 1
+      )
+    ).reverse()
     return data.map((row: ScoreData) => ({
       name: row.name,
       likes: row.likes ?? 0,
@@ -70,7 +75,7 @@ export class ScoreTable {
   async topTenMulti(ruletypes: readonly string[]) {
     const p = (this.store as any).pipeline()
     for (const type of ruletypes) {
-      p.zrange(this.dbKey(type), 0, 9)
+      p.zrange(this.dbKey(type), 0, this.retainCount(type) - 1)
     }
     const results = await p.exec()
     const allData = {}
@@ -87,7 +92,11 @@ export class ScoreTable {
   }
 
   async getById(ruletype: string, id: string): Promise<ScoreData> {
-    const data = await this.store.zrange(this.dbKey(ruletype), 0, 9)
+    const data = await this.store.zrange(
+      this.dbKey(ruletype),
+      0,
+      this.retainCount(ruletype) - 1
+    )
     return data
       .map((item: any) => ({
         name: item.name,
