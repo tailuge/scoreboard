@@ -44,6 +44,63 @@ async function getCachedTopNBatch(limitElo: number) {
   return value
 }
 
+// In-process cache for recent matches. Strips superfluous fields not used by the
+// lobby (isbot, playerId, ua, browser, os, etc.) to minimize served bandwidth.
+const RECENT_MATCHES_TTL_MS = 60 * 1000
+export const recentMatchesCache = new Map<
+  number,
+  {
+    value: ReturnType<typeof sanitizeRecentMatches>
+    expiresAt: number
+  }
+>()
+
+export function sanitizeMatchResult(match: any) {
+  const sanitized: Record<string, unknown> = {
+    id: match.id,
+    winner: match.winner,
+    winnerScore: match.winnerScore,
+    ruleType: match.ruleType ?? "nineball",
+    timestamp: match.timestamp,
+  }
+
+  if (match.loser !== undefined) sanitized.loser = match.loser
+  if (match.loserScore !== undefined) sanitized.loserScore = match.loserScore
+  if (match.hasReplay !== undefined) sanitized.hasReplay = match.hasReplay
+  if (match.locationCountry !== undefined)
+    sanitized.locationCountry = match.locationCountry
+  if (match.locationCity !== undefined)
+    sanitized.locationCity = match.locationCity
+  if (match.arenaId !== undefined) sanitized.arenaId = match.arenaId
+  if (match.tableSize !== undefined) sanitized.tableSize = match.tableSize
+  if (match.freeaim !== undefined) sanitized.freeaim = match.freeaim
+  if (match.berserk !== undefined) sanitized.berserk = match.berserk
+  if (match.club !== undefined) sanitized.club = match.club
+  if (match.card !== undefined) sanitized.card = match.card
+
+  return sanitized
+}
+
+function sanitizeRecentMatches(
+  matches: Awaited<ReturnType<typeof matchResultService.getMatchResults>>
+) {
+  return matches.map(sanitizeMatchResult)
+}
+
+async function getCachedRecentMatches(limitMatches: number) {
+  const cached = recentMatchesCache.get(limitMatches)
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.value
+  }
+  const rawMatches = await matchResultService.getMatchResults(limitMatches)
+  const value = sanitizeRecentMatches(rawMatches)
+  recentMatchesCache.set(limitMatches, {
+    value,
+    expiresAt: Date.now() + RECENT_MATCHES_TTL_MS,
+  })
+  return value
+}
+
 // TEMPORARY diagnostics for Vercel fluid-compute investigation. Remove once we
 // know where this route's budget goes. Deliberately uses console.log rather than
 // logger.log: logger.enabled is derived from `typeof process`, which is fragile
@@ -98,11 +155,7 @@ export default async function handler(
     const [hiscores, topPlayers, recentMatches] = await Promise.all([
       timed("hiscoresMs", scoreTable.topTenMulti(VALID_RULE_TYPES), parts),
       timed("topPlayersMs", getCachedTopNBatch(limitElo), parts),
-      timed(
-        "recentMatchesMs",
-        matchResultService.getMatchResults(limitMatches),
-        parts
-      ),
+      timed("recentMatchesMs", getCachedRecentMatches(limitMatches), parts),
     ])
 
     logTiming("done", {
