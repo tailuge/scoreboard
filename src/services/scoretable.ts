@@ -8,7 +8,7 @@ import { getUID } from "@/utils/uid"
 // How many entries each game type keeps in its sorted set. Reads (topTen,
 // topTenMulti, getById) use the same window, so every retained entry is visible.
 const DEFAULT_RETAIN_COUNT = 10
-const RETAIN_BY_RULE_TYPE: Record<string, number> = { sagu: 20 }
+const RETAIN_BY_RULE_TYPE: Record<string, number> = { sagu: 40 }
 
 export class ScoreTable {
   readonly prefix = "hiscore"
