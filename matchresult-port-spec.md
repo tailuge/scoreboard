@@ -1,25 +1,11 @@
-# Match result port: simplified backend spec
+# Match result port
 
-The simplified take on `../scoreboard/match-result.md`. This file supersedes that
-plan for everything it covers: **the backend write path only.** The client
-repoint, the cutover, and any change to the scoreboard's own routes are out of
-scope here, and the sections of `match-result.md` that described them no longer
-apply.
+Port the match-result write path into `../messaging`: the handler lives in a new
+`docker/matchresult.njs` module driven from `docker/api.njs`, writing to the same
+Upstash KV the scoreboard already uses.
 
-Written in the behaviour-only style of `computeoptimise.md` and
-`simplify_hiscore.md`: what must be stored and returned, not which API calls to
-type. There are no code blocks by request.
-
-Target: `../messaging`, where the handler lives in a new `docker/matchresult.njs`
-module driven from `docker/api.njs`, writing to the same Upstash KV the
-scoreboard already uses.
-
-## Status
-
-- Not started. No code has been changed.
-- Assumes uploads eventually arrive here (the client repoint that sends them is
-  tracked elsewhere and is not part of this spec).
-- The scoreboard's `src/pages/api/match-results.ts` is left exactly as it is.
+Backend write path only. The client repoint, the cutover, and any change to the
+scoreboard's own routes are out of scope.
 
 ## Goal
 
@@ -27,12 +13,12 @@ Accept a POSTed match result in messaging, store it, and update player ratings �
 with less code and fewer stored fields than the current Vercel implementation,
 and without running on Vercel Fluid Compute at all.
 
-The success condition is "match uploads no longer bill Vercel". No numeric
-latency target was set, but the client does block on the response: `../billiards`
-`src/controller/end.ts` awaits the upload, and in the arena flow it then awaits
-the arena result with the "Back to Arena" button disabled for the duration — so
-upload latency is visible to the player at the end of a match. The requirement
-that follows is simply to keep the write to a single round trip.
+The success condition is "match uploads no longer bill Vercel". The client does
+block on the response: `../billiards` `src/controller/end.ts` awaits the upload,
+and in the arena flow it then awaits the arena result with the "Back to Arena"
+button disabled for the duration — so upload latency is visible to the player at
+the end of a match. The requirement that follows is simply to keep the write to a
+single round trip.
 
 ## Scope
 
@@ -41,7 +27,7 @@ that follows is simply to keep the write to a single round trip.
 - A `POST /api/match-results` handler in messaging, in its own module.
 - The stored match record and its KV writes.
 - Replay blob storage.
-- Geo (country/city) resolution for the stored record.
+- Geo (country/city) for the stored record when known.
 - Player rating updates, including which rating shape is written.
 
 **Out of scope**
@@ -50,8 +36,7 @@ that follows is simply to keep the write to a single round trip.
 - Cutover sequencing, dual writing, or retiring anything on the scoreboard.
 - Deleting or editing the scoreboard's `src/pages/api/match-results.ts` — leave
   it untouched even though its POST becomes unused.
-- Request-body size limits (nginx already caps at 1MB; measured replays are
-  ~809 bytes).
+- Request-body size limits (nginx already caps at 1MB).
 - Duplicate suppression — see Future work.
 - The arena result flow (`/api/arena/<id>/result`), usage metrics, hiscores, and
   `GET /api/match-results`.
@@ -63,16 +48,11 @@ The scoreboard builds the record, then `MatchResultService.addMatchResult` write
 timestamp, trims to the newest 32, and — for two-player uploads — updates both
 players' Glicko-2 ratings plus an `elo-history` entry.
 
-Relevant facts established while reviewing:
-
 - The only caller of the scoreboard route is `../billiards`
   `src/network/client/scorereporter.ts`, and it only ever POSTs.
 - `GET /api/match-results` has no callers anywhere in either repo.
 - The lobby reads matches through `/api/summary`, so the stored field set is
   driven by the lobby's recent-matches row, not by the route's response.
-- Measured cost today: ~99–140ms billed per invocation
-  (`computeoptimise.md`), of which the KV write was the bulk before the
-  single-pipeline change landed.
 
 ## Route and wiring
 
@@ -94,33 +74,12 @@ Relevant facts established while reviewing:
 
 ## Stored record
 
-Store only the fields something reads. The lobby's recent-matches row is the
-authoritative consumer, and it renders exactly: `ruleType`, `arenaId`, `tableSize`,
-`freeaim`, `berserk`, `winner`, `winnerScore`, `loser`, `loserScore`, `timestamp`,
-`locationCity`, `locationCountry`, `hasReplay`, `id`.
-
-| Field | Source | Why it is stored |
-| --- | --- | --- |
-| `id` | generated, 8 random hex chars | Replay key and the replay URL |
-| `winner` | body | Displayed |
-| `winnerScore` | body | Displayed when present |
-| `loser` | body | Displayed; presence is what marks a two-player match |
-| `loserScore` | body | Displayed when present |
-| `ruleType` | body, default `nineball` | Game icon |
-| `timestamp` | `Date.now()` at write | Sort score and the "Ago" column |
-| `hasReplay` | set true only when a blob was stored | Whether the replay button renders |
-| `locationCountry` | geo cache | Flag emoji |
-| `locationCity` | geo cache | City column |
-| `arenaId` | body | Sword prefix on the row |
-| `tableSize` | body | Baby-bottle emoji when below 10 |
-| `freeaim` | body | Free-aim glyph |
-| `berserk` | body | Rocket glyph |
-
-**Dropped, with reasons:** `userAgent`, `browser`, `os`, `version` and
-`locationRegion` are rendered nowhere — `computeoptimise.md` already recommends
-dropping them, and the only component that reads `os`/`browser`/`version`
-(`LocationTimeBadge`) has no importers. `winnerId` and `loserId` are used
-client-side before upload and never rendered, so they are not stored.
+Store the POST body as received, minus `replayData`, plus `id`, `timestamp`,
+`hasReplay`, and `locationCountry`/`locationCity` when they are known. No
+allowlist. The lobby's recent-matches row is the authoritative consumer and it
+keeps gaining fields (`club`, `card`), so anything the client sends is kept
+rather than enumerated — that is also what the scoreboard does today, and it
+means a new client field needs no change here or in the spec.
 
 **Rules**
 
@@ -130,6 +89,9 @@ client-side before upload and never rendered, so they are not stored.
   it is given. Validation must not be added.
 - Every match type is stored: two-player, solo (no `loser`), bot games, reveal
   results. This matches today's behaviour exactly.
+- `timestamp` is `Date.now()` at write; it is the sort score and the "Ago"
+  column.
+- `hasReplay` is set true only when a replay blob was stored.
 - `id` uses the same 8-random-hex-chars algorithm as the scoreboard's `getUID`
   so replay keys and URLs keep the same shape. Nothing bundles that TypeScript
   helper into the image, so the algorithm is inlined in `matchresult.njs`.
@@ -152,9 +114,9 @@ Keep the keys, the member shape, the 5-day TTL and the 32-entry trim identical
 to the current implementation: that is what lets the scoreboard's existing reads
 (`/api/summary`, `/api/match-replay`) keep working without changes.
 
-The window stays at 32. At the measured ~89 uploads/day that spans roughly 8
-hours, comfortably inside the 5-day replay TTL, so a rendered replay button
-cannot point at an expired blob.
+The window stays at 32. At roughly 89 uploads/day that spans about 8 hours,
+comfortably inside the 5-day replay TTL, so a rendered replay button cannot
+point at an expired blob.
 
 ## Replay blobs
 
@@ -166,34 +128,10 @@ cannot point at an expired blob.
 
 ## Geo
 
-Country and city feed the lobby flag and the City column, so they are worth
-keeping — but only when they are already known.
-
-- Read `ngx.shared.ip_cache` directly from `matchresult.njs`. Do **not** import
-  `nchan_meta.js`: that module is a separate NJS module and `api.njs` has no
-  imports at all, so the wiring would be new anyway, and keeping the module
-  self-contained is simpler.
-- Cache key: the obfuscated client IP, i.e. the client IP taken from
-  `x-forwarded-for` (first entry), `cf-connecting-ip`, `x-real-ip` or the remote
-  address, with the digits before each `.` replaced by `x` (and hex digits before
-  each `:` for IPv6) — the same obfuscation the presence path uses when it
-  populates the cache. The obfuscation is a few lines and must be inlined.
-- Cached value format: `country|city|count|origins|os|browser`. Take field 0 as
-  country and field 1 as city.
-- Cache entries live 1 day (`ip_cache` zone timeout), so this reuses entries
-  that presence traffic has already warmed for anyone currently in the lobby.
-- **On a miss, omit `locationCountry` and `locationCity` entirely. Do not call
-  the geo-IP service from this route.** This is the one place this spec
-  deliberately overrides `match-result.md`, which proposed reusing the presence
-  path's lookup-on-miss and its 2-second HTTP call. A match upload should not
-  block on an external geolocation request; absence simply means no flag and no
-  city for that match.
-- Treat an empty country, or the placeholder `XX` that the presence path uses for
-  an unknown country, as absent rather than storing it — otherwise the lobby
-  renders a bogus flag.
-
-Consequence to accept: geo is only populated for players whose IP presence
-traffic has already cached. Cold uploads from an unseen IP store no location.
+Store `locationCountry` and `locationCity` when they are already known, so the
+lobby's flag and City column keep working. They come from the shared IP cache if
+presence traffic has filled an entry for that IP; on a miss, omit both and do not
+call a geo-IP service from this route.
 
 ## Ratings
 
@@ -264,8 +202,9 @@ games. This is accepted.
 No NJS unit tests exist for `api.njs` or its siblings, and E2E is out of scope
 for cloud agents. Verify manually against the container:
 
-- `POST /api/match-results` with only `winner` and `winnerScore` succeeds and the
-  newest `match_results` member carries `timestamp`, `id` and no `replayData`.
+- `POST /api/match-results` with only `winner` and `winnerScore` succeeds, the
+  newest `match_results` member carries `timestamp`, `id` and no `replayData`,
+  and any other body field (`club`, `card`, `version`) is stored as sent.
 - The same POST with `replayData` stores a blob under `match_replay:<id>`, the
   member carries `hasReplay: true`, and a read of that key returns the blob.
 - A two-player POST leaves both names present in `elo:<ruleType>` with `rd: 0`,
@@ -301,8 +240,8 @@ for cloud agents. Verify manually against the container:
 | Decision | Choice |
 | --- | --- |
 | Handler location | New `docker/matchresult.njs`, dispatched from `api.njs` |
-| Record fields | Store only fields the lobby renders; drop UA, version, region, ids |
-| Geo | Read `ip_cache` directly; omit on miss; no lookup, no `nchan_meta` import |
+| Record fields | Store the body as received minus `replayData`, plus `id`, `timestamp`, `hasReplay`, geo |
+| Geo | Store country/city when the IP cache already knows them; omit on miss |
 | Replays | Keep as today — separate key, 5-day TTL, `hasReplay` flag |
 | History window | Keep the newest 32 |
 | Match types | All, unchanged (two-player, solo, bot, reveal) |
@@ -312,6 +251,5 @@ for cloud agents. Verify manually against the container:
 | `elo-history` | Keep writing it |
 | Ranking field | Emit `rating`; stop emitting `conservativeRating` |
 | Logging | None |
-| Spec detail | Behaviour only, no code blocks |
 | Scoreboard route | Untouched |
 | Client repoint / cutover | Out of scope |
