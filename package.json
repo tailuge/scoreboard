@@ -63,13 +63,13 @@
     "jest-environment-jsdom": "30.5.2",
     "jest-transform-stub": "^2.0.0",
     "jscpd": "5.4.3",
-    "oxlint": "1.94.0",
+    "oxlint": "1.95.0",
     "postcss-load-config": "^6.0.1",
     "prettier": "3.10.1",
     "tailwindcss": "4.3.5",
     "ts-jest": "29.4.15",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.73.0"
+    "typescript-eslint": "8.74.0"
   },
   "browserslist": [
     "defaults",
